@@ -1,0 +1,273 @@
+<?xml version="1.0"?> 
+<tabbed-panels>
+
+   <tabbed-panel>
+      <id>TP01</id>
+      <title>Search Results</title>
+      <desc></desc>
+      <tabmode>JS</tabmode>
+      <tabs>
+         <tab>
+            <title>Featured Projects</title>
+            <desc>View Featured Projects</desc>
+            <link></link>
+            <code>FEATURED</code>
+            <active>1</active>
+         </tab>
+         <tab>
+            <title>Featured Organisations</title>
+            <desc>View Featured Organisations</desc>
+            <link></link>
+            <code>ORGANISATION</code>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>Search</title>
+            <desc>Search Projects / Organisations</desc>
+            <link></link>
+            <code>SEARCH</code>
+            <active>0</active>
+         </tab>
+      </tabs>
+   </tabbed-panel>
+
+   <tabbed-panel>
+      <id>TP02</id>
+      <title>Destination Search Results</title>
+      <desc></desc>
+      <tabmode>LINK</tabmode>
+      <tabs>
+         <tab>
+            <title>Featured Projects</title>
+            <desc>Featured Projects</desc>
+            <code>FEATURED</code>            
+            <link>/</link>
+            <active>1</active>
+         </tab>
+         <tab>
+            <title>Volunteer</title>
+            <desc>Volunteer Projects, Volunteer Opportunities &amp; Voluntary Work</desc>
+            <code>VOLUNTEER</code>
+            <link>/volunteer</link>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>Seasonal Work</title>
+            <desc>Work abroad, Seasonal Work, Working Holidays and Work Opportunities</desc>
+            <code>WORK</code>
+            <link>/work</link>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>Teaching Projects</title>
+            <desc>Teaching Projects, Language Courses, TEFL / EFL courses &amp; jobs</desc>
+            <code>TEACH</code>
+            <link>/teach</link>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>Travel &amp; Tours</title>
+            <desc>Travel &amp; tours, holidays and travel activities</desc>
+            <link>/travel-tour</link>
+            <code>TRAVEL-TOUR</code>
+            <active>0</active>
+         </tab>
+
+         <tab>
+            <title>Accomodation</title>
+            <desc>Accomodation, Hostel &amp; Hotel Bookings</desc>
+            <link>/accomodation</link>
+            <code>ACCOMODATION</code>
+            <active>0</active>
+         </tab>
+
+         <tab>
+            <title>Travel Guide</title>
+            <desc>Travel Guide from WikiTravel</desc>
+            <link>/travel-guide</link>
+            <code>TRAVEL-GUIDE</code>
+            <active>0</active>
+         </tab>
+
+         
+      </tabs>
+   </tabbed-panel>
+
+
+   <tabbed-panel>
+      <id>TP03</id>
+      <title>Company Profile</title>
+      <desc></desc>
+      <tabmode>LINK</tabmode>
+      <tabs>
+         <tab>
+            <title>Profile</title>
+            <desc>View Profile</desc>
+            <link></link>
+            <active>1</active>
+         </tab>
+         <tab>
+            <title>Placements</title>
+            <desc>View Placements</desc>
+            <link></link>
+            <active>0</active>
+         </tab>
+      </tabs>
+   </tabbed-panel>
+
+
+   <tabbed-panel>
+      <id>TP04</id>
+      <title>View Placement</title>
+      <desc></desc>
+      <tabmode>LINK</tabmode>
+      <tabs>
+         <tab>
+            <title>Profile</title>
+            <desc>View Profile</desc>
+            <link></link>
+            <active>1</active>
+         </tab>
+         <tab>
+            <title>Company Profile</title>
+            <desc>View Company Profile</desc>
+            <link></link>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>Related Placements</title>
+            <desc>Related Placements</desc>
+            <link></link>
+            <active>0</active>
+         </tab>
+		<tab>
+            <title>Contact / Enquiry</title>
+            <desc>Contact / Enquiry</desc>
+            <link></link>
+            <active>0</active>
+         </tab>         
+
+      </tabs>
+   </tabbed-panel>
+   
+   
+   <tabbed-panel>
+      <id>TP05</id>
+      <title>Homepage Feature Panel</title>
+      <desc></desc>
+      <tabmode>LINK</tabmode>
+      <tabs>
+         <tab>
+            <title>Feature</title>
+            <desc>Current Feature</desc>
+            <link></link>
+            <active>1</active>
+         </tab>
+         <tab>
+            <title>About Us</title>
+            <desc>About Our Site</desc>
+            <link>/about-us</link>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>Search</title>
+            <desc>Search for Projects &amp; Organisations</desc>
+            <link>/search</link>
+            <active>0</active>
+         </tab>         
+      </tabs>
+   </tabbed-panel>   
+
+   <tabbed-panel>
+      <id>TP06</id>
+      <title>Edit Placement</title>
+      <desc></desc>
+      <tabmode>JS</tabmode>
+      <tabs>
+         <tab>
+            <title>General Info</title>
+            <desc>Edit profile info</desc>
+            <link></link>
+            <active>1</active>
+         </tab>
+         <tab>
+            <title>Upload Images</title>
+            <desc>Upload images</desc>
+            <link></link>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>YouTube Video</title>
+            <desc>Upload video</desc>
+            <link></link>
+            <active>0</active>
+         </tab>
+      </tabs>
+   </tabbed-panel>
+
+   <tabbed-panel>
+      <id>TP07</id>
+      <title>Add Company</title>
+      <desc>Initial ADD</desc>
+      <tabmode>JS</tabmode>
+      <tabs>
+         <tab>
+            <title>General Info</title>
+            <desc>General info</desc>
+            <link></link>
+            <active>1</active>
+         </tab>
+      </tabs>
+   </tabbed-panel>
+
+
+   <tabbed-panel>
+      <id>TP08</id>
+      <title>Edit Company</title>
+      <desc></desc>
+      <tabmode>JS</tabmode>
+      <tabs>
+         <tab>
+            <title>General Info</title>
+            <desc>General info</desc>
+            <link></link>
+            <active>1</active>
+         </tab>
+         <tab>
+            <title>Upload Logo</title>
+            <desc>Logo Upload</desc>
+            <link></link>
+            <active>0</active>
+         </tab>         
+         <tab>
+            <title>Upload Images</title>
+            <desc>Upload images</desc>
+            <link></link>
+            <active>0</active>
+         </tab>
+         <tab>
+            <title>YouTube Video</title>
+            <desc>Upload video</desc>
+            <link></link>
+            <active>0</active>
+         </tab>
+
+      </tabs>
+   </tabbed-panel>
+
+   <tabbed-panel>
+      <id>TP09</id>
+      <title>Add Placement</title>
+      <desc>Initial ADD</desc>
+      <tabmode>JS</tabmode>
+      <tabs>
+         <tab>
+            <title>General Info</title>
+            <desc>General info</desc>
+            <link></link>
+            <active>1</active>
+         </tab>
+      </tabs>
+   </tabbed-panel>
+
+</tabbed-panels>

@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://admin.oneworld365.org" />
+<title>add_company</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">add_company</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=pass</td>
+	<td>stokecity123</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Add a new Company Profile</td>
+	<td></td>
+</tr>
+<!--Add Organisation-->
+<tr>
+	<td>type</td>
+	<td>id=title</td>
+	<td>Test Title</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=desc_short</td>
+	<td>Test Short Description</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=desc_long</td>
+	<td>Etiam suscipit nunc risus. Mauris ullamcorper, velit non consequat volutpat, ipsum est euismod odio, et sagittis nulla nibh in sem. Integer suscipit nisl sit amet odio lacinia sit amet ullamcorper metus rutrum.<br /><br />Fusce a risus augue. Curabitur et hendrerit lorem. Morbi sit amet nibh leo, non placerat mi. Vestibulum nec elit sem, vitae interdum nisi. Curabitur ultricies, nulla vel hendrerit tempor, velit dolor imperdiet nunc, quis convallis mi est at nibh. Suspendisse potenti. Phasellus quis commodo mi. Aliquam mauris tellus, malesuada quis venenatis lobortis, suscipit quis risus. Pellentesque justo purus, malesuada eget interdum sit amet, feugiat vitae justo. Aenean sit amet mattis metus. Nullam a sem tortor, quis rutrum justo. Duis sit amet erat odio, et aliquet urna. Nullam velit dolor, dapibus non commodo et, suscipit sed nisi. Ut diam augue, aliquet adipiscing convallis ut, venenatis eget metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.<br /><br />Donec eros dolor, pulvinar ut tristique eget, dignissim sit amet augue. Nam euismod convallis mauris, nec viverra tortor dignissim vel. Praesent condimentum, lacus a imperdiet condimentum, mauris nisl dictum magna, a dapibus nisi massa a sem. Aenean sit amet quam a neque egestas scelerisque. Phasellus et justo vehicula libero venenatis elementum. Sed ornare rhoncus velit, vel accumsan erat bibendum in. Aliquam erat volutpat. Praesent ullamcorper, sapien sed scelerisque pretium, mi elit iaculis magna, non iaculis sapien erat vitae orci. Nullam gravida egestas mauris id iaculis. Nullam consequat tempor rhoncus.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=desc_short</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=url</td>
+	<td>http://www.testurl.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email</td>
+	<td>test@testurl.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=address</td>
+	<td>101 Test Street, Test Town, Region</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=country_id</td>
+	<td>label=United States</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=state_id</td>
+	<td>label=California</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tel</td>
+	<td>01202 202020</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profile_type</td>
+	<td>value=8</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=tp_duration_from_id</td>
+	<td>label=2 weeks</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=tp_duration_to_id</td>
+	<td>label=6 weeks</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=tp_no_teachers</td>
+	<td>label=0-10</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=tp_class_size</td>
+	<td>label=0-10</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tp_salary</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tp_benefits</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tp_qualifications</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tp_requirements</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=tp_how_to_apply</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=expand_category_select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=cat_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=expand_activity_select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=act_50</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=act_6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=act_5</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=act_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=act_9</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=act_53</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=expand_country_select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=cty_111</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=cty_18</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=cty_136</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=cty_60</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=cty_44</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=cty_26</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=collapse_activity_select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=collapse_country_select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=collapse_category_select</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=cat_selected</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=act_selected</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=cty_selected</td>
+	<td>7</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=prod_type_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=profile_quota</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=listing_type</td>
+	<td>label=Basic Listing 6 months</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=web_0</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=web_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=prof_opt_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=enq_opt_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=enq_opt_2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=status</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submit</td>
+	<td></td>
+</tr>
+<!--verify save-->
+<tr>
+	<td>verifyValue</td>
+	<td>id=title</td>
+	<td>Test Title</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=desc_short</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=desc_long</td>
+	<td>Etiam suscipit nunc risus. Mauris ullamcorper, velit non consequat volutpat, ipsum est euismod odio, et sagittis nulla nibh in sem. Integer suscipit nisl sit amet odio lacinia sit amet ullamcorper metus rutrum.<br /><br />Fusce a risus augue. Curabitur et hendrerit lorem. Morbi sit amet nibh leo, non placerat mi. Vestibulum nec elit sem, vitae interdum nisi. Curabitur ultricies, nulla vel hendrerit tempor, velit dolor imperdiet nunc, quis convallis mi est at nibh. Suspendisse potenti. Phasellus quis commodo mi. Aliquam mauris tellus, malesuada quis venenatis lobortis, suscipit quis risus. Pellentesque justo purus, malesuada eget interdum sit amet, feugiat vitae justo. Aenean sit amet mattis metus. Nullam a sem tortor, quis rutrum justo. Duis sit amet erat odio, et aliquet urna. Nullam velit dolor, dapibus non commodo et, suscipit sed nisi. Ut diam augue, aliquet adipiscing convallis ut, venenatis eget metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.<br /><br />Donec eros dolor, pulvinar ut tristique eget, dignissim sit amet augue. Nam euismod convallis mauris, nec viverra tortor dignissim vel. Praesent condimentum, lacus a imperdiet condimentum, mauris nisl dictum magna, a dapibus nisi massa a sem. Aenean sit amet quam a neque egestas scelerisque. Phasellus et justo vehicula libero venenatis elementum. Sed ornare rhoncus velit, vel accumsan erat bibendum in. Aliquam erat volutpat. Praesent ullamcorper, sapien sed scelerisque pretium, mi elit iaculis magna, non iaculis sapien erat vitae orci. Nullam gravida egestas mauris id iaculis. Nullam consequat tempor rhoncus.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=url</td>
+	<td>exact:http://www.testurl.com</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=email</td>
+	<td>test@testurl.com</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=address</td>
+	<td>101 Test Street, Test Town, Region</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>id=country_id</td>
+	<td>United States</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>id=state_id</td>
+	<td>California</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tel</td>
+	<td>01202 202020</td>
+</tr>
+<tr>
+	<td>verifySelectedValue</td>
+	<td>id=profile_type</td>
+	<td>8</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_duration_from_id</td>
+	<td>2 weeks</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_duration_to_id</td>
+	<td>6 weeks</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_no_teachers</td>
+	<td>0 - 10</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_class_size</td>
+	<td>10-100</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_salary</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_benefits</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_qualifications</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_requirements</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_how_to_apply</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cat_0</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_50</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_6</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_5</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_9</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_53</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_111</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_18</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_136</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_60</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_44</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_26</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=cat_selected</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=act_selected</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=cty_selected</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=prod_type_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifySelectedValue</td>
+	<td>id=listing_type</td>
+	<td>BASIC_6</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>id=profile_quota</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=prof_opt_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=enq_opt_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=enq_opt_2</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=status</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submit</td>
+	<td></td>
+</tr>
+<!--verify save-->
+<tr>
+	<td>verifyValue</td>
+	<td>id=title</td>
+	<td>Test Title</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=desc_short</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=desc_long</td>
+	<td>Etiam suscipit nunc risus. Mauris ullamcorper, velit non consequat volutpat, ipsum est euismod odio, et sagittis nulla nibh in sem. Integer suscipit nisl sit amet odio lacinia sit amet ullamcorper metus rutrum.<br /><br />Fusce a risus augue. Curabitur et hendrerit lorem. Morbi sit amet nibh leo, non placerat mi. Vestibulum nec elit sem, vitae interdum nisi. Curabitur ultricies, nulla vel hendrerit tempor, velit dolor imperdiet nunc, quis convallis mi est at nibh. Suspendisse potenti. Phasellus quis commodo mi. Aliquam mauris tellus, malesuada quis venenatis lobortis, suscipit quis risus. Pellentesque justo purus, malesuada eget interdum sit amet, feugiat vitae justo. Aenean sit amet mattis metus. Nullam a sem tortor, quis rutrum justo. Duis sit amet erat odio, et aliquet urna. Nullam velit dolor, dapibus non commodo et, suscipit sed nisi. Ut diam augue, aliquet adipiscing convallis ut, venenatis eget metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.<br /><br />Donec eros dolor, pulvinar ut tristique eget, dignissim sit amet augue. Nam euismod convallis mauris, nec viverra tortor dignissim vel. Praesent condimentum, lacus a imperdiet condimentum, mauris nisl dictum magna, a dapibus nisi massa a sem. Aenean sit amet quam a neque egestas scelerisque. Phasellus et justo vehicula libero venenatis elementum. Sed ornare rhoncus velit, vel accumsan erat bibendum in. Aliquam erat volutpat. Praesent ullamcorper, sapien sed scelerisque pretium, mi elit iaculis magna, non iaculis sapien erat vitae orci. Nullam gravida egestas mauris id iaculis. Nullam consequat tempor rhoncus.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=url</td>
+	<td>exact:http://www.testurl.com</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=email</td>
+	<td>test@testurl.com</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=address</td>
+	<td>101 Test Street, Test Town, Region</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>id=country_id</td>
+	<td>United States</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>id=state_id</td>
+	<td>California</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tel</td>
+	<td>01202 202020</td>
+</tr>
+<tr>
+	<td>verifySelectedValue</td>
+	<td>id=profile_type</td>
+	<td>8</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_duration_from_id</td>
+	<td>2 weeks</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_duration_to_id</td>
+	<td>6 weeks</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_no_teachers</td>
+	<td>0 - 10</td>
+</tr>
+<tr>
+	<td>verifySelectedLabel</td>
+	<td>name=tp_class_size</td>
+	<td>10-100</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_salary</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_benefits</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_qualifications</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_requirements</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=tp_how_to_apply</td>
+	<td>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur a eros nec purus scelerisque aliquam. In hac habitasse platea dictumst. Quisque ac elit nec orci tempus malesuada sit amet malesuada neque. Ut pharetra aliquet ultricies.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cat_0</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_50</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_6</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_5</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_9</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=act_53</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_111</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_18</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_136</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_60</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_44</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=cty_26</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=cat_selected</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=act_selected</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=cty_selected</td>
+	<td>6</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>id=prod_type_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifySelectedValue</td>
+	<td>id=listing_type</td>
+	<td>BASIC_6</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>id=profile_quota</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=prof_opt_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=enq_opt_1</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=enq_opt_2</td>
+	<td>on</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=status</td>
+	<td>on</td>
+</tr>
+</tbody></table>
+</body>
+</html>

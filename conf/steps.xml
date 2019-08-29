@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<steps>
+	<step>
+		<id>0</id>
+		<name>Index</name>
+		<classname>IndexStep</classname>
+		<uri>/</uri>
+		<label>Index step</label>
+	</step>
+	<step>
+		<id>1</id>
+		<name>NewListing</name>
+		<classname>NewListingStep</classname>
+		<uri>/new</uri>
+		<label>Entry for new listing request</label>
+	</step>
+	<step>
+		<id>2</id>
+		<name>EditListing</name>
+		<classname>EditListingStep</classname>
+		<uri>/edit</uri>
+		<label>Not a step, used as a suffix to allow editting of profiles</label>
+	</step>
+	<step>
+		<id>3</id>
+		<name>UpdateListing</name>
+		<classname>UpdateListingStep</classname>
+		<uri>/update</uri>
+		<label>Request to update an existing listing</label>
+	</step>
+	<step>
+		<id>4</id>
+		<name>Dashboard</name>
+		<classname>DashboardStep</classname>
+		<uri>/dashboard</uri>
+		<label>Account Dashboard</label>
+	</step>
+	<step>
+		<id>5</id>
+		<name>Login</name>
+		<classname>LoginStep</classname>
+		<uri>/login</uri>
+		<label>Login Step</label>
+	</step>
+	<step>
+		<id>6</id>
+		<name>Password</name>
+		<classname>PasswordStep</classname>
+		<uri>/password</uri>
+		<label>Password reminder</label>
+	</step>
+	<step>
+		<id>7</id>
+		<name>Registration</name>
+		<classname>RegistrationStep</classname>
+		<uri>/registration</uri>
+		<label>Registration / Personal Details Step</label>
+	</step>
+	<step>
+		<id>9</id>
+		<name>CompanyProfile</name>
+		<classname>CompanyProfileStep</classname>
+		<uri>/company</uri>
+		<label>Add / Edit / View Company Step</label>
+	</step>
+	<step>
+		<id>10</id>
+		<name>Placement</name>
+		<classname>PlacementStep</classname>
+		<uri>/placement</uri>
+		<label>Add / Edit / View Placement Step</label>
+	</step>
+	<step>
+		<id>11</id>
+		<name>Confirmation</name>
+		<classname>ConfirmationStep</classname>
+		<uri>/confirmation</uri>
+		<label>Confirmation Step</label>
+	</step>
+	<step>
+		<id>12</id>
+		<name>Error</name>
+		<classname>ErrorStep</classname>
+		<uri>/error</uri>
+		<label>Error Page</label>
+	</step>	
+	<step>
+		<id>13</id>
+		<name>Contact</name>
+		<classname>ContactStep</classname>
+		<uri>/contact</uri>
+		<label>Contact Page</label>
+	</step>	
+	<step>
+		<id>14</id>
+		<name>Mailshot</name>
+		<classname>MailshotStep</classname>
+		<uri>/mailshot</uri>
+		<label>Mailshot Creator</label>
+	</step>	
+
+</steps> 

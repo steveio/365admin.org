@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://admin.oneworld365.org" />
+<title>add_company</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">add_company</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=pass</td>
+	<td>stokecity123</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=search_str</td>
+	<td>bunac</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=search_btn</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td>3000</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=edit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Edit Company Profile</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profile_version_target</td>
+	<td>oneworld365.org</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::title</td>
+	<td>Bunac Oneworld365</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::desc_short</td>
+	<td>Bunac short description for oneworld365.org</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::desc_long</td>
+	<td>Bunac full description for oneworld365.org</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profile_version_target</td>
+	<td>gapyear365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::1::title</td>
+	<td>Bunac Title Gapyear365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::1::desc_short</td>
+	<td>Bunac short description for gapyear365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::1::desc_long</td>
+	<td>Bunac full description for gapyear365.com</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profile_version_target</td>
+	<td>seasonaljobs365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::2::title</td>
+	<td>Bunac Title seasonaljobs365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::2::desc_short</td>
+	<td>Bunac short description for seasonaljobs365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::2::desc_long</td>
+	<td>Bunac full description for seasonaljobs365.com</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profile_version_target</td>
+	<td>summercampjobs365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::3::title</td>
+	<td>Bunac Title summercampjobs365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::3::desc_short</td>
+	<td>Bunac short description for summercampjobs365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::3::desc_long</td>
+	<td>Bunac full description for summercampjobs365.com</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profile_version_target</td>
+	<td>tefl365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::4::title</td>
+	<td>Bunac Title tefl365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::4::desc_short</td>
+	<td>Bunac short description for tefl365.com</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::4::desc_long</td>
+	<td>Bunac full description for tefl365.com</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=ListingYear</td>
+	<td>label=2013</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::title</td>
+	<td>TEST Bunac Oneworld365</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::desc_short</td>
+	<td>TEST Bunac short description for oneworld365.org</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::desc_long</td>
+	<td>TEST Bunac full description for oneworld365.org</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::title</td>
+	<td>Volunteer with BUNAC</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::desc_short</td>
+	<td>Bunac short description for oneworld365.org</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=PV::0::desc_long</td>
+	<td>Bunac full description for oneworld365.org</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submit</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

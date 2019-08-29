@@ -1,0 +1,126 @@
+<?php
+
+/*
+ * Provides simple paging of Company / Placement results 
+ * 
+ * @depreciated - to be replaced by Zend::Pager 
+ * 
+*/
+
+class PagedResultSet
+{
+
+  var $results;
+  var $pageSize;
+  var $page;
+  var $row;
+
+  function GetByCount($iResultCount,$sPid)
+  {
+
+	global $_CONFIG;
+
+	$this->sPid = $sPid;
+    $this->iResultCount = $iResultCount; 
+
+    
+	$resultpage = $this->getOffset($this->sPid);
+    
+	$this->pageSize = $_CONFIG['results_per_page'];
+    if ((int)$resultpage <= 0) $resultpage = 1;
+    if ($resultpage > $this->getNumPages())
+     $resultpage = $this->getNumPages();
+    $this->setPageNum($resultpage);
+
+	$this->iResultOffset = (($this->page -1) * $this->pageSize);
+
+  }
+  
+  
+  
+  function GetFromArray($aResults,$sPid)
+  {
+
+	global $_CONFIG;
+
+	$this->sPid = $sPid;
+    $this->aResults = $aResults;
+
+    
+	$resultpage = $this->getOffset($this->sPid);
+    
+	$this->pageSize = $_CONFIG['results_per_page'];
+    if ((int)$resultpage <= 0) $resultpage = 1;
+    if ($resultpage > $this->getNumPages())
+     $resultpage = $this->getNumPages();
+    $this->setPageNum($resultpage);
+
+	$this->iResultOffset = (($this->page -1) * $this->pageSize);
+
+  }
+  
+  public function getOffset($sPagerId) {
+  		return $resultpage = $_REQUEST[$sPagerId.'ro']; 
+  }
+   
+  function getNumPages()
+  {
+  	$iCount = (is_array($this->aResults)) ? count($this->aResults) : $this->iResultCount; 
+    
+  	return ceil($iCount / (float)$this->pageSize);
+  }
+  
+  function setPageNum($pageNum)
+  {
+    if ($pageNum > $this->getNumPages() or $pageNum <= 0) return FALSE;
+  
+    $this->page = $pageNum;
+
+  }
+  
+  function getPageNum()
+  {
+    return $this->page;
+  }
+  
+  function isLastPage()
+  {
+    return ($this->page >= $this->getNumPages());
+  }
+  
+  function isFirstPage()
+  {
+    return ($this->page <= 1);
+  }
+
+  
+  function getPageNav($url)
+  {
+
+	$sQueryStr = "";
+	
+	
+	
+    $nav = '';
+    if (!$this->isFirstPage())
+    {
+	  $nav .= "<a class='std' style='$style' href=\"".$url."?&".$this->sPid."ro=".($this->getPageNum()-1).$sQueryStr."\"><< prev</a> ";
+	}
+    if ($this->getNumPages() > 1)
+		for ($i=1; $i<=$this->getNumPages(); $i++)
+      {
+        if ($i==$this->page)
+          $nav .= "<span style='font-size: 10px; color: red;'>$i</span> ";
+        else
+		  $nav .= "<a class='std' style='$style' href=\"".$url."?&".$this->sPid."ro={$i}".$sQueryStr."\">{$i}</a> ";
+      }
+    if (!$this->isLastPage())
+    {
+	  $nav .= "<a class='std' style='$style' href=\"".$url."?&".$this->sPid."ro=".($this->getPageNum()+1).$sQueryStr."\">next >></a> ";
+    }
+    
+    return $nav;
+  }
+}
+
+?>

@@ -1,0 +1,34 @@
+<add><doc>
+<field name="id"></field>
+<field name="profile_type"></field>
+<field name="prod_type"></field>
+<field name="company_id"></field>
+<field name="company_name"></field>
+<field name="title"></field>
+<field name="desc_short"></field>
+<field name="desc_long"></field>
+<field name="duration_from"></field>
+<field name="duration_to"></field>
+<field name="price_from"></field>
+<field name="price_to"></field>
+<field name="category"></field>
+<field name="category"></field>
+<field name="activity"></field>
+<field name="activity"></field>
+<field name="country"></field>
+<field name="country"></field>
+<field name="continent"></field>
+<field name="state"></field>
+<field name="region"></field>
+<field name="added"></field>
+<field name="last_updated"></field>
+<field name="text"></field>
+<field name="camp_type"></field>
+<field name="camp_gender"></field>
+<field name="camper_age_from"></field>
+<field name="camper_age_to"></field>
+<field name="camp_religion"></field>
+<field name="camp_activities"></field>
+<field name="camp_job_types"></field>
+</doc></add>
+
