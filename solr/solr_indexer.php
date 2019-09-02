@@ -214,16 +214,15 @@ if (in_array($type,array("ALL", "COMPANY"))) {
 		$aId = $oCompany->GetCompanyList($key);
 	}
 	
-	if (LOG) Logger::DB(2,JOBNAME,'FOUND '.count($aId).' COMPANY');
-	
 	if (is_array($aId) && count($aId) >= 1) {
+		if (LOG) Logger::DB(2,JOBNAME,'FOUND '.count($aId).' COMPANY');
 		$oSolrIndexer = new SolrIndexer();
 		$oSolrIndexer->debug = $debug;
 		$oSolrIndexer->setId($aId);
 		$oSolrIndexer->indexCompany();
 	}
 
-        if (LOG) Logger::DB(2,JOBNAME,'END PROCESSING COMPANY');
+        //if (LOG) Logger::DB(2,JOBNAME,'END PROCESSING COMPANY');
 
 	
 } // end if process compa
@@ -264,7 +263,7 @@ if (in_array($type,array("ALL", "PLACEMENT"))) {
 
 if (in_array($type,array("ALL", "ARTICLE"))) {
 
-        //if (LOG) Logger::DB(2,JOBNAME,'BEGIN PROCESSING ARTICLES');
+        if (LOG) Logger::DB(2,JOBNAME,'BEGIN PROCESSING ARTICLES');
 
 	require_once($_CONFIG['root_path']."/classes/link.class.php");
 	require_once($_CONFIG['root_path']."/classes/article.class.php");
