@@ -740,7 +740,6 @@ class Content  implements TemplateInterface {
 		if (!$this->Validate($response)) return false;
 		
 		
-		$this->Sanitize();			
 		
 		if (!is_numeric($this->GetId())) {
 			$this->SetId($this->GetNextArticleSeq());
@@ -842,20 +841,21 @@ class Content  implements TemplateInterface {
 
 		global $db;
 
+		$sql = "UPDATE ".DB__ARTICLE_TBL."
+                                                SET
+                                                        title = '".addslashes($this->GetTitle())."'
+                                                        ,short_desc = '".addslashes($this->GetDescShort())."'
+                                                        ,full_desc = '".addslashes($this->GetDescFull())."'
+                                                        ,meta_desc = '".addslashes($this->GetMetaDesc())."'
+                                                        ,meta_keywords = '".addslashes($this->GetMetaKeywords())."'
+                                                        ,last_updated = now()::timestamp
+                                                        ,last_indexed_solr = now() - interval '1 hour'
+                                                WHERE id = ".$this->GetId().";
+                                        ";
+
 		
-		$db->query("UPDATE ".DB__ARTICLE_TBL." 
-						SET
-							title = '".addslashes($this->GetTitle())."' 
-							,short_desc = '".addslashes($this->GetDescShort())."' 
-							,full_desc = '".addslashes($this->GetDescFull())."' 
-							,meta_desc = '".addslashes($this->GetMetaDesc())."'
-							,meta_keywords = '".addslashes($this->GetMetaKeywords())."'
-							,last_updated = now()::timestamp
-							,last_indexed_solr = now() - interval '1 hour'
-						WHERE id = ".$this->GetId().";
-					");
-		
-		
+		$db->query($sql);
+ 
 		if (!$db->getAffectedRows() == 1) {
 			$response['save_error'] = "There was a problem adding the ".$this->GetTypeLabel().".";
 			return false;
@@ -1276,6 +1276,7 @@ class Content  implements TemplateInterface {
 	
 	/*
 	 * Santize input and escape non-db safe chars
+         * @deprecated - results in double escaping on php 7
 	 * 
 	 */
 	private function Sanitize() {
@@ -1285,7 +1286,7 @@ class Content  implements TemplateInterface {
 		foreach($this as $k => $v) {
 			if (is_string($v)) {				
 				//Validation::Sanitize($this->$k);
-				Validation::AddSlashes($this->$k);
+				//Validation::AddSlashes($this->$k);
 			}
 		}
 
