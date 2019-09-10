@@ -99,6 +99,10 @@ class Mail_RFC822
     */
     var $limit = null;
 
+    public function __constructa($address = null, $default_domain = null, $nest_groups = null, $validate = null, $limit = null)
+    {
+	$this->Mail_RFC822($address, $default_domain, $nest_groups, $validate, $limit);
+    }
 
     /**
      * Sets up the object. The address must either be set here or when

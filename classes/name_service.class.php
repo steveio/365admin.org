@@ -10,6 +10,11 @@
 
 class NameService {
 
+	public function __construct()
+	{
+		$this->NameService();
+	}
+
 	function NameService() {
  	}
 

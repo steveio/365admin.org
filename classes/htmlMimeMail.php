@@ -88,6 +88,11 @@ class htmlMimeMail
     */
     var $smtp_params;
 
+    public function __construct()
+    {
+	$this->htmlMimeMail();
+    }
+
     /**
     * Constructor function. Sets the headers
     * if supplied.

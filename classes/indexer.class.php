@@ -23,6 +23,9 @@ define("WEIGHT_MAX",6);
 
 class Indexer {
 
+	public function __construct(&$db) {
+		$this->Indexer($db);
+	}
 
 	public function Indexer(&$db) {
 		$this->db = $db;

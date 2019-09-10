@@ -347,7 +347,7 @@ class Image {
  */
 class BlankImage extends Image {
 	
-	public function GetHtml($size,$title) {
+	public function GetHtml($size, $alt = '', $class = '', $noOutputSize = false) {
 		global $_CONFIG;
 		
 		$width = ($size != "") ? ImageSize::Get($size,$this->GetAspect(),"WIDTH") : '100px';
@@ -945,34 +945,6 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 	
 }
 
-
-
-
-/* Generate thumbnail images from an existing image object */
-class ImageProcessor_ImageThumbnail extends ImageProcessor {
-		
-	public function Process($oImage) {
-
-		Logger::DB(2,get_class($this)."::".__FUNCTION__."()");
-
-		global $db,$_CONFIG;
-		
-		Logger::DB(2,get_class($this)."::".__FUNCTION__."()","Image info : ".serialize($oImage));				
-					
-		/* 5.  Convert the image to thumbnail resolutions */
-		if ($this->GetResizeFl()) {
-			if ($this->GetResizeProfile() == PROFILE_IMAGE) {
-				
-				foreach($this->GetImageSize() as $k => $v) {
-					Logger::DB(2,get_class($this)."::".__FUNCTION__."()","Creating Thumbnail : ".$k);
-					$this->Convert($oImage,$k);
-				}
-			}
-		}
-		
-	}
-	
-}
 
 
 

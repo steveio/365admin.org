@@ -1,6 +1,10 @@
 <?
 
 class Company {
+
+        function __construct(&$db) {
+		$this->Company($db);
+	}
 	
 	function Company(&$db) {
 		

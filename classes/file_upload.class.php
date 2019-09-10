@@ -38,6 +38,12 @@ class File_upload {
 	var $_is_error; //(bool)
 	var $_errno;
 
+	public function __construct()
+	{
+		$this->File_upload();
+	}
+
+
 	function File_upload() {
 		$this->_allowed_mime = array();
 		$this->_allowed_ext = array();

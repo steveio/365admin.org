@@ -8,6 +8,9 @@
 
 class Placement {
 
+        function __construct(&$db) {
+		$this->Placement($db);
+	}
 
 	function Placement(&$db) {
 

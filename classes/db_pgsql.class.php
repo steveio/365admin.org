@@ -44,11 +44,8 @@ class db {
 		if(null === $this->db) {
 			$this->db=@pg_connect($this->conn_str);
 		}
-				
+			
 		if (!$this->db) {
-		    print_r(pg_last_error());
-		    die(__FILE__."::".__LINE__);
-		    
 			$this->halt(); // call error handler
 		}
 	}

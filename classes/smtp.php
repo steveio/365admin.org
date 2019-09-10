@@ -12,8 +12,8 @@
     */
 
 
-    define('SMTP_STATUS_NOT_CONNECTED', 1, TRUE);
-    define('SMTP_STATUS_CONNECTED', 2, TRUE);
+    define('SMTP_STATUS_NOT_CONNECTED', 1);
+    define('SMTP_STATUS_CONNECTED', 2);
 
     class smtp{
 
@@ -48,6 +48,11 @@
         *   timeout - The timeout in seconds for the call    Default: 5
         *             to fsockopen()
         */
+
+	public function __construct($params = array())
+	{
+		$this->smtp($params);
+	}
 
         function smtp($params = array()){
 

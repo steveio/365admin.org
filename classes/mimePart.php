@@ -102,6 +102,11 @@ class Mail_mimePart {
     */
     var $_body;
 
+    public function __construct($body = '', $params = array())
+    {
+	$this->Mail_mimePart($body, $params);
+    }
+
     /**
      * Constructor.
      *

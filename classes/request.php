@@ -18,8 +18,7 @@ class Request {
 	
 	public static function GetHostName() {
 		
-		$server_name = $_SERVER["SERVER_NAME"];
-		$a = explode(".",$_SERVER["SERVER_NAME"]);
+		$a = explode(".",$_SERVER['HTTP_HOST']);
 		return $hostname = $a[1].".".$a[2];
 		
 	}

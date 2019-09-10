@@ -114,7 +114,12 @@ define('SERVICES_JSON_SUPPRESS_ERRORS', 32);
  */
 class Services_JSON
 {
-   /**
+    public function __construct($use = 0)
+    {
+        $this->Services_JSON($use);
+    } 
+
+  /**
     * constructs a new JSON instance
     *
     * @param    int     $use    object behavior flags; combine with boolean-OR
