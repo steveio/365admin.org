@@ -1,20 +1,12 @@
 <?php
 
-
 require_once("./conf/config.php");
 require_once("./init.php");
 require_once("./conf/brand_config.php");
 
 
-
 $allowed_hosts = array("oneworld365.org", "gapyear365.com", "seasonaljobs365.com","summercamp365.com", "tefl365.com");
-$hostname = Request::GetHostName();
-
-if (!in_array(strtolower($hostname), $allowed_hosts)) {
-	Http::Header(404);
-	die();
-}
-
+$hostname = "oneworld365.org";
 
 define('HOSTNAME',$hostname);
 define('BASE_URL','http://admin.'.$hostname);
@@ -23,7 +15,6 @@ define("COOKIE_DOMAIN", ".".HOSTNAME);
 /* setup an instance of session authentication */
 $oAuth = new Authenticate($db,$redirect = TRUE, $redirect_url = "/".ROUTE_LOGIN, COOKIE_NAME);
 $oAuth->ValidSession();
-
 
 
 
@@ -37,6 +28,7 @@ $oBrand = new Brand($aBrandConfig[HOSTNAME]);
 
 include("./includes/header.php");
 include("./includes/footer.php");
+
 
 
 /* route request */
@@ -101,7 +93,7 @@ try {
 	die($e->getMessage());
 }
 
-	
+
 try {
 	
 	/**
@@ -115,11 +107,13 @@ try {
 } catch (InvalidSessionException $e) {  // invalid session / session expired 
 	Http::Redirect("/");
 } catch (NotFoundException $e) {  // 404 not found error
-	Logger::DB(1,"404NotFoundException: ".$e->getMessage());
+	print_r(1,"404NotFoundException: ".$e->getMessage());
+	die();
 	header('HTTP/1.0 404 Not Found');	
 	Http::Redirect("/".ROUTE_ERROR);
 } catch (Exception $e) { // general exception
-	Logger::DB(1,"GeneralException: ".$e->getMessage());
+	print_r(1,"GeneralException: ".$e->getMessage());
+	die();
 	Http::Redirect("/".ROUTE_ERROR);
 }
 
