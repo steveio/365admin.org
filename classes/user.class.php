@@ -101,8 +101,8 @@ class User {
 		// check for required feilds
 
 		foreach($_POST as $k => $v) {
-			if (ereg("^p_",$k)) {
-				$k = ereg_replace("p_","",$k);
+			if (preg_match("/^p_/",$k)) {
+				$k = preg_replace("/p_/","",$k);
 				$this->$k = $v;
 			}
 		}

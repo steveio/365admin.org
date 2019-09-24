@@ -116,7 +116,7 @@ class Services_JSON
 {
     public function __construct($use = 0)
     {
-        $this->Services_JSON($use);
+        $this->_Services_JSON($use);
     } 
 
   /**
@@ -135,7 +135,7 @@ class Services_JSON
     *                                   bubble up with an error, so all return values
     *                                   from encode() should be checked with isError()
     */
-    function Services_JSON($use = 0)
+    function _Services_JSON($use = 0)
     {
         $this->use = $use;
     }

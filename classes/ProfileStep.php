@@ -77,7 +77,7 @@ class ProfileStep extends GenericStep {
 					$aError['msg']['img_upload'] = $upload->get_error();
 				}
 		
-				if ( count($aError['msg']) < 1 && is_array($aResult['TMP_PATH']) && (count($aResult['TMP_PATH']) >= 1)) {
+				if (is_array($aError) &&  count($aError['msg']) < 1 && is_array($aResult['TMP_PATH']) && (count($aResult['TMP_PATH']) >= 1)) {
 
 					/* Now call ImageProcessor to generate proxy images */
 					if (isset($_REQUEST['do_file_upload'])) { 

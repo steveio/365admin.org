@@ -9,9 +9,14 @@ class Country {
 	private $url_name;
 	private $description;
 	private $hostelbooker_id;		
+
+	public function __construct($db = NULL)
+	{
+		$this->_Country($db);
+	}
 	
 	/* @param depreciated $db */
-	function Country($db = NULL) {
+	function _Country($db = NULL) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 	

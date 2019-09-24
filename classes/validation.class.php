@@ -28,7 +28,7 @@ class Validation {
 	}
 
 	
-	public static function AddSlashes(&$input) {
+	public static function AddSlashes(&$input,$db_escape = true) {
 		
 		if (DEBUG) Logger::Msg(get_class()."::".__FUNCTION__."()");
 
@@ -37,6 +37,9 @@ class Validation {
 			foreach($input as $k => $v) {
 				if (is_string($v)) {
 					$input[$k] = addslashes($v); 
+                                        if ($db_escape)
+                                        	$input[$k] = pg_escape_string($input[$k]); 
+
 				}
 			}
 		} elseif (is_string($input)) {

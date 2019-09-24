@@ -92,16 +92,17 @@ class Mail_RFC822
      * @var boolean $mailRFC822
      */
     var $mailRFC822 = true;
-    
+   
+ 
     /**
     * A limit after which processing stops
     * @var int $limit
     */
     var $limit = null;
 
-    public function __constructa($address = null, $default_domain = null, $nest_groups = null, $validate = null, $limit = null)
+    public function __construct($address = null, $default_domain = null, $nest_groups = null, $validate = null, $limit = null)
     {
-	$this->Mail_RFC822($address, $default_domain, $nest_groups, $validate, $limit);
+	$this->_Mail_RFC822($address, $default_domain, $nest_groups, $validate, $limit);
     }
 
     /**
@@ -116,7 +117,7 @@ class Mail_RFC822
      * 
      * @return object Mail_RFC822 A new Mail_RFC822 object.
      */
-    function Mail_RFC822($address = null, $default_domain = null, $nest_groups = null, $validate = null, $limit = null)
+    function _Mail_RFC822($address = null, $default_domain = null, $nest_groups = null, $validate = null, $limit = null)
     {
         if (isset($address))        $this->address        = $address;
         if (isset($default_domain)) $this->default_domain = $default_domain;

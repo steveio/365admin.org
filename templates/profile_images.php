@@ -55,7 +55,7 @@
 		<p2>Upload images from files stored on your computer.</p2>
 	</div>
 
-	<? if (count($oArticle->aImage) >= 1) { ?>
+	<? if (is_array($oArticle->aImage) && count($oArticle->aImage) >= 1) { ?>
 		<div class="row" style="width: 400px;">
 		<h2>Existing Images :</h2>
 		

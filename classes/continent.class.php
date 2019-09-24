@@ -7,9 +7,14 @@ class Continent {
 	private $name;
 	private $url_name;
 	private $description;		
+
+	public function __construct($db = NULL)
+	{
+		$this->_Continent($db);
+	}
 	
 	/* @param depreciated $db */
-	function Continent($db = NULL) {
+	function _Continent($db = NULL) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		

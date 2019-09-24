@@ -7,9 +7,14 @@ class Activity {
 	private $count;
 	private $url_name;
 	private $description;
+
+	public function __construct($db = NULL)
+	{
+		$this->_Activity($db);
+	}
 	
 	/* @param depreciated $db */ 
-	function Activity($db = NULL) {
+	function _Activity($db = NULL) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		

@@ -12,7 +12,12 @@ class Category implements TemplateInterface {
 	
 	private $aCategory;
 
-	public function Category(&$db = NULL) {
+	public function _Category(&$db = NULL)
+	{
+		$this->_Category($db);
+	}
+
+	public function _Category(&$db = NULL) {
 	
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
