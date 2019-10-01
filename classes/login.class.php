@@ -382,7 +382,7 @@ class Login {
 				
 				$db->query("UPDATE euser SET logins = logins+1, failed_logins = 0, last_login = CURRENT_TIMESTAMP, sess_id = '".$this->sess_id."' WHERE id = '".$this->user_id."';");
 				
-				$ip = (getenv(HTTP_X_FORWARDED_FOR)) ?  getenv(HTTP_X_FORWARDED_FOR) :  getenv(REMOTE_ADDR);
+				$ip = (getenv('HTTP_X_FORWARDED_FOR')) ?  getenv('HTTP_X_FORWARDED_FOR') :  getenv('REMOTE_ADDR');
 								
 				Logger::DB(2,get_class($this)."::".__FUNCTION__."()",'LOGIN'.' Username: '.$this->uname." IP: ".$ip);
 				return false;

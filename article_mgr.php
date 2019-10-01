@@ -20,6 +20,8 @@ $sWebSiteListHTML = $oWebsite->GetSiteSelectList(array(),$checked = TRUE, $marku
 
 
 
+$aDelete = array();
+
 foreach($_REQUEST as $k => $v) {
 	if (preg_match("/art_/",$k)) {
 		$id = preg_replace("/art_/","",$k);

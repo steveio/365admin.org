@@ -37,8 +37,13 @@ class Website {
 
 		return $sStr;	
 	}
-	
+
+	/*
+	 * @deprecated - homepage is statically maintained
+	 *
+	 */	
 	public function GetCompanyWebsiteList($iCompanyId) {
+		/*
 		if (!is_numeric($iCompanyId)) return;
 		$this->db->query("SELECT website_id FROM comp_website_hp_map WHERE company_id = ".$iCompanyId.";");
 		for($i=0; $i< count($this->db->getNumRows()); $i++) {
@@ -49,6 +54,9 @@ class Website {
 			$aId[] = (int) $aResult[$i]['website_id'];
 		}
 		return $aId;
+		*/
+
+		return array();
 		
 	}
 

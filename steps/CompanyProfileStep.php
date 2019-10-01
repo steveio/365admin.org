@@ -521,7 +521,7 @@ EOT;
 		// no volunteers 
 		$oNoStaff = new Refdata(REFDATA_INT_RANGE);
 		$oNoStaff->SetOrderBySql(' id ASC');
-		$oNoStaff->SetElementId(PROFILE_FIELD_VOLUNTEER_NO_D); 
+		$oNoStaff->SetElementId(PROFILE_FIELD_VOLUNTEER_NO_PLACEMENTS); 
 		$oNoStaff->SetElementName(PROFILE_FIELD_VOLUNTEER_NO_PLACEMENTS);
 		$selected = '';
 		if (isset($_POST['submit'])) {

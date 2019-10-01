@@ -12,7 +12,7 @@ class Category implements TemplateInterface {
 	
 	private $aCategory;
 
-	public function _Category(&$db = NULL)
+	public function __construct(&$db = NULL)
 	{
 		$this->_Category($db);
 	}

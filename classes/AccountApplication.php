@@ -109,7 +109,7 @@ class AccountApplication {
 		
 		$this->id = $db->getFirstCell("SELECT nextval('act_app_seq')");
 		
-		foreach($a as $v) $v = (is_string($v)) ? htmlentities(trim($v),ENT_NOQUOTES) : $v;
+		foreach($a as $v) $v = (is_string($v)) ? pg_escape_string(htmlentities(trim($v),ENT_NOQUOTES)) : $v;
 
 		$sql = "INSERT INTO act_app (
 									id

@@ -20,7 +20,7 @@
 
 	<?
 	$aImage = $oProfile->GetImageArray();	
-	if (count($aImage) >= 1) {
+	if (is_array($aImage) && count($aImage) >= 1) {
 		foreach($aImage as $oImage) {
 			$type = ($oProfile->GetGeneralType() == PROFILE_COMPANY) ? "COMPANY" : "PLACEMENT";
 			?>

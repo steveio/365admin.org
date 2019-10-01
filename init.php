@@ -9,6 +9,22 @@
  */
 
 
+/* class auto-loader
+ */
+function class_autoload($classname) {
+        $classpath = PATH_2_STEP_CLASSES . $classname.".php";
+
+    if (!file_exists($classpath)) {
+        throw new Exception("Unable to load step class: ".$classname);
+    }
+
+        require_once($classpath);
+
+}
+
+spl_autoload_register("class_autoload");
+
+
 /* global php includes */
 require_once(BASE_PATH."/classes/Exceptions.php");
 require_once(BASE_PATH."/classes/StepController.php");
@@ -150,20 +166,6 @@ try {
     die();
 }
 
-
-/* step class auto-loader- 
- * these must be defined one class per file with a filename matching the classname 
- */
-function __autoload($classname) {
-	$classpath = PATH_2_STEP_CLASSES . $classname.".php";
-
-    if (!file_exists($classpath)) {
-    	throw new Exception("Unable to load step class: ".$classname);
-    }
-	
-	require_once($classpath);
-
-}
 
 
 ?>
