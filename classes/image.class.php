@@ -315,7 +315,7 @@ class Image {
 	}
 	
 	/*
-	 * Delete an image (including all thumbnails)
+	 * Delete (detach / unmap) an image
 	 * 
 	 */
 	public function Delete() {
@@ -326,15 +326,14 @@ class Image {
 		
 		if (!is_numeric($this->GetId())) return false;
 		
-		File::Delete($this->GetPath());		
-		
-		foreach(ImageSize::Get("","","ALL") as $k => $v) {
-			File::Delete($this->GetPath($k));
-		}
+		//File::Delete($this->GetPath());		
+		//foreach(ImageSize::Get("","","ALL") as $k => $v) {
+		//	File::Delete($this->GetPath($k));
+		//}
 
 		$db->query("DELETE FROM ".$_CONFIG['image_map']." WHERE img_id = ".$this->GetId());
 		
-		$db->query("DELETE FROM ".$_CONFIG['image']." WHERE id = ".$this->GetId());
+		//$db->query("DELETE FROM ".$_CONFIG['image']." WHERE id = ".$this->GetId());
 	
 	}
 	

@@ -45,8 +45,8 @@ if (!is_numeric($link_id) ||
 	sendResponse($aResponse);	 
 }
 
-
-$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$link_to."' AND m.link_id = ".$link_id." AND i.id = ".$img_id);
+$sql = "SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$link_to."' AND m.link_id = ".$link_id." AND i.id = ".$img_id;
+$db->query($sql);
 
 if ($db->getNumRows() == 1) {
 	$o = $db->getObject();
@@ -56,7 +56,8 @@ if ($db->getNumRows() == 1) {
 	$oImage->Delete();
 	*/
 
-	$db->query("DELETE FROM ".$_CONFIG['image_map']." WHERE link_to = '".$link_to."' and link_id = '".$link_id."'");
+	$sql = "DELETE FROM ".$_CONFIG['image_map']." WHERE link_to = '".$link_to."' and link_id = '".$link_id."' AND img_id = ".$img_id;
+	$db->query($sql);
 		
 	$aResponse['retVal'] = true;
 	$aResponse['msg'] = "SUCCESS: Detached image";
