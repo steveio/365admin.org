@@ -108,8 +108,8 @@ try {
 	Http::Redirect("/");
 } catch (NotFoundException $e) {  // 404 not found error
 	print_r(1,"404NotFoundException: ".$e->getMessage());
-	die();
 	header('HTTP/1.0 404 Not Found');	
+	die();
 	Http::Redirect("/".ROUTE_ERROR);
 } catch (Exception $e) { // general exception
 	print_r(1,"GeneralException: ".$e->getMessage());
