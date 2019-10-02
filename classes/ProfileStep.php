@@ -54,6 +54,7 @@ class ProfileStep extends GenericStep {
 		$max_uploads  = 4;
 		$path = ROOT_PATH_IMAGE_UPLOAD.'/upload/images/';
 		
+
 		if (isset($_REQUEST['do_file_upload']) || isset($_REQUEST['do_logo_upload'])) {
 		
 			if (DEBUG) Logger::Msg("Upload: Begin...");
@@ -76,14 +77,16 @@ class ProfileStep extends GenericStep {
 					$aError = array();
 					$aError['msg']['img_upload'] = $upload->get_error();
 				}
-		
-				if (is_array($aError) &&  count($aError['msg']) < 1 && is_array($aResult['TMP_PATH']) && (count($aResult['TMP_PATH']) >= 1)) {
+				
+				if (!is_array($aError) && is_array($aResult['TMP_PATH']) && (count($aResult['TMP_PATH']) >= 1)) {
 
 					/* Now call ImageProcessor to generate proxy images */
-					if (isset($_REQUEST['do_file_upload'])) { 
+					if (isset($_REQUEST['do_file_upload'])) {
+
 						/* process profile images */
 						$oIP = new ImageProcessor_FileUpload;						
 						$oIP->Process($aResult['TMP_PATH'],$link_to,$link_id,$iImgType = PROFILE_IMAGE);
+
 					} elseif (isset($_REQUEST['do_logo_upload'])) {
 						/* process logo */
 						$oIP = new ImageProcessor_FileUpload;
