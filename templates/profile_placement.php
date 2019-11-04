@@ -475,7 +475,7 @@ $(document).ready(function(){
 		</div>
 	
 		<div class="row">
-			<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_JOB_OPTIONS; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_JOB_DURATION]) > 1 ? "color:red;" : ""; ?>">Job Details</label></span>
+			<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_JOB_OPTIONS; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_JOB_OPTIONS]) > 1 ? "color:red;" : ""; ?>">Job Details</label></span>
 			<span class="input_col">
 				<ul class='select_list'>
 			<?

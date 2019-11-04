@@ -628,8 +628,9 @@ class PlacementProfile extends AbstractProfile {
 	private function UpdateCache($url_name, $company_id) {
 		
 		global $db;
-		
-		$sCompUrlName = CompanyProfile::GetUrlNameById($company_id);
+	
+		$oCompanyProfile = new CompanyProfile;	
+		$sCompUrlName = $oCompanyProfile->GetUrlNameById($company_id);
 		$sUri = "/company/".$sCompUrlName."/".$url_name;
 		
 		// get id's and hostname of each website this page is registered with in cache table

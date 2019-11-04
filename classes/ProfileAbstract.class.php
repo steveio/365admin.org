@@ -169,7 +169,9 @@ abstract class AbstractProfile implements TemplateInterface {
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
 		global $db,$_CONFIG;
-		
+	
+		if (!is_numeric($this->GetId())) return false;
+	
 		$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$this->GetLinkTo()."' AND m.link_id = ".$this->GetId()." ORDER BY i.id ASC");
 
 		if ($db->getNumRows() >= 1) {

@@ -360,7 +360,7 @@ class Enquiry {
 					$aProfileId[] = $row['id']; 
 				}
 			}
-			if (count($aProfileId)) {
+			if (is_array($aProfileId) && count($aProfileId)) {
 				$sql_filter_placement = " e.link_to = '1' AND e.link_id IN (".implode(",",$aProfileId).") ";
 				$join = " LEFT OUTER JOIN ".$_CONFIG['profile_hdr_table']." p ON p.id = e.link_id ";
 				$join .= " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON p.company_id = comp.id ";

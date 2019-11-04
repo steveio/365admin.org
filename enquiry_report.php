@@ -234,7 +234,9 @@ if (is_numeric($company_id)) {
 	<th>status</th>
 	<? } ?>
 </tr>
-<? 
+<?
+if (is_array($aEnquiryProcessed))
+{ 
 foreach($aEnquiryProcessed as $oEnquiry) {
 ?>
 	<? $class = ($class == "hi") ? "" : "hi"; ?>
@@ -255,6 +257,7 @@ foreach($aEnquiryProcessed as $oEnquiry) {
 		<? } ?>
 	</tr>
 <?
+}
 } 
 ?>
 </table>
