@@ -102,15 +102,15 @@ print $oHeader->Render();
 		{
 		  $oCompany = new Company($db);
 		  $objCompany = $oCompany->GetById($oReview->GetLinkId(),"title,url_name");
-		  $strDetails = "Company: ".$objCompany->title;
+		  $strDetails = "Company: <a href='http://www.oneworld365.org/company/".$objCompany->url_name."'>".$objCompany->title."</a>";
 		} elseif ($oReview->GetLinkTo() == 'PLACEMENT') {
                   $oProfile = new PlacementProfile();
                   $objProfile = $oProfile->GetProfileById($oReview->GetLinkId(),$key = "PLACEMENT_ID");
-                  $strDetails = "Placement: ".$objProfile->company_name." : ".$objProfile->title;
+                  $strDetails = "Placement: <a href='http://www.oneworld365.org/company/".$objProfile->comp_url_name."/".$objProfile->url_name."'>".$objProfile->company_name." : ".$objProfile->title. "</a>";
 		} elseif ($oReview->GetLinkTo() == 'ARTICLE') {
 		    $oArticle = new Article();
 		    $oArticle->GetById($oReview->GetLinkId());
-		    $strDetails = "Article: ".$oArticle->GetTitle();
+		    $strDetails = "Article: <a href='http://".$oArticle->GetUrl()."'>".$oArticle->GetTitle()."</a>";
 		}
 
 	?>
