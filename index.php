@@ -47,7 +47,6 @@ $request_array = Request::GetUri("ARRAY");
 //print_r($request_array);
 $request_uri = "/".$request_array[1]; 
 
-
 try {
 	/**
 	 * Match older standalong php file routes eg enquiry_repory, article system
@@ -63,7 +62,11 @@ try {
 			die();
 			break;
 		case "/review-report" :
-			require_once("review_report.php");
+		    require_once("review_report.php");
+		    die();
+		    break;
+		case "/edit_review" :
+			require_once("edit_review.php");
 			die();
 			break;
 		case "/enquiry-report" :
