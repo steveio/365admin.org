@@ -124,7 +124,7 @@ class ProfileStep extends GenericStep {
 							$tmp->SetId($id);
 							$aExistingLogo = $tmp->GetImages(LOGO_IMAGE);
 							unset($tmp);
-							if (count($aExistingLogo) >= 1) {
+							if (is_array($aExistingLogo) && count($aExistingLogo) >= 1) {
 								if (DEBUG) Logger::Msg("Delete ".count($aExistingLogo)." Existing Logo...");
 								
 								foreach($aExistingLogo as $oLogoImage) {
@@ -145,7 +145,7 @@ class ProfileStep extends GenericStep {
 			}   
 			
 			
-			if (count($aError['msg']) >= 1) {
+			if (is_array($aError) && count($aError['msg']) >= 1) {
 				$this->ProcessValidationErrors($aError['msg']);
 			} else {
 				$plural = (count($aResult['FILENAME']) > 1) ? "s" : "";

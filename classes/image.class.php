@@ -76,8 +76,6 @@ class Image {
 	
 	public function __Construct($id = '',$type = '',$ext = '',$dimensions = '',$width = '',$height = '',$aspect = '') {
 		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		global $_CONFIG;
 		
 		$this->id = $id;
@@ -199,8 +197,6 @@ class Image {
 	
 	public function Save() {
 		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."() id = ".$this->GetId());
-		
 		global $db,$_CONFIG;
 
 		if (!is_numeric($this->GetId())) $this->SetId(-1);
@@ -220,8 +216,6 @@ class Image {
 	
 	public function Add() {
 		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
 		global $db,$_CONFIG;
 		
 
@@ -257,8 +251,6 @@ class Image {
 	}
 	
 	public function Update() {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
 		global $db,$_CONFIG;
 
@@ -320,8 +312,6 @@ class Image {
 	 */
 	public function Delete() {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		global $db,$_CONFIG;
 		
 		if (!is_numeric($this->GetId())) return false;
@@ -380,8 +370,6 @@ class ImageProcessor {
 	private $aImageSize; // an array of image thumbnail dimensions 
 	
 	public function __construct() {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
 		global $_CONFIG;
 
@@ -491,8 +479,6 @@ class ImageProcessor {
 	 */
 	public function Identify($sPath) {
 
-		if (LOG) Logger::DB(2,JOBNAME,get_class($this)."::".__FUNCTION__."() path: ".$sPath);
-		
 		$aReturn = array(
 							"type" => '',
 							"dimensions" => '',
@@ -504,8 +490,6 @@ class ImageProcessor {
 		if (!file_exists($sPath)) return false;
 		
 		$sCmd = $this->GetPath2Identify() . " " . $sPath; 
-		
-		if (LOG) Logger::DB(2,JOBNAME,$sCmd);
 		
 		
 		$aOut = array();
@@ -541,16 +525,12 @@ class ImageProcessor {
 		$aReturn['height'] = $iHeight;
 		$aReturn['aspect'] = ($iWidth > $iHeight) ? LANDSCAPE : PORTRAIT ;
 		
-		if (DEBUG) Logger::Msg($aReturn);
-		
 		return $aReturn;
 
 	}
 	
 	public function Convert($oImage,$size) {
 	
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		if (!is_object($oImage)) return false;
 
 		
@@ -641,8 +621,6 @@ class ImageProcessor {
 	 */
 	protected function Process($aUrl,$sLinkTo,$iLinkId,$iImgType = PROFILE_IMAGE) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
 		global $db,$_CONFIG;
 		
 		
@@ -677,8 +655,6 @@ class ImageProcessor {
 			}
 			
 			
-			if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."() Processing Image path : ".$oImage->GetPath());
-						
 			/* 3.  Identify the image */
 			$aResult = $this->Identify($sTmpPath);
 		
@@ -716,11 +692,8 @@ class ImageProcessor {
 			/* move image from tmp path to img folder */
 			rename($sTmpPath,$oImage->GetPath());
 
-			if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."() Image info : ".serialize($oImage));
-			
 			/* 5.  Convert the image to thumbnail resolutions */
 			foreach($this->GetImageSize() as $k => $v) {
-				if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."() Creating Thumbnail : ".$k);
 				$this->Convert($oImage,$k);
 			}
 
@@ -752,8 +725,6 @@ class ImageProcessor {
 		foreach($aResult as $aProfile) {
 
 			//if ($i++ == 10) die("finished");
-			
-			if (LOG) Logger::DB(2,JOBNAME,'PROCESSING : profile_id = '.$aProfile['id']);
 			
 			$oProfile = ProfileFactory::Get($aProfile['type']);
 			$oProfile->SetId($aProfile['id']);
@@ -825,11 +796,7 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 		
 	public function Process($aPath,$sLinkTo,$iLinkId,$iImgType = PROFILE_IMAGE) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
 		global $db,$_CONFIG;
-		
-		if (LOG) Logger::DB(3,get_class($this)."::".__FUNCTION__."()",'Path: '.$aPath.", LinkTo: ".$sLinkTo.", LinkId: ".$iLinkId.", Type: ".$iImgType);
 		
 		
 		foreach($aPath as $sImgPath) {
@@ -852,7 +819,6 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 			$aResult = $this->Identify($sImgPath);
 	
 			if (!$aResult) {
-			    if (LOG) Logger::DB(1,get_class($this)."::".__FUNCTION__."()","Identify Failed : ".$sTmpPath." ,LinkTo : ".$sLinkTo." ,LinkId : ".$iLinkId);
 				$bErrorFl = true;
 				continue;
 			}
