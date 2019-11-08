@@ -82,7 +82,7 @@ print $oHeader->Render();
 
 	<div id='row800'>
 	
-	<h1>Reviews (Pending)</h1>
+	<h1>Reviews / Comments (Pending)</h1>
 	
 	<table cellspacing="2" cellpadding="4" border="0" width="800px">	
 	
@@ -93,7 +93,7 @@ print $oHeader->Render();
 		<th>age</th>
 		<th>gender</th>
 		<th>rating</th>
-		<th colspan=3>&nbsp;</th>		
+		<th colspan=5>&nbsp;</th>		
 	</tr>
 		
 	<? foreach($aReviewPending as $oReview) { 
@@ -123,6 +123,7 @@ print $oHeader->Render();
 			<td width="20px" valign="top"><?= $oReview->GetGender() ?></td>
 			<td width="60px" valign="top"><?= $oReview->GetRating() ?></td>
 			
+			<td width="20px"><a href="../edit_review/?&id=<?= $oReview->GetId() ?>" target="_new">edit</a></td>
 			<td width="20px"><input type="submit" name="enq_<?= $oReview->GetId() ?>" value="approve" /></td>
 			<td width="20px"><input type="submit" onclick="javscript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $oReview->GetId() ?>" value="reject" /></td>
 			<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oReview->GetId() ?>" name="enq_<?= $oReview->GetId() ?>" value="approve" /></td>
@@ -136,10 +137,12 @@ print $oHeader->Render();
 			<td colspan="6" width="200px" valign="top"><?= html_entity_decode($oReview->GetTitle()); ?></td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>
 		<tr class='<?= $class ?>'>
 			<td>Review:</td>
 			<td colspan="6" width="200px" valign="top"><?= html_entity_decode($oReview->GetReview()) ?></td>
+			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 		</tr>
@@ -186,6 +189,7 @@ $strPage = "Page ".$iPage." of ".$oPager->GetNumPages();
 		<th>gender</th>
 		<th>title</th>
 		<th>rating</th>
+		<th>edit</th>
 		<th>status</th>		
 	</tr>
 <? 
@@ -216,6 +220,8 @@ foreach($aReviewProcessed as $oReview) {
 			<td width="20px" valign="top"><?= $oReview->GetGender() ?></td>
 			<td width="160px" valign="top"><?= html_entity_decode($oReview->GetTitle()) ?></td>
 			<td width="60px" valign="top"><?= $oReview->GetRating() ?></td>
+			<td width="20px"><a href="../edit_review/?&id=<?= $oReview->GetId() ?>" target="_new">edit</a></td>
+			
 			<td width="60px" valign="top"><?= $oReview->GetStatusLabel() ?></td>
 		</tr>
 		<tr>
