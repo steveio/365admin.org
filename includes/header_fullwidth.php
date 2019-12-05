@@ -27,16 +27,29 @@ $oHeader->SetJsInclude($oJsInclude);
 
 
 
-/* load the generic site wide CSS */
+$oJsInclude = new JsInclude();
+$oJsInclude->SetSrc("/includes/js/datatables/js/jquery.dataTables.min.js");
+$oHeader->SetJsInclude($oJsInclude);
+
 $oCssInclude = new CssInclude();
-$oCssInclude->SetHref('/css/stylesheet.css');
+$oCssInclude->SetHref('/includes/js/datatables/css/jquery.dataTables.min.css');
 $oCssInclude->SetMedia('screen');
 $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+
+
+
+/* load the generic site wide CSS */
+//$oCssInclude = new CssInclude();
+//$oCssInclude->SetHref('/css/stylesheet.css');
+//$oCssInclude->SetMedia('screen');
+//$oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
 
 $oCssInclude = new CssInclude();
 $oCssInclude->SetHref('/css/fonts.css');
 $oCssInclude->SetMedia('screen');
 $oHeader->SetCssInclude("CSS_FONTS", $oCssInclude);
+
+
 
 
 

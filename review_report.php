@@ -1,13 +1,13 @@
 <?php
 
-include_once("./includes/header.php");
+include_once("./includes/header_fullwidth.php");
 include_once("./includes/footer.php");
 include_once("/www/vhosts/oneworld365.org/htdocs/classes/review.class.php");
 
 //include("./footer_new.php");
 
 
-if (!$oAuth->oUser->isValidUser) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
+if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
 
@@ -49,21 +49,9 @@ if ($oAuth->oUser->isAdmin) {
 
 
 
-if ($oAuth->oUser->isAdmin) {
-    
-    $iPage = isset($_REQUEST['Page']) ? $_REQUEST['Page'] : 0;
-    $iPageSize = 30;
-    $iStart = ($iPage > 1) ? (($iPage -1) * $iPageSize) : 0;
+$aReport = $oReview->GetReport();
 
-	$aReviewPending = $oReview->Get(null,null,0);
-	if (!$aReviewPending) $aReviewPending = array();
-	$aReviewProcessed = $oReview->Get(null,null,null,$iPageSize, $iStart);
-	
-	$oPager = new PagedResultSet();
-	$oPager->SetResultsPerPage(30);
-	$oPager->GetByCount($oReview->GetTotalReviews(),"Page");
-	
-}
+
 
 
 print $oHeader->Render();
@@ -75,82 +63,62 @@ print $oHeader->Render();
 <div class="row pad-tbl clear">
 
 
+<script>
 
-<? if ($oAuth->oUser->isAdmin) {  ?>
+$(document).ready(function() {
+    $('#report').DataTable({
+    	"pageLength": 100,
+    	"bSort" : false
+    });
+});
 
-	<form enctype="multipart/form-data" name="process_enquiry" id="process_enquiry" action="#" method="POST">
+</script>
 
-	<div id='row800'>
-	
-	<h1>Reviews / Comments (Pending)</h1>
-	
-	<table cellspacing="2" cellpadding="4" border="0" width="800px">	
-	
-	<tr>
-		<th>name</th>
-		<th>email</th>
-		<th>nationality</th>
-		<th>age</th>
-		<th>gender</th>
-		<th>rating</th>
-		<th colspan=5>&nbsp;</th>		
+
+
+<div id='' style='margin-top: 40px;'>
+
+<h1>Reviews</h1>
+
+<table id="report" class="display" cellspacing="2" cellpadding="4" border="0" width="1200px">
+
+	<thead>
+	<tr><?
+$aRow = array_shift($aReport);
+
+$aKeys = array_keys($aRow);
+foreach($aKeys as $idx => $key) { ?>
+	<th><?= $key; ?></th><? 
+} ?>
+	<th>edit</th>
+	<th>approve</th>
+	<th>reject</th>
+	<th>bulk</th>	
 	</tr>
-		
-	<? foreach($aReviewPending as $oReview) { 
-		$strDetails = "";
-		if ($oReview->GetLinkTo() == 'COMPANY')
-		{
-		  $oCompany = new Company($db);
-		  $objCompany = $oCompany->GetById($oReview->GetLinkId(),"title,url_name");
-		  $strDetails = "Company: <a href='http://www.oneworld365.org/company/".$objCompany->url_name."'>".$objCompany->title."</a>";
-		} elseif ($oReview->GetLinkTo() == 'PLACEMENT') {
-                  $oProfile = new PlacementProfile();
-                  $objProfile = $oProfile->GetProfileById($oReview->GetLinkId(),$key = "PLACEMENT_ID");
-                  $strDetails = "Placement: <a href='http://www.oneworld365.org/company/".$objProfile->comp_url_name."/".$objProfile->url_name."'>".$objProfile->company_name." : ".$objProfile->title. "</a>";
-		} elseif ($oReview->GetLinkTo() == 'ARTICLE') {
-		    $oArticle = new Article();
-		    $oArticle->GetById($oReview->GetLinkId());
-		    $strDetails = "Article: <a href='http://".$oArticle->GetUrl()."'>".$oArticle->GetTitle()."</a>";
-		}
+	</thead>
+	
+	<tbody>
 
-	?>
-		<? $class = ($class == "hi") ? "" : "hi"; ?>
-		<tr class='<?= $class ?>'>
-			<td width="80px" valign="top"><?= $oReview->GetName() ?></td>
-			<td width="80px" valign="top"><?= $oReview->GetEmail() ?></td>
-			<td width="80px" valign="top"><?= $oReview->GetNationality() ?></td>
-			<td width="20px" valign="top"><?= $oReview->GetAge() ?></td>
-			<td width="20px" valign="top"><?= $oReview->GetGender() ?></td>
-			<td width="60px" valign="top"><?= $oReview->GetRating() ?></td>
-			
-			<td width="20px"><a href="../edit_review/?&id=<?= $oReview->GetId() ?>" target="_new">edit</a></td>
-			<td width="20px"><input type="submit" name="enq_<?= $oReview->GetId() ?>" value="approve" /></td>
-			<td width="20px"><input type="submit" onclick="javscript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $oReview->GetId() ?>" value="reject" /></td>
-			<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oReview->GetId() ?>" name="enq_<?= $oReview->GetId() ?>" value="approve" /></td>
-		</tr>
-		<tr class='<?= $class ?>'>
-                        <td>For:</td>
-                        <td colspan="6"><?= $strDetails; ?></td>
-		</tr>
-		<tr class='<?= $class ?>'>
-			<td>Title:</td>
-			<td colspan="6" width="200px" valign="top"><?= html_entity_decode($oReview->GetTitle()); ?></td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr class='<?= $class ?>'>
-			<td>Review:</td>
-			<td colspan="6" width="200px" valign="top"><?= html_entity_decode($oReview->GetReview()) ?></td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr><td>&nbsp;</td></tr>
-		
-	<? } ?>
+<?
+foreach($aReport as $aRow) { ?>
+	<tr><?php 
+    foreach($aRow as $key => $value)
+    { ?>
+		<td id="<?= $key; ?>" valign="top"><?= $value; ?></td><? 
+    } ?>
+	<td width="20px"><a href="../edit_review/?&id=<?= $aRow['post_id'] ?>" target="_new">edit</a></td>
+	<td width="20px"><input type="submit" name="enq_<?= $aRow['post_id'] ?>" value="approve" /></td>
+	<td width="20px"><input type="submit" onclick="javscript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $aRow['post_id'] ?>" value="reject" /></td>
+	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $aRow['post_id'] ?>" name="enq_<?= $aRow['post_id'] ?>" value="approve" /></td>
+
+	</tr><?
+} ?>
+</tbody>
+</table>
+
+<table>
 	<tr class="hi">
-		<td colspan="9" align="right">
+		<td colspan="" align="right">
 			<select name="bulk_action">
 				<option value="approve">approve selected</option>
 				<option value="reject">reject selected</option>
@@ -159,96 +127,12 @@ print $oHeader->Render();
 		
 		</td>	
 	</tr>
-	</table>
-	
-	</div>
-	</form>
-<? } ?>
-
-
-<hr />
-
-
-<div id='row800' style='margin-top: 40px;'>
-<?php 
-$iPage = isset($_REQUEST['Page']) ? $_REQUEST['Page'] : 1;
-
-$strPage = "Page ".$iPage." of ".$oPager->GetNumPages();
-?> 
-<h1>Reviews (<?= $strPage; ?>)</h1>
-
-
-
-<table cellspacing="2" cellpadding="4" border="0" width="800px">
-
-	<tr>
-		<th>name</th>
-		<th>email</th>
-		<th>nationality</th>
-		<th>age</th>
-		<th>gender</th>
-		<th>title</th>
-		<th>rating</th>
-		<th>edit</th>
-		<th>status</th>		
-	</tr>
-<? 
-foreach($aReviewProcessed as $oReview) {
-                $strDetails = "";
-                if ($oReview->GetLinkTo() == 'COMPANY')
-                {
-                  $oCompany = new Company($db);
-                  $objCompany = $oCompany->GetById($oReview->GetLinkId(),"title,url_name");
-                  $strDetails = "Company: ".$objCompany->title;
-                } elseif ($oReview->GetLinkTo() == "PLACEMENT") {
-                  $oProfile = new PlacementProfile();
-                  $objProfile = $oProfile->GetProfileById($oReview->GetLinkId(),$key = "PLACEMENT_ID");
-                  $strDetails = "Placement: ".$objProfile->company_name." : ".$objProfile->title;
-                } elseif ($oReview->GetLinkTo() == 'ARTICLE') {
-                    $oArticle = new Article();
-                    $oArticle->GetById($oReview->GetLinkId());
-                    $strDetails = "Article: ".$oArticle->GetTitle();
-                }
-
-?>
-	<? $class = ($class == "hi") ? "" : "hi"; ?>
-		<tr class='<?= $class; ?>'>
-			<td width="80px" valign="top"><?= $oReview->GetName() ?></td>
-			<td width="80px" valign="top"><?= $oReview->GetEmail() ?></td>
-			<td width="80px" valign="top"><?= $oReview->GetNationality() ?></td>
-			<td width="20px" valign="top"><?= $oReview->GetAge() ?></td>
-			<td width="20px" valign="top"><?= $oReview->GetGender() ?></td>
-			<td width="160px" valign="top"><?= html_entity_decode($oReview->GetTitle()) ?></td>
-			<td width="60px" valign="top"><?= $oReview->GetRating() ?></td>
-			<td width="20px"><a href="../edit_review/?&id=<?= $oReview->GetId() ?>" target="_new">edit</a></td>
-			
-			<td width="60px" valign="top"><?= $oReview->GetStatusLabel() ?></td>
-		</tr>
-		<tr>
-		<td>For:</td>
-		<td colspan="7"><?= $strDetails ?></td>
-		</tr>
-		<tr class='hi'>
-			<td>&nbsp;</td>
-			<td colspan="6" width="200px" valign="top"><?= html_entity_decode($oReview->GetReview()) ?></td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-	
-	<?
-} 
-?>
 </table>
 
-<div id="pager" class="row800">
-<?= $oPager->RenderHTML(); ?>
-</div>
 
 </div>
 
-<? if ($oAuth->oUser->isAdmin) {  ?>
 </form>
-<? } ?>
 
 </div>
 </div>

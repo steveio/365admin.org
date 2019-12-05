@@ -14,22 +14,6 @@
 <?= $this->Get("CSS_GENERIC"); ?>
 <?= $this->Get("CSS_FONTS"); ?>
 
-<!--[if !IE]>-->
-<?= $this->Get("CSS_NOT_IE"); ?>
-<!--<![endif]-->
-
-<!--[if IE 6]>
-<?= $this->Get("CSS_IE6"); ?>
-<![endif]-->
-
-<!--[if IE 7]>
-<?= $this->Get("CSS_IE7"); ?>
-<![endif]-->
-
-<!--[if IE 8]>
-<?= $this->Get("CSS_IE8"); ?>
-<![endif]-->
-
 
 <?= $this->Get("JS_INCLUDE"); ?>
 

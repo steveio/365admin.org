@@ -2,7 +2,7 @@
 body {  
 	margin: 0; 
 	padding: 0;
-	background: #eeeeee; 
+	background: #ffffff; 
 }
 
 
@@ -54,11 +54,11 @@ body {
 
 
 .MainWrapper {
-	width:925px;height:auto;margin:0 auto;background:#ffffff; }
+	width:1225px;height:auto;margin:0 auto;background:#ffffff; }
 
 .MainWrapperInner {
 	float: left;
-	width:925px;height:auto;margin:0 auto;background:#ffffff; }
+	width:1225px;height:auto;margin:0 auto;background:#ffffff; }
 
 .header {
 	float: left;
@@ -68,7 +68,7 @@ body {
 
 .footer {
 	clear:  both;
-	width: 904px;
+	width: 1204px;
 	padding: 10px;
 	
 }
@@ -76,7 +76,7 @@ body {
 
 .ContentWrapper {
 	float: left;
-	width: 904px;
+	width: 1204px;
 	padding: 10px;
 }
 

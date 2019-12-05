@@ -84,65 +84,6 @@ ul ul {
     margin: 20px 40px;
 }
 
-
-table {
-    font-size: inherit;
-    border: 1px solid #c8c8c8;
-}
-
-th {
-    background: #d8d8d8;
-    text-align: left;
-    padding: 5px;
-    white-space: nowrap;
-}
-
-td {
-    background: #f8f8f8;
-    text-align: left;
-    padding: 5px;
-    vertical-align: top;
-}
-
-select, input, textarea {
-    font: 99% "Trebuchet MS", Trebuchet, Tahoma, Verdana, Arial, sans-serif;
-}
-
-pre, code, tt, dt {
-    font: 100% monospace;
-    margin: 20px 0;
-}
-
-pre, blockquote {
-    padding: 15px;
-    background-color: #f0f0f0;
-    margin: 20px 0;
-    -moz-border-radius: 10px;
-}
-
-td pre {
-    font: 85% monospace;
-    padding: 5px;
-    margin: 5px 0;
-}
-
-
-.pad1 { padding: 3px; }
-.pad2 { padding: 6px; }
-.pad3 { padding: 9px; }
-
-.pad1-r { padding-right: 3px; }
-.pad2-r { padding-right: 6px; }
-.pad3-r { padding-right: 9px; }
-.pad1-t { padding-top: 3px; }
-.pad2-t { padding-top: 6px; }
-.pad3-t { padding-top: 9px; }
-.pad1-b { padding-bottom: 3px; }
-.pad2-b { padding-bottom: 6px; }
-.pad3-b { padding-bottom: 9px; }
-.pad4-b { padding-bottom: 18px; }
-
-
 .margin1 { margin: 3px; }
 
 .title {
