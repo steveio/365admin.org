@@ -250,7 +250,7 @@ class Listing {
 	
 		global $db;
 		
-		$sStartDate = ($this->GetStartDate() == "now()::timestamp") ? $this->GetStartDate() : "'".$this->GetStartDate()."'";   
+		$sStartDate = "now()::timestamp";   
 	
 		$sql = "INSERT INTO listing (	id
 										,company_id
