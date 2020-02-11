@@ -25,6 +25,23 @@ $oJsInclude = new JsInclude();
 $oJsInclude->SetSrc("/includes/js/jquery/plugins/jquery.cookie.js");
 $oHeader->SetJsInclude($oJsInclude);
 
+$oJsInclude = new JsInclude();
+$oJsInclude->SetSrc("/includes/js/jquery/plugins/jquery.cookie.js");
+$oHeader->SetJsInclude($oJsInclude);
+
+$oJsInclude = new JsInclude();
+$oJsInclude->SetSrc("/includes/js/daterangepicker/moment.min.js");
+$oHeader->SetJsInclude($oJsInclude);
+
+$oJsInclude = new JsInclude();
+$oJsInclude->SetSrc("/includes/js/daterangepicker/daterangepicker.js");
+$oHeader->SetJsInclude($oJsInclude);
+
+$oCssInclude = new CssInclude();
+$oCssInclude->SetHref('/includes/js/daterangepicker/daterangepicker.css');
+$oCssInclude->SetMedia('screen');
+$oHeader->SetCssInclude("CSS_FONTS", $oCssInclude);
+
 
 
 /* load the generic site wide CSS */
