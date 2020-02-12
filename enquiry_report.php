@@ -72,9 +72,10 @@ $aOptions['report_date_from'] = null;
 $aOptions['report_date_to'] = null;
 $aOptions['report_status'] = array(0,1,2,3,4,5,6,7);
 $aOptions['company_id'] = $company_id;
-$aOptions['limit'] = 25;
+//$aOptions['limit'] = 25;
 
-if ($_REQUEST['report_status'] != "ALL")
+
+if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
 {
     switch($_REQUEST['report_status'])
     {
@@ -96,17 +97,13 @@ if ($_REQUEST['report_status'] != "ALL")
     }
 }
 
-if (!isset($_REQUEST['report_all']))
-{
-    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 month"))." - ".date("d-m-Y");
-    $aDate = explode(" - ", $strDateRange);
-    $aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
-    $aOptions['report_date_to'] = preg_replace("/\//","-",$aDate[1]);
-}
+$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 month"))." - ".date("d-m-Y");
+$aDate = explode(" - ", $strDateRange);
+$aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
+$aOptions['report_date_to'] = preg_replace("/\//","-",$aDate[1]);
 
 
 $aEnquiry = $oEnquiry->GetAll($aOptions);
-
 
 
 print $oHeader->Render();
