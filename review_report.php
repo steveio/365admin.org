@@ -56,8 +56,8 @@ if ($oAuth->oUser->isAdmin) {
 }
 
 $aOptions = array();
-$aOptions['report_date_from'] = null;
-$aOptions['report_date_to'] = null;
+$aOptions['report_date_from'] = "";
+$aOptions['report_date_to'] = "";
 if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
     $aOptions['report_status'] = $_REQUEST['report_status'];
 
@@ -79,19 +79,6 @@ print $oHeader->Render();
 <!-- BEGIN Page Content Container -->
 <div class="page_content content-wrap clear">
 <div class="row pad-tbl clear">
-
-
-<script>
-
-$(document).ready(function() {
-    $('#report').DataTable({
-    	"pageLength": 100,
-    	"bSort" : false
-    });
-});
-
-</script>
-
 
 
 <form name="report_filter" enctype="multipart/form-data" action="" method="POST">
@@ -177,17 +164,29 @@ foreach($aReport as $aRow) { ?>
 
 
 <script>
-$(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left',
-    locale: {
-        format: 'DD-MM-YYYY'
-    }
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-  });
+
+$(document).ready(function() {
+
+    $(function() {
+      $('input[name="daterange"]').daterangepicker({
+        opens: 'left',
+        locale: {
+            format: 'DD-MM-YYYY'
+        }
+      }, function(start, end, label) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+      });
+    });
+
+    $('#report').DataTable({
+    	"pageLength": 100,
+    	"bSort" : false
+    });
+
 });
+
 </script>
+
 </div>
 </div>
 <!-- END Page Content Container -->

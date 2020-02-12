@@ -234,6 +234,27 @@ class Enquiry {
 		}
 	}
 
+	public function GetShortStatusLabel() {
+	    switch($this->status) {
+	        case 0 :
+	            return "Pending";
+	            break;
+	        case 1 :
+	            return "Approved";
+	            break;
+	        case 2 :
+	        case 5 :
+	        case 6 :
+	        case 7 :
+	            return "Sent";
+	            break;
+	        case 3 :
+	        case 4 :
+	            return "Rejected";
+	            break;
+	    }
+	}
+	
 
 	public function GetEnquiryTypeLabel() {
 
@@ -329,14 +350,35 @@ class Enquiry {
 	}
 
 
-	public function GetAll($iStatusFrom = 0, $iStatusTo = 1, $iLimit = 50,$company_id = NULL) {
-
+	public function GetAll($aOptions = array()) {
+	        
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
 
 		global $db,$_CONFIG;
 
-		$sLimit = (is_numeric($iLimit)) ? "LIMIT ".$iLimit : "";
+		
+		$strStartDateSQL = "";
+		$strEndDateSQL = "";
+		$strStatusSQL = "";
+
+		if (isset($aOptions['limit']))  
+		    $sLimit = "LIMIT ".$aOptions['limit'];
+		
+		$company_id = null;
+		if (isset($aOptions['company_id']) && $aOptions['company_id'] != null)
+		    $company_id = $aOptions['company_id'];
+
+		if ($aOptions['report_date_from'] != null) {
+		    $strStartDateSQL = " and e.date >= '".$aOptions['report_date_from']."'";
+		}
+		
+		if ($aOptions['report_date_to'] != null) {
+		    $strEndDateSQL = " and e.date <= '".$aOptions['report_date_to']."'";
+		}
+
+		if (is_array($aOptions['report_status'])) {
+		    $strStatusSQL = " and e.status in (".implode(",",$aOptions['report_status']).")";
+		}
 		
 		/*
 		 * filter report by company id : 
@@ -349,7 +391,7 @@ class Enquiry {
 			$sql_filter_company = " e.link_to = '0' AND e.link_id = ".$company_id;
 			$join = " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON comp.id = e.link_id ";
 			$join_fields = "comp.title as company_name,comp.url_name as company_url_name,comp.id as company_id ";
-			$aCompEnquiry = $this->GetEnquiryResults($join, $join_fields, $sql_filter_company, $iStatusFrom, $iStatusTo, $sLimit);
+			$aCompEnquiry = $this->GetEnquiryResults($join, $join_fields, $sql_filter_company, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 			
 			/* get placement enquiry result */
 			$sql = "SELECT id FROM ".$_CONFIG['profile_hdr_table']." WHERE company_id = ".$company_id;
@@ -365,7 +407,7 @@ class Enquiry {
 				$join = " LEFT OUTER JOIN ".$_CONFIG['profile_hdr_table']." p ON p.id = e.link_id ";
 				$join .= " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON p.company_id = comp.id ";
 				$join_fields = "p.title as placement_name,p.url_name as placement_url_name,p.company_id, comp.title as company_name, comp.url_name as company_url_name ";
-				$aPlacementEnquiry = $this->GetEnquiryResults($join, $join_fields,$sql_filter_placement, $iStatusFrom, $iStatusTo, $sLimit);
+				$aPlacementEnquiry = $this->GetEnquiryResults($join, $join_fields,$sql_filter_placement, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 			} else {
 				$aPlacementEnquiry = array();
 			}
@@ -375,13 +417,13 @@ class Enquiry {
 			$sql_filter_company = " e.link_to = '0' ";
 			$join = " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON comp.id = e.link_id ";
 			$join_fields = "comp.title as company_name,comp.url_name as company_url_name,comp.id as company_id ";
-			$aCompEnquiry = $this->GetEnquiryResults($join, $join_fields, $sql_filter_company, $iStatusFrom, $iStatusTo, $sLimit);
+			$aCompEnquiry = $this->GetEnquiryResults($join, $join_fields, $sql_filter_company, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 
 			$sql_filter_placement = " e.link_to = '1' ";
 			$join = " LEFT OUTER JOIN ".$_CONFIG['profile_hdr_table']." p ON p.id = e.link_id ";
 			$join .= " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON p.company_id = comp.id ";
 			$join_fields = "p.title as placement_name,p.url_name as placement_url_name,p.company_id, comp.title as company_name, comp.url_name as company_url_name ";
-			$aPlacementEnquiry = $this->GetEnquiryResults($join, $join_fields,$sql_filter_placement, $iStatusFrom, $iStatusTo, $sLimit);
+			$aPlacementEnquiry = $this->GetEnquiryResults($join, $join_fields,$sql_filter_placement, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 			
 		}
 		
@@ -402,7 +444,7 @@ class Enquiry {
 	}
 
 
-	private function GetEnquiryResults($join, $join_field_sql, $sql_filter, $iStatusFrom, $iStatusTo, $sLimit) {
+	private function GetEnquiryResults($join, $join_field_sql, $sql_filter, $sLimit, $strStartDateSQL = "", $strEndDateSQL = "", $strStatusSQL = "") {
 
 		global $db,$_CONFIG;
 		
@@ -440,14 +482,21 @@ class Enquiry {
 		,website w
 		WHERE
 		$sql_filter
-		AND e.status >= $iStatusFrom
-		AND e.status <= $iStatusTo
-		AND e.country = c.id
-		AND e.site_id = w.id
+	    AND e.country = c.id
+		AND e.site_id = w.id".
+        $strStartDateSQL." ".
+        $strEndDateSQL." ".
+        $strStatusSQL ." 
 		ORDER BY id DESC
 		$sLimit
-				";
-		
+        ";
+
+        /*
+		print_r("<pre>");
+		print_r($sql);
+		print_r("</pre>");
+		*/
+
 		$db->query($sql);
 
 		$aResult = array();

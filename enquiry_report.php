@@ -1,30 +1,32 @@
 <?php
 
-include_once("./includes/header.php");
+include_once("./includes/header_fullwidth.php");
 include_once("./includes/footer.php");
 
-
-//include("./footer_new.php");
 
 
 if (!$oAuth->oUser->isValidUser) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
-
 $oEnquiry = new Enquiry();
 
+// only admin approves / rejects enquiries, companies have a read-only view
 if ($oAuth->oUser->isAdmin) {
+
 	$oCompany = new Company($db);
 	$d['company_select_ddlist'] = $oCompany->getCompanyNameDropDown($_REQUEST['p_company'],null,'p_company',true);
 
 	$aApprove = array();
 	$aReject  = array();
-	
+
+	$iApproved = 0;
+	$iRejected = 0;
+
 	foreach($_REQUEST as $k => $v) {
 		if (preg_match("/enq_/",$k)) {
 			$id = preg_replace("/enq_/","",$k);
-			if (isset($_REQUEST['bulk_action'])) {
-				if ($_REQUEST['bulk_action'] == "approve") $aApprove[] = $id;
+			if (isset($_REQUEST['bulk_action']) && $_REQUEST['bulk_action'] != "") {
+			    if ($_REQUEST['bulk_action'] == "approve") $aApprove[] = $id;
 				if ($_REQUEST['bulk_action'] == "reject") $aReject[] = $id;
 			} else {
 				if ($v == "approve") $aApprove[] = $id;
@@ -35,24 +37,26 @@ if ($oAuth->oUser->isAdmin) {
 	
 	if (count($aApprove) >= 1) {
 		foreach($aApprove as $id) {
-			if (DEBUG) Logger::Msg("Approve : id = ".$id);
-			$oEnquiry->SetStatus($id,1);			
+			$oEnquiry->SetStatus($id,1);
+			$iApproved++;
 		}
 	}
-	
-	
-	
+
 	if (count($aReject) >= 1) {
 		foreach($aReject as $id) {
-			if (DEBUG) Logger::Msg("Reject : id = ".$id);
-			$oEnquiry->SetStatus($id,3);			
+			$oEnquiry->SetStatus($id,3);
+			$iRejected++;
 		}
 	}
 
+	$strMessage = "";
+	if ($iApproved >= 1)
+	    $strMessage = "Approved ".$iApproved." row(s) \n";
+    if ($iRejected >= 1)
+        $strMessage .= "Rejected ".$iRejected." row(s) ";
+
 }
-
-
-$iLimit = (is_numeric($_REQUEST['p_company'])) ? "null" : 50; 
+ 
 
 /* filtering by company */
 $company_id = NULL;
@@ -63,39 +67,46 @@ if (!$oAuth->oUser->isAdmin) {
 }
 
 
-if ($oAuth->oUser->isAdmin) {
-	$aEnquiryPending = $oEnquiry->GetAll($iStatusFrom = 0, $iStatusTo = 0, $iLimit,$company_id);
+$aOptions = array();
+$aOptions['report_date_from'] = null;
+$aOptions['report_date_to'] = null;
+$aOptions['report_status'] = array(0,1,2,3,4,5,6,7);
+$aOptions['company_id'] = $company_id;
+$aOptions['limit'] = 25;
+
+if ($_REQUEST['report_status'] != "ALL")
+{
+    switch($_REQUEST['report_status'])
+    {
+        case 0 : // pending
+            $aOptions['report_status'] = array(0);
+            break;
+        case 1 : // approved
+            $aOptions['report_status'] = array(1);
+            break;
+        case 2 : // sent (including auto-response codes)
+            $aOptions['report_status'] = array(2,5,7);
+            break;
+        case 3 : // rejected
+            $aOptions['report_status'] = array(3);
+            break;
+        case 4 : // failed
+            $aOptions['report_status'] = array(4,6);
+            break;
+    }
 }
 
-if ($oAuth->oUser->isAdmin) {
-	$aEnquiryProcessed = $oEnquiry->GetAll($iStatusFrom = 1, $iStatusTo = 7, $iLimit,$company_id);	
-} else { /* only show approved enquiries */
-	$aEnquiryProcessed = $oEnquiry->GetAll($iStatusFrom = 0, $iStatusTo = 2, $iLimit,$company_id);
+if (!isset($_REQUEST['report_all']))
+{
+    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 month"))." - ".date("d-m-Y");
+    $aDate = explode(" - ", $strDateRange);
+    $aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
+    $aOptions['report_date_to'] = preg_replace("/\//","-",$aDate[1]);
 }
 
 
+$aEnquiry = $oEnquiry->GetAll($aOptions);
 
-
-  
-
-if (is_numeric($company_id)) { /* filter results */
-	if (is_array($aEnquiryPending)) {
-		foreach($aEnquiryPending as $oEnquiry) {
-			if ($oEnquiry->company_id == $company_id) {
-				$aEnquiryPendingFiltered[] = $oEnquiry; 
-			}
-		}
-		$aEnquiryPending = $aEnquiryPendingFiltered;
-	}
-	if (is_array($aEnquiryProcessed)) {
-		foreach($aEnquiryProcessed as $oEnquiry) {
-			if ($oEnquiry->company_id == $company_id) {
-				$aEnquiryProcessedFiltered[] = $oEnquiry; 
-			}
-		}
-		$aEnquiryProcessed = $aEnquiryProcessedFiltered; 
-	}
-}
 
 
 print $oHeader->Render();
@@ -107,167 +118,140 @@ print $oHeader->Render();
 <div class="row pad-tbl clear">
 
 
-<? if ($oAuth->oUser->isAdmin) {  ?>
+<form enctype="multipart/form-data" name="process_enquiry" id="process_enquiry" action="" method="POST">
 
-<div id='row800' style='margin: 20px 0px 40px 0px;'>
-	<form enctype="multipart/form-data" name="placement_edit" id="placement_edit" action="#" method="POST">		
-		<?= $d['company_select_ddlist']; ?>
-		<input type="submit" name="doEnquiryByCompany" value=" Go " style="width: 45px;" class="textinput" />
-	</form>
+<label for="daterange">Date range:</label>
+<input type="text" name="daterange" value="<?= $strDateRange; ?>" />
+
+<label for="daterange">By Status:</label>
+<select id="" name="report_status">
+	<option value="ALL">ALL</option>
+	<option value="0" <?= ($_REQUEST['report_status'] == "0") ? "selected" : ""; ?>>PENDING</option>
+	<option value="1" <?= ($_REQUEST['report_status'] == "1") ? "selected" : ""; ?>>APPROVED</option>
+	<option value="2"<?= ($_REQUEST['report_status'] == "2") ? "selected" : ""; ?>>SENT</option>
+	<option value="3"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>REJECTED</option>
+	<option value="4"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>FAILED</option>
+</select>
+
+<? if ($oAuth->oUser->isAdmin) {  ?>
+	<label for="daterange">By Company:</label><?= $d['company_select_ddlist']; ?>
+<? } ?>
+
+<input type="submit" name="report_filter" value="go" onClick="this.form.submit()" />
+
+	
+<? if (strlen($strMessage) >= 1) { ?>
+    <div style="font-weight: bold; margin: 20px 0px 20px 0px;">
+    <h3><img src="/images/icon_green_tick.png" border="0" /><?= $strMessage; ?></h3>
+    </div>
+<?php } ?>
+
+
+<div class="span12">
+
+<h1>Enquiry Report</h1>
+
+<div style="clear: both;">
+<div style="float: right; margin-bottom: 20px;">
+		<select name="bulk_action">
+			<option value="">select</option>
+			<option value="approve">approve selected</option>
+			<option value="reject">reject selected</option>
+		</select>
+		<input type="button" name="go_batch" value="go" onClick="this.form.submit()" />
 </div>
-<? } ?>
+</div>
 
 
-<? if ($oAuth->oUser->isAdmin) {  ?>
-<? if (!is_numeric($_REQUEST['p_company'])) { ?>
+<table id="report" class="display" cellspacing="2" cellpadding="4" border="0">	
 
-	<form enctype="multipart/form-data" name="process_enquiry" id="process_enquiry" action="#" method="POST">
-
-	<div id='row800'>
-	
-	<h1>50 Most Recent Enquiries (Pending)</h1>
-	
-	<table cellspacing="2" cellpadding="4" border="0" width="800px">	
-	
-	<tr>
-		<th>date</th>
-		<th>site</th>
-		<th>type</th>
-		<th>about</th>
-		<th>from</th>
-		<th>country</th>
-		<th>enquiry</th>
-		<th>&nbsp;</th>		
-	</tr>
-		
-	<? foreach($aEnquiryPending as $oEnquiry) { ?>
-		<? $class = ($class == "hi") ? "" : "hi"; ?>
-		<tr class='hi'>
-			<td width="80px" valign="top"><?= $oEnquiry->GetDate() ?></td>
-			<td width="80px" valign="top"><?= $oEnquiry->GetSiteName() ?></td>
-			<td width="80px" valign="top"><?= $oEnquiry->GetEnquiryTypeLabel() ?></td>
-			<td width="160px" valign="top">
-				<? if (strlen($oEnquiry->GetPlacementName()) > 1) { ?>
-				<a class="p_small" href="./company/<?= $oEnquiry->GetCompanyUrlName() ."/". $oEnquiry->GetPlacementUrlName() ?>" title="<?= $oEnquiry->GetPlacementName() ?>"><?= $oEnquiry->GetPlacementName() ?></a>
-				<br/>
-				<? } ?>
-				<a class="p_small" href="./company/<?= $oEnquiry->GetCompanyUrlName(); ?>" title="<?= $oEnquiry->GetCompanyName(); ?>"><?= $oEnquiry->GetCompanyName(); ?></a>
-			</td>
-			<td width="160px" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().")" ?></td>
-			<td width="80px" valign="top"><?= $oEnquiry->GetCountryName() ?></td>
-			
-			<td width="20px"><input type="submit" name="enq_<?= $oEnquiry->GetId() ?>" value="approve" /></td>
-			<td width="20px"><input type="submit" onclick="javscript: return confirm('Are you sure you wish to reject this enquiry?');" name="enq_<?= $oEnquiry->GetId() ?>" value="reject" /></td>
-			<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oEnquiry->GetId() ?>" name="enq_<?= $oEnquiry->GetId() ?>" value="approve" /></td>
-		</tr>
-		<tr class='hi'>
-			<td>&nbsp;</td>
-			<td colspan="6" width="200px" valign="top"><?= $oEnquiry->GetEnquiry() ?></td>
-			<td>&nbsp;</td>
-			<td>&nbsp;</td>
-		</tr>
-		<tr><td>&nbsp;</td></tr>
-		
-		<!-- 
-		<? if ($oEnquiry->GetEnquiryType() == "BOOKING") { ?>
-		<tr>
-			<td colspan=2></td>
-			<td><i>No Travellers</i></td>
-			<td><i>Budget</i></td>
-			<td><i>Est Dept Date</i></td>
-			<td><i>Contact Method</i></td>
-		</tr>
-		<tr>
-			<td colspan=2>&nbsp;</td>
-			<td valign="top"><?= $oEnquiry->GetGroupSize(); ?></td>
-			<td valign="top"><?= $oEnquiry->GetBudget(); ?></td>
-			<td valign="top"><?= $oEnquiry->GetDeptDate(); ?></td>
-			<td valign="top"><?= $oEnquiry->GetContactType(); ?></td>
-		</tr>
-		<? } ?>
-		 -->
-		
-		
-	<? } ?>
-	<tr class="hi">
-		<td colspan="9" align="right">
-			<select name="bulk_action">
-				<option value="approve">approve selected</option>
-				<option value="reject">reject selected</option>
-			</select>
-			<input type="submit" name="go_batch" value="go" onClick="this.form.submit()" />
-		
-		</td>	
-	</tr>
-	</table>
-	
-	</div>
-	</form>
-<? } ?>
-<? } ?>
-
-
-<hr />
-
-
-<div id='row800' style='margin-top: 40px;'> 
-
-<? 
-if (is_numeric($company_id)) { 
-	print "<h1>Recent Enquiries</h1>";
-} else {
-	print "<h1>50 Most Recent Enquiries</h1>";
-}
-?>
-
-
-
-<table cellspacing="2" cellpadding="4" border="0" width="800px">
+<thead>
 
 <tr>
 	<th>date</th>
 	<th>type</th>
 	<th>about</th>
 	<th>from</th>
+	<th>country</th>
 	<th>enquiry</th>
-	<? if ($oAuth->oUser->isAdmin) {  ?>
 	<th>status</th>
-	<? } ?>
+<?php if ($oAuth->oUser->isAdmin) { ?>
+	<th>approve</th>
+	<th>reject</th>
+	<th>bulk</th>
+<?php } ?>
 </tr>
-<?
-if (is_array($aEnquiryProcessed))
-{ 
-foreach($aEnquiryProcessed as $oEnquiry) {
-?>
-	<? $class = ($class == "hi") ? "" : "hi"; ?>
-	<tr class='<?= $class ?>'>
-		<td width="80px" valign="top"><?= $oEnquiry->GetDate() ?></td>
-		<td width="80px" valign="top"><?= $oEnquiry->GetEnquiryTypeLabel() ."<br />(".$oEnquiry->GetSiteName() ?>)</td>
-		<td width="160px" valign="top">
+</thead>
+
+<tbody>
+	
+<? foreach($aEnquiry as $oEnquiry) { ?>
+	<tr>
+		<td width="" valign="top"><?= $oEnquiry->GetDate() ?></td>
+		<td width="" valign="top"><?= $oEnquiry->GetEnquiryTypeLabel() ?></td>
+		<td width="" valign="top">
 			<? if (strlen($oEnquiry->GetPlacementName()) > 1) { ?>
-			<a class="p_small" href="./company/<?= $oEnquiry->GetCompanyUrlName() ."/". $oEnquiry->GetPlacementUrlName() ?>" title="<?= $oEnquiry->GetPlacementName() ?>"><?= $oEnquiry->GetPlacementName() ?></a>
+			<a class="" href="http://www.oneworld365.org/company/<?= $oEnquiry->GetCompanyUrlName() ."/". $oEnquiry->GetPlacementUrlName() ?>" title="<?= $oEnquiry->GetPlacementName() ?>"><?= $oEnquiry->GetPlacementName() ?></a>
 			<br/>
 			<? } ?>
-			<a class="p_small" href="./company/<?= $oEnquiry->GetCompanyUrlName(); ?>" title="<?= $oEnquiry->GetCompanyName(); ?>"><?= $oEnquiry->GetCompanyName(); ?></a>
+			<a class="" href="http://www.oneworld365.org/company/<?= $oEnquiry->GetCompanyUrlName(); ?>" title="<?= $oEnquiry->GetCompanyName(); ?>"><?= $oEnquiry->GetCompanyName(); ?></a>
 		</td>
-		<td width="160px" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().")" . "<br />". $oEnquiry->GetCountryName() ?></td>
-		<td width="200px" valign="top"><?= $oEnquiry->GetEnquiry() ?></td>
-		<? if ($oAuth->oUser->isAdmin) {  ?>
-		<td width="20px" valign="top"><?= $oEnquiry->GetStatusLabel() ?></td>
-		<? } ?>
+		<td width="" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().") <br />".$oEnquiry->GetIpAddr() ?></td>
+		<td width="" valign="top"><?= $oEnquiry->GetCountryName() ?></td>
+		<td width="" valign="top">
+			<?= $oEnquiry->GetEnquiry() ?>
+        	<? if ($oEnquiry->GetEnquiryType() == "BOOKING") { ?>
+        		<br /><br />
+        		Group Size: <?= $oEnquiry->GetGroupSize(); ?>, 
+        		Budget: <?= $oEnquiry->GetBudget(); ?>, 
+        		Dept Date: <?= $oEnquiry->GetDeptDate(); ?>
+        	<? } ?>
+
+		</td>
+		<td width="" valign="top"><?= $oEnquiry->GetShortStatusLabel() ?></td>
+<?php if ($oAuth->oUser->isAdmin) { ?>
+    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>" value="approve" /></td>
+    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>" value="reject" /></td>
+    	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oEnquiry->GetId(); ?>" name="enq_<?= $oEnquiry->GetId() ?>" value="bulk" /></td>
+<?php } ?>
 	</tr>
-<?
-}
-} 
-?>
+
+<? } ?>
+
+</tbody>
 </table>
 
-
 </div>
-
-<? if ($oAuth->oUser->isAdmin) {  ?>
 </form>
-<? } ?>
+
+
+
+<script>
+
+$(document).ready(function() {
+
+    $(function() {
+      $('input[name="daterange"]').daterangepicker({
+        opens: 'left',
+        locale: {
+            format: 'DD-MM-YYYY'
+        }
+      }, function(start, end, label) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+      });
+    });
+
+    $('#report').DataTable({
+    	"pageLength": 100,
+    	"bSort" : false
+    });
+
+});
+
+</script>
+
+
+</form>
 
 </div>
 </div>
