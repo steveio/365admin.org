@@ -24,13 +24,15 @@ if ($oAuth->oUser->isAdmin) {
 
 	foreach($_REQUEST as $k => $v) {
 		if (preg_match("/enq_/",$k)) {
-			$id = preg_replace("/enq_/","",$k);
+		    $aBits = explode("_",$k);
+		    $id = $aBits[1];
+		    $mode = isset($aBits[2]) ? $aBits[2] : null;
 			if (isset($_REQUEST['bulk_action']) && $_REQUEST['bulk_action'] != "") {
 			    if ($_REQUEST['bulk_action'] == "approve") $aApprove[] = $id;
 				if ($_REQUEST['bulk_action'] == "reject") $aReject[] = $id;
 			} else {
-				if ($v == "approve") $aApprove[] = $id;
-				if ($v == "reject") $aReject[] = $id;
+			    if ($mode == "approve") $aApprove[] = $id;
+			    if ($mode == "reject") $aReject[] = $id;
 			}
 		}
 	}
@@ -207,8 +209,8 @@ print $oHeader->Render();
 		</td>
 		<td width="" valign="top"><?= $oEnquiry->GetShortStatusLabel() ?></td>
 <?php if ($oAuth->oUser->isAdmin) { ?>
-    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>" value="approve" /></td>
-    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>" value="reject" /></td>
+    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_approve" value="approve" /></td>
+    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_reject" value="reject" /></td>
     	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oEnquiry->GetId(); ?>" name="enq_<?= $oEnquiry->GetId() ?>" value="bulk" /></td>
 <?php } ?>
 	</tr>

@@ -20,13 +20,15 @@ if ($oAuth->oUser->isAdmin) {
 
 	foreach($_REQUEST as $k => $v) {
 		if (preg_match("/enq_/",$k)) {
-			$id = preg_replace("/enq_/","",$k);
+		    $aBits = explode("_",$k);
+		    $id = $aBits[1];
+		    $mode = isset($aBits[2]) ? $aBits[2] : null;
 			if (isset($_REQUEST['bulk_action']) && $_REQUEST['bulk_action'] != "") {
 				if ($_REQUEST['bulk_action'] == "approve") $aApprove[] = $id;
 				if ($_REQUEST['bulk_action'] == "reject") $aReject[] = $id;
 			} else {
-				if ($v == "approve") $aApprove[] = $id;
-				if ($v == "reject") $aReject[] = $id;
+			    if ($mode == "approve") $aApprove[] = $id;
+			    if ($mode == "reject") $aReject[] = $id;
 			}
 		}
 	}
@@ -77,8 +79,8 @@ print $oHeader->Render();
 ?>
 
 <!-- BEGIN Page Content Container -->
-<div class="page_content content-wrap clear">
-<div class="row pad-tbl clear">
+<div class="">
+<div class="">
 
 
 <form name="report_filter" enctype="multipart/form-data" action="" method="POST">
@@ -106,7 +108,7 @@ print $oHeader->Render();
 <?php } ?>
 
 
-<div id='' style='margin-top: 40px;'>
+<div id='' class="span12" style='margin-top: 40px;'>
 
 <h1>Reviews</h1>
 
@@ -149,8 +151,8 @@ foreach($aReport as $aRow) { ?>
 		<td id="<?= $key; ?>" valign="top"><?= $value; ?></td><? 
     } ?>
 	<td width="20px"><a href="../edit_review/?&id=<?= $aRow['post_id'] ?>" target="_new">edit</a></td>
-	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this review?');" name="enq_<?= $aRow['post_id'] ?>" value="approve" /></td>
-	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $aRow['post_id'] ?>" value="reject" /></td>
+	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this review?');" name="enq_<?= $aRow['post_id'] ?>_approve" value="approve" /></td>
+	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $aRow['post_id'] ?>_reject" value="reject" /></td>
 	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $aRow['post_id'] ?>" name="enq_<?= $aRow['post_id'] ?>" value="approve" /></td>
 
 	</tr><?
