@@ -48,6 +48,7 @@ include($path."/classes/indexer.class.php");
 include($path."/classes/file.class.php");
 include($path."/classes/logger.php");
 include($path."/classes/image.class.php");
+include($path."/classes/review.class.php");
 
 /* legacy company/placement classes - methods to return id lists */
 include($path."/classes/company.class.php");
