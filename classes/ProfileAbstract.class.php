@@ -292,6 +292,7 @@ abstract class AbstractProfile implements TemplateInterface {
 				
 		$arr = $oActivity->GetActivitiesById($this->GetId(),$this->GetRelationalKey());
 
+		if (!is_array($arr)) return false;
 		
 		unset($sText);
 		$sText = '';
