@@ -491,11 +491,6 @@ class Enquiry {
 		$sLimit
         ";
 
-        /*
-		print_r("<pre>");
-		print_r($sql);
-		print_r("</pre>");
-		*/
 
 		$db->query($sql);
 
