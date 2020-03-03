@@ -796,7 +796,7 @@ class Content  implements TemplateInterface {
 
 		global $db;
 		
-		$db->query("INSERT INTO ".DB__ARTICLE_TBL." (
+		$sql = "INSERT INTO ".DB__ARTICLE_TBL." (
 									id
 									,title
 									,short_desc
@@ -811,21 +811,23 @@ class Content  implements TemplateInterface {
 									,published_date
 								) VALUES (
 									".$this->GetId()."
-									,'".addslashes($this->GetTitle())."'
-									,'".addslashes($this->GetDescShort())."'		
-									,'".addslashes($this->GetDescFull())."'
-									,'".addslashes($this->GetMetaDesc())."'
-									,'".addslashes($this->GetMetaKeywords())."'
+									,'".pg_escape_string($this->GetTitle())."'
+									,'".pg_escape_string($this->GetDescShort())."'
+									,'".pg_escape_string($this->GetDescFull())."'
+									,'".pg_escape_string($this->GetMetaDesc())."'
+									,'".pg_escape_string($this->GetMetaKeywords())."'
 									,".$this->GetCreatedBy()."
 									,now()::timestamp
 									,now()::timestamp
 									,now() - interval '1 hour'
 									,".$this->GetPublishedStatus()."
 									,now()::timestamp
-								);
-					");
+								);";
+
+		$db->query($sql);
 		
 		if (!$db->getAffectedRows() == 1) {
+		    print $sql;
 			$response['save_error'] = "There was a problem adding the ".$this->GetTypeLabel().".";
 			return false;
 		}
@@ -843,11 +845,11 @@ class Content  implements TemplateInterface {
 
 		$sql = "UPDATE ".DB__ARTICLE_TBL."
                                                 SET
-                                                        title = '".addslashes($this->GetTitle())."'
-                                                        ,short_desc = '".addslashes($this->GetDescShort())."'
-                                                        ,full_desc = '".addslashes($this->GetDescFull())."'
-                                                        ,meta_desc = '".addslashes($this->GetMetaDesc())."'
-                                                        ,meta_keywords = '".addslashes($this->GetMetaKeywords())."'
+                                                        title = '".pg_escape_string($this->GetTitle())."'
+                                                        ,short_desc = '".pg_escape_string($this->GetDescShort())."'
+                                                        ,full_desc = '".pg_escape_string($this->GetDescFull())."'
+                                                        ,meta_desc = '".pg_escape_string($this->GetMetaDesc())."'
+                                                        ,meta_keywords = '".pg_escape_string($this->GetMetaKeywords())."'
                                                         ,last_updated = now()::timestamp
                                                         ,last_indexed_solr = now() - interval '1 hour'
                                                 WHERE id = ".$this->GetId().";
