@@ -28,7 +28,7 @@ function ArticleMapOptions(mid) {
     	//alert($(this).attr('name'));
     	if ($(this).attr('name') != prefix) {
     		//w[$(this).attr('name')] = $(this).attr('checked');
-    		var v = ($(this).attr('checked')) ? "T" : "F";
+    		var v = ($(this).prop('checked')) ? "T" : "F";
     		var v2 = $(this).attr('name') +'_'+ v;
     		w.push(v2);
     	}
@@ -54,7 +54,7 @@ function ArticleMapOptions(mid) {
     var opts = w.join('::');
 	var url = "/article_opt_ajax.php";
     var pars = '&mid='+mid+'&opts='+opts+'&q='+q+'&pt='+pt+'&ot='+ot+'&nt='+nt;
-
+    
 	$.post(url, { mid: mid, opts: opts, q: q, pt: pt, ot: ot, nt: nt, pi: pi, oi: oi }, 
 		function(data){
 	

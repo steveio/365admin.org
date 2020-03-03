@@ -126,9 +126,13 @@ if (count($oArticle->GetMapping()) >= 1) {
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PROFILE) == "f") ?  "" : "checked"; ?>
 			Related Profiles <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PROFILE; ?>" <?= $checked ?> />		
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_REVIEW) == "f") ?  "" : "checked"; ?>
-			Comments <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_REVIEW; ?>" <?= $checked ?> />		
+			Comments / Reviews <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_REVIEW; ?>" <?= $checked ?> />		
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_SOCIAL) == "f") ?  "" : "checked"; ?>
 			Social Buttons <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_SOCIAL; ?>" <?= $checked ?> />		
+
+			<br />
+			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ADS) == "f") ?  "" : "checked"; ?>
+			Google Ads <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ADS; ?>" <?= $checked ?> />		
 			
 		</td>
 		<td width="20px">&nbsp;</td>

@@ -18,6 +18,8 @@ define("ARTICLE_DISPLAY_OPT_ARTICLE",2);
 define("ARTICLE_DISPLAY_OPT_PROFILE",14);
 define("ARTICLE_DISPLAY_OPT_REVIEW",15);
 define("ARTICLE_DISPLAY_OPT_SOCIAL",16);
+define("ARTICLE_DISPLAY_OPT_ADS",17);
+define("ARTICLE_DISPLAY_OPT_GADS",18);
 
 // keywords to drive search results
 define("ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD",3);
@@ -694,6 +696,7 @@ class Content  implements TemplateInterface {
 			$opts[ARTICLE_DISPLAY_OPT_SOCIAL] = ($aRow['opt_social'] == NULL) ? "t" : $aRow['opt_social'];
 			$opts[ARTICLE_DISPLAY_OPT_PARENT_TABS] = ($aRow['opt_ptab'] == 't') ? 't' : 'f';
 			$opts[ARTICLE_DISPLAY_OPT_FEATURED_PROJECT] = ($aRow['opt_fproject'] == 't') ? 't' : 'f';
+			$opts[ARTICLE_DISPLAY_OPT_ADS] = ($aRow['opt_ads'] == NULL) ? "t" : $aRow['opt_ads'];
 			
 			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER] = ($aRow['opt_txtalignh'] == 't') ? 't' : 'f';
 			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY] = ($aRow['opt_txtalignb'] == 't') ? 't' : 'f';
@@ -1615,7 +1618,8 @@ class ContentMapping {
 												o_title,
 												n_title,
 												p_intro,
-												o_intro
+												o_intro,
+                                                opt_ads
 											 ) VALUES (
 												".$mid.",
 												'".$opts_array[ARTICLE_DISPLAY_OPT_PLACEMENT]."',						
@@ -1629,12 +1633,18 @@ class ContentMapping {
 												'".$o_title."',
 												'".$n_title."',
 												'".$p_intro."',
-												'".$o_intro."'
+												'".$o_intro."',
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ADS]."'
 											 );";
 
 		$db->query($sql);
 		
-		if ($db->getNumRows() == 1) return TRUE;
+		if ($db->getNumRows() == 1)
+		{
+		    return TRUE;
+		} else {
+		    error_log($sql);
+		}
 	}
 	
 }
