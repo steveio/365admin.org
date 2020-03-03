@@ -13,7 +13,7 @@ define("CK_EDITOR_INTRO_DT","2012-07-06 10:00:00");
 
 // content type flags to signal what to display in template
 define("ARTICLE_DISPLAY_OPT_PLACEMENT",0);
-define("ARTICLE_DISPLAY_OPT_ORG",1);
+define("ARTICLE_DISPLAY_OPT_ORG",1); // @ deprecated
 define("ARTICLE_DISPLAY_OPT_ARTICLE",2);
 define("ARTICLE_DISPLAY_OPT_PROFILE",14);
 define("ARTICLE_DISPLAY_OPT_REVIEW",15);
@@ -689,7 +689,6 @@ class Content  implements TemplateInterface {
 			
 			$opts = array();
 			$opts[ARTICLE_DISPLAY_OPT_PLACEMENT] = ($aRow['opt_placement'] == NULL) ? "t" : $aRow['opt_placement'];
-			$opts[ARTICLE_DISPLAY_OPT_ORG] = ($aRow['opt_org'] == NULL) ? "t" : $aRow['opt_org'];
 			$opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "t" : $aRow['opt_article'];
 			$opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "t" : $aRow['opt_profile'];
 			$opts[ARTICLE_DISPLAY_OPT_REVIEW] = ($aRow['opt_review'] == NULL) ? "t" : $aRow['opt_review'];
@@ -1608,7 +1607,6 @@ class ContentMapping {
 		
 		$sql = "INSERT INTO ".DB__ARTICLE_MAP_OPTS." (	article_map_oid, 
 												opt_placement, 
-												opt_org, 
 												opt_article,
                                                 opt_profile,
                                                 opt_review,
@@ -1623,7 +1621,6 @@ class ContentMapping {
 											 ) VALUES (
 												".$mid.",
 												'".$opts_array[ARTICLE_DISPLAY_OPT_PLACEMENT]."',						
-												'".$opts_array[ARTICLE_DISPLAY_OPT_ORG]."',
 												'".$opts_array[ARTICLE_DISPLAY_OPT_ARTICLE]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_PROFILE]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_REVIEW]."',

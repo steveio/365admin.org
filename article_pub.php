@@ -117,9 +117,7 @@ if (count($oArticle->GetMapping()) >= 1) {
 	<tr class='<?= $class ?>'>
 		<td width="100px" align="right" valign="top">
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PLACEMENT) == "t") ? "checked" : "" ; ?>
-			Placement Results <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PLACEMENT; ?>" <?= $checked ?> />&nbsp;&nbsp;
-			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ORG) == "t") ? "checked" : "" ; ?>
-			Organisation Results <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ORG; ?>" <?= $checked ?> />&nbsp;&nbsp;
+			Profile Results <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PLACEMENT; ?>" <?= $checked ?> />&nbsp;&nbsp;
 			<br />
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ARTICLE) == "t") ? "checked" : "" ; ?>
 			Related Articles <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ARTICLE; ?>" <?= $checked ?> />		
@@ -142,8 +140,7 @@ if (count($oArticle->GetMapping()) >= 1) {
 		<td width="600px;" align="right" valign="top">
 			<table cellpadding="0" cellspacing="0" border="0">
 				<tr>
-				<td width="400px;" align="right">Placement Result Title: <br /><input id="ptitle_<?= $oArticleMapping->GetId() ?>" type="text" name="ptitle_<?= $oArticleMapping->GetId() ?>" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PTITLE); ?>" maxlength="128" /></td>
-				<td width="400px;" align="right">Org Result Title: <br /><input id="otitle_<?= $oArticleMapping->GetId() ?>" type="text" name="otitle_<?= $oArticleMapping->GetId() ?>" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_OTITLE); ?>" maxlength="128" /></td>
+				<td width="400px;" align="right">Profile Result Title: <br /><input id="ptitle_<?= $oArticleMapping->GetId() ?>" type="text" name="ptitle_<?= $oArticleMapping->GetId() ?>" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PTITLE); ?>" maxlength="128" /></td>
 				</tr>
 			</table> 
 		</td>
@@ -154,8 +151,7 @@ if (count($oArticle->GetMapping()) >= 1) {
 		<td width="600px;" align="right" valign="top">
 			<table cellpadding="0" cellspacing="0" border="0">
 				<tr>
-				<td width="400px;" align="right">Placement Intro: <textarea id="pintro_<?= $oArticleMapping->GetId() ?>" type="text" name="pintro_<?= $oArticleMapping->GetId() ?>" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PINTRO); ?>" style="width: 300px; height: 60px;" maxlength="512"><?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PINTRO); ?></textarea></td>
-				<td width="400px;" align="right">Organisation Results Intro: <textarea id="ointro_<?= $oArticleMapping->GetId() ?>" type="text" name="ointro_<?= $oArticleMapping->GetId() ?>" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_OINTRO); ?>" style="width: 300px; height: 60px;" maxlength="512"><?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_OINTRO); ?></textarea></td>
+				<td width="400px;" align="right">Profile Intro Paragraph: <textarea id="pintro_<?= $oArticleMapping->GetId() ?>" type="text" name="pintro_<?= $oArticleMapping->GetId() ?>" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PINTRO); ?>" style="width: 300px; height: 60px;" maxlength="512"><?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PINTRO); ?></textarea></td>
 				</tr>
 			</table>
 		</td>
