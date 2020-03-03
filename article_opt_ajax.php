@@ -78,7 +78,8 @@ $aTextFieldOpts = array(
 
 $oContentMapping->SetOptions($mid,$opts_array, $aTextFieldOpts);
 
-
+// update cache
+$oContentMapping->SetCacheUpdate();
 
 
 $aResponse['retVal'] = true;
