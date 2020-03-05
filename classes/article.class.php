@@ -20,6 +20,7 @@ define("ARTICLE_DISPLAY_OPT_REVIEW",15);
 define("ARTICLE_DISPLAY_OPT_SOCIAL",16);
 define("ARTICLE_DISPLAY_OPT_ADS",17);
 define("ARTICLE_DISPLAY_OPT_GADS",18);
+define("ARTICLE_DISPLAY_OPT_IMG",19);
 
 // keywords to drive search results
 define("ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD",3);
@@ -355,9 +356,14 @@ class Content  implements TemplateInterface {
 		if (!is_object($oMapping)) return $this->url = $defaultUrl;
 		
 		$this->url = $oMapping->GetUrl();
+		$this->section_uri = $oMapping->GetSectionUri();
 		
 	}
-	
+
+	public function GetRelativeUri()
+	{
+	    return $this->section_uri;
+	}
 	
 	
 	public function GetAll($aFilter = array(),$fields = '',$fetch = TRUE) {
@@ -697,6 +703,7 @@ class Content  implements TemplateInterface {
 			$opts[ARTICLE_DISPLAY_OPT_PARENT_TABS] = ($aRow['opt_ptab'] == 't') ? 't' : 'f';
 			$opts[ARTICLE_DISPLAY_OPT_FEATURED_PROJECT] = ($aRow['opt_fproject'] == 't') ? 't' : 'f';
 			$opts[ARTICLE_DISPLAY_OPT_ADS] = ($aRow['opt_ads'] == NULL) ? "t" : $aRow['opt_ads'];
+			$opts[ARTICLE_DISPLAY_OPT_IMG] = ($aRow['opt_img'] == NULL) ? "t" : $aRow['opt_img'];
 			
 			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER] = ($aRow['opt_txtalignh'] == 't') ? 't' : 'f';
 			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY] = ($aRow['opt_txtalignb'] == 't') ? 't' : 'f';
@@ -1618,7 +1625,8 @@ class ContentMapping {
 												n_title,
 												p_intro,
 												o_intro,
-                                                opt_ads
+                                                opt_ads,
+                                                opt_img
 											 ) VALUES (
 												".$mid.",
 												'".$opts_array[ARTICLE_DISPLAY_OPT_PLACEMENT]."',						
@@ -1632,7 +1640,8 @@ class ContentMapping {
 												'".$n_title."',
 												'".$p_intro."',
 												'".$o_intro."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ADS]."'
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ADS]."',
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_IMG]."'
 											 );";
 
 		$db->query($sql);

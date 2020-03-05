@@ -118,6 +118,9 @@ if (count($oArticle->GetMapping()) >= 1) {
 		<td width="100px" align="right" valign="top">
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PLACEMENT) == "t") ? "checked" : "" ; ?>
 			Profile Results <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PLACEMENT; ?>" <?= $checked ?> />&nbsp;&nbsp;
+			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_IMG) == "t") ? "checked" : "" ; ?>
+			Intro Image <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_IMG; ?>" <?= $checked ?> />&nbsp;&nbsp;
+
 			<br />
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ARTICLE) == "t") ? "checked" : "" ; ?>
 			Related Articles <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ARTICLE; ?>" <?= $checked ?> />		
