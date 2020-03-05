@@ -24,10 +24,10 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 		<td width="20px" valign="top"><?= $i++ ?></td>
 		<td width="80px" valign="top"><?= $oArticle->GetTitle() ?></td>
 		<td width="80px" valign="top"><?= $oArticle->GetCreatedDate() ?></td>
-		<td width="260px" valign="top"><a href="http://www.oneworld365.org<?= $oArticle->GetUrl() ?>"><?= $oArticle->GetUrl() ?></td>
+		<td width="260px" valign="top"><a href="<?= $oArticle->GetUrl() ?>"><?= $oArticle->GetRelativeUrl() ?></td>
 		<td width="20px">
 			<!-- <input type="submit" onclick="javascript: window.location = './article?&id=<?= $oArticle->GetId() ?>'; return false;" name="art_<?= $oArticle->GetId() ?>" value="view" /> -->
-			<a href="http://www.oneworld365.org<?= $oArticle->GetUrl() ?>" title="View">View</a>
+			<a href="<?= $oArticle->GetUrl() ?>" title="View">View</a>
 		</td>		
 		<td width="20px">
 			<!-- <input type="submit" onclick="javascript: window.location = './article-editor?&id=<?= $oArticle->GetId() ?>'; return false;" name="art_<?= $oArticle->GetId() ?>" value="edit" /> -->
