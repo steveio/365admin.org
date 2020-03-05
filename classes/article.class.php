@@ -47,6 +47,7 @@ define ("DB__ARTICLE_LINK_TBL","article_link"); /* other articles that are assoc
 define ("DB__ARTICLE_MAP_OPTS","article_map_opts");
 
 
+$_CONFIG['site_id'] = 0;
 
 /*
  * Abstract Base class for all content elements eg. articles, sections

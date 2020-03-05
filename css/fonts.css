@@ -11,7 +11,7 @@ body {
 }
 
 body * {
-    line-height:1.22em;
+	line-height:1.22em;
 }
 
 .red	{ color:red; }
@@ -37,12 +37,12 @@ h4 {
 }
 
 p {
-	font-size: .8em;
+	font-size: 1em;
 	line-height: 1.4em;
 }
 
 p2 {
-	font-size: .75em;
+	font-size: .85em;
 }
 
 p3 {
@@ -59,7 +59,7 @@ p.profile_text {
 }
 
 .smalltext {
-	font-size: .7em;
+	font-size: .9em;
 }
 
 .bold {
@@ -113,7 +113,7 @@ a.navlink:hover {
 }
 
 a.navlink_profile:link,a.navlink_profile:visited {
-	font-size: .7em;
+	font-size: .9em;
 	color: #4088b8;
 	text-decoration: none;
 }
@@ -125,7 +125,7 @@ a.navlink_profile:hover {
 
 
 .small-text, span.p_small {
-	font-size: .8em;
+	font-size: 1em;
 	margin: 0px;
 }
 
@@ -135,7 +135,7 @@ a.breadcrumb:link,a.breadcrumb:visited {
 }
 
 a.small:link,a.small:visited {
-	font-size: .7em;
+	font-size: .9em;
 	color: #F62217;
 	text-decoration: none;
 }
@@ -145,7 +145,7 @@ a.small:hover {
 }
 
 a.p_small:link,a.p_small:visited {
-	font-size: .7em;
+	font-size: 1em;
 	color: #F62217;
 	text-decoration: none;
 }
