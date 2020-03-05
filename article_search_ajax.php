@@ -106,7 +106,6 @@ if ($mode == "search") { /* search for articles published to uri and return a re
 
 function sendResponse($aResponse) {
 
-
 	/* return response back to the caller */
 	$oJson = new Services_JSON;
 	header('Content-type: application/x-json');

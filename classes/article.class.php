@@ -321,7 +321,8 @@ class Content  implements TemplateInterface {
 	public function GetLastIndexedSolr() {
 		return $this->last_indexed_solr;
 	}
-	
+
+
 	/*
 	 * Return relative to the website being viewed
 	 * 
@@ -356,6 +357,7 @@ class Content  implements TemplateInterface {
 		if (!is_object($oMapping)) return $this->url = $defaultUrl;
 		
 		$this->url = $oMapping->GetUrl();
+<<<<<<< HEAD
 		$this->section_uri = $oMapping->GetSectionUri();
 		
 	}
@@ -366,6 +368,18 @@ class Content  implements TemplateInterface {
 	}
 	
 	
+=======
+      		$this->section_uri = $oMapping->GetSectionUri();
+	
+		
+	}
+
+	public function GetRelativeUrl()
+	{
+	    return $this->section_uri;
+	}
+
+>>>>>>> e30cc18de6a21e7bfc2cbcdc9431ae03d8618fb5
 	public function GetAll($aFilter = array(),$fields = '',$fetch = TRUE) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -1547,7 +1561,7 @@ class ContentMapping {
 	
 	public function GetUrl() {
 		global $_CONFIG;
-                return $_CONFIG['host_prefix'] . $this->GetLabel();
+                return "http://www.".$this->GetLabel();
 
 	}
 	
