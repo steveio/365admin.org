@@ -232,7 +232,6 @@ if (count($oArticle->GetMapping()) >= 1) {
 </div>
 
 
-</form>
 
 </div>
 </div>
