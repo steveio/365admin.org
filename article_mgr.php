@@ -95,7 +95,7 @@ print $oHeader->Render();
 <tr class="hi">
 	<td align="right" width="800px">
 	From:
-	<input type="text" id="search_phrase" style="width: 150px;" value="<?= $_REQUEST['filter_uri'] ?>" />
+	<input type="text" id="search_phrase" style="width: 350px;" value="<?= $_REQUEST['filter_uri'] ?>" />
 	<input type="submit" onclick="javascript: ArticleSearch('<?= $_CONFIG['url'] ?>','search','','article_search_result_list_03.php'); return false;" name="article_search" value="Search" />
 	Exact? <input type="checkbox" id="search_exact" name="search_exact" />
 	</td>
