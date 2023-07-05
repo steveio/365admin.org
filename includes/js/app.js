@@ -59,7 +59,7 @@ $(document).ready(function(){
 		fq = fq+'&rf='+rf;
 		 
 		$.ajax({
-		     url:"http://api.oneworld365.org/search"+url+fq,
+		     url:"https://api.oneworld365.org/search"+url+fq,
 		     dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
 		     success:function(json){
 		    	 if (json.status == 1) {

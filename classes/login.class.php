@@ -408,7 +408,10 @@ class Login {
 		if (!is_numeric($iFailedLogins)) $iFailedLogins = 0;
 
 		if ($iFailedLogins >= MAX_LOGIN_ATTEMPTS) {
-			$db->query("UPDATE euser SET locked = 1 WHERE id = ".$this->id );
+			if (!is_numeric($id))
+			{	
+				$db->query("UPDATE euser SET locked = '1' WHERE id = ".$this->id );
+			}
 			Logger::DB(1,get_class($this)."::".__FUNCTION__."()",'LOGIN : ACCOUNT_LOCKED : '.'Username: '.$this->uname);
 		} else {
 			$iFailedLogins++;

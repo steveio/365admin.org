@@ -9,7 +9,7 @@ $allowed_hosts = array("oneworld365.org", "gapyear365.com", "seasonaljobs365.com
 $hostname = "oneworld365.org";
 
 define('HOSTNAME',$hostname);
-define('BASE_URL','http://admin.'.$hostname);
+define('BASE_URL','https://admin.'.$hostname);
 define("COOKIE_DOMAIN", ".".HOSTNAME);
 
 /* setup an instance of session authentication */
