@@ -797,8 +797,10 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 	public function Process($aPath,$sLinkTo,$iLinkId,$iImgType = PROFILE_IMAGE) {
 
 		global $db,$_CONFIG;
-		
-		
+	
+		Logger::DB(3,get_class($this)."::".__FUNCTION__."()",implode($aPath,"::"). "  ".$sLinkTo. "  ".$iLinkId . "  " . $iImgType );    
+	
+	
 		foreach($aPath as $sImgPath) {
 
 			$bErrorFl  = false;
@@ -819,6 +821,8 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 			$aResult = $this->Identify($sImgPath);
 	
 			if (!$aResult) {
+				Logger::DB(1,get_class($this)."::".__FUNCTION__."()","Identify Failed : ".$sTmpPath." ".$oImage->GetType()." ,LinkTo : ".$sLinkTo." ,LinkId : ".$iLinkId);    
+
 				$bErrorFl = true;
 				continue;
 			}

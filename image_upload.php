@@ -38,7 +38,32 @@ if ($oSession->Exists()) {
     $oSession = $oSession->Get();
 }
 
-$article_id = $_SESSION['article_id'];
+
+/***************************************************
+* Only these origins are allowed to upload images *
+ ***************************************************/
+$accepted_origins = array("https://localhost", "https://192.168.1.1", "https://admin.oneworld365.org");
+
+
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    // same-origin requests won't set an origin. If the origin is set, it must be valid.
+    if (in_array($_SERVER['HTTP_ORIGIN'], $accepted_origins)) {
+      header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+    } else {
+      header("HTTP/1.1 403 Origin Denied");
+      return;
+    }
+}
+
+// Don't attempt to process the upload on an OPTIONS request
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    header("Access-Control-Allow-Methods: POST, OPTIONS");
+    return;
+}
+
+
+$article_id = (is_numeric($_SESSION['article_id'])) ? $_SESSION['article_id'] : 0; // article may not be saved
+
 
 if (LOG) Logger::DB(3,JOBNAME,'ArticleId: '.$article_id);
 
@@ -48,46 +73,56 @@ $max_uploads  = 4;
 $path = '/www/vhosts/oneworld365.org/htdocs/img/101/';
 
 
+try {
 
-$callback = $_GET['CKEditorFuncNum'];
-$url = '';
-$message = '';
+	$url = '';
+	$message = '';
+
+	reset ($_FILES);
+  	$temp = current($_FILES);
+
+	$upload = new File_upload();
+	$upload->allow('images');
+	$upload->set_path($path);
+	$upload->set_max_size($max_size);
+
+	$aFile = $upload->upload($temp,FALSE);
 
 
-$upload = new File_upload();
-$upload->allow('images');
-$upload->set_path($path);
-$upload->set_max_size($max_size);
+	if (LOG) Logger::DB(3,JOBNAME,json_encode($aFile));
 
-$aFile = $upload->upload($_FILES['upload'],FALSE);
+	$error = false;
+	if ($upload->is_error()) {
+		throw new Exception($upload->get_error);
+	} else {
+		$url = "http://www.oneworld365.org/img/101/".$aFile['FILENAME'];
+	}
 
-if (LOG) Logger::DB(3,JOBNAME,json_encode($aFile));
+	Logger::DB(3,JOBNAME,$url);
 
-$error = false;
-if ($upload->is_error()) {
-	$error = true;
-	$msg= $upload->get_error();
-} else {
-	$url = "http://www.oneworld365.org/img/101/".$aFile['FILENAME'];
-	$msg= 'Image uploaded: '.$url;
+
+	// generate small, medium, large proxy images, attach to article
+	$oImageProcessor = new ImageProcessor_FileUpload();
+	$oImageProcessor->Process(array($aFile['TMP_PATH']), 'ARTICLE', $article_id);
+
+
+	$aId = $oImageProcessor->GetProcessedIds();
+
+
+	$iImageId = array_shift($aId);
+
+	if (LOG) Logger::DB(3,JOBNAME,"Image Id: ".$iImageId);
+
+	$oImage = new Image();
+	$oImage->GetById($iImageId);
+
+
+
+	echo json_encode(array('location' => $oImage->GetUrl()));
+
+
+} catch(Exception $e) {
+	Logger::DB(1,JOBNAME,$e->getMessage());
+	header("HTTP/1.1 500 Server Error");
 }
-
-// generate small, medium, large proxy images, attach to article
-$oImageProcessor = new ImageProcessor_FileUpload();
-$oImageProcessor->Process(array($aFile['TMP_PATH']), 'ARTICLE', $article_id);
-
-$aId = $oImageProcessor->GetProcessedIds();
-
-$iImageId = array_shift($aId);
-
-if (LOG) Logger::DB(3,JOBNAME,"Image Id: ".$iImageId);
-
-$oImage = new Image();
-$oImage->GetById($iImageId);
-
-if (LOG) Logger::DB(3,JOBNAME,var_export($oImage->GetUrl()));
-
-$output = '<html><body><script type="text/javascript">window.parent.CKEDITOR.tools.callFunction('.$callback.', "'.$oImage->GetUrl().'","'.$msg.'");</script></body></html>';
-echo $output;
-
 ?>
