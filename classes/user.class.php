@@ -93,6 +93,50 @@ class User {
 			*/
 	}
 
+	function sanitize()
+	{
+
+
+		// sanitize username
+	        $this->uname = preg_replace("/[^a-zA-Z0-9]/", "", $this->uname);
+
+
+       		// sanitize password
+	        $this->pass = preg_replace("/[^A-Za-z0-9#?!@$%^&*-]/", "", $this->pass);  
+
+
+	}
+
+	function validateEmailAddress($email)
+	{
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL))
+                {
+                        return false;
+                }
+
+		return true;
+	}
+
+       function validateUsername($username)
+       {
+                if (preg_match("/[^a-zA-Z0-9]/",$username))
+                {
+                        return false;
+                }
+
+                return true;
+       }
+
+       function validatePassword($password)
+       {
+                if (preg_match("/[^A-Za-z0-9#?!@$%^&*-]/",$password))
+                {
+                        return false;
+                }
+
+                return true;
+       }
+
 
 	function addUser() {
 
@@ -115,8 +159,24 @@ class User {
 			|| (!is_numeric($this->company))
 		) {
 			$this->msg = "Error : One or more fields missing.";
-			return;
+			return false;
 		}
+
+                if ($this->validateUserName($this->uname))
+                {
+                        $this->msg = "Error : Invalid username - alphanumberic chars [a-zA-Z0-9] only .";
+                        return false;
+                }
+
+
+		if ($this->validateEmailAddress($this->email))
+		{
+                        $this->msg = "Error : Invalid email address.";
+                        return false;
+		}
+
+		$this->santize();
+
 
 		// check uniqueness of username
 		$this->db->query("SELECT id FROM euser WHERE uname = '".$this->uname."'");
