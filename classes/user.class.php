@@ -107,37 +107,14 @@ class User {
 
 	}
 
-	function validateEmailAddress($email)
-	{
-                if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-                {
-                        return false;
-                }
-
-		return true;
-	}
-
-       function validateUsername($username)
-       {
-                if (preg_match("/[^a-zA-Z0-9]/",$username))
-                {
-                        return false;
-                }
-
-                return true;
-       }
-
-       function validatePassword($password)
-       {
-                if (preg_match("/[^A-Za-z0-9#?!@$%^&*-]/",$password))
-                {
-                        return false;
-                }
-
-                return true;
-       }
 
 
+
+	/**
+	 * New user applications are pending as account applications
+	 * they are reviewed and approved by "admin" user, so strict validation is not performed here 
+	 *
+	 **/
 	function addUser() {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -162,20 +139,8 @@ class User {
 			return false;
 		}
 
-                if ($this->validateUserName($this->uname))
-                {
-                        $this->msg = "Error : Invalid username - alphanumberic chars [a-zA-Z0-9] only .";
-                        return false;
-                }
 
-
-		if ($this->validateEmailAddress($this->email))
-		{
-                        $this->msg = "Error : Invalid email address.";
-                        return false;
-		}
-
-		$this->santize();
+		$encrypted_password = Login::generatePassHash($this->pass,$salt = '');
 
 
 		// check uniqueness of username
@@ -192,7 +157,7 @@ class User {
 		   ,email
 		   ,uname
 		   ,access_level
-		   ,pass
+		   ,pass_hash
 		   ,pass_salt
 		   ,company_id
 		   ,added
@@ -202,7 +167,7 @@ class User {
 		   ,'".$this->email."'
 		   ,'".$this->uname."'
 		   ,1
-		   ,'".$this->pass."'
+		   ,'".$encrypted_password."'
 		   ,''
 		   ,'".$this->company."'
 		   ,now()::timestamp
@@ -230,7 +195,7 @@ class User {
 
 		$s = "<table cellpadding='2' cellspacing='4' border='0'>";
 		$s .= "<tr><td colspan='3'>User Count : ".$this->db->getNumRows()."</td></tr>"; 
-		$s .= "<tr><td>&nbsp;</td><td>Name</td><td>User</td><td>Pass</td><td>Email</td>";
+		$s .= "<tr><td>&nbsp;</td><td>Name</td><td>User</td><td>Email</td>";
 		if ($oAuth->oUser->isAdmin) {
 			$s .= "<td>Admin?</td>";
 		}
@@ -244,7 +209,6 @@ class User {
 				$s .= "<td>".$i."</td>";
 				$s .= "<td>".$oUser->name."</td>";
 				$s .= "<td>".$oUser->uname."</td>";
-				$s .= "<td>".$oUser->pass."</td>";
 				$s .= "<td>".$oUser->email."</td>";
 				if ($oAuth->oUser->isAdmin) {
 					$super = ($oUser->access_level == 3) ? "Admin" : "no";
