@@ -276,6 +276,7 @@ EOT;
 		
 
 		/* set default profile type based on saved profile or brand default */
+
 		
 		
 		// id of default profile_type for this brand
@@ -987,8 +988,8 @@ EOT;
 	/* process a request to edit a company profile */
 	protected function EditProfile() {
 		
-		global $oSession;
-		
+                $this->GetCompanyProfileFromDb( $this->GetCompanyId() );
+
 		// handle update if form submitted
 		if (isset($_POST['submit'])) {
 			
@@ -996,7 +997,7 @@ EOT;
 			
 		}
 
-		// get company profile
+		// refresh company profile
 		$this->GetCompanyProfileFromDb( $this->GetCompanyId() );
 		
 		$this->SetFormValuesFromCompanyProfile(); // set _POST form values from $this->oCompanyProfile 
