@@ -280,7 +280,9 @@ class PlacementStep extends ProfileStep {
 	private function EditProfile() {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
+	
+                $this->GetProfileFromDb();
+	
 		// handle update if form submitted
 		if (isset($_POST['submit'])) {
 
