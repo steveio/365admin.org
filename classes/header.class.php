@@ -238,10 +238,12 @@ class JsInclude {
 
 	private $type;
 	private $src;
+	private $referrerPolicy;
 
 	function __Construct() {
 		$this->src = "";
 		$this->type = "text/javascript";
+		$this->referrerPolicy = "";
 	}
 
 	public function SetSrc($src) {
@@ -256,8 +258,19 @@ class JsInclude {
 		return $this->type;
 	}
 
+	public function SetReferrerPolicy($str) {
+		$this->referrerPolicy = $str;
+	}
+
+	public function GetReferrerPolicy() {
+		return $this->referrerPolicy;
+	}
+
 	public function Render() {
-		return "<script type=\"".$this->GetType()."\" src=\"".$this->GetSrc()."\"></script>";
+
+		$strReferrerPolicy = ($this->referrerPolicy == "") ? "" : "referrerpolicy=\"".$this->referrerPolicy."\"";
+
+		return "<script type=\"".$this->GetType()."\" src=\"".$this->GetSrc()."\" ".$strReferrerPolicy."></script>";
 	}
 
 }

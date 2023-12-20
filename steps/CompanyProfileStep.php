@@ -240,42 +240,43 @@ class CompanyProfileStep extends ProfileStep {
 		$this->SetTeachingProjectForm(new Template);
 		$this->SetVolunteerProjectForm(new Template);
 		
-		
+
 		$oJsInclude = new JsInclude();
-		$oJsInclude->SetSrc("/lib/ckeditor/ckeditor.js");
+		$oJsInclude->SetSrc("https://cdn.tiny.cloud/1/64vi9u0mlw972adwn9riluuctbqvquz44j5udsiffm2xvx3y/tinymce/6/tinymce.min.js");
+		$oJsInclude->SetReferrerPolicy("origin");
 		$oHeader->SetJsInclude($oJsInclude);
-		
-		$ckeditor_js_template = <<<EOT
-CKEDITOR.replace( '%s',
-    {
-    	toolbar : 'MyToolbar',
-    	height:'191',
-    	width:'640'
-    });
-CKEDITOR.replace( '%s',
-    {
-	filebrowserImageUploadUrl : '/includes/image_upload.php',
-        toolbar : 'MyToolbar',
-    	height:'291',
-    	width:'640'
-    });
-				
+
+$ckeditor_js = <<<EOT
+
+tinymce.init({
+        selector: '#desc_short',
+        menubar : false,
+        images_upload_url: '/image_upload.php',
+        height:"291",
+        width:"900"
+
+});
+
+
+tinymce.init({
+        selector: '#desc_long',
+        menubar: false,
+        toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link | table | numlist bullist | code",
+        plugins: "image link lists table code",
+        images_upload_url : '/image_upload.php',
+        height:"691",
+        width:"960"
+
+});
+
 EOT;
-		$ckeditor_js = sprintf($ckeditor_js_template,"desc_short", "desc_long");
-
-
-		if ($oAuth->oUser->isAdmin) {		
-			foreach($_CONFIG['aProfileVersion'] as $tid => $sVersionTarget) {
-				$pv_prefix = "PV::".$tid."::";
-				$ckeditor_js .= sprintf($ckeditor_js_template,$pv_prefix."desc_short", $pv_prefix."desc_long");
-			}
-		}
 		
 		$oHeader->SetJsOnload($ckeditor_js);
 		$oHeader->Reload();
 		
 
 		/* set default profile type based on saved profile or brand default */
+
 		
 		
 		// id of default profile_type for this brand
@@ -987,8 +988,8 @@ EOT;
 	/* process a request to edit a company profile */
 	protected function EditProfile() {
 		
-		global $oSession;
-		
+                $this->GetCompanyProfileFromDb( $this->GetCompanyId() );
+
 		// handle update if form submitted
 		if (isset($_POST['submit'])) {
 			
@@ -996,7 +997,7 @@ EOT;
 			
 		}
 
-		// get company profile
+		// refresh company profile
 		$this->GetCompanyProfileFromDb( $this->GetCompanyId() );
 		
 		$this->SetFormValuesFromCompanyProfile(); // set _POST form values from $this->oCompanyProfile 

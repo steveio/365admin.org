@@ -93,7 +93,28 @@ class User {
 			*/
 	}
 
+	function sanitize()
+	{
 
+
+		// sanitize username
+	        $this->uname = preg_replace("/[^a-zA-Z0-9]/", "", $this->uname);
+
+
+       		// sanitize password
+	        $this->pass = preg_replace("/[^A-Za-z0-9#?!@$%^&*-]/", "", $this->pass);  
+
+
+	}
+
+
+
+
+	/**
+	 * New user applications are pending as account applications
+	 * they are reviewed and approved by "admin" user, so strict validation is not performed here 
+	 *
+	 **/
 	function addUser() {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -115,8 +136,12 @@ class User {
 			|| (!is_numeric($this->company))
 		) {
 			$this->msg = "Error : One or more fields missing.";
-			return;
+			return false;
 		}
+
+
+		$encrypted_password = Login::generatePassHash($this->pass,$salt = '');
+
 
 		// check uniqueness of username
 		$this->db->query("SELECT id FROM euser WHERE uname = '".$this->uname."'");
@@ -132,7 +157,7 @@ class User {
 		   ,email
 		   ,uname
 		   ,access_level
-		   ,pass
+		   ,pass_hash
 		   ,pass_salt
 		   ,company_id
 		   ,added
@@ -142,7 +167,7 @@ class User {
 		   ,'".$this->email."'
 		   ,'".$this->uname."'
 		   ,1
-		   ,'".$this->pass."'
+		   ,'".$encrypted_password."'
 		   ,''
 		   ,'".$this->company."'
 		   ,now()::timestamp
@@ -170,7 +195,7 @@ class User {
 
 		$s = "<table cellpadding='2' cellspacing='4' border='0'>";
 		$s .= "<tr><td colspan='3'>User Count : ".$this->db->getNumRows()."</td></tr>"; 
-		$s .= "<tr><td>&nbsp;</td><td>Name</td><td>User</td><td>Pass</td><td>Email</td>";
+		$s .= "<tr><td>&nbsp;</td><td>Name</td><td>User</td><td>Email</td>";
 		if ($oAuth->oUser->isAdmin) {
 			$s .= "<td>Admin?</td>";
 		}
@@ -184,7 +209,6 @@ class User {
 				$s .= "<td>".$i."</td>";
 				$s .= "<td>".$oUser->name."</td>";
 				$s .= "<td>".$oUser->uname."</td>";
-				$s .= "<td>".$oUser->pass."</td>";
 				$s .= "<td>".$oUser->email."</td>";
 				if ($oAuth->oUser->isAdmin) {
 					$super = ($oUser->access_level == 3) ? "Admin" : "no";

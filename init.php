@@ -115,6 +115,25 @@ require_once(BASE_PATH."/classes/smtp.php");
 require_once(BASE_PATH."/classes/mimePart.php");
 
 
+function my_session_start()
+{
+      if (ini_get('session.use_cookies') && isset($_COOKIE['PHPSESSID'])) {
+           $sessid = $_COOKIE['PHPSESSID'];
+      } elseif (!ini_get('session.use_only_cookies') && isset($_GET['PHPSESSID'])) {
+           $sessid = $_GET['PHPSESSID'];
+      } else {
+           session_start();
+           return false;
+      }
+
+      if (!preg_match('/^[a-z0-9]{32}$/', $sessid)) {
+           return false;
+      }
+      session_start();
+
+      return true;
+}
+
 try {
     /* set no cache headers */
     header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' ); 
@@ -128,7 +147,7 @@ try {
     
     
     /* start a new session */
-    session_start();
+    my_session_start();
     
     
     $oSession = new Session;

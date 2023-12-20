@@ -12,29 +12,36 @@ if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/cl
 
 
 $oJsInclude = new JsInclude();
-$oJsInclude->SetSrc("/lib/ckeditor/ckeditor.js");
+$oJsInclude->SetSrc("https://cdn.tiny.cloud/1/64vi9u0mlw972adwn9riluuctbqvquz44j5udsiffm2xvx3y/tinymce/6/tinymce.min.js");
+$oJsInclude->SetReferrerPolicy("origin");
 $oHeader->SetJsInclude($oJsInclude);
+
 
 $ckeditor_js = <<<EOT
 
-CKEDITOR.replace( 'desc_short',
-    {
-    filebrowserImageUploadUrl : '/image_upload.php',
-    	toolbar : 'MyToolbar',
-    	height:"291", 
-    	width:"800"
-    });
-CKEDITOR.replace( 'desc_long',
-    {
-    filebrowserImageUploadUrl : '/image_upload.php',
-		
-		toolbar : 'MyToolbar',
-    	height:"391", 
-    	width:"800"
-        
-    });
-    
+tinymce.init({
+        selector: '#desc_short',
+	menubar : false,
+	images_upload_url: '/image_upload.php',
+        height:"291",
+        width:"900"
+
+});
+
+
+tinymce.init({
+        selector: '#desc_long',
+	menubar: false,
+        toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link | table | numlist bullist | code",
+        plugins: "image link lists table code",
+        images_upload_url : '/image_upload.php',
+        height:"691",
+        width:"960"
+
+});
+
 EOT;
+
 $oHeader->SetJsOnload($ckeditor_js);
 $oHeader->Reload();
 
@@ -234,14 +241,14 @@ print AppError::GetErrorHtml($aResponse);
 <input type="hidden" name="id" value="<?= $oArticle->GetId(); ?>" />
 
 
-<div class="row800">
+<div class="row800" style="margin-bottom:10px">
 	<span class="label_col"><label for="title" class="f_label" style="<?= strlen($response['msg']['title']) > 1 ? "color:red;" : ""; ?>">Title<span class="red"> *</span></label></span>
-	<span class="input_col"><input type="text" id="title" class="text_input" style="width: 300px;" name="title" value="<?= $oArticle->GetTitle(); ?>" /></span>
+	<span class="input_col"><input type="text" id="title" class="text_input" style="width: 600px;" name="title" value="<?= $oArticle->GetTitle(); ?>" /></span>
 </div>
  
 <div class="row800">
 	<span class="label_col"><label for="desc_short" class="f_label" style="<?= strlen($response['msg']['desc_short']) > 1 ? "color:red;" : ""; ?>">Short Desc<span class="red"> *</span></label></span>
-	<span class="input_col"><textarea id="desc_short" name="desc_short" /><?= $oArticle->GetDescShort(); ?></textarea></span>
+	<span class="input_col"><textarea id="desc_short" class="tinyMCEeditor" name="desc_short" /><?= $oArticle->GetDescShort(); ?></textarea></span>
 </div>
 
 <div class="row800">
@@ -249,7 +256,7 @@ print AppError::GetErrorHtml($aResponse);
 
 	<? $desc_full = $oArticle->GetDescFull(); ?>
 	
-	<span class="input_col"><textarea id="desc_long" name="desc_long" /><?= $desc_full; ?></textarea></span>
+	<span class="input_col"><textarea id="desc_long" class="tinyMCEeditor" name="desc_long" /><?= $desc_full; ?></textarea></span>
 </div>
 
 <div class="row800">

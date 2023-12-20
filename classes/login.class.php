@@ -32,7 +32,6 @@ class Login {
 	private $cookie_path;
 	private $session_expires;
 	private $recaptchCheckFl;
-	private $encryptPassFl;
 	private $passHashSalt;
 	private $validCharRegex;
 	private $aError;
@@ -54,7 +53,6 @@ class Login {
 		$this->user_id = "";
 
 		$this->recaptchCheckFl = FALSE; /* use recaptcha anti-spam verification? */
-		$this->encryptPassFl = false; /* use encrypted | plain text passwords? */
 		$this->passHashSalt = ''; /* salt used to harden password hashing function */
 		$this->validCharRegex = self::VALID_CHAR_REGEX; /* valid chars for username, password */
 
@@ -92,7 +90,9 @@ class Login {
 	public function doPasswordReminder($sEmail,&$aError) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-	
+
+		global $db;
+		
 		if ((strlen(trim($sEmail)) < 1) || (!Validation::IsValidEmail($sEmail))) {
 			$aError['EMAIL_INVALID'] = "Please enter a valid email address.";
 			return false;	
@@ -105,6 +105,25 @@ class Login {
 			return false;	
 		}
 
+		$new_password = $this->randomPassword();
+		$encrypted_password = Login::generatePassHash($new_password,$salt = '');
+
+		if (strlen($encrypted_password) > 1)
+		{
+			$sql = "UPDATE euser SET pass_hash = '".$encrypted_password."' WHERE id = ".$res['id'];
+			$db->query($sql);
+			if ($db->getAffectedRows() != 1)
+			{
+	                        Logger::DB(1,get_class($this)."::".__FUNCTION__."()",'PASSWORD : Password encryption error : '.$sEmail . ' : '.IPAddress::GetVisitorIP());
+        	                $aError['PASSWORD_ENCRYPT'] = "Error generating new password.  Please contact us.";
+                	        return false;   
+			}
+		} else {
+                        Logger::DB(1,get_class($this)."::".__FUNCTION__."()",'PASSWORD : Password encryption error : '.$sEmail . ' : '.IPAddress::GetVisitorIP());
+                        $aError['PASSWORD_ENCRYPT'] = "Error generating new password.  Please contact us.";
+                        return false;
+		}		
+
 		$aMsgParams = array(
 						'site_title' => 'One World 365',
 						'login_url' => 'http://admin.oneworld365.org/login',
@@ -114,7 +133,7 @@ class Login {
 						'template_path'  => ROOT_PATH.'/templates'
 						);
 
-		$this->SendPasswordReminderEmail($res['email'],$res['uname'],$res['pass'],$aMsgParams);
+		$this->SendPasswordReminderEmail($res['email'],$res['uname'],$new_password,$aMsgParams);
 		
 		Logger::DB(2,get_class($this)."::".__FUNCTION__."()",'PASSWORD : REMINDER_SENT : '.$sEmail . ' : '.IPAddress::GetVisitorIP());
 				
@@ -140,7 +159,7 @@ class Login {
 			
 			$sMsg .= "Url : ". $aMsgParams['login_url']." \n";
 			$sMsg .= "Username : ". $sUname." \n";
-			$sMsg .= "Password : ". $sPass." \n\n";
+			$sMsg .= "New Password : ". $sPass." \n\n";
 			
 			$sMsg .= "For further assistance please email ".$aMsgParams['admin_email'].".\n\n";
 			$sMsg .= "With Thanks,\n\n";
@@ -169,7 +188,7 @@ class Login {
 		
 		global $db;
 		
-		$db->query("SELECT uname, pass, email FROM euser WHERE email = '".$sEmail."'");
+		$db->query("SELECT id, uname, pass, email FROM euser WHERE email = '".$sEmail."'");
 		
 		if ($db->getNumRows() != 1) return false;
 		
@@ -216,8 +235,8 @@ class Login {
 			case $this->validateStr($this->pass, $key = 'CREDENTIAL_PASSWD', $msg = "Please enter a valid password."):
 			case $this->checkAccountStatus():
 			case $this->ipAddressCheck():
-			case $this->encryptPass($this->pass):
 			case $this->recaptchaCheck($this->recaptcha_challenge, $this->recaptcha_response):
+			case $this->verifyEncryptedPassword();
 			case $this->createSessionID():
 			case $this->authenticate():
 			case $this->setSessionCookieHeader():
@@ -316,7 +335,7 @@ class Login {
 	
 	private function encryptPass() {
 
-		$this->encryptedPass = sha1($this->passHashSalt . $this->pass);
+		$this->encryptedPass = password_hash($this->pass,PASSWORD_DEFAULT);
 
 	}
 
@@ -324,7 +343,7 @@ class Login {
 	/* generate secure password hash - called by add user */
 	public static function generatePassHash($pass,$salt) {
 
-		return sha1($salt . $pass);
+		return password_hash($pass,PASSWORD_DEFAULT);
 
 	}
 
@@ -365,16 +384,43 @@ class Login {
 		}
 	}
 
+	private function randomPassword() {
 
-	/* authenticate user against database */
+    		$alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    		$pass = array(); //remember to declare $pass as an array
+    		$alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    		for ($i = 0; $i < 8; $i++) {
+	        	$n = rand(0, $alphaLength);
+        		$pass[] = $alphabet[$n];
+    		}
+    		return implode($pass); //turn the array into a string
+	}
+
+	private function verifyEncryptedPassword()
+	{
+
+		global $db;
+
+		$db->query("SELECT pass_hash FROM euser WHERE uname = '".$this->uname."'");
+
+		if ($db->getNumRows() == 1) {
+
+			$aRow = $db->getRow(PGSQL_ASSOC,0);
+			$db_password_hash = $aRow['pass_hash'];
+
+			if(password_verify($this->pass, $db_password_hash))
+			{
+				return false; 
+			}
+		}
+	}
+
+	/* authenticate user against database - password must be checked by verifyEncryptedPassword() before calling this func */
 	private function authenticate() {
 
 		global $db;
 
-		/* are we storing encrypted passwords ? */
-		$pass = ($this->encryptPassFl) ? $this->encryptedPass : $this->pass;
-		
-		if ($db->query("SELECT id FROM euser WHERE uname = '".$this->uname."' AND  pass = '".$pass."';")) {
+		if ($db->query("SELECT id FROM euser WHERE uname = '".$this->uname."'")) {
 
 			if ($db->getNumRows() == 1) {
 				$aRow = $db->getRow(PGSQL_ASSOC,0);
@@ -408,7 +454,10 @@ class Login {
 		if (!is_numeric($iFailedLogins)) $iFailedLogins = 0;
 
 		if ($iFailedLogins >= MAX_LOGIN_ATTEMPTS) {
-			$db->query("UPDATE euser SET locked = 1 WHERE id = ".$this->id );
+			if (!is_numeric($id))
+			{	
+				$db->query("UPDATE euser SET locked = '1' WHERE id = ".$this->id );
+			}
 			Logger::DB(1,get_class($this)."::".__FUNCTION__."()",'LOGIN : ACCOUNT_LOCKED : '.'Username: '.$this->uname);
 		} else {
 			$iFailedLogins++;
