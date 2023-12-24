@@ -23,8 +23,7 @@ tinymce.init({
         selector: '#desc_short',
 	menubar : false,
 	images_upload_url: '/image_upload.php',
-        height:"291",
-        width:"900"
+  height:"291",
 
 });
 
@@ -35,8 +34,6 @@ tinymce.init({
         toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link | table | numlist bullist | code",
         plugins: "image link lists table code",
         images_upload_url : '/image_upload.php',
-        height:"691",
-        width:"960"
 
 });
 
@@ -48,9 +45,9 @@ $oHeader->Reload();
 
 
 
-$mode = (is_numeric($_REQUEST['id'])) ? "EDIT" : "ADD"; 
+$mode = (is_numeric($_REQUEST['id'])) ? "EDIT" : "ADD";
 
-$sTitle = ($mode == "EDIT") ? "Edit Article" : "Create New Article";
+$sTitle = ($mode == "EDIT") ? "Edit Article" : "New Article";
 
 $oWebsite = new Website($db);
 $sWebSiteListHTML = $oWebsite->GetSiteSelectList(array(),$checked = TRUE, $markup = "DIV");
@@ -67,7 +64,7 @@ $_SESSION['article_id'] = $_REQUEST['id'];
 
 /*
  * EVENT HANDLERS
- * 
+ *
  */
 
 
@@ -85,7 +82,7 @@ if (isset($_REQUEST['remove_profile'])) {
 		 $oArticle->RemoveProfile($_REQUEST,$aResponse);
 	} else {
 		$aResponse['placement_id'] = "ERROR : Please select a placement to remove";
-	}	
+	}
 }
 
 
@@ -116,20 +113,20 @@ $path = '/www/vhosts/oneworld365.org/htdocs/upload/images/';
 if (isset($_REQUEST['do_file_upload'])) {
 
 	if (DEBUG) Logger::Msg("Upload: Begin...");
-	
-	
+
+
 	if (count($_FILES['file']['name'])<=$max_uploads) {
 		if (DEBUG) Logger::Msg("Upload: Multiple...");
 		$upload = new File_upload();
 		$upload->allow('images');
 		$upload->set_path($path);
-		$upload->set_max_size($max_size);		
+		$upload->set_max_size($max_size);
 
 		$aResult = $upload->upload_multiple($_FILES['file']);
-		
+
 		$error = false;
 		if ($upload->is_error()) {
-			$error = true; 
+			$error = true;
 			$errstr= $upload->get_error();
 		}
 
@@ -139,25 +136,25 @@ if (isset($_REQUEST['do_file_upload'])) {
 			$oIP = new ImageProcessor_FileUpload;
 			$result = $oIP->Process($aResult['TMP_PATH'],"ARTICLE",$article_id,$iImgType = PROFILE_IMAGE);
 			if (!$result) {
-				$error = TRUE; 
+				$error = TRUE;
 				$errstr= 'An error occured during image thumbnail processing';
 			}
-			
-		}
-		
-	} else {
-		$error = TRUE; 
-		$errstr= 'Trying to upload to many files';
-	}   
 
-		
+		}
+
+	} else {
+		$error = TRUE;
+		$errstr= 'Trying to upload to many files';
+	}
+
+
 	if ($error) {
 		$aResponse['msg'] = "ERROR : ".$errstr;
 	} else {
 		$plural = (count($aResult['FILENAME']) > 1) ? "s" : "";
-		$aResponse['msg'] = "SUCCESS : uploaded ".count($aResult['FILENAME']) ." file".$plural."<br/>".implode("<br />",$aResult['FILENAME']); 
+		$aResponse['msg'] = "SUCCESS : uploaded ".count($aResult['FILENAME']) ." file".$plural."<br/>".implode("<br />",$aResult['FILENAME']);
 	}
-	
+
 }
 
 
@@ -176,14 +173,14 @@ if (isset($_REQUEST['save'])) {
 								,"published_status" => 0 /* DRAFT */
 								),"SET", $escape_chars = FALSE /* Save()->Santitize() does escaping */
 							);
-							
+
 	if ($oArticle->Save($aResponse)) {
 		$aResponse['msg'] = "SUCCESS : Article saved OK";
-		$_REQUEST['id'] = $oArticle->GetId(); 
+		$_REQUEST['id'] = $oArticle->GetId();
 	}
-	
-	
-	
+
+
+
 
 }
 
@@ -192,7 +189,7 @@ if(($mode == "EDIT") || ($mode == "ADD")) {
 	$oArticle->SetFetchMode(FETCHMODE__FULL);
 	$oArticle->SetFetchAttachedTo(TRUE);
 	$oArticle->SetFetchProfiles(TRUE);
-	$oArticle->SetFetchAttachedTo(TRUE);	
+	$oArticle->SetFetchAttachedTo(TRUE);
 
 	/* get article from DB */
 	if ($mode == "EDIT") {
@@ -217,22 +214,22 @@ print $oHeader->Render();
 
 
 <div id="msgtext" style="color: red; font-size: 10px;">
-<? 
-$aResponse = (isset($aResponse['msg'])) ? $aResponse['msg'] : $aResponse; 
-print AppError::GetErrorHtml($aResponse);  
+<?
+$aResponse = (isset($aResponse['msg'])) ? $aResponse['msg'] : $aResponse;
+print AppError::GetErrorHtml($aResponse);
 ?>
 </div>
 
-<div class="page_content content-wrap clear">
-<div class="row pad-tbl clear">
+<div class="container">
+<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
 
-<div id="profile">	
-<div id="profile_inner" style="width: 800px">
+<div>
+<div>
 
 
-<div id='row800'>
-	
+<div class='row'>
+
 <h1><?= $sTitle ?></h1>
 
 
@@ -241,30 +238,30 @@ print AppError::GetErrorHtml($aResponse);
 <input type="hidden" name="id" value="<?= $oArticle->GetId(); ?>" />
 
 
-<div class="row800" style="margin-bottom:10px">
+<div class="row  my-3">
 	<span class="label_col"><label for="title" class="f_label" style="<?= strlen($response['msg']['title']) > 1 ? "color:red;" : ""; ?>">Title<span class="red"> *</span></label></span>
 	<span class="input_col"><input type="text" id="title" class="text_input" style="width: 600px;" name="title" value="<?= $oArticle->GetTitle(); ?>" /></span>
 </div>
- 
-<div class="row800">
+
+<div class="row my-3">
 	<span class="label_col"><label for="desc_short" class="f_label" style="<?= strlen($response['msg']['desc_short']) > 1 ? "color:red;" : ""; ?>">Short Desc<span class="red"> *</span></label></span>
 	<span class="input_col"><textarea id="desc_short" class="tinyMCEeditor" name="desc_short" /><?= $oArticle->GetDescShort(); ?></textarea></span>
 </div>
 
-<div class="row800">
+<div class="row my-3">
 	<span class="label_col"><label class="f_label">Full Description</label></span>
 
 	<? $desc_full = $oArticle->GetDescFull(); ?>
-	
+
 	<span class="input_col"><textarea id="desc_long" class="tinyMCEeditor" name="desc_long" /><?= $desc_full; ?></textarea></span>
 </div>
 
-<div class="row800">
+<div class="row my-3">
 	<span class="label_col"><label for="meta_desc" class="f_label" style="<?= strlen($response['msg']['meta_desc']) > 1 ? "color:red;" : ""; ?>">Meta Desc</label></span>
 	<span class="input_col"><input type="text" id="meta_desc" class="text_input" maxlength="254" style="width: 400px;" name="meta_desc" value="<?= $oArticle->GetMetaDesc(); ?>" /></span>
 </div>
 
-<div class="row800">
+<div class="row">
 	<span class="label_col"><label for="meta_keywords" class="f_label" style="<?= strlen($response['msg']['meta_keywords']) > 1 ? "color:red;" : ""; ?>">Meta Keywords</label></span>
 	<span class="input_col"><input type="text" id="meta_keywords" class="text_input"  maxlength="254" style="width: 400px;" name="meta_keywords" value="<?= $oArticle->GetMetaKeywords(); ?>" /></span>
 </div>
@@ -272,36 +269,37 @@ print AppError::GetErrorHtml($aResponse);
 
 
 
-<div class="row800" style="float: left; margin-top: 20px;">
-	<span class="label_col"><label class="f_label">&nbsp;</label></span>
-	<span class="input_col">
-		<input type="submit" title="save article" name="save" value="Save" class="sub_col_but" />
+<div class="row">
+	<span class="my-3">
+
+    <button class="btn btn-primary rounded-pill px-3" type="submit" name="">Save</button>
+
+
 		<? if (is_numeric($oArticle->GetId())) { ?>
-		<input type="submit" title="publish article" onclick="javascript: go('./article-publisher?&id=<?= $oArticle->GetId() ?>'); return false;" name="new" value="Publish" class="sub_col_but" />
+      <button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: go('./article-publisher?&id=<?= $oArticle->GetId() ?>'); return false;" name="new">Publish</button>
 		<? } ?>
 	</span>
 </div>
 
-<div class="row800" style="float: left; margin-top: 20px;">
-	<span class="label_col"><label class="f_label">&nbsp;</label></span>
+<div class="row">
 	<span class="input_col"><a href='./article-manager' title='Back to Article Manager'>Back to Article Manager >></a></span>
 </div>
 
 
 
-<div class="row800" style="width: 800px;"><hr /></div>
+<div class="row" style="width: 800px;"><hr /></div>
 
 
 <? if (is_numeric($oArticle->GetId())) { ?>
 
 
-<div class="row800" style="width: 400px;">
+<div class="row" style="width: 400px;">
 
-	<div class="row800" style="width: 400px;">
+	<div class="row" style="width: 400px;">
 	<h2>Attached Images :</h2>
 	<div id="image_msg"></div>
-	
-	<div class="row800" style="width: 400px;">
+
+	<div class="row" style="width: 400px;">
 	<?
 	if (count($oArticle->aImage) >= 1) {
 		foreach($oArticle->aImage as $oImage) {
@@ -316,11 +314,11 @@ print AppError::GetErrorHtml($aResponse);
 	}
 	?>
 	</div>
-		
+
 	<h2>Upload Images :</h2>
 
 		<!-- MULTIPLE FILE UPLOAD -->
-		
+
 		<script type="text/javascript">
 		<!--
 			var gFiles = 0;
@@ -345,7 +343,7 @@ print AppError::GetErrorHtml($aResponse);
 		<input type="hidden" name="mode" value="misc" />
 		<input type="hidden" name="action" value="upload" />
 		<input type="hidden" name="upload" value="1" />
-		
+
 		<input type="hidden" name="MAX_FILE_SIZE" value="<?= IMAGE_MAX_UPLOAD_SIZE; ?>" />
 		<table>
 		<tbody id="files-root">
@@ -365,26 +363,26 @@ print AppError::GetErrorHtml($aResponse);
 			}
 		}
 		?>
-		
+
 	</div>
 
 </div>
 
 
 
-<div class="row800" style="width: 380px; margin-left: 20px;">
+<div class="row" style="width: 380px; margin-left: 20px;">
 
-	<div class="row800" style="width: 400px;">
+	<div class="row" style="width: 400px;">
 	<h2>Attached Links :</h2>
-	
+
 	<div id="link_msg"></div>
 	<div id="link_result">
 	<?= $oArticle->oLinkGroup->Render(); ?>
 	</div>
-	
-	
+
+
 	<h2>Attach a Link :</h2>
-	
+
 	<div id="image_msg"></div>
 
 		<table>
@@ -403,93 +401,93 @@ print AppError::GetErrorHtml($aResponse);
 
 </div>
 
-	<div class="row800" style="width: 800px;"><hr /></div>
+	<div class="row" style="width: 800px;"><hr /></div>
 
 
-	<div class="row800" style="width: 800px;">
+	<div class="row" style="width: 800px;">
 	<h2>Attached Profiles :</h2>
-	
+
 	<?
-	
+
 	foreach($oArticle->GetAttachedProfile() as $oProfile) {
-				
+
 		if ($oProfile->GetType() == PROFILE_COMPANY) {
 			$oProfile->LoadTemplate("profile_summary_01_sm.php");
 		} else { /* assume everything else is a placement profile varient */
-			$oProfile->LoadTemplate("profile_summary_01_sm.php");	
+			$oProfile->LoadTemplate("profile_summary_01_sm.php");
 		}
-		
+
 		?>
 		<div class="border" style="float: left; width: 250px;">
 		<div style="float: right; padding-right: 10px;"><a class="p_small" title="Remove Profile" href="<?= $_SERVER['PHP_SELF'] ?>?&id=<?= $oArticle->GetId() ?>&profile_id=<?= $oProfile->GetId() ?>&profile_type=<?= $oProfile->GetType(); ?>&remove_profile=1">[REMOVE]</a></div>
 		<div style="height: 200px;">
 		<?= $oProfile->Render(); ?>
 		</div>
-		
+
 		</div>
 		<?
 	}
-	
+
 	?>
-	
+
 	</div>
-	
-	
-	<div class="row800" style="width: 800px;">
-	
+
+
+	<div class="row" style="width: 800px;">
+
 	<h2>Attach Profiles :</h2>
-	
-	<div class="row800">
+
+	<div class="row">
 		<span class="label_col"><label class="f_label">Company</label></span>
 		<span class="input_col"><?= $sCompDDList ?></span>
 	</div>
-	
-	<div class="row800">
+
+	<div class="row">
 		<span class="label_col"><label class="f_label">Placement</label></span>
 		<span class="input_col"><div id="placement_list"><?= $sPlacementDDList ?></div></span>
 	</div>
-	
-	<div class="row800">
+
+	<div class="row">
 		<span class="label_col"><label class="f_label">&nbsp;</label></span>
 		<span class="input_col">
 			<input type="submit" onclick="javascript: return validateAttachProfile();" title="attach profile" name="attach_profile" value="Attach" class="sub_col_but" />
 		</span>
 	</div>
-	
-	</div>
-	
-	<div class="row800" style="width: 800px;"><hr /></div>
-		
 
-	<div class="row800" style="width: 800px;">
+	</div>
+
+	<div class="row" style="width: 800px;"><hr /></div>
+
+
+	<div class="row" style="width: 800px;">
 	<h2>Attached Articles :</h2>
-	
+
 	<?
-	
+
 	if ($oArticle->oArticleCollection->Count() >= 1) {
 
 		$oArticle->oArticleCollection->LoadTemplate("article_search_result_list_02.php");
-		
+
 		print $oArticle->oArticleCollection->Render();
-		
+
 	}
-	
+
 	?>
-	
+
 	</div>
 
-	
-	<div class="row800">
-	
+
+	<div class="row">
+
 	<h2>Attach Articles :</h2>
-	
+
 	<p class="p_small">
 		<ul>
 			<li>Patterns: <span class="p_small">"%" = all  OR  "%africa" = contains "africa" OR  "/activity/animals"</i></span></li>
 		</ul>
 	</p>
-	
-	<table cellspacing="2" cellpadding="4" border="0">	
+
+	<table cellspacing="2" cellpadding="4" border="0">
 	<tr class="hi">
 		<td align="right" width="800px">
 		From:
@@ -505,20 +503,20 @@ print AppError::GetErrorHtml($aResponse);
 		</td>
 	</tr>
 	</table>
-	
+
 	<div id="article_search_msg"></div>
 	<div id="article_search_result"></div>
-	
+
 	</div>
 
-	<div class="row800">
-	
+	<div class="row">
+
 	<h2>Attached To :</h2>
-	
+
 	<p class="p_small">Shows other articles this article is attached to and where these are published</p>
-	
+
 	<div id="article_deattach_msg" style="color: red; font-size: 12px;"></div>
-	
+
 	<table cellspacing="2" cellpadding="4" border="0" width="800px">
 		<tr>
 			<th>Id</th>
@@ -527,10 +525,10 @@ print AppError::GetErrorHtml($aResponse);
 			<th>De-attach</th>
 		</tr>
 		<?php
-		$prev_id = null; 
+		$prev_id = null;
 		foreach ($oArticle->GetAttachedTo() as $row) {
 			$url = "<a href='/article-editor?id=".$row['id']."' target='_new' title='View / Edit this Article'>".$row['title']."</a>";
-			$deattach_link = "<input type=\"submit\" onclick=\"javascript: ArticleDeattach('". $_CONFIG['url'] ."',".$row['id'].",". $oArticle->GetId() ."); return false;\" name=\"deattach\" value=\"Deattach\" />";  
+			$deattach_link = "<input type=\"submit\" onclick=\"javascript: ArticleDeattach('". $_CONFIG['url'] ."',".$row['id'].",". $oArticle->GetId() ."); return false;\" name=\"deattach\" value=\"Deattach\" />";
 		?>
 		<tr id="deattach_row<?= $row['id']; ?>">
 			<td valign="top"><?= $row['id']; ?></td>
@@ -539,18 +537,18 @@ print AppError::GetErrorHtml($aResponse);
 			<td><?= $deattach_link; ?></td>
 		</tr>
 		<?php
-			$prev_id = $row['id']; 
-		} 
+			$prev_id = $row['id'];
+		}
 		?>
-	</table>	
-	
+	</table>
+
 	</div>
 
 <? } // end is published check ?>
 
 
 
-</div><!--  end row800 -->
+</div><!--  end row -->
 
 </div><!--  end profile_inner -->
 </div><!--  end profile -->
@@ -559,10 +557,9 @@ print AppError::GetErrorHtml($aResponse);
 </form>
 
 
-</div>	
+</div>
 </div>
 
 <?
 print $oFooter->Render();
 ?>
-	

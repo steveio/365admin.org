@@ -12,8 +12,8 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 $(document).ready(function(){
 
 
-   $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID ?>").change(function() 
-    { 
+   $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID ?>").change(function()
+    {
         var idx;
 		var id;
 		var panel_prefix = 'profile_type_';
@@ -22,28 +22,28 @@ $(document).ready(function(){
 								'profile_type_<?= PROFILE_SEASONALJOBS; ?>',
 								'profile_type_<?= PROFILE_VOLUNTEER_PROJECT; ?>',
 								'profile_type_<?= PROFILE_TEACHING; ?>'
-							); 
-		
+							);
+
         idx = $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>").val();
 		id = panel_prefix+idx;
-		
+
 		for(i=0;i<panels.length;i++) {
 			(panels[i] == id) ?  $("#"+panels[i]).show() : $("#"+panels[i]).hide();
 		}
-		
+
 	});
 
 	$('#country_id').change(function()
 	{
-		// check the corresponding country checkbox, increment selected country count 
+		// check the corresponding country checkbox, increment selected country count
 		var cid = 'cty_'+$(this).attr('value')
 		if ($('input[name='+cid+']').attr('checked') != true) {
 			$('input[name='+cid+']').attr('checked','checked');
 			var c = parseInt($('#cty_selected').html());
 			$('#cty_selected').html(String(++c));
 		}
-		
-		
+
+
 		// display state drop down
 		if ($(this).attr('value') == '71') {
 			$('#state_panel').show();
@@ -52,7 +52,7 @@ $(document).ready(function(){
 			$('#state_panel').hide();
 			$('#region_panel').show();
 		}
-		
+
 	});
 
 
@@ -62,7 +62,7 @@ $(document).ready(function(){
 
 	$('#collapse_category_select').click(function() {
 		$('#category_select').hide();
-	});	
+	});
 
 	$('#expand_activity_select').click(function() {
 		$('#activity_select').show();
@@ -70,7 +70,7 @@ $(document).ready(function(){
 
 	$('#collapse_activity_select').click(function() {
 		$('#activity_select').hide();
-	});	
+	});
 
 	$('#expand_country_select').click(function() {
 		$('#country_select').show();
@@ -78,7 +78,7 @@ $(document).ready(function(){
 
 	$('#collapse_country_select').click(function() {
 		$('#country_select').hide();
-	});	
+	});
 
 	$('#expand_species_select').click(function() {
 		$('#species_select').show();
@@ -95,7 +95,7 @@ $(document).ready(function(){
 	$('#collapse_habitats_select').click(function() {
 		$('#habitats_select').hide();
 	});
-		
+
 	$("input[name^='cat_']").click(function() {
 		var c = parseInt($('#cat_selected').html());
 		if ($(this).attr('checked') == true) {
@@ -104,7 +104,7 @@ $(document).ready(function(){
 			$('#cat_selected').html(String(--c));
 		}
 	});
-	
+
 	$("input[name^='act_']").click(function() {
 		var c = parseInt($('#act_selected').html());
 		if ($(this).attr('checked') == true) {
@@ -144,19 +144,19 @@ $(document).ready(function(){
 	// profile version editor
 	$('#profile_version_target').change(function(e) {
 		e.preventDefault();
-		
+
 		var tid = $('#profile_version_target').val();
 
 		toggleProfileVersion(tid);
-		
+
 		//$('#PROFILE_VERSION_MASTER').hide();
 
 		//
-		
-		
+
+
 		return false;
-		
-	});	
+
+	});
 
 	var toggleProfileVersion = function(tid) {
 		$('#PROFILE_VERSION_MASTER').hide();
@@ -167,317 +167,259 @@ $(document).ready(function(){
 		$('#PROFILE_VERSION_4').hide();
 
 		$('#PROFILE_VERSION_'+tid).show();
-		
+
 	};
-	
+
 });
 </script>
 
 
-<div class="col five clear">
+<div class="container">
+<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
 
 
 <div class="row">
+
 <h1><?= $this->Get('COMPANY_TITLE'); ?> Details</h1>
 
-<img src="/images/icon_info.png" alt="" border="0" style="vertical-align: middle;" />
-<span class="p_small grey">Enter details about your <?= strtolower($this->Get('COMPANY_TITLE')); ?>.  
-Try to add original content, don't just duplicate your website.
-</span>
+<div class="row my-2">
+  <div class="col">
+  <span><img src="/images/icon_info.png" alt="" border="0" style="vertical-align: middle;" /></span>
+  <span class="p_small grey">Enter details about your <?= strtolower($this->Get('COMPANY_TITLE')); ?>.
+  Try to add original content, don't just duplicate your website.
+  </span>
+  </div>
 </div>
 
 <? if ($oAuth->oUser->isAdmin) { ?>
-<div class="row"><span class="label_col">
-	<label for="" class="">Profile Version</label></span> 
-	<span class="input_col">
-		<select id="profile_version_target">
-			<option value="MASTER" selected>default version</option>
-			<option value="0">oneworld365.org</option>
-			<option value="1">gapyear365.com</option>
-			<option value="2">seasonaljobs365.com</option>
-			<option value="3">summercamp365.com</option>
-			<option value="4">tefl365.com</option>
-		</select>
-		<!-- <input id="profile_version_edit" type="submit" name="edit_profile_version" value="edit" /> -->
-		<br /><span class="p_small grey">Create a default profile version (all sites) and optionally additional versions for specific site(s).</span>
-	</span>
+<div class="row">
+	<input type="hidden" id="profile_version_target" name="profile_version_target" value="MASTER" / />
 </div>
 <?php } // end is admin ?>
 
 <div id="PROFILE_VERSION_MASTER">
 
-	<? if ($oAuth->oUser->isAdmin) { ?>
-	<div class="row">
-	<h2>Profile Version : Default (all sites)</h2>
-	</div>
-	<?php } // end is admin ?>
+	<div class="row formgroup my-2">
+    <span class="label_col">
+      <label for="<?= PROFILE_FIELD_COMP_TITLE; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_TITLE]) > 1 ? "red" : ""; ?>"><?= $this->Get('COMPANY_TITLE'); ?> Name
+    <span class="red"> *</span></label></span>
+    <span class="input_col">
+      <input class="form-control" type="text" id="<?= PROFILE_FIELD_COMP_TITLE; ?>" maxlength="99" class="textinput_01" name="<?= PROFILE_FIELD_COMP_TITLE; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_TITLE]; ?>" />
+    </span>
+  </div>
 
-	<div class="row"><span class="label_col"><label
-		for="<?= PROFILE_FIELD_COMP_TITLE; ?>"
-		class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_TITLE]) > 1 ? "red" : ""; ?>"><?= $this->Get('COMPANY_TITLE'); ?> Name<span
-		class="red"> *</span></label></span> <span class="input_col"><input
-		type="text" id="<?= PROFILE_FIELD_COMP_TITLE; ?>" maxlength="99"
-		class="textinput_01" name="<?= PROFILE_FIELD_COMP_TITLE; ?>"
-		value="<?= $_POST[PROFILE_FIELD_COMP_TITLE]; ?>" /></span></div>
-	
-	<div class="row"><span class="label_col"><label
+	<div class="row formgroup my-2"><span class="label_col"><label
 		for="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>"
 		class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_DESC_SHORT]) > 1 ? "red" : ""; ?>">Short
 	Description<span class="red"> *</span><br />
 	(300 chars or less)</label></span> <span class="input_col"><textarea
 		id="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>"
-		name="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>" class="textarea_01" /><?= stripslashes($_POST[PROFILE_FIELD_COMP_DESC_SHORT]); ?></textarea>
+		name="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>" class="form-control" /><?= stripslashes($_POST[PROFILE_FIELD_COMP_DESC_SHORT]); ?></textarea>
 		<br /><span class="p_small grey"></span>
 		</span>
-		
+
 	</div>
-	
-	<div class="row"><span class="label_col">
-	<?php 
+
+	<div class="row formgroup my-2"><span class="label_col">
+	<?php
 	$full_desc_label = 'Full Description';
-	if (strlen($this->Get('FULL_DESC_LABEL')) > 1) $full_desc_label = $this->Get('FULL_DESC_LABEL'); 
+	if (strlen($this->Get('FULL_DESC_LABEL')) > 1) $full_desc_label = $this->Get('FULL_DESC_LABEL');
 	?>
 	<label for="<?= PROFILE_FIELD_COMP_DESC_LONG; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_DESC_LONG]) > 1 ? "red" : ""; ?>"><?= $full_desc_label; ?><span class="red"> *</span></label></span> <span
 		class="input_col"><textarea id="<?= PROFILE_FIELD_COMP_DESC_LONG; ?>"
-		name="<?= PROFILE_FIELD_COMP_DESC_LONG; ?>" class="textarea_02" /><?= stripslashes($_POST[PROFILE_FIELD_COMP_DESC_LONG]); ?></textarea>
+		name="<?= PROFILE_FIELD_COMP_DESC_LONG; ?>" class="form-control" /><?= stripslashes($_POST[PROFILE_FIELD_COMP_DESC_LONG]); ?></textarea>
 		<br />
 		</span>
 	</div>
 
 </div>
 
-<? if ($oAuth->oUser->isAdmin) { ?>
-<?php 
-foreach($_CONFIG['aProfileVersion'] as $tid => $sVersionTarget) {
-?>
-<div id="PROFILE_VERSION_<?= $tid; ?>" style="display: none;">
-<?php $pv_prefix = "PV::".$tid."::"; ?>
-
-	<div class="row">
-	<h2>Profile Version: <?= $sVersionTarget; ?></h2>
-	</div>
-
-	<div class="row">
-		<span class="label_col">
-			<label for="<?= $pv_prefix.PROFILE_FIELD_COMP_TITLE; ?>" class="<?= strlen($response['msg'][$pv_prefix.PROFILE_FIELD_COMP_TITLE]) > 1 ? "red" : ""; ?>">Title </label>
-		</span> 
-		<span class="input_col">
-			<input type="text" id="<?= $pv_prefix.PROFILE_FIELD_COMP_TITLE; ?>" maxlength="99" class="textinput_01" name="<?= $pv_prefix.PROFILE_FIELD_COMP_TITLE; ?>" value="<?= $_POST[$pv_prefix.PROFILE_FIELD_COMP_TITLE]; ?>" />
-		</span>
-	</div>
-	
-	<div class="row">
-		<span class="label_col">
-			<label for="<?= $pv_prefix.PROFILE_FIELD_COMP_DESC_SHORT; ?>" class="<?= strlen($response['msg'][$pv_prefix.PROFILE_FIELD_COMP_DESC_SHORT]) > 1 ? "red" : ""; ?>">Short Description<br />	(300 chars or less)</label>
-		</span> 
-		<span class="input_col">
-		<textarea id="<?= $pv_prefix.PROFILE_FIELD_COMP_DESC_SHORT; ?>" name="<?= $pv_prefix.PROFILE_FIELD_COMP_DESC_SHORT; ?>" class="textarea_01" /><?= stripslashes($_POST[$pv_prefix.PROFILE_FIELD_COMP_DESC_SHORT]); ?></textarea>
-		</span>
-	</div>
-	
-	<div class="row">
-		<span class="label_col">
-			<label for="<?= $pv_prefix.PROFILE_FIELD_COMP_DESC_LONG; ?>" class="<?= strlen($response['msg'][$pv_prefix.PROFILE_FIELD_COMP_DESC_LONG]) > 1 ? "red" : ""; ?>">Full Description</label>
-		</span> 
-		<span class="input_col">
-			<textarea id="<?= $pv_prefix.PROFILE_FIELD_COMP_DESC_LONG; ?>" name="<?= $pv_prefix.PROFILE_FIELD_COMP_DESC_LONG; ?>" class="textarea_02" /><?= stripslashes($_POST[$pv_prefix.PROFILE_FIELD_COMP_DESC_LONG]); ?></textarea>
-		</span>
-	</div>
-</div>
-<?php } // end profile versions?>
-<?php } // end is admin ?>
-
 
 <?php if ($this->Get('DISPLAY_CAT_ACT_CTY_OPTIONS')) {  ?>
 
-<div class="left-align five clear pad4-b"><span class="label_col">
-<h1 style="margin: 0; <?= strlen($response['msg']['category']) > 1 ? "color:red;" : ""; ?>">Categories<span class="red"> *</span></h1></span> 
-<span class="input_col" style=""> 
-<a id="expand_category_select">+ Expand</a> 
-<a id="collapse_category_select">- Collapse</a> (<span id="cat_selected"><?= $this->Get('CATEGORY_LIST_SELECTED_COUNT'); ?></span> Selected)</a> </span> 
-<span id="category_select" class="input_col" style="display: none;">
-<div class="left-align four">
-<ul class='select_list'>
-<?= $this->Get('CATEGORY_LIST'); ?>
-</ul>
-</div>
-</span></div>
+<div class="container">
+<div class="row my-3">
 
 
-<div class="left-align five clear pad4-b"><span class="label_col">
-<h1 style="margin: 0; <?= strlen($response['msg']['activity']) > 1 ? "color:red;" : ""; ?>">Activities<span
-	class="red"> *</span></h1>
-</span> <span class="input_col" style=""> <a id="expand_activity_select">+
-Expand</a> <a id="collapse_activity_select">- Collapse</a> (<span
-	id="act_selected"><?= $this->Get('ACTIVITY_LIST_SELECTED_COUNT'); ?></span>
-Selected) </span> <span id="activity_select" class="input_col"
-	style="display: none;"> <?
-	$oColumnSort = new ColumnSort;
-	$oColumnSort->SetElements($this->Get('ACTIVITY_LIST'));
-	$oColumnSort->SetCols(3);
-	$aElements = $oColumnSort->Sort();
-	?>
+<div class="col-4">
 
-<div class="left-align four">
-<div class="one-half left-align">
-<ul class='select_list'>
-<?php
-foreach($aElements[1] as $idx => $val) {
-	print $val;
-}
-?>
-</ul>
-</div>
-<div class="one-half left-align">
-<ul class='select_list'>
-<?php
-foreach($aElements[2] as $idx => $val) {
-	print $val;
-}
-?>
-</ul>
-</div>
-<div class="one-half left-align">
-<ul class='select_list'>
-<?php
-foreach($aElements[3] as $idx => $val) {
-	print $val;
-}
-?>
-</ul>
-</div>
-</div>
-</span></div>
-
-<div class="left-align five clear pad4-b"><span class="label_col">
-<h1 style="margin: 0; <?= strlen($response['msg']['country']) > 1 ? "color:red;" : ""; ?>">Countries<span
-	class="red"> *</span></h1>
-<span class="p_small grey">Where are your placements located?</span> </span>
-<span class="input_col" style=""> <a id="expand_country_select">+ Expand</a>
-<a id="collapse_country_select">- Collapse</a> (<span id="cty_selected"><?= $this->Get('COUNTRY_LIST_SELECTED_COUNT'); ?></span>
-Selected) </span> <span id="country_select" class="input_col"
-	style="display: none;"> <?
-	$oColumnSort = new ColumnSort;
-	$oColumnSort->SetElements($this->Get('COUNTRY_LIST'));
-	$oColumnSort->SetCols(4);
-	$aElements = $oColumnSort->Sort();
-	?>
-
-<div class="left-align four">
-<div class="one left-align">
-<ul class='select_list'>
-<?php
-foreach($aElements[1] as $idx => $val) {
-	print $val;
-}
-?>
-</ul>
-</div>
-<div class="one left-align">
-<ul class='select_list'>
-<?php
-foreach($aElements[2] as $idx => $val) {
-	print $val;
-}
-?>
-</ul>
-</div>
-<div class="one left-align">
-<ul class='select_list'>
-<?php
-foreach($aElements[3] as $idx => $val) {
-	print $val;
-}
-?>
-</ul>
-</div>
-<div class="one left-align">
-<ul class='select_list'>
-<?php
-foreach($aElements[4] as $idx => $val) {
-	print $val;
-}
-?>
-</ul>
-</div>
+  <div class="row formgroup my-2"><span class="label_col">
+  <h1 style="margin: 0; <?= strlen($response['msg']['category']) > 1 ? "color:red;" : ""; ?>">Categories<span class="red"> *</span></h1></span>
+  <span class="input_col" style="">
+  <a id="expand_category_select">+ Expand</a>
+  <a id="collapse_category_select">- Collapse</a> (<span id="cat_selected"><?= $this->Get('CATEGORY_LIST_SELECTED_COUNT'); ?></span> Selected)</a> </span>
+  <span id="category_select" class="input_col" style="display: none;">
+  <div class="py-2">
+  <ul class='form-check'>
+  <?= $this->Get('CATEGORY_LIST'); ?>
+  </ul>
+  </div>
+  </span></div>
 
 </div>
 
-</span></div>
+
+<div class="col-4">
+  <div class="row formgroup my-2"><span class="label_col">
+  <h1 style="margin: 0; <?= strlen($response['msg']['activity']) > 1 ? "color:red;" : ""; ?>">Activities<span
+  	class="red"> *</span></h1>
+  </span> <span class="input_col" style=""> <a id="expand_activity_select">+
+  Expand</a> <a id="collapse_activity_select">- Collapse</a> (<span
+  	id="act_selected"><?= $this->Get('ACTIVITY_LIST_SELECTED_COUNT'); ?></span>
+  Selected) </span> <span id="activity_select" class="input_col" style="display: none;"> <?
+  	$oColumnSort = new ColumnSort;
+  	$oColumnSort->SetElements($this->Get('ACTIVITY_LIST'));
+  	$oColumnSort->SetCols(3);
+  	$aElements = $oColumnSort->Sort();
+  	?>
+
+  <div class="row formgroup my-2">
+  <div class="py-2">
+  <ul class='form-check'>
+  <?php
+  foreach($aElements[1] as $idx => $val) {
+  	print $val;
+  }
+  ?>
+  <?php
+  foreach($aElements[2] as $idx => $val) {
+  	print $val;
+  }
+  ?>
+  <?php
+  foreach($aElements[3] as $idx => $val) {
+  	print $val;
+  }
+  ?>
+  </ul>
+  </div>
+  </div>
+  </span></div>
+</div>
+
+
+<div class="col-4">
+
+
+  <div class="row formgroup my-2"><span class="label_col">
+  <h1 style="margin: 0; <?= strlen($response['msg']['country']) > 1 ? "color:red;" : ""; ?>">Countries<span
+  	class="red"> *</span></h1></span>
+  <span class="input_col" style=""> <a id="expand_country_select">+ Expand</a>
+  <a id="collapse_country_select">- Collapse</a> (<span id="cty_selected"><?= $this->Get('COUNTRY_LIST_SELECTED_COUNT'); ?></span>
+  Selected) </span> <span id="country_select" class="input_col"
+  	style="display: none;"> <?
+  	$oColumnSort = new ColumnSort;
+  	$oColumnSort->SetElements($this->Get('COUNTRY_LIST'));
+  	$oColumnSort->SetCols(4);
+  	$aElements = $oColumnSort->Sort();
+  	?>
+
+  <div class="row formgroup my-2">
+  <div class="py-2">
+  <ul class='form-check'>
+  <?php
+  foreach($aElements[1] as $idx => $val) {
+  	print $val;
+  }
+  foreach($aElements[2] as $idx => $val) {
+  	print $val;
+  }
+  foreach($aElements[3] as $idx => $val) {
+  	print $val;
+  }
+  foreach($aElements[4] as $idx => $val) {
+  	print $val;
+  }
+  ?>
+  </ul>
+  </div>
+  </div>
+
+  </span></div>
+
+</div>
+
+
+</div>
+</div>
+
+
+
+
 
 <?php } // end IF DISPLAY_CAT_ACT_CTY_OPTIONS ?>
 
-<div class="row"><span class="label_col"><label
+<div class="row ormgroup my-2"><span class="label_col"><label
 	for="<?= PROFILE_FIELD_COMP_URL; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_URL]) > 1 ? "red" : ""; ?>">Website
 Url <span class="red">*</span></label></span> <span class="input_col"><input
 	type="text" id="<?= PROFILE_FIELD_COMP_URL; ?>"
-	name="<?= PROFILE_FIELD_COMP_URL; ?>" class="textinput_01"
+	name="<?= PROFILE_FIELD_COMP_URL; ?>" class="form-control"
 	maxlength="255"
 	value="<?= (strlen($_POST[PROFILE_FIELD_COMP_URL]) > 1) ? $_POST[PROFILE_FIELD_COMP_URL] : "http://www."; ?>" /></span>
 </div>
 
-<div class="row"><span class="label_col"><label
+<div class="row formgroup my-2"><span class="label_col"><label
 	for="<?= PROFILE_FIELD_COMP_EMAIL; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_EMAIL]) > 1 ? "red" : ""; ?>">Enquiry
 Email <span class="red">*</span></label></span> <span class="input_col"><input
-	type="text" id="<?= PROFILE_FIELD_COMP_EMAIL; ?>" class="textinput_01"
+	type="text" id="<?= PROFILE_FIELD_COMP_EMAIL; ?>" class="form-control"
 	maxlength="60" name="<?= PROFILE_FIELD_COMP_EMAIL; ?>"
 	value="<?= $_POST[PROFILE_FIELD_COMP_EMAIL]; ?>" /></span></div>
 
-<div class="row"><span class="label_col"><label
+<div class="row formgroup my-2"><span class="label_col"><label
 	for="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_APPLY_URL]) > 1 ? "red" : ""; ?>">Apply
 Url</label></span> <span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>" class="textinput_01"
+	id="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>" class="form-control"
 	maxlength="255" name="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>"
 	value="<?= $_POST[PROFILE_FIELD_COMP_APPLY_URL]; ?>" /> <br />
 <span class="p_small grey">(optional) supply a url if you want applicants sent directly to your booking/recruitment website</span> </span></div>
 
-<div class="row"><span class="label_col"><label
+<div class="row formgroup my-2"><span class="label_col"><label
 	for="<?= PROFILE_FIELD_COMP_ADDRESS; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_ADDRESS]) > 1 ? "red" : ""; ?>">Address</label></span>
 <span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_ADDRESS; ?>" class="textinput_01"
+	id="<?= PROFILE_FIELD_COMP_ADDRESS; ?>" class="form-control"
 	maxlength="999" name="<?= PROFILE_FIELD_COMP_ADDRESS; ?>"
 	value="<?= $_POST[PROFILE_FIELD_COMP_ADDRESS]; ?>" /></span></div>
 
-<div class="row"><span class="label_col"><label
+<div class="row formgroup my-2"><span class="label_col"><label
 	for="<?= PROFILE_FIELD_COMP_COUNTRY_ID; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_COUNTRY_ID]) > 1 ? "red" : ""; ?>">Country</label></span>
 <span class="input_col"> <?= $this->Get("COUNTRY_ID_LIST"); ?> </span></div>
 
 <? $css = ($this->Get('COUNTRY_ID_SELECTED') != 71) ? "display: none;" : ""; ?>
-<div id="state_panel" class="row" style="<?= $css; ?>"><span
+<div id="state_panel" class="row formgroup my-2" style="<?= $css; ?>"><span
 	class="label_col"><label for="<?= PROFILE_FIELD_COMP_STATE_ID; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_STATE_ID]) > 1 ? "red" : ""; ?>">State</label></span>
 <span class="input_col"> <?= $this->Get("US_STATE_LIST"); ?> </span></div>
 
 <? $css = ($this->Get('COUNTRY_ID_SELECTED') == 71) ? "display: none;" : ""; ?>
-<div id="region_panel" class="row"  style="<?= $css; ?>"><span
+<div id="region_panel" class="row formgroup my-2"  style="<?= $css; ?>"><span
 	class="label_col"><label for="<?= PROFILE_FIELD_COMP_LOCATION; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LOCATION]) > 1 ? "red" : ""; ?>">Region</label></span>
 <span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_LOCATION; ?>" class="textinput_01"
+	id="<?= PROFILE_FIELD_COMP_LOCATION; ?>" class="form-control"
 	maxlength="99" name="<?= PROFILE_FIELD_COMP_LOCATION; ?>"
 	value="<?= $_POST[PROFILE_FIELD_COMP_LOCATION]; ?>" /></span></div>
 
-<div class="row pad3-b"><span class="label_col"><label
+<div class="row formgroup my-2"><span class="label_col"><label
 	for="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>"
 	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_TELEPHONE]) > 1 ? "red" : ""; ?>">Telephone</label></span>
 <span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>" class="textinput_01"
+	id="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>" class="form-control"
 	maxlength="39" name="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>"
 	value="<?= $_POST[PROFILE_FIELD_COMP_TELEPHONE]; ?>" /> <br />
 <span class="p_small grey">Include international / regional dialing
 code(s)</span> </span></div>
 
 <?php if ($this->Get("PROFILE_TYPE_COUNT") >  1) { ?>
-<div class="row pad4-t pad3-b">
+<div class="row formgroup my-2">
 <h2>Profile Type</h2>
 </div>
 
-<div class="row"><span class="label_col"><label for="<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_COMP_PROFILE_TYPE_ID]) > 1 ? "color:red;" : ""; ?>">Profile
+<div class="row formgroup my-2"><span class="label_col"><label for="<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_COMP_PROFILE_TYPE_ID]) > 1 ? "color:red;" : ""; ?>">Profile
 Type<span class="red"> *</span></label></span> <span class="input_col">
 <?= $this->Get("PROFILE_TYPE_LIST"); ?> <br />
 <span class="p_small grey"> Choose profile type that best matches your
@@ -486,39 +428,39 @@ If your activities span multiple profile types choose 'Organisation
 Profile - General'. </span> </span></div>
 <?php } else { ?> <input type="hidden"
 	name="<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>"
-	value="<?= $this->Get("PROFILE_TYPE_SELECTED_ID"); ?>" /> <?php } ?> <?php 
+	value="<?= $this->Get("PROFILE_TYPE_SELECTED_ID"); ?>" /> <?php } ?> <?php
 	$panel_key = 'profile_type_'.PROFILE_COMPANY;
 	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
 	?>
-<div id="<?= $panel_key; ?>" class="row pad3-t" style="<?= $visibility; ?>">
+<div id="<?= $panel_key; ?>" class="row  formgroup my-2" style="<?= $visibility; ?>">
 	<?= $this->Get('EXTENDED_FIELDSET_GENERAL_PROFILE'); ?></div>
 
 	<?php
 	$panel_key = 'profile_type_'.PROFILE_SUMMERCAMP;
 	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
 	?>
-<div id="profile_type_<?= PROFILE_SUMMERCAMP; ?>" class="row pad3-t" style="<?= $visibility; ?>">
+<div id="profile_type_<?= PROFILE_SUMMERCAMP; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
 	<?= $this->Get('EXTENDED_FIELDSET_SUMMERCAMP'); ?></div>
 
 	<?php
 	$panel_key = 'profile_type_'.PROFILE_SEASONALJOBS;
 	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
 	?>
-<div id="profile_type_<?= PROFILE_SEASONALJOBS; ?>" class="row pad3-t" style="<?= $visibility; ?>">
+<div id="profile_type_<?= PROFILE_SEASONALJOBS; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
 	<?= $this->Get('EXTENDED_FIELDSET_SEASONALJOBS'); ?></div>
 
 	<?php
 	$panel_key = 'profile_type_'.PROFILE_VOLUNTEER_PROJECT;
 	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
 	?>
-<div id="profile_type_<?= PROFILE_VOLUNTEER_PROJECT; ?>" class="row pad3-t" style="<?= $visibility; ?>">
+<div id="profile_type_<?= PROFILE_VOLUNTEER_PROJECT; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
 	<?= $this->Get('EXTENDED_FIELDSET_VOLUNTEER_PROJECT'); ?></div>
 
 	<?php
 	$panel_key = 'profile_type_'.PROFILE_TEACHING;
 	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
 	?>
-<div id="profile_type_<?= PROFILE_TEACHING; ?>" class="row pad3-t" style="<?= $visibility; ?>">
+<div id="profile_type_<?= PROFILE_TEACHING; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
 	<?= $this->Get('EXTENDED_FIELDSET_TEACHING_PROJECT'); ?></div>
 
 
@@ -528,7 +470,7 @@ Profile - General'. </span> </span></div>
 
 <? if ($oAuth->oUser->isAdmin) { ?>
 
-<div class="row">
+<div class="row formgroup my-2">
 <h2>Admin Options</h2>
 </div>
 
@@ -672,7 +614,7 @@ Job App<input type="checkbox" name="enq_opt_3"
 
 
 <div class="row"><span class="label_col"><label><b>Approved?</b> :<span
-	class="red"> *</span></label></span> <span class="input_col"> <? 
+	class="red"> *</span></label></span> <span class="input_col"> <?
 	if (isset($_POST['submit'])) {
 		$checked = ($_POST['status'] == "true") ? "checked" : "";
 	} else {
@@ -687,4 +629,8 @@ Job App<input type="checkbox" name="enq_opt_3"
 	value="Submit" /> </span></div>
 
 
+
+</div>
+
+</div>
 </div>

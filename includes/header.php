@@ -18,7 +18,7 @@ $oHeader->SetJsInclude($oJsInclude);
 
 
 $oJsInclude = new JsInclude();
-$oJsInclude->SetSrc("/includes/js/jquery-3.3.1.js");
+$oJsInclude->SetSrc("/includes/js/jquery-3.7.1.min.js");
 $oHeader->SetJsInclude($oJsInclude);
 
 $oJsInclude = new JsInclude();
@@ -45,10 +45,10 @@ $oHeader->SetCssInclude("CSS_FONTS", $oCssInclude);
 
 
 /* load the generic site wide CSS */
-$oCssInclude = new CssInclude();
-$oCssInclude->SetHref('/css/stylesheet.css');
-$oCssInclude->SetMedia('screen');
-$oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+//$oCssInclude = new CssInclude();
+//$oCssInclude->SetHref('/css/stylesheet.css');
+//$oCssInclude->SetMedia('screen');
+//$oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
 
 $oCssInclude = new CssInclude();
 $oCssInclude->SetHref('/css/fonts.css');

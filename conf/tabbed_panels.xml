@@ -1,4 +1,4 @@
-<?xml version="1.0"?> 
+<?xml version="1.0"?>
 <tabbed-panels>
 
    <tabbed-panel>
@@ -40,7 +40,7 @@
          <tab>
             <title>Featured Projects</title>
             <desc>Featured Projects</desc>
-            <code>FEATURED</code>            
+            <code>FEATURED</code>
             <link>/</link>
             <active>1</active>
          </tab>
@@ -89,7 +89,7 @@
             <active>0</active>
          </tab>
 
-         
+
       </tabs>
    </tabbed-panel>
 
@@ -145,12 +145,12 @@
             <desc>Contact / Enquiry</desc>
             <link></link>
             <active>0</active>
-         </tab>         
+         </tab>
 
       </tabs>
    </tabbed-panel>
-   
-   
+
+
    <tabbed-panel>
       <id>TP05</id>
       <title>Homepage Feature Panel</title>
@@ -174,9 +174,9 @@
             <desc>Search for Projects &amp; Organisations</desc>
             <link>/search</link>
             <active>0</active>
-         </tab>         
+         </tab>
       </tabs>
-   </tabbed-panel>   
+   </tabbed-panel>
 
    <tabbed-panel>
       <id>TP06</id>
@@ -238,7 +238,7 @@
             <desc>Logo Upload</desc>
             <link></link>
             <active>0</active>
-         </tab>         
+         </tab>
          <tab>
             <title>Upload Images</title>
             <desc>Upload images</desc>

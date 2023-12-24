@@ -129,11 +129,7 @@ class db {
 	// execute a query
 	function query($query) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-	
 		if(DEBUG) Logger::Msg("<span style='font-size: 11px;'>".$query."</span>");
-
-		
 
 		if(strlen($query = trim($query))) {
 			if($this->last_result = pg_exec($this->db, $query)) {
@@ -272,51 +268,81 @@ class db {
 	}
 
 	function logError($query) {
-		
+	}
 
-		$message .= "\nDate: " . date("d/m/y H:i:s") . "\n";
-		$message .= "Vhost: summercampreunited.com \n";
-		$message .= "Page: " . $_SERVER['PHP_SELF'] . "\n";
-		$message .= "IP: " . $_SERVER['REMOTE_ADDR'] . "\n";
-		$message .= $query;
-		$message .= "\n";
-		$message .= "Error: ".pg_last_error($this->db)."\n";
-		$message .= "\n";
+	/**
+	 * @see ./dbal/lib/Doctrine/DBAL/Platforms/PostgreSqlPlatform.php
+	 * @return array
+	 */
+	public function getTableList()
+	{
+	    $sql = "SELECT quote_ident(table_name) AS table_name,
+                       table_schema AS schema_name
+                FROM   information_schema.tables
+                WHERE  table_schema NOT LIKE 'pg\_%'
+                AND    table_schema != 'information_schema'
+                AND    table_name != 'geometry_columns'
+                AND    table_name != 'spatial_ref_sys'
+                AND    table_type != 'VIEW'";
+	    
+	    $this->query($sql);
 
-		// Add GET, POST & COOKIE variables:
-		ob_start();
-		print "_POST...\n";
-		var_dump($_POST);
-		print "_GET...\n";
-		var_dump($_GET);
-		print "_COOKIE...\n";
-		var_dump($_COOKIE);
-		print "_SERVER\n";
-		var_dump($_SERVER);
-	
-
-		$user_details = ob_get_contents();
-		ob_end_clean();
-		$message .= $user_details;
-
-		/*
-		// save to a log file
-		$path = "/var/tmp/db_query.log";
-		$f = fopen($path, 'a');
-		fwrite($f, $message);
-		fclose($f);
-		*/
-
-		// mail the error report
-		//global $_CONFIG;
-		//$to = "steveedwards01@yahoo.co.uk";
-		//$subject =  $_CONFIG['site_title'] . " :: ERROR : db->query() failure log";
-		//$headers = 'From: '.$_CONFIG['website_email'] . "\r\n";
-		//$headers .= 'Reply-To: '.$_CONFIG['website_email'] . "\r\n";
-		//mail($to,$subject,$message,$headers);
+	    if ($this->getNumRows() >= 1)
+	    {
+	        return $this->getRows();
+	    }
 
 	}
-	
+
+	/**
+	 * @see ./dbal/lib/Doctrine/DBAL/Platforms/PostgreSqlPlatform.php
+	 * @param string $strTable
+	 * @return array
+	 */
+	public function getTableSchema($strTable)
+	{
+	    $sql = "
+            SELECT
+            a.attnum,
+            quote_ident(a.attname) AS field,
+            t.typname AS type,
+            format_type(a.atttypid, a.atttypmod) AS complete_type,
+            --(SELECT t1.typname FROM pg_catalog.pg_type t1 WHERE t1.oid = t.typbasetype) AS domain_type,
+            --(SELECT format_type(t2.typbasetype, t2.typtypmod) FROM
+            --pg_catalog.pg_type t2 WHERE t2.typtype = 'd' AND t2.oid = a.atttypid) AS domain_complete_type,
+            a.attnotnull AS isnotnull,
+            --(SELECT 't'
+            --FROM pg_index
+            --WHERE c.oid = pg_index.indrelid
+            --AND pg_index.indkey[0] = a.attnum
+            --AND pg_index.indisprimary = 't'
+            --) AS pri,
+            (SELECT pg_get_expr(adbin, adrelid)
+            FROM pg_attrdef
+            WHERE c.oid = pg_attrdef.adrelid
+            AND pg_attrdef.adnum=a.attnum
+            ) AS default,
+            (SELECT pg_description.description
+            FROM pg_description WHERE pg_description.objoid = c.oid AND a.attnum = pg_description.objsubid
+            ) AS comment
+            FROM pg_attribute a, pg_class c, pg_type t, pg_namespace n
+            WHERE 1=1
+            AND c.relname = '".$strTable."' 
+            AND a.attnum > 0
+            AND a.attrelid = c.oid
+            AND a.atttypid = t.oid
+            AND n.oid = c.relnamespace
+            ORDER BY a.attnum
+            ";
+	    
+	    $this->query($sql);
+	    
+	    if ($this->getNumRows() >= 1)
+	    {
+	        return $this->getRows();
+	    }
+	}
+
 } // end db class
 
 ?>
