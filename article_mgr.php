@@ -73,13 +73,6 @@ print $oHeader->Render();
 
 	<h1>Content Manager</h1>
 
-	<div class="col">
-		<span class="">
-			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: window.location = './article-editor'; return false;">New Article</button>
-		</span>
-	</div>
-
-
 
 	<div class="col">
 
@@ -102,6 +95,14 @@ print $oHeader->Render();
 <div class="row">
 	<div id="article_search_msg"></div>
 	<div id="article_search_result"></div>
+</div>
+
+<div class="row">
+	<div class="col">
+		<span class="">
+			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: window.location = './article-editor'; return false;">New Article</button>
+		</span>
+	</div>
 </div>
 
 </form>
