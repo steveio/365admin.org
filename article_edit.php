@@ -8,6 +8,8 @@ include_once("./includes/header.php");
 include_once("./includes/footer.php");
 
 
+
+
 if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/client_login.php",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
@@ -159,7 +161,6 @@ if (isset($_REQUEST['do_file_upload'])) {
 
 
 
-
 if (isset($_REQUEST['save'])) {
 
 	$oArticle->SetFromArray(array(
@@ -209,16 +210,17 @@ $sPlacementDDList = "<select id='placement_id' disabled><option value='NULL'>sel
 
 
 print $oHeader->Render();
-?>
 
 
-
-<div id="msgtext" style="color: red; font-size: 10px;">
-<?
 $aResponse = (isset($aResponse['msg'])) ? $aResponse['msg'] : $aResponse;
+if(is_array($aResponse) && count($aResponse) >= 1) { ?>
+<div id="msgtext" class="alert alert-warning" role="alert">
+<?
 print AppError::GetErrorHtml($aResponse);
 ?>
-</div>
+</div><?
+} ?>
+
 
 <div class="container">
 <div class="align-items-center justify-content-center">
@@ -240,7 +242,7 @@ print AppError::GetErrorHtml($aResponse);
 
 <div class="row  my-3">
 	<span class="label_col"><label for="title" class="f_label" style="<?= strlen($response['msg']['title']) > 1 ? "color:red;" : ""; ?>">Title<span class="red"> *</span></label></span>
-	<span class="input_col"><input type="text" id="title" class="text_input" style="width: 600px;" name="title" value="<?= $oArticle->GetTitle(); ?>" /></span>
+	<span class="input_col"><input type="text" id="title" class="form-control" name="title" value="<?= $oArticle->GetTitle(); ?>" /></span>
 </div>
 
 <div class="row my-3">
@@ -257,13 +259,14 @@ print AppError::GetErrorHtml($aResponse);
 </div>
 
 <div class="row my-3">
-	<span class="label_col"><label for="meta_desc" class="f_label" style="<?= strlen($response['msg']['meta_desc']) > 1 ? "color:red;" : ""; ?>">Meta Desc</label></span>
-	<span class="input_col"><input type="text" id="meta_desc" class="text_input" maxlength="254" style="width: 400px;" name="meta_desc" value="<?= $oArticle->GetMetaDesc(); ?>" /></span>
-</div>
-
-<div class="row">
-	<span class="label_col"><label for="meta_keywords" class="f_label" style="<?= strlen($response['msg']['meta_keywords']) > 1 ? "color:red;" : ""; ?>">Meta Keywords</label></span>
-	<span class="input_col"><input type="text" id="meta_keywords" class="text_input"  maxlength="254" style="width: 400px;" name="meta_keywords" value="<?= $oArticle->GetMetaKeywords(); ?>" /></span>
+	<div class="col">
+		<span class="label_col"><label for="meta_desc" class="f_label" style="<?= strlen($response['msg']['meta_desc']) > 1 ? "color:red;" : ""; ?>">Meta Desc</label></span>
+	        <span class="input_col"><input type="text" id="meta_desc" class="form-control" maxlength="254" style="width: 400px;" name="meta_desc" value="<?= $oArticle->GetMetaDesc(); ?>" /></span>
+	</div>
+	<div class="col">
+		<span class="label_col"><label for="meta_keywords" class="f_label" style="<?= strlen($response['msg']['meta_keywords']) > 1 ? "color:red;" : ""; ?>">Meta Keywords</label></span>
+		<span class="input_col"><input type="text" id="meta_keywords" class="form-control"  maxlength="254" style="width: 400px;" name="meta_keywords" value="<?= $oArticle->GetMetaKeywords(); ?>" /></span>
+	</div>
 </div>
 
 
@@ -271,9 +274,7 @@ print AppError::GetErrorHtml($aResponse);
 
 <div class="row">
 	<span class="my-3">
-
-    <button class="btn btn-primary rounded-pill px-3" type="submit" name="">Save</button>
-
+  		 <button class="btn btn-primary rounded-pill px-3" type="submit" name="save" value="save">Save</button>
 
 		<? if (is_numeric($oArticle->GetId())) { ?>
       <button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: go('./article-publisher?&id=<?= $oArticle->GetId() ?>'); return false;" name="new">Publish</button>
@@ -548,13 +549,12 @@ print AppError::GetErrorHtml($aResponse);
 
 
 
-</div><!--  end row -->
+</div>
 
-</div><!--  end profile_inner -->
-</div><!--  end profile -->
+</div>
+</div>
 
 
-</form>
 
 
 </div>
