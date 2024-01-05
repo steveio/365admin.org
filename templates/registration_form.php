@@ -1,5 +1,5 @@
 <div class="container">
-<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+<div class="align-items-center justify-content-center">
 	<form enctype="multipart/form-data" name="" id="" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
 

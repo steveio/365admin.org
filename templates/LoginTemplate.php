@@ -17,7 +17,7 @@ foreach($aError as $k => $v) {
 ?>
 
 <div class="container">
-<div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+<div class="align-items-center justify-content-center">
 
 
 <form name="LoginForm" action="/<?= ROUTE_LOGIN; ?>" method="post">

@@ -9,7 +9,7 @@ $oSalesEnquiry = $this->Get('oSalesEnquiry');
 <input type="hidden" name="id" value="<?= base64_encode($oSalesEnquiry->GetId()) ?>" />
 
 <div class="container">
-  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+  <div class="align-items-center justify-content-center">
 
 
           <div class="row formgroup my-2">
