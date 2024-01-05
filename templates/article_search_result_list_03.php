@@ -1,16 +1,19 @@
 
-<table cellspacing="2" cellpadding="4" border="0" width="800px">
+<table cellspacing="2" cellpadding="4" border="0" width="" class="table table-striped">
+<thead>
 <tr>
-	<th>&nbsp;</th>
-	<th>Title</th>
-	<th>Created</th>
-	<th>Published To</th>
-	<th>&nbsp;</th>
-	<th>&nbsp;</th>
-	<th>&nbsp;</th>
-	<th>&nbsp;</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">Title</th>
+	<th scope="col">Created</th>
+	<th scope="col">Published To</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">&nbsp;</th>
 
 </tr>
+</thead>
+<tbody>
 <? 
 $i = 1;
 
@@ -21,24 +24,21 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	?>
 	<? $class = ($class == "hi") ? "" : "hi"; ?>
 	<tr class='<?= $class ?>'>
-		<td width="20px" valign="top"><?= $i++ ?></td>
-		<td width="80px" valign="top"><?= $oArticle->GetTitle() ?></td>
-		<td width="80px" valign="top"><?= $oArticle->GetCreatedDate() ?></td>
-		<td width="260px" valign="top"><a href="<?= $oArticle->GetUrl() ?>"><?= $oArticle->GetRelativeUrl() ?></td>
-		<td width="20px">
-			<!-- <input type="submit" onclick="javascript: window.location = './article?&id=<?= $oArticle->GetId() ?>'; return false;" name="art_<?= $oArticle->GetId() ?>" value="view" /> -->
-			<a href="<?= $oArticle->GetUrl() ?>" title="View">View</a>
+		<td valign="top"><?= $i++ ?></td>
+		<td valign="top"><?= $oArticle->GetTitle() ?></td>
+		<td valign="top"><?= $oArticle->GetCreatedDate() ?></td>
+		<td valign="top"><a href="<?= $oArticle->GetUrl() ?>"><?= $oArticle->GetRelativeUrl() ?></td>
+		<td>
+			<a class="btn btn-primary rounded-pill px-3" role="button" href="<?= $oArticle->GetUrl() ?>" title="View">View</a>
 		</td>		
-		<td width="20px">
-			<!-- <input type="submit" onclick="javascript: window.location = './article-editor?&id=<?= $oArticle->GetId() ?>'; return false;" name="art_<?= $oArticle->GetId() ?>" value="edit" /> -->
-			<a href="./article-editor?&id=<?= $oArticle->GetId() ?>" title="Edit">Edit</a>
+		<td>
+			<a class="btn btn-primary rounded-pill px-3" role="button"  href="./article-editor?&id=<?= $oArticle->GetId() ?>" title="Edit">Edit</a>
 		</td>
-		<td width="20px">
-			<!-- <input type="submit" onclick="javascript: window.location = './article-publisher?&id=<?= $oArticle->GetId() ?>'; return false;" name="art_<?= $oArticle->GetId() ?>" value="publish" /> -->
-			<a href="./article-publisher?&id=<?= $oArticle->GetId() ?>" title="Edit">Publish</a>
+		<td>
+			<a class="btn btn-primary rounded-pill px-3" role="button"  href="./article-publisher?&id=<?= $oArticle->GetId() ?>" title="Edit">Publish</a>
 		</td>
-		<td width="20px">
-			<input type="submit" onclick="javscript: return confirm('Are you sure you wish to delete this article?');" name="art_<?= $oArticle->GetId() ?>" value="delete" />
+		<td>
+			<button id=""  onclick="javscript: return confirm('Are you sure you wish to delete this article?');" name="art_<?= $oArticle->GetId() ?>" class="btn btn-primary rounded-pill px-3" tabindex="3" value="delete" type="submit">delete</button>			
 		</td>		
 	</tr>
 <? 
@@ -49,5 +49,5 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	print "<tr><td colspan=5>There are 0 articles found.</tr>";
 }
 ?>
-
+</tbody>
 </table>

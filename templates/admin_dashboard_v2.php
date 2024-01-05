@@ -23,28 +23,35 @@
 
 
 <div class="row formgroup my-2">
-  <div>
-    <div class="form-check form-check-inline">
+  <div class="row my-2">
+    <div class="col-2 form-check form-check-inline">
   		<label class="" for="projects">Projects</label>
   		<input id="search_projects" class="form-check" name="search_type" value="1" type="radio" checked />
   	</div>
-  	<div class="form-check form-check-inline">
+  	<div class="col-2 form-check form-check-inline">
   		<label class="" for="organisations">Organisations</label>
   		<input id="search_orgs" class="form-check" name="search_type" value="0" type="radio" />
   	</div>
-  	<div class="form-check form-check-inline">
+  	<div class="col-2 form-check form-check-inline">
   		<label class="" for="articles">Articles</label>
   		<input id="search_articles" class="form-check" name="search_type" value="2" type="radio" />
   	</div>
   </div>
 
-
-    <div class="form-group mx-sm-3 mb-2">
-			<input id="search-query" class="form-control" type="text" value="" autocapitalize="off" autocorrect="off" autofocus="autofocus" tabindex="1" name="query">
-      <input id="query-origin" class="" type="hidden" value="1" name="query-origin">
+  <div class="row">
+  	<div class="col-9">
+        <div class="form-group mx-sm-3 mb-2">
+    			<input id="search-query" class="form-control" type="text" value="" autocapitalize="off" autocorrect="off" autofocus="autofocus" tabindex="1" name="query">
+          <input id="query-origin" class="" type="hidden" value="1" name="query-origin">
+        </div>
     </div>
-
-    <button id="search-btn" class="btn btn-primary rounded-pill mb-2" type="submit" name="search" value="search">Search</button>
+  	<div class="col-2">    
+        <button id="search-btn" class="btn btn-primary rounded-pill mb-2" type="submit" name="search" value="search">Search</button>
+    </div>
+    <div class="col-2">
+    
+    </div>
+  </div>
 </div>
 
 
@@ -109,7 +116,7 @@
 				<% } %>
     		</div>
 
-			<div class="featured-project-details-org">
+			<div class="featured-project-details-org my-3">
 			<% if (image_url_medium.length > 1) { %>
 				<div style="float: right; padding: 0px 0px 6px 6px;">
 				<img src="<%= image_url_medium %>" alt="<%= title %>" />
@@ -120,13 +127,13 @@
 				<p><%= desc_short %></p>
 				<div class="buttons">
 				<a title="<%= title %>" target="_new" href="<%= profile_url %>">
-					<button id="" class="" tabindex="3" value="view" type="submit">view</button>
+					<button id="" class="btn btn-primary rounded-pill px-3" tabindex="3" value="view" type="submit">view</button>
 				</a>
 				<a title="<%= title %>" target="_new" href="<%= profile_uri %>/edit">
-					<button id="" class="" tabindex="3" value="edit" type="submit">edit company</button>
+					<button id="" class="btn btn-primary rounded-pill px-3" tabindex="3" value="edit" type="submit">edit company</button>
 				</a>
 				<a title="<%= title %>" target="_new" href="<%= profile_uri %>/delete" onclick="javascript: return confirm('This will delete (archive) company and all placements - you can restore it later if necessary.  Are you sure?')">
-					<button id="" class="" tabindex="3" value="edit" type="submit">delete company</button>
+					<button id="" class="btn btn-primary rounded-pill px-3" tabindex="3" value="edit" type="submit">delete company</button>
 				</a>
 
 				</div>
@@ -137,19 +144,19 @@
 	</script>
 
 	<script id="aTWide" type="text/template">
-        <div class="featured-project-org">
+        <div class="featured-project-org my-3">
    		<div class="featured-project-item-org">
  				<h2><a href="<%= view_url %>" target="_new" title="<%= title %>"><%= title %></a></h2>
 				<p><%= desc_short %></p>
 				<div class="buttons">
 				<a title="<%= title %>" target="_new" href="<%= view_url %>">
-					<button id="" class="" tabindex="3" value="view" type="submit">view</button>
+					<button id="" class="btn btn-primary rounded-pill px-3" tabindex="3" value="view" type="submit">view</button>
 				</a>
 				<a title="<%= title %>" target="_new" href="<%= edit_url %>">
-					<button id="" class="" tabindex="3" value="view" type="submit">edit</button>
+					<button id="" class="btn btn-primary rounded-pill px-3" tabindex="3" value="view" type="submit">edit</button>
 				</a>
 				<a title="<%= title %>" target="_new" href="<%= publish_url %>">
-					<button id="" class="" tabindex="3" value="view" type="submit">publish</button>
+					<button id="" class="btn btn-primary rounded-pill px-3" tabindex="3" value="view" type="submit">publish</button>
 				</a>
 				</div>
 			</div>
