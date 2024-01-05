@@ -52,9 +52,11 @@ $(document).ready(function(){
         </ul>
 
       <? if ($oAuth->oUser->isValidUser) { ?>
+        <!--
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
           <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
         </form>
+        -->
 
         <div class="dropdown text-end">
           <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,8 +65,8 @@ $(document).ready(function(){
           <ul class="dropdown-menu text-small">
             <a class="dropdown-item" href="/dashboard">dashboard</a>
             <? if ($oAuth->oUser->isAdmin) { ?>
-                    <a class="dropdown-item" href="/company/add" title="add a new company">company</a>
-                    <a class="dropdown-item" href="/placement/add" title="add a new placement">placement</a>
+                    <a class="dropdown-item" href="/company/add" title="add a new company">add company</a>
+                    <a class="dropdown-item" href="/placement/add" title="add a new placement">add placement</a>
                     <a class="dropdown-item" href="/article-manager" title="manage articles">article</a>
                     <a class="dropdown-item"  href="/user/" title="manage users">user</a>
             <? } ?>

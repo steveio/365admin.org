@@ -83,6 +83,8 @@ $(document).ready(function(){
 
 		var url = $('#search-query').val();
 
+    if (url == undefined) return false;
+
 		if (url.length == 0) return false;
 
 		if (url.substring(0, 2) == "q=") {

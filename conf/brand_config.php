@@ -14,19 +14,19 @@ $aBrandConfig  = array(
 					'website_path' => '/www/vhosts/oneworld365.org/htdocs/',
 					'logo_url' => 'http://www.oneworld365.org/images/oneworld365_logo_small.png',
 					'site_title' => 'One World 365',
-				    'site_info' => 'One World 365 : meaningful travel, tour & volunteering opportunities worldwide including volunteer programs, gap year travel, career break,  year out, TEFL, seasonal work, summer / winter jobs, working holidays, adventure breaks, expeditions & tours.',					
+			    'site_info' => 'Work, Volunteer, Teach, Travel, Intern & Learn Worldwide',
 					'default_placement_profile_type_id' => PROFILE_PLACEMENT,
 					'default_company_profile_type_id' => PROFILE_COMPANY,
 					'available_company_profile_type_id' => array(PROFILE_VOLUNTEER_PROJECT,PROFILE_COMPANY),
         			'default_categories' => array(),
 					'default_activities' => array(),
 					'default_countries' => array(),
-					'site_categories' => array(0,2,3,4,6,7), 
+					'site_categories' => array(0,2,3,4,6,7),
 					'company_title' => 'Company / Organisation',
 					'placement_title' => 'Placement',
 					'display_cat_act_cty' => TRUE,
 					'admin_website_url' => 'http://admin.oneworld365.org',
-					'company_base_url' => '/company'				
+					'company_base_url' => '/company'
 				),
 		'gapyear365.com' => array(
 					'brand_name' => 'Gap Year 365',
@@ -39,7 +39,7 @@ $aBrandConfig  = array(
 				    'website_url' => 'http://www.gapyear365.com',
 					'site_title' => 'GAP YEAR 365',
         			'site_info' => 'Gap Year 365 features gap year ideas, career break & year out projects, seasonal work, teaching jobs, working holidays, summer / winter jobs, adventure holidays and tours worldwide.',
-					'logo_url' => 'http://www.gapyear365.com/images/gapyear365.gif',				
+					'logo_url' => 'http://www.gapyear365.com/images/gapyear365.gif',
 					'default_company_profile_type_id' => PROFILE_COMPANY,
 					'default_placement_profile_type_id' => PROFILE_PLACEMENT,
 					'default_categories' => array(7),
@@ -50,7 +50,7 @@ $aBrandConfig  = array(
 					'placement_title' => 'Placement',
 				    'display_cat_act_cty' => TRUE,
 					'admin_website_url' => 'http://admin.gapyear365.com',
-					'company_base_url' => '/company'				
+					'company_base_url' => '/company'
 				),
 		'seasonaljobs365.com' => array(
 					'brand_name' => 'Seasonal Jobs 365',
@@ -76,7 +76,7 @@ $aBrandConfig  = array(
 				    	'display_cat_act_cty' => TRUE,
 					'admin_website_url' => 'http://admin.seasonaljobs365.com',
 					'company_base_url' => '/company'
-				
+
 				),
 		'summercamp365.com' => array(
 					'brand_name' => 'Summer Camp 365',
@@ -101,7 +101,7 @@ $aBrandConfig  = array(
 					'full_desc_label' => 'Program Description',
 					'admin_website_url' => 'http://admin.summercamp365.com',
 					'company_base_url' => '/summer-camp'
-				
+
 				),
 		'tefl365.com' => array(
 					'brand_name' => 'Tefl 365',
@@ -128,5 +128,5 @@ $aBrandConfig  = array(
 					'company_base_url' => '/company',
 					'site_categories' => array(4),
 				)
-				
+
 );

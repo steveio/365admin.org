@@ -86,7 +86,7 @@ class DashboardStep extends GenericStep {
 		
 		/* messages panel */
 		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('USER_MSG',$this->GetUserMessages());		
+		$oMessagesPanel->Set('UI_MSG',$this->GetUserMessages());		
 		$oMessagesPanel->LoadTemplate("messages_template.php");
 		$this->UnsetUserMessages();
 		

@@ -1548,7 +1548,7 @@ EOT;
 
 		/* messages panel */
 		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('USER_MSG',$this->GetUserMsg());
+		$oMessagesPanel->Set('UI_MSG',$this->GetUserMsg());
 		$oMessagesPanel->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
 		$oMessagesPanel->LoadTemplate("messages_template.php");
 		$oTabbedPanel->SetContentFromObject($oMessagesPanel);

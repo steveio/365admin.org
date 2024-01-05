@@ -57,7 +57,10 @@ try {
 			require_once("logout.php");
 			die();
 			break;
-
+		case "/user" :
+		    require_once("user.php");
+		    die();
+		    break;
 		case "/category-admin" :
 			require_once("category_admin.php");
 			die();

@@ -45,6 +45,13 @@ foreach($aError as $k => $v) {
 
 		<h2>Login</h2>
 
+		<? if (isset($aError) && count($aError) >= 1) { ?>
+		<div id="msgtext" class="alert alert-warning" role="alert">
+		<?= AppError::GetErrorHtml($aError);  ?>
+		</div>
+		<? } ?>
+
+
 		<div class="row formgroup my-2">
 			<span  class="label_col"><label for="username" style="<?= isset($aError['CREDENTIAL_UNAME']) ? "color:red;" : ""; ?>">Username: </label></span>
 			<span class="input_col">

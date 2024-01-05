@@ -6,11 +6,12 @@
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
 			<? if ($oAuth->IsValidUser()) { ?>
 				<li class="nav-item"><a href="/logout" class="nav-link px-2 text-body-secondary">Logout</a></li>
-				<li class="nav-item"><a href="/dashboard" class="nav-link px-2 text-body-secondary">Admin Home</a></li>
 				<li class="nav-item"><a href="https://www.oneworld365.org" class="nav-link px-2 text-body-secondary">OneWorld365.org</a></li>
 			<? } ?>
     </ul>
-    <p class="text-center text-body-secondary"><?= $this->Get("COPYRIGHT"); ?></p>
+    <p class="text-center text-body-secondary"><?= $this->Get("DESCRIPTION"); ?></p>
+    <br />
+    <p class="text-center text-body-primary"><?= $this->Get("COPYRIGHT"); ?></p>
 </footer>
 
 <!-- END Footer -->

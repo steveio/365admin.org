@@ -12,7 +12,7 @@
 
 class Authenticate {
 
-	public function __Construct(&$db,$redirect = false, $redirect_url, $cookiename) {
+	public function __Construct(&$db,$redirect = false, $redirect_url = '', $cookiename = '') {
 		
 		global $_CONFIG;
 		

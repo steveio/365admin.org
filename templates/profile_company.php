@@ -12,23 +12,25 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 $(document).ready(function(){
 
 
-   $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID ?>").change(function()
-    {
-        var idx;
+  $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID ?>").change(function()
+  {
+    var idx;
 		var id;
 		var panel_prefix = 'profile_type_';
-		var panels = new Array( 'profile_type_<?= PROFILE_COMPANY; ?>',
+		var panels = new Array(
+                'profile_type_<?= PROFILE_COMPANY; ?>',
 								'profile_type_<?= PROFILE_SUMMERCAMP; ?>',
 								'profile_type_<?= PROFILE_SEASONALJOBS; ?>',
 								'profile_type_<?= PROFILE_VOLUNTEER_PROJECT; ?>',
 								'profile_type_<?= PROFILE_TEACHING; ?>'
 							);
 
-        idx = $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>").val();
-		id = panel_prefix+idx;
+    idx = $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>").val();
+    id = panel_prefix+idx;
 
-		for(i=0;i<panels.length;i++) {
-			(panels[i] == id) ?  $("#"+panels[i]).show() : $("#"+panels[i]).hide();
+		for(i=0;i<panels.length;i++)
+    {
+      (panels[i] == id) ? $("#"+panels[i]).show() : $("#"+panels[i]).hide();
 		}
 
 	});
@@ -415,53 +417,65 @@ Url</label></span> <span class="input_col"><input type="text"
 code(s)</span> </span></div>
 
 <?php if ($this->Get("PROFILE_TYPE_COUNT") >  1) { ?>
-<div class="row formgroup my-2">
-<h2>Profile Type</h2>
+  <div class="row formgroup my-2">
+  <h2>Profile Type <span class="red"> *</span></h2>
+  </div>
+
+  <div class="row my-2">
+	  <div class="col">
+  	  <span><img src="/images/icon_info.png" alt="" border="0" style="vertical-align: middle;" /></span>
+      <span class="p_small grey"> Choose profile type that best matches your organisation's activities.</span>
+	  </div>
+	</div>
+  <div class="row my-2">
+    <span class="input_col">
+      <?= $this->Get("PROFILE_TYPE_LIST"); ?> <br />
+    </span>
+  </div>
+
+<?php } else { ?>
+  <input type="hidden" name="<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>" value="<?= $this->Get("PROFILE_TYPE_SELECTED_ID"); ?>" />
+<?php } ?>
+
+<?php
+$panel_key = 'profile_type_'.PROFILE_COMPANY;
+$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
+?>
+<div id="<?= $panel_key; ?>" class="row  formgroup my-2" style="<?= $visibility; ?>">
+  <?= $this->Get('EXTENDED_FIELDSET_GENERAL_PROFILE'); ?>
 </div>
 
-<div class="row formgroup my-2"><span class="label_col"><label for="<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_COMP_PROFILE_TYPE_ID]) > 1 ? "color:red;" : ""; ?>">Profile
-Type<span class="red"> *</span></label></span> <span class="input_col">
-<?= $this->Get("PROFILE_TYPE_LIST"); ?> <br />
-<span class="p_small grey"> Choose profile type that best matches your
-organisation's activities. <br />
-If your activities span multiple profile types choose 'Organisation
-Profile - General'. </span> </span></div>
-<?php } else { ?> <input type="hidden"
-	name="<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>"
-	value="<?= $this->Get("PROFILE_TYPE_SELECTED_ID"); ?>" /> <?php } ?> <?php
-	$panel_key = 'profile_type_'.PROFILE_COMPANY;
-	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
-	?>
-<div id="<?= $panel_key; ?>" class="row  formgroup my-2" style="<?= $visibility; ?>">
-	<?= $this->Get('EXTENDED_FIELDSET_GENERAL_PROFILE'); ?></div>
-
-	<?php
-	$panel_key = 'profile_type_'.PROFILE_SUMMERCAMP;
-	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
-	?>
+<?php
+$panel_key = 'profile_type_'.PROFILE_SUMMERCAMP;
+$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
+?>
 <div id="profile_type_<?= PROFILE_SUMMERCAMP; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
-	<?= $this->Get('EXTENDED_FIELDSET_SUMMERCAMP'); ?></div>
+  <?= $this->Get('EXTENDED_FIELDSET_SUMMERCAMP'); ?>
+</div>
 
-	<?php
-	$panel_key = 'profile_type_'.PROFILE_SEASONALJOBS;
-	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
-	?>
+<?php
+$panel_key = 'profile_type_'.PROFILE_SEASONALJOBS;
+$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
+?>
 <div id="profile_type_<?= PROFILE_SEASONALJOBS; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
-	<?= $this->Get('EXTENDED_FIELDSET_SEASONALJOBS'); ?></div>
+  <?=  $this->Get('EXTENDED_FIELDSET_SEASONALJOBS'); ?>
+</div>
 
-	<?php
-	$panel_key = 'profile_type_'.PROFILE_VOLUNTEER_PROJECT;
-	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
-	?>
+<?php
+$panel_key = 'profile_type_'.PROFILE_VOLUNTEER_PROJECT;
+$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
+?>
 <div id="profile_type_<?= PROFILE_VOLUNTEER_PROJECT; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
-	<?= $this->Get('EXTENDED_FIELDSET_VOLUNTEER_PROJECT'); ?></div>
+  <?= $this->Get('EXTENDED_FIELDSET_VOLUNTEER_PROJECT'); ?>
+</div>
 
-	<?php
-	$panel_key = 'profile_type_'.PROFILE_TEACHING;
-	$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
-	?>
+<?php
+$panel_key = 'profile_type_'.PROFILE_TEACHING;
+$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
+?>
 <div id="profile_type_<?= PROFILE_TEACHING; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
-	<?= $this->Get('EXTENDED_FIELDSET_TEACHING_PROJECT'); ?></div>
+  <?= $this->Get('EXTENDED_FIELDSET_TEACHING_PROJECT'); ?>
+</div>
 
 
 
@@ -471,166 +485,226 @@ Profile - General'. </span> </span></div>
 <? if ($oAuth->oUser->isAdmin) { ?>
 
 <div class="row formgroup my-2">
-<h2>Admin Options</h2>
+  <h2>Admin Options</h2>
 </div>
 
 
-<div class="row"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>">Listing Level</label></span>
-<span class="input_col"> <?php
-$checked = (($oProfile->GetListingType() == FREE_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == FREE_LISTING)) ? "checked" : "";
-?> Free<input type="radio"
-	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= FREE_LISTING ?>"
-	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>" value="<?= FREE_LISTING ?>"
-	<?= $checked; ?>> <?php
-	$checked = (($oProfile->GetListingType() == BASIC_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == BASIC_LISTING)) ? "checked" : "";
-	?> Basic<input type="radio"
-	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= BASIC_LISTING ?>"
-	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>"
-	value="<?= BASIC_LISTING ?>" <?= $checked; ?>> <?php
-	$checked = (($oProfile->GetListingType() == ENHANCED_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == ENHANCED_LISTING)) ? "checked" : "";
-	?> Enhanced<input type="radio"
-	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= ENHANCED_LISTING ?>"
-	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>"
-	value="<?= ENHANCED_LISTING ?>" <?= $checked; ?>> <?php
-	$checked = (($oProfile->GetListingType() == SPONSORED_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == SPONSORED_LISTING)) ? "checked" : "";
-	?> Sponsored<input type="radio"
-	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= SPONSORED_LISTING ?>"
-	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>"
-	value="<?= SPONSORED_LISTING ?>" <?= $checked; ?>> </span></div>
-
-
-<div class="row"><span class="label_col"> <label
-	for="<?= PROFILE_FIELD_COMP_LISTING_TYPE; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LISTING_TYPE]) > 1 ? "red" : ""; ?>">Listing
-Type :</label><span class="red"> *</span> </span> <span
-	class="input_col"> <?
-
-	$aListingOption = $this->Get('ADMIN_LISTING_OPTIONS');
-	$oListing = $this->Get('ADMIN_CURRENT_LISTING_OBJECT'); // null if no existing listing record exists
-
-	/* default listings start date */
-	if (is_object($oListing)) {
-		$aDate = explode("-",$oListing->GetStartDate());
-		$_REQUEST['ListingMonth'] = $aDate[1];
-		$_REQUEST['ListingYear'] = $aDate[2];
-	}
-
-	?> <select id="<?= PROFILE_FIELD_COMP_LISTING_TYPE; ?>"
-	name="<?= PROFILE_FIELD_COMP_LISTING_TYPE; ?>">
-	<option value="null"></option>
-	<?
-	foreach($aListingOption as $key => $value) {
-		if (isset($_POST[PROFILE_FIELD_COMP_LISTING_TYPE])) {
-			$selected = ($_POST[PROFILE_FIELD_COMP_LISTING_TYPE] == $key) ? "selected" : "";
-		}  elseif (is_object($oListing)) {
-			$selected = ($oListing->GetCode() == $key) ? "selected" : "";
-		} else { // default to FREE listing, start date now
-			$selected = ($key == "FREE") ? "selected" : "";
-			$_REQUEST['ListingMonth'] = date("m");
-			$_REQUEST['ListingYear'] = date("Y");
-		}
-		//$label = "&pound;".$value['price'];
-		if ($key == "FREE") $label = "";
-		?>
-	<option value="<?= $key ?>" <?= $selected ?>><?= $value['label'] ?> <?= $label ?></option>
-	<? } ?>
-</select> </span></div>
-
-<div class="row"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_LISTING_START_DATE ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LISTING_START_DATE]) > 1 ? "red" : ""; ?>">Listing
-Start :</label><span class="red"> *</span></span> <span
-	class="input_col"><? print Date::GetDateInput('Listing',false,true,true,$iYFrom = 1, $iTo = 5); ?></span>
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"><label
+    	for="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>">Listing Level</label></span>
+  </div>
+  <div class="col-4 form-group">
+    <span class=""> <?php
+    $checked = (($oProfile->GetListingType() == FREE_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == FREE_LISTING)) ? "checked" : "";
+  ?><input type="radio"
+  	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= FREE_LISTING ?>"
+  	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>" value="<?= FREE_LISTING ?>" class="form-check-input"
+  	<?= $checked; ?>> Free <?php
+  	$checked = (($oProfile->GetListingType() == BASIC_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == BASIC_LISTING)) ? "checked" : "";
+  	?>
+    <input type="radio"
+  	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= BASIC_LISTING ?>"
+  	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>"  class="form-check-input"
+    value="<?= BASIC_LISTING ?>" <?= $checked; ?>> Basic  <?php
+  	$checked = (($oProfile->GetListingType() == ENHANCED_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == ENHANCED_LISTING)) ? "checked" : "";
+  	?>
+    <input type="radio"
+  	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= ENHANCED_LISTING ?>"
+  	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>"  class="form-check-input"
+  	value="<?= ENHANCED_LISTING ?>" <?= $checked; ?>> Enhanced  <?php
+  	$checked = (($oProfile->GetListingType() == SPONSORED_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == SPONSORED_LISTING)) ? "checked" : "";
+  	?>
+    <input type="radio"
+  	id="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>_<?= SPONSORED_LISTING ?>"
+    class="form-check-input"
+  	name="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>"
+  	value="<?= SPONSORED_LISTING ?>" <?= $checked; ?>> Sponsored </span>
+  </div>
 </div>
 
-	<?
-	if (!is_numeric($oProfile->GetProfileQuota())) {
-		switch($oProfile->GetProfileQuota()) {
-			case FREE_LISTING :
-				$oProfile->SetProfileQuota(FREE_PQUOTA);
-				break;
-			case BASIC_LISTING :
-				$oProfile->SetProfileQuota(BASIC_PQUOTA);
-				break;
-			case ENHANCED_LISTING :
-				$oProfile->SetProfileQuota(ENHANCED_PQUOTA);
-				break;
-			case SPONSORED_LISTING :
-				$oProfile->SetProfileQuota(SPONSORED_PQUOTA);
-				break;
-			default :
-				$oProfile->SetProfileQuota(FREE_PQUOTA);
-		}
-	}
-	?>
-<div class="row"><span class="label_col"><label>Placement Quota:</label></span>
-	<?php
-	if (isset($_POST['submit'])) {
-		$profile_quota = $_POST[PROFILE_FIELD_COMP_PROFILE_QUOTA];
-	} else {
-		$profile_quota = $oProfile->GetProfileQuota();
-	}
-	?> <span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_PROFILE_QUOTA; ?>"
-	name="<?= PROFILE_FIELD_COMP_PROFILE_QUOTA; ?>" class="text_input"
-	style="width: 30px;" maxlength="3" value="<?= $profile_quota; ?>" /></span>
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"> <label
+    	for="<?= PROFILE_FIELD_COMP_LISTING_TYPE; ?>"
+    	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LISTING_TYPE]) > 1 ? "red" : ""; ?>">Listing Type :</label><span class="red"> *</span> </span>
+  </div>
+  <div class="col-4 form-group">
+    <span class="input_col"> <?
+
+    	$aListingOption = $this->Get('ADMIN_LISTING_OPTIONS');
+    	$oListing = $this->Get('ADMIN_CURRENT_LISTING_OBJECT'); // null if no existing listing record exists
+
+    	/* default listings start date */
+    	if (is_object($oListing)) {
+    		$aDate = explode("-",$oListing->GetStartDate());
+    		$_REQUEST['ListingMonth'] = $aDate[1];
+    		$_REQUEST['ListingYear'] = $aDate[2];
+    	}
+
+    	?> <select id="<?= PROFILE_FIELD_COMP_LISTING_TYPE; ?>"
+    	name="<?= PROFILE_FIELD_COMP_LISTING_TYPE; ?>" class="form-select">
+    	<option value="null"></option>
+    	<?
+    	foreach($aListingOption as $key => $value) {
+    		if (isset($_POST[PROFILE_FIELD_COMP_LISTING_TYPE])) {
+    			$selected = ($_POST[PROFILE_FIELD_COMP_LISTING_TYPE] == $key) ? "selected" : "";
+    		}  elseif (is_object($oListing)) {
+    			$selected = ($oListing->GetCode() == $key) ? "selected" : "";
+    		} else { // default to FREE listing, start date now
+    			$selected = ($key == "FREE") ? "selected" : "";
+    			$_REQUEST['ListingMonth'] = date("m");
+    			$_REQUEST['ListingYear'] = date("Y");
+    		}
+    		//$label = "&pound;".$value['price'];
+    		if ($key == "FREE") $label = "";
+    		?>
+    	<option value="<?= $key ?>" <?= $selected ?>><?= $value['label'] ?> <?= $label ?></option>
+    	<? } ?>
+    </select> </span>
+  </div>
 </div>
 
-<div class="row"><span class="label_col"><label style="<?= strlen($response['msg']['prof_opt_1']) > 1 ? "color:red;" : ""; ?>">Profile
-Options :</label></span> <span class="input_col"> General<input
-	type="checkbox" name="prof_opt_1"
-	<? if (($oProfile->HasProfileOption(PROFILE_VOLUNTEER)) || isset($_POST['prof_opt_1'])) print "checked"; ?>>
-Tour<input type="checkbox" name="prof_opt_2"
-<? if (($oProfile->HasProfileOption(PROFILE_TOUR)) || isset($_POST['prof_opt_2'])) print "checked"; ?>>
-Job<input type="checkbox" name="prof_opt_3"
-<? if (($oProfile->HasProfileOption(PROFILE_JOB)) || isset($_POST['prof_opt_3'])) print "checked"; ?>>
-</span></div>
-
-<div class="row"><span class="label_col"><label style="<?= strlen($response['msg']['profile_filter_from_search']) > 1 ? "color:red;" : ""; ?>">Profile Filter from Search :</label></span> <span class="input_col">
-	<?php
-	if (isset($_POST['submit'])) {
-		$profile_filter = $_POST['profile_filter_from_search'];
-	} else {
-		$profile_filter = $oProfile->GetProfileFilterFromSearch();
-	}
-	?>
-<input type="checkbox" name="profile_filter_from_search"
-<? if ($profile_filter == 't') print "checked"; ?>>
-</span></div>
-
-<div class="row"><span class="label_col"><label>Enquiry Options :</label></span>
-<span class="input_col"> General<input type="checkbox" name="enq_opt_1"
-<? if (($oProfile->HasEnquiryOption(ENQUIRY_GENERAL)) || isset($_POST['enq_opt_1'])) print "checked"; ?>>
-Booking<input type="checkbox" name="enq_opt_2"
-<? if (($oProfile->HasEnquiryOption(ENQUIRY_BOOKING)) || isset($_POST['enq_opt_2'])) print "checked"; ?>>
-Job App<input type="checkbox" name="enq_opt_3"
-<? if (($oProfile->HasEnquiryOption(ENQUIRY_JOB_APP)) || isset($_POST['enq_opt_3'])) print "checked"; ?>>
-</span></div>
-
-<div class="row"><span class="label_col"><label>Homepage on:</label></span>
-<span class="input_col"> <?= $this->Get('ADMIN_WEBSITE_HOMEPAGE_OPTIONS'); ?>
-</span></div>
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"><label
+    	for="<?= PROFILE_FIELD_COMP_LISTING_START_DATE ?>"
+    	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LISTING_START_DATE]) > 1 ? "red" : ""; ?>">Listing
+    Start :</label><span class="red"> *</span></span>
+  </div>
+  <div class="col-4 form-group">
+    <span class="input_col"><? print Date::GetDateInput('Listing',false,true,true,$iYFrom = 1, $iTo = 5); ?></span>
+  </div>
+</div>
 
 
-<div class="row"><span class="label_col"><label><b>Approved?</b> :<span
-	class="red"> *</span></label></span> <span class="input_col"> <?
-	if (isset($_POST['submit'])) {
-		$checked = ($_POST['status'] == "true") ? "checked" : "";
-	} else {
-		$checked = ($oProfile->GetStatus() == 1) ? "checked" : "";
-	}
-	?> <input id="status" type="checkbox" name="status" value="true"
-	<?= $checked; ?> /> </span></div>
+<?
+if (!is_numeric($oProfile->GetProfileQuota())) {
+  switch($oProfile->GetProfileQuota()) {
+    case FREE_LISTING :
+      $oProfile->SetProfileQuota(FREE_PQUOTA);
+      break;
+    case BASIC_LISTING :
+      $oProfile->SetProfileQuota(BASIC_PQUOTA);
+      break;
+    case ENHANCED_LISTING :
+      $oProfile->SetProfileQuota(ENHANCED_PQUOTA);
+      break;
+    case SPONSORED_LISTING :
+      $oProfile->SetProfileQuota(SPONSORED_PQUOTA);
+      break;
+    default :
+      $oProfile->SetProfileQuota(FREE_PQUOTA);
+  }
+}
+?>
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"><label>Placement Quota:</label></span>
+  </div>
+  <div class="col-4 form-group">
+    <?php
+  	if (isset($_POST['submit'])) {
+  		$profile_quota = $_POST[PROFILE_FIELD_COMP_PROFILE_QUOTA];
+  	} else {
+  		$profile_quota = $oProfile->GetProfileQuota();
+  	}
+  	?> <span class="input_col"><input type="text"
+  	id="<?= PROFILE_FIELD_COMP_PROFILE_QUOTA; ?>"
+  	name="<?= PROFILE_FIELD_COMP_PROFILE_QUOTA; ?>" class="text_input"
+  	style="width: 30px;" maxlength="3" value="<?= $profile_quota; ?>" /></span>
+  </div>
+</div>
+
+
+
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"><label style="<?= strlen($response['msg']['prof_opt_1']) > 1 ? "color:red;" : ""; ?>">Profile Options :</label></span>
+  </div>
+  <div class="col-4">
+    <div class="form-check form-check-inline">
+    General<input
+    	type="checkbox" name="prof_opt_1" class="form-check-input"
+    	<? if (($oProfile->HasProfileOption(PROFILE_VOLUNTEER)) || isset($_POST['prof_opt_1'])) print "checked"; ?>>
+    </div>
+    <div class="form-check form-check-inline">
+    Tour<input type="checkbox" name="prof_opt_2" class="form-check-input"
+    <? if (($oProfile->HasProfileOption(PROFILE_TOUR)) || isset($_POST['prof_opt_2'])) print "checked"; ?>>
+    </div>
+    <div class="form-check form-check-inline">
+    Job<input type="checkbox" name="prof_opt_3" class="form-check-input"
+    <? if (($oProfile->HasProfileOption(PROFILE_JOB)) || isset($_POST['prof_opt_3'])) print "checked"; ?>>
+  </div>
+  </div>
+</div>
+
+
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"><label style="<?= strlen($response['msg']['profile_filter_from_search']) > 1 ? "color:red;" : ""; ?>">Profile Filter from Search :</label></span>
+  </div>
+  <div class="col-4">
+    <span class="input_col">
+    	<?php
+    	if (isset($_POST['submit'])) {
+    		$profile_filter = $_POST['profile_filter_from_search'];
+    	} else {
+    		$profile_filter = $oProfile->GetProfileFilterFromSearch();
+    	}
+    	?>
+      <input type="checkbox" class="form-check-input" name="profile_filter_from_search" <? if ($profile_filter == 't') print "checked"; ?>>
+    </span>
+  </div>
+</div>
+
+
+
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"><label>Enquiry Options :</label></span>
+  </div>
+  <div class="col-4">
+    <div class="form-check form-check-inline">
+      General<input type="checkbox" name="enq_opt_1"  class="form-check-input" <? if (($oProfile->HasEnquiryOption(ENQUIRY_GENERAL)) || isset($_POST['enq_opt_1'])) print "checked"; ?>>
+    </div>
+    <div class="form-check form-check-inline">
+      Booking<input type="checkbox" name="enq_opt_2" class="form-check-input" <? if (($oProfile->HasEnquiryOption(ENQUIRY_BOOKING)) || isset($_POST['enq_opt_2'])) print "checked"; ?>>
+    </div>
+    <div class="form-check form-check-inline">
+      Job App<input type="checkbox" name="enq_opt_3" class="form-check-input"  <? if (($oProfile->HasEnquiryOption(ENQUIRY_JOB_APP)) || isset($_POST['enq_opt_3'])) print "checked"; ?>>
+    </div>
+  </div>
+</div>
+
+
+<div class="row formgroup my-2">
+  <div class="col-2">
+    <span class="label_col"><label><b>Approved?</b> :<span class="red"> *</span></label></span>
+  </div>
+  <div class="col-4">
+    <span class="input_col"> <?
+  	if (isset($_POST['submit'])) {
+  		$checked = ($_POST['status'] == "true") ? "checked" : "";
+  	} else {
+  		$checked = ($oProfile->GetStatus() == 1) ? "checked" : "";
+  	}
+  	?> <input id="status" type="checkbox" name="status" value="true" <?= $checked; ?> />
+    </span>
+  </div>
+</div>
+
 
 <? } // end admin options ?>
-<div class="row"><span class="label_col">&nbsp;</span> <span
-	class="input_col"><input type="submit" name="submit" id="submit"
-	value="Submit" /> </span></div>
 
 
-
+<div class="row my-3">
+  <span  class="label_col">&nbsp;</span>
+  <span class="input_col">
+    <button class="btn btn-primary rounded-pill px-3" type="submit" name="submit">Submit</button>
+  </span>
 </div>
+
 
 </div>
 </div>

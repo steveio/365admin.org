@@ -17,6 +17,9 @@ body * {
 .red	{ color:red; }
 .grey { color: #016799; }
 
+.p_small {
+  font-style: italic;
+}
 
 h1, h2, h3, h4, h5, h6 {
 }
@@ -55,7 +58,7 @@ p.lead {
 }
 
 p.profile_text {
-	font-size: .7em;		
+	font-size: .7em;
 }
 
 .smalltext {
@@ -63,11 +66,11 @@ p.profile_text {
 }
 
 .bold {
-	font-weight: bold;	
+	font-weight: bold;
 }
 
  ul, li {
- 	
+
  	font-size: .9em;
 }
 
@@ -192,7 +195,7 @@ a.article_title:hover {
 
 .error {
 	font-size: 12px;
-	line-height:1.45em;	
+	line-height:1.45em;
 }
 
 input.textbox250	{
@@ -213,9 +216,9 @@ a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-re
 
 
 .nav_link {
-    margin: 6px 0px 0px 0px; 
-    letter-spacing: 2px; 
-    line-height: 14px; 
+    margin: 6px 0px 0px 0px;
+    letter-spacing: 2px;
+    line-height: 14px;
     font-size: 12px;
     font-weight: bold;
 }
