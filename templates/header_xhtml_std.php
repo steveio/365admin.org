@@ -94,5 +94,4 @@ $(document).ready(function(){
   </header>
 
 
-<div class="container-fluid">
-<hr />
+<div class="container">
