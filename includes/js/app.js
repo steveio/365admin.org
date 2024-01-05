@@ -63,6 +63,7 @@ $(document).ready(function(){
 		     dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
 		     success:function(json){
 		    	 if (json.status == 1) {
+		    		 console.log(json);
 		    	 	process(json);
 		     	 } else {
 		     		 processError();
@@ -83,7 +84,7 @@ $(document).ready(function(){
 
 		var url = $('#search-query').val();
 
-    if (url == undefined) return false;
+		if (url == undefined) return false;
 
 		if (url.length == 0) return false;
 
