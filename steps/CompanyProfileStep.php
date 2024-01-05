@@ -252,9 +252,7 @@ tinymce.init({
         selector: '#desc_short',
         menubar : false,
         images_upload_url: '/image_upload.php',
-        height:"291",
-        width:"900"
-
+        height:"291"
 });
 
 
@@ -263,9 +261,7 @@ tinymce.init({
         menubar: false,
         toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link | table | numlist bullist | code",
         plugins: "image link lists table code",
-        images_upload_url : '/image_upload.php',
-        height:"691",
-        width:"960"
+        images_upload_url : '/image_upload.php'
 
 });
 
@@ -401,7 +397,7 @@ EOT;
 		$oLinksTemplate->LoadTemplate("edit_profile_links.php");
 
 		print $oHeader->Render();
-		print $oLinksTemplate->Render();
+		//print $oLinksTemplate->Render();
 		print $this->GetTabbedPanel()->Render();
 		print $oFooter->Render();
 

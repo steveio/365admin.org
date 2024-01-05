@@ -1,8 +1,7 @@
 
 
 <!-- BEGIN Tabbed Panel -->
-<div id="<?= $this->Get("ID"); ?>" class="container">
-	<div class="align-items-center justify-content-center">
+<div id="<?= $this->Get("ID"); ?>" >
 
 	<div class="row mb-3">
 		<div class="col">
@@ -22,16 +21,14 @@
 		</div>
 	</div>
 
-
 </div>
-</div>
-
 
 
 
 <div class="row">
 <?= $this->Get("CONTENT"); ?>
 </div>
+
 
 </div>
 </div>
