@@ -53,8 +53,85 @@ class Company {
 		return $this->db->getObject();
 		
 	}
-		
-		
+
+	
+	function GetByUri($uri, $fuzzy = false) {
+	    
+	    global $_CONFIG;
+
+	    $url_name = addslashes($uri);
+	    if ($fuzzy)
+	    {
+	        $operator = "like";
+	    } else {
+	        $operator = "=";
+	    }
+	    
+        $sql = "SELECT
+                c.id,
+                c.title,
+                '/company/'||c.url_name as url_name,
+                c.desc_short,
+                c.added,
+                c.last_updated,
+                CASE prod_type
+                    WHEN 0 THEN 'FREE'
+                    WHEN 1 THEN 'BASIC'
+                    WHEN 2 THEN 'ADVANCED'
+                    WHEN 3 THEN 'SPONSORED'
+                    END as listing,
+                (select count(*) from profile_hdr p where p.company_id = c.id) as num_profile
+                FROM company c
+                WHERE url_name ".$operator." '".$url_name."'
+                ORDER BY
+                c.title asc;
+                ";	    
+	    
+	    $this->db->query($sql);
+	    
+	    if ($this->db->getNumRows() >= 1)
+	    {
+	        return $this->db->getObjects();
+	    }
+
+	}
+	
+	
+
+	function GetByKeyword($sKeyword, $fuzzy = true) {
+	    
+	    if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
+	    
+	    global $_CONFIG;
+
+	    // try an exact match
+	    $sql = "SELECT id, title, url_name, desc_short, last_updated 
+				FROM ".$_CONFIG['company_table']."
+				WHERE UPPER(name) = '".strtoupper($sKeyword)."'";
+	    
+	    $this->db->query($sql);
+	    
+	    if ($this->db->getNumRows() == 1)
+	    {
+	       return $this->db->getObject();
+	    }
+
+	    if (!$fuzzy) return false;
+
+	    // try a fuzzy match
+	    $sql = "SELECT id, title, url_name, desc_short, last_updated 
+				FROM ".$_CONFIG['company_table']."
+				WHERE UPPER(name) ILIKE '%".strtoupper($sKeyword)."'%";
+
+	    $this->db->query($sql);
+
+	    if ($this->db->getNumRows() >= 1)
+	    {
+	        return $this->db->getObjects();
+	    }
+	    
+	}
+	
 	
 	// get a full company profile
 	function GetCompany($id,$ret_type = "rows") {
@@ -270,7 +347,7 @@ class Company {
 		$this->db->query("SELECT id,title FROM company WHERE $w status = 1 $w2 ORDER BY title asc");
 		
 		$result = $this->db->getRows();
-		$s = "<select id='".$name."' name='".$name."' class='ddlist' onchange=\"".$sOnChangeJS."\">";
+		$s = "<select id='".$name."' name='".$name."' class='form-select' onchange=\"".$sOnChangeJS."\">";
 		if ($bSelect) {
 			$s .= "<option value='NULL'>select</option>";
 		}

@@ -15,10 +15,11 @@
  */
 
 require_once("./conf/config.php");
+require_once("./conf/brand_config.php");
 require_once("./classes/logger.php");
 require_once("./classes/json.class.php");
 require_once("./classes/db_pgsql.class.php");
-require_once(BASE_PATH."/classes/file.class.php");
+require_once("./classes/file.class.php");
 require_once("./classes/logger.php");
 require_once("./classes/template.class.php");
 require_once("./classes/link.class.php");
@@ -59,15 +60,64 @@ Logger::DB(2,basename(__FILE__)." exp:".$exp.", t: ".$template);
 
 if (preg_match("/^\//",$exp))
 {
-    uriSearch($exp,$template);    
+    uriSearch($exp);    
 } 
 
 
-function uriSearch($uri,$template)
+function uriSearch($uri,$template = "search_result_list_company.php")
 {
-
-    if (preg_match("/^\/company\//",$uri))
+    global $db, $aBrandConfig;
+    
+    if (preg_match("/^\/company\//",$uri)) // org or placement uri search /company/*
     {
+
+        $uri_depth = substr_count($uri, '/');
+
+        $uri = strtolower($uri);
+        $uri = preg_replace("/\/company\//","",$uri);
+        $fuzzy = false;
+        if (substr_count($uri, '%') >= 1)
+        {
+            $fuzzy = true;
+        }
+
+        if ($uri_depth <= 2) // company search: /company/company-url  
+        {
+
+            $oCompany = new Company($db);
+            $aResult = $oCompany->GetByUri($uri, $fuzzy);
+
+            if (is_array($aResult) && count($aResult) >= 1)
+            {
+                $oTemplate = new Template();
+                $oTemplate->Set("RESULT_ARRAY",$aResult);
+                $oTemplate->Set("WEBSITE_URL",$aBrandConfig['oneworld365.org']['website_url']);
+                $oTemplate->LoadTemplate($template);
+                $oTemplate->Render();
+
+                $aResponse['retVal'] = true;
+                $aResponse['msg'] = "Found ".count($aResult)." result(s).";
+                $aResponse['html'] = $oTemplate->Render();
+                $aResponse['status'] = "success";
+                sendResponse($aResponse);
+
+            } else {
+
+                $aResponse['retVal'] = true;
+                $aResponse['msg'] = "Found 0 results.";
+                $aResponse['html'] = '';
+                $aResponse['status'] = "warning";
+                
+            }
+            
+
+        } else {  // placement search: /company/company-url/placememt-url
+
+            $aResponse['msg'] = "placement search: /company/company-url/placememt-url";
+            $aResponse['html'] = $uri;
+        }
+
+        sendResponse($aResponse);
         
     } else { // article search
         $oArticleCollection = new ArticleCollection();

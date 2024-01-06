@@ -35,9 +35,9 @@
 		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
 		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI('<?= $_CONFIG['url'] ?>','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
 		Projects <input type="checkbox" id="search_exact" name="filter_project" />
-		Orgs <input type="checkbox" id="search_exact" name="filter_org" />
+		Orgs <input type="checkbox" id="search_exact" name="filter_org" />		
 		<ul>
-			<li>Patterns: <span class="p_small">"%" = all  OR  "%africa" = contains "africa" OR  "/activity/animals" OR "UNPUBLISHED" = new articles</i></span></li>
+			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/thailand%  OR /company/camp%  OR "%africa"</i></span></li>
 		</ul>
 
 	</div>
