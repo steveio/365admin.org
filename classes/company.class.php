@@ -54,7 +54,7 @@ class Company {
 		
 	}
 
-	
+
 	function GetByUri($uri, $fuzzy = false) {
 	    
 	    global $_CONFIG;
@@ -94,8 +94,7 @@ class Company {
 	        return $this->db->getObjects();
 	    }
 
-	}
-	
+	}	
 	
 
 	function GetByKeyword($sKeyword, $fuzzy = true) {

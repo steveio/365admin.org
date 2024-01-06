@@ -64,7 +64,7 @@ if (preg_match("/^\//",$exp))
 } 
 
 
-function uriSearch($uri,$template = "search_result_list_company.php")
+function uriSearch($uri,$template = "search_result_list_profile.php")
 {
     global $db, $aBrandConfig;
     
@@ -74,17 +74,18 @@ function uriSearch($uri,$template = "search_result_list_company.php")
         $uri_depth = substr_count($uri, '/');
 
         $uri = strtolower($uri);
-        $uri = preg_replace("/\/company\//","",$uri);
         $fuzzy = false;
         if (substr_count($uri, '%') >= 1)
         {
             $fuzzy = true;
         }
 
-        if ($uri_depth <= 2) // company search: /company/company-url  
+        if ($uri_depth >= 1 && $uri_depth <= 2) // company search: /company/company-url  
         {
-
+            
             $oCompany = new Company($db);
+
+            $uri = preg_replace("/\/company\//","",$uri);
             $aResult = $oCompany->GetByUri($uri, $fuzzy);
 
             if (is_array($aResult) && count($aResult) >= 1)
@@ -92,6 +93,7 @@ function uriSearch($uri,$template = "search_result_list_company.php")
                 $oTemplate = new Template();
                 $oTemplate->Set("RESULT_ARRAY",$aResult);
                 $oTemplate->Set("WEBSITE_URL",$aBrandConfig['oneworld365.org']['website_url']);
+                $oTemplate->Set("RESULT_TYPE",'COMPANY');
                 $oTemplate->LoadTemplate($template);
                 $oTemplate->Render();
 
@@ -113,8 +115,48 @@ function uriSearch($uri,$template = "search_result_list_company.php")
 
         } else {  // placement search: /company/company-url/placememt-url
 
-            $aResponse['msg'] = "placement search: /company/company-url/placememt-url";
-            $aResponse['html'] = $uri;
+
+            $oPlacement = new Placement($db);
+
+            // extract placement uri from search expression
+            $aUri = explode("/",$uri);
+
+            if (!isset($aUri[3]) || strlen($aUri[3]) < 1)
+            {
+                $aResponse['msg'] = "Invalid url";
+                $aResponse['status'] = "warning";
+                sendResponse($aResponse);
+            }
+
+            $uri = $aUri[3];
+            
+            $aResult = $oPlacement->GetByUri($uri, $fuzzy);
+            
+            if (is_array($aResult) && count($aResult) >= 1)
+            {
+                $oTemplate = new Template();
+                $oTemplate->Set("RESULT_ARRAY",$aResult);
+                $oTemplate->Set("WEBSITE_URL",$aBrandConfig['oneworld365.org']['website_url']);
+                $oTemplate->Set("RESULT_TYPE",'PLACEMENT');
+                $oTemplate->LoadTemplate($template);
+                $oTemplate->Render();
+                
+                $aResponse['retVal'] = true;
+                $aResponse['msg'] = "Found ".count($aResult)." result(s).";
+                $aResponse['html'] = $oTemplate->Render();
+                $aResponse['status'] = "success";
+                sendResponse($aResponse);
+                
+            } else {
+                
+                $aResponse['retVal'] = true;
+                $aResponse['msg'] = "Found 0 results.";
+                $aResponse['html'] = '';
+                $aResponse['status'] = "warning";
+                
+            }
+            
+
         }
 
         sendResponse($aResponse);
