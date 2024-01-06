@@ -5,18 +5,29 @@
 class Date {
 
 	public static function GetDateInput($sName,$bHasDay = true, $bHasMonth = true, $bHasYear = true,$iYFrom = 0, $iYTo = 5) {
+	    
+	    $sOutStr = "<div class='row'>";
+	    
 		if ($bHasDay) {
 			$oSelect = new Select($sName."Day",$sName."Day","form-select",Date::GetDays(),true,$_REQUEST[$sName."Day"]);
+			$sOutStr .= "<div class='col-4'>";
 			$sOutStr .= $oSelect->GetHtml();
+			$sOutStr .= "</div>";
 		}
 		if ($bHasYear) {
 			$oSelect = new Select($sName."Month",$sName."Month","form-select",Date::GetMonths(),false,$_REQUEST[$sName."Month"]);
+			$sOutStr .= "<div class='col-4'>";
 			$sOutStr .= $oSelect->GetHtml();
+			$sOutStr .= "</div>";
 		}
 		if ($bHasYear) {
 			$oSelect = new Select($sName."Year",$sName."Year","form-select",Date::GetYears($iYFrom,$iYTo),true,$_REQUEST[$sName."Year"]);
+			$sOutStr .= "<div class='col-4'>";
 			$sOutStr .= $oSelect->GetHtml();
+			$sOutStr .= "</div>";
 		}
+		
+		$sOutStr .= "</div>";
 
 		return $sOutStr;
 	}
