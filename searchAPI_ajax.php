@@ -129,8 +129,22 @@ function uriSearch($uri,$template = "search_result_list_profile.php")
             }
 
             $uri = $aUri[3];
-            
-            $aResult = $oPlacement->GetByUri($uri, $fuzzy);
+
+            if ($uri == "%") // wildcard return all profile for /company/comp-name/% 
+            {
+                $comp_id = Company::GetIdByUri($aUri[2]);
+                if (!is_numeric($comp_id))
+                {
+                    $aResponse['msg'] = "Invalid company url";
+                    $aResponse['status'] = "warning";
+                    sendResponse($aResponse);
+                }
+
+                $aResult = $oPlacement->GetByCompId($comp_id);
+
+            } else {
+                $aResult = $oPlacement->GetByUri($uri, $fuzzy);
+            }
             
             if (is_array($aResult) && count($aResult) >= 1)
             {

@@ -513,11 +513,10 @@ EOT;
 		$this->SetJobProfileFormElements();
 		
 		
-		//@todo - display label according to profile type eg Job, Tour, Placement etc
 		$prefix = ($this->GetMode() == self::MODE_ADD) ? "Add " : "Edit ";
 		$title = $prefix . $oBrand->GetPlacementTitle();
 		$this->GetPlacementForm()->Set('STEP_TITLE',$title);
-		$this->GetPlacementForm()->Set('PLACEMENT_TITLE',$oBrand->GetPlacementTitle());
+		$this->GetPlacementForm()->Set('PLACEMENT_TITLE',$title);
 		$this->GetPlacementForm()->Set('VALID',$this->Valid());
 		$this->GetPlacementForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());		
 		$this->GetPlacementForm()->Set('COMPANY_PROFILE',$this->GetPlacementProfile());
@@ -532,7 +531,7 @@ EOT;
 			$oLinksTemplate->Set('VIEW_URL',$oBrand->GetWebsiteUrl()."/".$this->GetPlacementProfile()->GetProfileUrl());
 		}
 		
-		$oLinksTemplate->LoadTemplate("edit_profile_links.php");
+		//$oLinksTemplate->LoadTemplate("edit_profile_links.php");
 		
 		print $oHeader->Render();
 		print $oLinksTemplate->Render();

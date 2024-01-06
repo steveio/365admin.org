@@ -54,6 +54,18 @@ class Company {
 		
 	}
 
+	public static function GetIdByUri($url_name) {
+	    
+	    global $db,$_CONFIG;
+	    
+	    $sql = "SELECT id FROM ".$_CONFIG['company_table']." WHERE url_name = '".$url_name."'";
+	    $db->query($sql);
+	    if ($db->getNumRows() == 1) {
+	        $row = $db->getRow();
+	        return $row['id'];
+	    }
+	}
+	
 
 	function GetByUri($uri, $fuzzy = false) {
 	    
