@@ -182,13 +182,13 @@ $(document).ready(function(){
 
 <div class="row">
 
-<h1><?= $this->Get('COMPANY_TITLE'); ?> Details</h1>
+<h1><?= $this->Get('COMPANY_TITLE'); ?></h1>
 
 <div class="row my-2">
   <div class="col">
   <span><img src="/images/icon_info.png" alt="" border="0" style="vertical-align: middle;" /></span>
   <span class="p_small grey">Enter details about your <?= strtolower($this->Get('COMPANY_TITLE')); ?>.
-  Try to add original content, don't just duplicate your website.
+  Add original content, don't duplicate your website.
   </span>
   </div>
 </div>
@@ -237,119 +237,14 @@ $(document).ready(function(){
 </div>
 
 
-<?php if ($this->Get('DISPLAY_CAT_ACT_CTY_OPTIONS')) {  ?>
-
-<div class="container">
-<div class="row my-3">
-
-
-<div class="col-4">
-
-  <div class="row formgroup my-2"><span class="label_col">
-  <h1 style="margin: 0; <?= strlen($response['msg']['category']) > 1 ? "color:red;" : ""; ?>">Categories<span class="red"> *</span></h1></span>
-  <span class="input_col" style="">
-  <a id="expand_category_select">+ Expand</a>
-  <a id="collapse_category_select">- Collapse</a> (<span id="cat_selected"><?= $this->Get('CATEGORY_LIST_SELECTED_COUNT'); ?></span> Selected)</a> </span>
-  <span id="category_select" class="input_col" style="display: none;">
-  <div class="py-2">
-  <ul class='form-check'>
-  <?= $this->Get('CATEGORY_LIST'); ?>
-  </ul>
-  </div>
-  </span></div>
-
-</div>
+<?php if ($this->Get('DISPLAY_CAT_ACT_CTY_OPTIONS')) {  
+	
+// Category, Activity, Country metadata common to all profile types
+require_once("profile_metadata_select.php");
 
 
-<div class="col-4">
-  <div class="row formgroup my-2"><span class="label_col">
-  <h1 style="margin: 0; <?= strlen($response['msg']['activity']) > 1 ? "color:red;" : ""; ?>">Activities<span
-  	class="red"> *</span></h1>
-  </span> <span class="input_col" style=""> <a id="expand_activity_select">+
-  Expand</a> <a id="collapse_activity_select">- Collapse</a> (<span
-  	id="act_selected"><?= $this->Get('ACTIVITY_LIST_SELECTED_COUNT'); ?></span>
-  Selected) </span> <span id="activity_select" class="input_col" style="display: none;"> <?
-  	$oColumnSort = new ColumnSort;
-  	$oColumnSort->SetElements($this->Get('ACTIVITY_LIST'));
-  	$oColumnSort->SetCols(3);
-  	$aElements = $oColumnSort->Sort();
-  	?>
+} // end IF DISPLAY_CAT_ACT_CTY_OPTIONS ?>
 
-  <div class="row formgroup my-2">
-  <div class="py-2">
-  <ul class='form-check'>
-  <?php
-  foreach($aElements[1] as $idx => $val) {
-  	print $val;
-  }
-  ?>
-  <?php
-  foreach($aElements[2] as $idx => $val) {
-  	print $val;
-  }
-  ?>
-  <?php
-  foreach($aElements[3] as $idx => $val) {
-  	print $val;
-  }
-  ?>
-  </ul>
-  </div>
-  </div>
-  </span></div>
-</div>
-
-
-<div class="col-4">
-
-
-  <div class="row formgroup my-2"><span class="label_col">
-  <h1 style="margin: 0; <?= strlen($response['msg']['country']) > 1 ? "color:red;" : ""; ?>">Countries<span
-  	class="red"> *</span></h1></span>
-  <span class="input_col" style=""> <a id="expand_country_select">+ Expand</a>
-  <a id="collapse_country_select">- Collapse</a> (<span id="cty_selected"><?= $this->Get('COUNTRY_LIST_SELECTED_COUNT'); ?></span>
-  Selected) </span> <span id="country_select" class="input_col"
-  	style="display: none;"> <?
-  	$oColumnSort = new ColumnSort;
-  	$oColumnSort->SetElements($this->Get('COUNTRY_LIST'));
-  	$oColumnSort->SetCols(4);
-  	$aElements = $oColumnSort->Sort();
-  	?>
-
-  <div class="row formgroup my-2">
-  <div class="py-2">
-  <ul class='form-check'>
-  <?php
-  foreach($aElements[1] as $idx => $val) {
-  	print $val;
-  }
-  foreach($aElements[2] as $idx => $val) {
-  	print $val;
-  }
-  foreach($aElements[3] as $idx => $val) {
-  	print $val;
-  }
-  foreach($aElements[4] as $idx => $val) {
-  	print $val;
-  }
-  ?>
-  </ul>
-  </div>
-  </div>
-
-  </span></div>
-
-</div>
-
-
-</div>
-</div>
-
-
-
-
-
-<?php } // end IF DISPLAY_CAT_ACT_CTY_OPTIONS ?>
 
 <div class="row ormgroup my-2"><span class="label_col"><label
 	for="<?= PROFILE_FIELD_COMP_URL; ?>"

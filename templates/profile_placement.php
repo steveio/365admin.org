@@ -86,159 +86,48 @@ $(document).ready(function(){
 </script>
 
 
-<!-- BEGIN Page Content Container -->
-<div class="page_content content-wrap clear">
-<div class="row pad-tbl clear">
 
-<h1><?= $this->Get('PLACEMENT_TITLE'); ?> Details</h1>
+<div class="container">
+<div class="align-items-center justify-content-center">
 
 
-	<div class="col four clear">	
-	<div>
+    <h1><?= $this->Get('PLACEMENT_TITLE'); ?></h1>
+
 	
 	<form enctype="multipart/form-data" name="edit_placement" id="edit_placement" action="#" method="POST">
 
 
-	<div class="row">
+	<div class="row formgroup my-2">
 		<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_TITLE; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_TITLE]) > 1 ? "red" : ""; ?>">Title<span class="red"> *</span></label></span>
-		<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_PLACEMENT_TITLE; ?>" maxlength="128" class="textinput_01"  name="<?= PROFILE_FIELD_PLACEMENT_TITLE; ?>" value="<?= $_POST[PROFILE_FIELD_PLACEMENT_TITLE]; ?>" /></span>
+		<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_PLACEMENT_TITLE; ?>" maxlength="128" class="form-control"  name="<?= PROFILE_FIELD_PLACEMENT_TITLE; ?>" value="<?= $_POST[PROFILE_FIELD_PLACEMENT_TITLE]; ?>" /></span>
 	</div>	
 
-	<div class="row">
+	<div class="row formgroup my-2">
 		<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_COMP_ID; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_COMP_ID]) > 1 ? "red" : ""; ?>">Company</label></span>
 		<span class="input_col">
 		<?= $this->Get("COMPANY_NAME_LIST"); ?>
 		</span>
 	</div>	
 
-	<div class="row">
+	<div class="row formgroup my-2">
 		<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_DESC_SHORT; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_DESC_SHORT]) > 1 ? "red" : ""; ?>">Short Description<span class="red"> *</span><br/>(1500 chars or less)</label></span>
 		<span class="input_col"><textarea id="<?= PROFILE_FIELD_PLACEMENT_DESC_SHORT; ?>" name="<?= PROFILE_FIELD_PLACEMENT_DESC_SHORT; ?>" class="textarea_01" /><?= stripslashes($_POST[PROFILE_FIELD_PLACEMENT_DESC_SHORT]); ?></textarea></span>
 	</div> 
 
-	<div class="row">
+	<div class="row formgroup my-2">
 		<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_DESC_LONG; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_DESC_LONG]) > 1 ? "red" : ""; ?>">Full Description<span class="red"> *</span></label></span>
 		<span class="input_col"><textarea id="<?= PROFILE_FIELD_PLACEMENT_DESC_LONG; ?>" name="<?= PROFILE_FIELD_PLACEMENT_DESC_LONG; ?>" class="textarea_02" /><?= stripslashes($_POST[PROFILE_FIELD_PLACEMENT_DESC_LONG]); ?></textarea></span>
 	</div> 
 
-	<div class="left-align five clear pad4-b">
-		<span class="label_col"><h1 style="margin: 0; <?= strlen($response['msg']['category']) > 1 ? "color:red;" : ""; ?>">Categories<span class="red"> *</span></h1></span>
-		<span class="input_col" style="">
-			<a id="expand_category_select">+ Expand</a> <a id="collapse_category_select">- Collapse</a>  (<span id="cat_selected"><?= $this->Get('CATEGORY_LIST_SELECTED_COUNT'); ?></span> Selected)</a>
-		</span>
-		<span id="category_select" class="input_col" style="display: none;">
-			<div class="left-align four">
-				<ul class='select_list'>
-					<?= $this->Get('CATEGORY_LIST'); ?>
-				</ul>
-			</div>
-		</span>
-	</div>
 
-	<div class="left-align five clear pad4-b">
-		<span class="label_col">
-			<h1 style="margin: 0; <?= strlen($response['msg']['activity']) > 1 ? "color:red;" : ""; ?>">Activities<span class="red"> *</span></h1>
-		</span>
-		<span class="input_col" style="">
-			<a id="expand_activity_select">+ Expand</a> <a id="collapse_activity_select">- Collapse</a>  (<span id="act_selected"><?= $this->Get('ACTIVITY_LIST_SELECTED_COUNT'); ?></span> Selected)
-		</span>
-		<span id="activity_select" class="input_col" style="display: none;">
-			<?
-				$oColumnSort = new ColumnSort;
-				$oColumnSort->SetElements($this->Get('ACTIVITY_LIST'));
-				$oColumnSort->SetCols(3);
-				$aElements = $oColumnSort->Sort();
-			?>
-		
-			<div class="left-align four">
-				<div class="one-half left-align">
-					<ul class='select_list'>
-					<?php 
-					foreach($aElements[1] as $idx => $val) {
-						print $val;
-					}
-					?>
-					</ul>
-				</div>
-				<div class="one-half left-align">
-					<ul class='select_list'>
-					<?php 
-					foreach($aElements[2] as $idx => $val) {
-						print $val;
-					}
-					?>
-					</ul>				
-				</div>
-				<div class="one-half left-align">
-					<ul class='select_list'>
-					<?php 
-					foreach($aElements[3] as $idx => $val) {
-						print $val;
-					}
-					?>
-					</ul>				
-				</div>
-			</div>
-		</span>
-	</div> 
+<?php
+// Category, Activity, Country metadata common to all profile types
+require_once("profile_metadata_select.php");
+?>
 
-	<div class="left-align five clear pad4-b">
-		<span class="label_col"><h1 style="margin: 0; <?= strlen($response['msg']['country']) > 1 ? "color:red;" : ""; ?>">Country(s)<span class="red"> *</span></h1>
-		</span>
-		<span class="input_col" style="">
-			<a id="expand_country_select">+ Expand</a> <a id="collapse_country_select">- Collapse</a>  (<span id="cty_selected"><?= $this->Get('COUNTRY_LIST_SELECTED_COUNT'); ?></span> Selected)
-		</span>
-		
-		<span id="country_select" class="input_col" style="display: none;">
-			<?
-				$oColumnSort = new ColumnSort;
-				$oColumnSort->SetElements($this->Get('COUNTRY_LIST'));
-				$oColumnSort->SetCols(4);
-				$aElements = $oColumnSort->Sort();
-			?>
-		
-			<div class="left-align four">
-				<div class="one left-align">
-					<ul class='select_list'>
-					<?php 
-					foreach($aElements[1] as $idx => $val) {
-						print $val;
-					}
-					?>
-					</ul>
-				</div>
-				<div class="one left-align">
-					<ul class='select_list'>
-					<?php 
-					foreach($aElements[2] as $idx => $val) {
-						print $val;
-					}
-					?>
-					</ul>				
-				</div>
-				<div class="one left-align">
-					<ul class='select_list'>
-					<?php 
-					foreach($aElements[3] as $idx => $val) {
-						print $val;
-					}
-					?>
-					</ul>				
-				</div>
-				<div class="one left-align">
-					<ul class='select_list'>
-					<?php 
-					foreach($aElements[4] as $idx => $val) {
-						print $val;
-					}
-					?>
-					</ul>				
-				</div>
 
-			</div>
 
-		</span>
-	</div> 
+
 
 	<div class="row">
 		<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_LOCATION; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_LOCATION]) > 1 ? "red" : ""; ?>">Location / Region</label></span>
@@ -519,11 +408,6 @@ $(document).ready(function(){
 		<span class="input_col"><input type="submit" name="submit" id="submit" value="Submit" />
 		</span>
 	</div>
-	
-	
-	</div><!--  end profile inner -->
-	</div><!--  end profile -->
 
 </div>
 </div>
-<!-- END Page Content Container -->
