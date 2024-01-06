@@ -7,51 +7,46 @@
 <div class="align-items-center justify-content-center">
 
 
-<div id="" class="">
-
-	<h1>Admin Dashboard</h1>
+<h1>Dashboard</h1>
 
 
-	<div class="row formgroup my-2">
-	<ul class="">
-		<li><a class="more-link" href="/<?= ROUTE_COMPANY ?>/add" title="Add a new Company Profile">Add a new Company Profile</a></li>
-		<li><a class="more-link" href="/<?= ROUTE_PLACEMENT ?>/add" title="Add a new Placement Profile">Add a new Placement</a></li>
-		<!-- <li><a class="more-link" href="/<?= ROUTE_MAILSHOT ?>" title="Send an email to a list of companies">Mailshot</a></li> -->
-	</ul>
+<div class="row my-3	">
+<div class="col-12">
+	<div class="col float-right">
+			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = './article-editor'; return false;">New Article</button>
+			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/company/add'; return false;">New Company</button>
+			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/placement/add'; return false;">New Placement</button>
+			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/enquiry-report'; return false;">Enquiries</button>
+			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/review-report'; return false;">Comments / Reviews</button>
+			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/user'; return false;">Users</button>
+
 	</div>
+</div>
+</div>
 
 
+<div class='row my-3'>
 
-<div class="row formgroup my-2">
-  <div class="row my-2">
-    <div class="col-2 form-check form-check-inline">
-  		<label class="" for="projects">Projects</label>
-  		<input id="search_projects" class="form-check" name="search_type" value="1" type="radio" checked />
-  	</div>
-  	<div class="col-2 form-check form-check-inline">
-  		<label class="" for="organisations">Organisations</label>
-  		<input id="search_orgs" class="form-check" name="search_type" value="0" type="radio" />
-  	</div>
-  	<div class="col-2 form-check form-check-inline">
-  		<label class="" for="articles">Articles</label>
-  		<input id="search_articles" class="form-check" name="search_type" value="2" type="radio" />
-  	</div>
-  </div>
+	<h1>Search</h1>
 
-  <div class="row">
-  	<div class="col-9">
-        <div class="form-group mx-sm-3 mb-2">
-    			<input id="search-query" class="form-control" type="text" value="" autocapitalize="off" autocorrect="off" autofocus="autofocus" tabindex="1" name="query">
-          <input id="query-origin" class="" type="hidden" value="1" name="query-origin">
-        </div>
-    </div>
-  	<div class="col-2">    
-        <button id="search-btn" class="btn btn-primary rounded-pill mb-2" type="submit" name="search" value="search">Search</button>
-    </div>
-    <div class="col-2">
-    
-    </div>
-  </div>
+	<div class="col">
+
+		Url or Keywords:
+		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
+		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: ArticleSearch('<?= $_CONFIG['url'] ?>','search','','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
+		Projects <input type="checkbox" id="search_exact" name="filter_project" />
+		Orgs <input type="checkbox" id="search_exact" name="filter_org" />
+		Exact URL? <input type="checkbox" id="search_exact" name="search_exact" />
+		<ul>
+			<li>Patterns: <span class="p_small">"%" = all  OR  "%africa" = contains "africa" OR  "/activity/animals" OR "UNPUBLISHED" = new articles</i></span></li>
+		</ul>
+
+	</div>
+</div>
+
+<div class="row">
+	<div id="article_search_msg"></div>
+	<div id="article_search_result"></div>
 </div>
 
 

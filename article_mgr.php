@@ -73,7 +73,6 @@ print $oHeader->Render();
 
 	<h1>Content Manager</h1>
 
-
 	<div class="col">
 
 		Url:

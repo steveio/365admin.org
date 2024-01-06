@@ -94,30 +94,33 @@ function ArticleDeattach(url,pid,aid) {
 }
 
 
+
 function ArticleSearch(url,mode,aid,template) {
 
-        var uri = escapePercent(document.getElementById('search_phrase').value);
+    var uri = escapePercent(document.getElementById('search_phrase').value);
 
-        var w = [];
-        
-        $('input[name^="web_"]').each(function() {
-        	if ($(this).attr('checked')) {
-        		var wid = $(this).attr('name').split('_')[1];
-        		w.push(wid);
-        	}
-        });
-        
-        var wid = w.join('::');
-        
-        if (uri == "") {
-                alert('Please enter a valid search url or url pattern');
-                return false;
-        }
+    var w = [];
+    
+    $('input[name^="web_"]').each(function() {
+    	if ($(this).attr('checked')) {
+    		var wid = $(this).attr('name').split('_')[1];
+    		w.push(wid);
+    	}
+    });
+    
+    var wid = w.join('::');
+    
+    if (uri == "") {
+            alert('Please enter a valid search url or url pattern');
+            return false;
+    }
 
-        var search_recursive = null;
-        if (mode == 'map') {
-                search_recursive = document.getElementById('search_recursive').value;
-        }
+	$('#spinner').show();
+
+    var search_recursive = null;
+    if (mode == 'map') {
+            search_recursive = document.getElementById('search_recursive').value;
+    }
 
 
 	var match = 0; /* default = fuzzy "like" matching */
@@ -125,20 +128,21 @@ function ArticleSearch(url,mode,aid,template) {
 		match = 1; /* exact "=" equal matching */
 	}
         
-        var url = url +"/article_search_ajax.php";
-        var pars = '&m='+mode+'&uri='+uri+'&aid='+aid+'&r='+search_recursive+'&t='+template+'&match='+match+'&wid='+wid;
+    var url = url +"/article_search_ajax.php";
+    var pars = '&m='+mode+'&uri='+uri+'&aid='+aid+'&r='+search_recursive+'&t='+template+'&match='+match+'&wid='+wid;
 
-		$.getJSON(url, pars, function(data){
-                $('#article_search_msg').html('<span class="red">'+data.msg+'</span>');
+	$.getJSON(url, pars, function(data){
+            $('#article_search_msg').html('<span class="red">'+data.msg+'</span>');
 
-                if (data.retVal == 1) {
-                        $('#article_search_result').html(data.html);
-                } else {
-                        $('#article_search_result').html('');
+        	$('#spinner').hide();
 
-                }
-                return false;
-    	});
+            if (data.retVal == 1) {
+                    $('#article_search_result').html(data.html);
+            } else {
+                    $('#article_search_result').html('');
+            }
+            return false;
+	});
                         
 }
 

@@ -1,5 +1,5 @@
 
-<table cellspacing="2" cellpadding="4" border="0" width="" class="table table-striped">
+<table  id="report" class="display" cellspacing="2" cellpadding="4" border="0" width="" class="table table-striped">
 <thead>
 <tr>
 	<th scope="col">&nbsp;</th>
@@ -51,3 +51,17 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 ?>
 </tbody>
 </table>
+
+
+<script>
+
+$(document).ready(function() {
+
+    $('#report').DataTable({
+    	"pageLength": 100,
+    	"bSort" : false
+    });
+
+});
+
+</script>
