@@ -64,13 +64,15 @@ if (preg_match("/^\//",$exp))
 } 
 
 
-function uriSearch($uri,$template = "search_result_list_profile.php")
+function uriSearch($uri)
 {
     global $db, $aBrandConfig;
     
     if (preg_match("/^\/company\//",$uri)) // org or placement uri search /company/*
     {
 
+        $template = "search_result_list_profile.php";
+        
         $uri_depth = substr_count($uri, '/');
 
         $uri = strtolower($uri);
@@ -176,6 +178,9 @@ function uriSearch($uri,$template = "search_result_list_profile.php")
         sendResponse($aResponse);
         
     } else { // article search
+
+        $template = "article_search_result_list_03.php";
+        
         $oArticleCollection = new ArticleCollection();
 
         $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished = false);

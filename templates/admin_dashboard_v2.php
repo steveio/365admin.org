@@ -37,7 +37,7 @@
 		Projects <input type="checkbox" id="search_exact" name="filter_project" />
 		Orgs <input type="checkbox" id="search_exact" name="filter_org" />		
 		<ul>
-			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/thailand%  OR /company/camp%  OR "%africa"</i></span></li>
+			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/%hong-kong%  OR /company/camp%  OR /company/placement/%ski%"</i></span></li>
 		</ul>
 
 	</div>

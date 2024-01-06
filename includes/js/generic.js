@@ -107,6 +107,9 @@ function SearchAPI(baseURL, template) {
         return false;
     }
 
+	$('#search_msg').html('');
+	$('#search_result').html('');
+
 	$('#spinner').show();
 
     var url = baseURL +"/searchAPI_ajax.php";
