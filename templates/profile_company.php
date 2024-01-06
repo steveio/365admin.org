@@ -490,11 +490,11 @@ $visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display
 
 
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"><label
     	for="<?= PROFILE_FIELD_COMP_PROD_TYPE; ?>">Listing Level</label></span>
   </div>
-  <div class="col-4 form-group">
+  <div class="col-9 form-group">
     <span class=""> <?php
     $checked = (($oProfile->GetListingType() == FREE_LISTING) || ($_POST[PROFILE_FIELD_COMP_PROD_TYPE] == FREE_LISTING)) ? "checked" : "";
   ?><input type="radio"
@@ -524,12 +524,12 @@ $visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display
 </div>
 
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"> <label
     	for="<?= PROFILE_FIELD_COMP_LISTING_TYPE; ?>"
     	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LISTING_TYPE]) > 1 ? "red" : ""; ?>">Listing Type :</label><span class="red"> *</span> </span>
   </div>
-  <div class="col-4 form-group">
+  <div class="col-9 form-group">
     <span class="input_col"> <?
 
     	$aListingOption = $this->Get('ADMIN_LISTING_OPTIONS');
@@ -566,13 +566,13 @@ $visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display
 </div>
 
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"><label
     	for="<?= PROFILE_FIELD_COMP_LISTING_START_DATE ?>"
     	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LISTING_START_DATE]) > 1 ? "red" : ""; ?>">Listing
     Start :</label><span class="red"> *</span></span>
   </div>
-  <div class="col-4 form-group">
+  <div class="col-9 form-group">
     <span class="input_col"><? print Date::GetDateInput('Listing',false,true,true,$iYFrom = 1, $iTo = 5); ?></span>
   </div>
 </div>
@@ -599,10 +599,10 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
 }
 ?>
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"><label>Placement Quota:</label></span>
   </div>
-  <div class="col-4 form-group">
+  <div class="col-9 form-group">
     <?php
   	if (isset($_POST['submit'])) {
   		$profile_quota = $_POST[PROFILE_FIELD_COMP_PROFILE_QUOTA];
@@ -619,10 +619,10 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
 
 
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"><label style="<?= strlen($response['msg']['prof_opt_1']) > 1 ? "color:red;" : ""; ?>">Profile Options :</label></span>
   </div>
-  <div class="col-4">
+  <div class="col-9">
     <div class="form-check form-check-inline">
     General<input
     	type="checkbox" name="prof_opt_1" class="form-check-input"
@@ -641,10 +641,10 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
 
 
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"><label style="<?= strlen($response['msg']['profile_filter_from_search']) > 1 ? "color:red;" : ""; ?>">Profile Filter from Search :</label></span>
   </div>
-  <div class="col-4">
+  <div class="col-9">
     <span class="input_col">
     	<?php
     	if (isset($_POST['submit'])) {
@@ -661,10 +661,10 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
 
 
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"><label>Enquiry Options :</label></span>
   </div>
-  <div class="col-4">
+  <div class="col-9">
     <div class="form-check form-check-inline">
       General<input type="checkbox" name="enq_opt_1"  class="form-check-input" <? if (($oProfile->HasEnquiryOption(ENQUIRY_GENERAL)) || isset($_POST['enq_opt_1'])) print "checked"; ?>>
     </div>
@@ -679,10 +679,10 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
 
 
 <div class="row formgroup my-2">
-  <div class="col-2">
+  <div class="col-3">
     <span class="label_col"><label><b>Approved?</b> :<span class="red"> *</span></label></span>
   </div>
-  <div class="col-4">
+  <div class="col-9">
     <span class="input_col"> <?
   	if (isset($_POST['submit'])) {
   		$checked = ($_POST['status'] == "true") ? "checked" : "";
