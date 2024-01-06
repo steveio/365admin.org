@@ -1822,7 +1822,7 @@ class ArticleCollection implements TemplateInterface  {
 		$this->oTemplate->Set("ARTICLE_ARRAY",$this->aArticle);
 
 		$this->oTemplate->LoadTemplate($sFilename);		
-		
+
 	}
 	
 	

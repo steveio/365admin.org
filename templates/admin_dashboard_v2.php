@@ -33,10 +33,9 @@
 
 		Url or Keywords:
 		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
-		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: ArticleSearch('<?= $_CONFIG['url'] ?>','search','','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
+		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI('<?= $_CONFIG['url'] ?>','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
 		Projects <input type="checkbox" id="search_exact" name="filter_project" />
 		Orgs <input type="checkbox" id="search_exact" name="filter_org" />
-		Exact URL? <input type="checkbox" id="search_exact" name="search_exact" />
 		<ul>
 			<li>Patterns: <span class="p_small">"%" = all  OR  "%africa" = contains "africa" OR  "/activity/animals" OR "UNPUBLISHED" = new articles</i></span></li>
 		</ul>
@@ -45,8 +44,8 @@
 </div>
 
 <div class="row">
-	<div id="article_search_msg"></div>
-	<div id="article_search_result"></div>
+	<div id="search_msg"></div>
+	<div id="search_result"></div>
 </div>
 
 

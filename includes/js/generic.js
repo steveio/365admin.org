@@ -93,7 +93,43 @@ function ArticleDeattach(url,pid,aid) {
 	
 }
 
+/*
+ * AJAX search API
+ * 
+ * @param string path to PHP file in /templates 
+ */
+function SearchAPI(baseURL, template) {
 
+    var exp = escapePercent(document.getElementById('search_phrase').value);
+
+    if (exp == "") {
+        alert('Please enter valid keywords, url (relative path) or pattern');
+        return false;
+    }
+
+	$('#spinner').show();
+
+    var url = baseURL +"/searchAPI_ajax.php";
+    var pars = '&exp='+exp+'&t='+template;
+
+	$.getJSON(url, pars, function(data){
+
+        $('#search_msg').html('<div class="alert alert-'+data.status+'" role="alert">'+data.msg+'</div>');
+
+		$('#spinner').hide();
+		
+	    if (data.retVal == 1) {
+	        $('#search_result').html(data.html);
+	    } else {
+	        $('#search_result').html('');
+	    }
+	    
+	    return false;
+	});
+
+    
+    return false;
+}
 
 function ArticleSearch(url,mode,aid,template) {
 
