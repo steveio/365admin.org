@@ -69,9 +69,6 @@ $(document).ready(function(){
                     <a class="dropdown-item" href="/placement/add" title="add a new placement">add placement</a>
                     <a class="dropdown-item" href="/article-manager" title="manage articles">article</a>
                     <a class="dropdown-item"  href="/user/" title="manage users">user</a>
-            <? } ?>
-            <? if ($oAuth->oUser->isAdmin) { ?>
-                    <a class="dropdown-item" href="/link_admin.php" title="link admin">links</a>
                     <a class="dropdown-item" href="/activity-admin" title="activity admin">activity</a>
             <? } ?>
             <? if ($oAuth->oUser->isValidUser) { ?>
