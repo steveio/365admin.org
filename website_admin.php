@@ -1,13 +1,15 @@
 <?php
 
-include("./header.php");
+
+require_once("./conf/config.php");
+require_once("./init.php");
+require_once("./conf/brand_config.php");
+
+include_once("./includes/header.php");
+include_once("./includes/footer.php");
 
 
-$db = new db($dsn,$debug = false);
-
-// Is the user authenticated?
-$oAuth = new Authenticate($db,$redirect = true);
-$oAuth->main();
+if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/client_login.php",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
 if ($oAuth->oUser->isAdmin) {
@@ -49,16 +51,22 @@ if ($oAuth->oUser->isAdmin) {
 } // end is admin check
 
 
+print $oHeader->Render();
+
 
 ?>
 
 <form enctype="multipart/form-data" name="edit_website" id="edit_website" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
-<div id="container" style="float: left; width: 800px;">
+<div class="container">
+<div class="align-items-center justify-content-center">
 
-<div id="msgtext" style="color: red;">
+
+<? if (isset($response['msg']) && strlen($response['msg']) >= 1) { ?>
+<div id="msgtext" class="alert alert-warning" role="alert">
 <?= $response['msg'];  ?>
 </div>
+<? } ?>
 
 
 
@@ -67,71 +75,42 @@ if ($oAuth->oUser->isAdmin) {
 
 	<h1>Website Admin :</h1>
 
-	<div class="row800">
+	<div class="row">
 	<?= $oWebsite->GetSiteDropDownList($iSiteId) ?>
 	</div> 
 	
-	<div class="row800">
-		<p>Categories</p>		
+	<div class="row">
+		<p>Categories</p>
 		<div class="boxItem">
-		<p><?= $sCatCheckBoxListHtml ?></p> 
-		<div style="float: right;" >
-		<div style="text-align: right;"><p>Update categories : <input type="submit" name="update_website_category" value="go" /></p></div>
-		</div>
+		<?= $sCatCheckBoxListHtml ?> 
+    		<div style="float: right;" >
+        		<div style="text-align: right;">Update categories : <input type="submit" name="update_website_category" value="go" /></div>
+    		</div>
 		</div>
 	</div>
 	
 	
-	<div class="row800">
+	<div class="row">
 		<p>Activities</p>
 		<div class="boxItem">
-		<p><?= $sActivityCheckBoxListHtml ?></p> 
-		<div style="float: right;" >
-			<div style="text-align: right;"><p>Update activities : <input type="submit" name="update_website_activity" value="go" /></p></div>
+		<?= $sActivityCheckBoxListHtml ?> 
+    		<div style="float: right;" >
+    			<div style="text-align: right;"><p>Update activities : <input type="submit" name="update_website_activity" value="go" /></p></div>
+    		</div>
 		</div>
-		</div>
 	</div>
 
 
-	
+			
+</div>
+</div>
 
-	
-	<div class="row800">
-	<h1>Navigation</h1>
-	
-	<p>The following items appear in the primary navigation on this website :</p>
-	</div>
-	
-	<div class="row800">
-	<h1>Homepage Content</h1>
-	
-	<p>The following items are displayed on this websites hompage :</p>
-	
-	
-	</div>
-	
-	<div class="row800">
-	<h1>Ad Banners</h1>
-	<p>The following ad banners & vertical banners are displayed on this website :</p>
-	
-	</div>
-	
-	</div> <!--  end container -->
-
-<? 
-} else {
-	print "<div class='msgtext'>ERROR : Only admin is permitted to manage websites.  Are you logged in as admin?</div>";
-}
-?>
+<? } ?>
 
 </form>
 <?
 
 
-
-include("./footer.php");
-
-
-
+print $oFooter->Render();
 
 ?>

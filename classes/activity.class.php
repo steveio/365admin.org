@@ -333,7 +333,7 @@ class Activity {
 	 	$sUrlName = $oNs->GetUrlName($sName,'activity','name');
 
 
-		print $sSql = "UPDATE activity SET name = '".addslashes($sName)."',url_name='".$sUrlName."',description='".addslashes($sDesc)."' WHERE id = '".$iId."'";
+		$sSql = "UPDATE activity SET name = '".addslashes($sName)."',url_name='".$sUrlName."',description='".addslashes($sDesc)."' WHERE id = '".$iId."'";
 
 		$db->query($sSql);
 
@@ -433,7 +433,7 @@ class Activity {
 
 		$aActivities = $db->getRows();
 
-		$sStr = "<select name='".$sName."'  class='ddlist' onchange=\"".$sOnChangeJs."\">";
+		$sStr = "<select name='".$sName."'  class='form-select' onchange=\"".$sOnChangeJs."\">";
 
 		$sStr .= "<option value='null'>select</option>";
 

@@ -72,7 +72,6 @@ $(document).ready(function(){
             <? } ?>
             <? if ($oAuth->oUser->isAdmin) { ?>
                     <a class="dropdown-item" href="/link_admin.php" title="link admin">links</a>
-                    <a class="dropdown-item" href="/website_admin.php" title="website admin">website</a>
                     <a class="dropdown-item" href="/activity-admin" title="activity admin">activity</a>
             <? } ?>
             <? if ($oAuth->oUser->isValidUser) { ?>

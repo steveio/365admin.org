@@ -299,7 +299,7 @@ class ReciprocalLinkCategory {
 		
 		$aLinkCat  = ReciprocalLinkCategory::GetAll();
 		
-		$s = "<select name='".$name."' class='ddlist'>";
+		$s = "<select name='".$name."' class='form-select'>";
 		$s .= "<option value='NULL'>select</option>";
 		if (is_array($aLinkCat)) {
 			foreach($aLinkCat as $o) {

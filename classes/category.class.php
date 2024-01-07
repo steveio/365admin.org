@@ -294,7 +294,7 @@ class Category implements TemplateInterface {
 
 		$aCategories = $this->GetAll();
 		
-		$sStr = "<select name='".$sName."'  class='ddlist'>";
+		$sStr = "<select name='".$sName."'  class='form-select'>";
 		
 		$sStr .= "<option value='null'>select</option>";
 		

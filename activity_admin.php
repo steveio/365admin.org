@@ -1,10 +1,5 @@
 <?php
 
-ini_set('display_errors',0);
-ini_set('log_errors', 1);
-ini_set('error_log', '/www/vhosts/365admin.org/logs/365admin_error.log');
-error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
-
 require_once("./conf/config.php");
 require_once("./init.php");
 require_once("./conf/brand_config.php");
@@ -101,20 +96,31 @@ print $oHeader->Render();
 
 <form enctype="multipart/form-data" name="edit_website" id="edit_website" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
-<div id="container" style="float: left; width: 800px;">
+<div class="container">
+<div class="align-items-center justify-content-center">
 
-<div id="msgtext" style="color: red;">
+<h1>Activity Admin</h1>
+
+<? if (isset($response['msg']) && strlen($response['msg']) >= 1) { ?>
+<div id="msgtext" class="alert alert-warning" role="alert">
 <?= $response['msg'];  ?>
 </div>
+<? } ?>
 
 
 <? if ($oAuth->oUser->isAdmin) { ?>
 
-	<div class="boxItem" style="width: 300px;">
-	<div id="activity_mgr">
-	<div style="text-align: right;"><h1>Manage Activities :</h1> 
-		<label>activity name: </label><input type="text" name="activity_name" style="width: 300px;" maxlength="40" value="<?= stripslashes($_POST['activity_name']); ?>" /><br />
-		<label>short desc: </label><textarea name="activity_desc" style="width: 300px; height: 80px;"><?= stripslashes($_POST['activity_desc']); ?></textarea><br />
+<div class="row">
+	<h2>Add Activity</h2>
+	<div class="row">
+		<label>Activity name: </label>
+		<input type="text" name="activity_name" class="form-control" maxlength="40" value="<?= stripslashes($_POST['activity_name']); ?>" />
+	</div>
+	<div class="row">	
+		<label>Short desc: </label>
+		<textarea name="activity_desc" class="form-control"><?= stripslashes($_POST['activity_desc']); ?></textarea>
+	</div>
+	<div class="row">
 		<input type="hidden" name="a_id" value="<?= $_POST['activity_id']; ?>" />
 		<input type="hidden" name="activity_url_name" value="<?= $_POST['activity_url_name']; ?>" />
 		<label>category: </label>		
@@ -122,40 +128,49 @@ print $oHeader->Render();
 			$oCategory = new Category($db);
 			print $oCategory->GetDDList("category_id",$_POST['category_id']);
 		?>
-		<br />
-		<input type="submit" name="<?= $sLabel = ($sMode == "EDIT_ACTIVITY") ? "update_activity" : "add_activity"; ?>" value="<?= $sLabel = ($sMode == "EDIT_ACTIVITY") ? "Edit" : "Add"; ?>" />
 	</div>
-	<div style="text-align: right;"><p>Activity Admin:</p>
-		<?= $oActivity->GetDDList(); ?><br />
-		Edit<input type="radio" name="activity_admin" value="edit_activity" checked/><br />
-		Delete<input type="radio" name="activity_admin" value="delete_activity" /><br />
-		<input type="submit" name="admin_activity" value="go" />
-	</div> 	
-	</div><!-- end activity mgr -->
-	</div><!-- end box item -->
+	<div class="row my-3">
+	<div class="col-3">		
+		<button class="btn btn-primary rounded-pill px-3" type="submit" name="<?= $sLabel = ($sMode == "EDIT_ACTIVITY") ? "update_activity" : "add_activity"; ?>" value="<?= $sLabel = ($sMode == "EDIT_ACTIVITY") ? "Edit" : "Add"; ?>">submit</button>
+	</div>
+	</div>
+</div>
 
-	<? if ($sMode == "EDIT_ACTIVITY") {  ?>
-	<div class="boxItem" style="width: 300px; margin-left: 20px;">
-		<div id='activity_panel_item'>
-		<? if (strlen($_POST['activity_img_url']) >1 ) {  ?>
-		<div id='activity_panel_img'><a href='".$_CONFIG['url']."/"<?= $_POST['activity_url_name'] ?>"' title='activity : <?= $_POST['activity_name'] ?>'><img src='<?= $_POST['activity_img_url'] ?>' alt='<?= $_POST['activity_name'] ?>' width='140' height='100' border=0></a></div>
-		<? }  ?>
-		<a class='activity_panel_title' href='".$_CONFIG['url']."/"<?= $_POST['activity_url_name'] ?>"' title='activity : <?= $_POST['activity_name'] ?>'><?= $_POST['activity_name'] ?></a><br />
-		<p class='activity_panel_desc'><?= $_POST['activity_desc'] ?></p>
+</form>
+
+
+<form enctype="multipart/form-data" name="edit_website" id="edit_website" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
+
+<div class="row">
+
+    <h2>Activity Admin</h2>
+   	<div class="row">
+		<?= $oActivity->GetDDList(); ?><br />
+	</div>
+	<div class="row my-3">
+		<div class="col-3">
+    		Edit<input type="radio" name="activity_admin" value="edit_activity" checked/>
+    		Delete<input type="radio" name="activity_admin" value="delete_activity" />
 		</div>
-	</div><!-- end box item -->
-	<? } ?>
+	</div> 	
+
+	<div class="row my-3">
+	<div class="col-3">		
+		<button class="btn btn-primary rounded-pill px-3" type="submit" name="admin_activity" value="go">submit</button>
+	</div>
+	</div>
+
+</div>
+
 
 	
-	</div> <!--  end container -->
+</div>
+</div>
 
 <? 
-} else {
-	print "<div class='msgtext'>ERROR : Only admin is permitted to manage websites.  Are you logged in as admin?</div>";
 }
 ?>
 
-</form>
 <?
 print $oFooter->Render();
 ?>

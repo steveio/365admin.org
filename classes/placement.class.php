@@ -315,7 +315,7 @@ class Placement {
 
 		$aResult = $this->db->getRows();
 
-		$s = "<select name='placement_list' class='ddlist'>";
+		$s = "<select name='placement_list' class='form-select'>";
 		$s .= "<option value=NULL>-- select --</option>";
 		$s .= "<option value=ALL>All Placements</option>";
 		foreach ($aResult as $aRow) {

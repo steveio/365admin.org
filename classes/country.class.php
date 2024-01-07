@@ -414,7 +414,7 @@ class Country {
 
 		$result = $db->getRows();
 
-		$s = "<select name='".$name."' class='ddlist'>";
+		$s = "<select name='".$name."' class='form-select'>";
 		$s .= "<option value='NULL'>select</option>";
 		if(is_array($result)) {
 			foreach($result as $row) {

@@ -954,7 +954,7 @@ class PlacementProfile extends AbstractProfile {
 
 		$aResult = $db->getRows();
 
-		$s = "<select id='placement_id' name='placement_id' class='ddlist'>";
+		$s = "<select id='placement_id' name='placement_id' class='form-select'>";
 		$s .= "<option value='NULL'></option>";
 		if (is_array($aResult)) {
 			foreach ($aResult as $aRow) {

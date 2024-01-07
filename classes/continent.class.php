@@ -209,7 +209,7 @@ class Continent {
 		
 		}
 		$result = $db->getRows();
-		$s = "<select name='".$name."' class='ddlist' onchange=\"".$onchange."\">";
+		$s = "<select name='".$name."' class='form-select' onchange=\"".$onchange."\">";
 		$s .= "<option value='NULL'>select</option>";
 		if (is_array($result)) {
 			foreach($result as $row) {
