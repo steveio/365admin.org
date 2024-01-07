@@ -26,10 +26,6 @@ $oJsInclude->SetSrc("/includes/js/jquery/plugins/jquery.cookie.js");
 $oHeader->SetJsInclude($oJsInclude);
 
 $oJsInclude = new JsInclude();
-$oJsInclude->SetSrc("/includes/js/jquery/plugins/jquery.cookie.js");
-$oHeader->SetJsInclude($oJsInclude);
-
-$oJsInclude = new JsInclude();
 $oJsInclude->SetSrc("/includes/js/datatables/js/jquery.dataTables.min.js");
 $oHeader->SetJsInclude($oJsInclude);
 

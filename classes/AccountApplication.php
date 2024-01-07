@@ -237,7 +237,7 @@ class AccountApplication {
 				AND a.country = cty.id  
 				ORDER BY 
 					a.apply_date DESC
-				LIMIT 20
+				LIMIT 30
 					";
 		
 		$db->query($sql);

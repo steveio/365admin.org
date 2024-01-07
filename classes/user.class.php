@@ -193,7 +193,7 @@ class User {
 
 		$this->db->query("SELECT * FROM euser WHERE company_id = $company_id ORDER by uname asc");
 
-		$s = "<table cellpadding='2' cellspacing='4' border='0'>";
+		$s = "<table id='report' class='table table-striped' cellpadding='2' cellspacing='4' border='0'>";
 		$s .= "<tr><td colspan='3'>User Count : ".$this->db->getNumRows()."</td></tr>"; 
 		$s .= "<tr><td>&nbsp;</td><td>Name</td><td>User</td><td>Email</td>";
 		if ($oAuth->oUser->isAdmin) {

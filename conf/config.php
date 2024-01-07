@@ -9,7 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
 date_default_timezone_set('Europe/London');
 
 // db connection... (@todo - move into $_CONFIG for consistancy)
-$dsn = array("dbhost" => "localhost","dbuser" => "oneworld365_pgsql", "dbpass" => "tH3a1LAn6iA","dbname" => "oneworld365","dbport" => "5432");
+$dsn = array("dbhost" => "localhost","dbuser" => "oneworld365_pgsql", "dbpass" => "bra@zi1","dbname" => "oneworld365","dbport" => "5432");
 
 $solr_config = array(
     'adapteroptions' => array(
@@ -28,7 +28,7 @@ define('TEST_EMAIL','steveedwards01@yahoo.co.uk');
 
 /* 0 = none, 1 = error, 2 = debug, 3 = verbose debug */
 define('LOG_PATH',"/www/vhosts/365admin.org/logs/oneworld365_debug.log");
-define('LOG_LEVEL',2);
+define('LOG_LEVEL',3);
 
 define('BASE_PATH','/www/vhosts/365admin.org/htdocs');
 define('ROOT_PATH',BASE_PATH); // required for some classes
