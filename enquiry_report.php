@@ -112,60 +112,79 @@ print $oHeader->Render();
 
 ?>
 
-<!-- BEGIN Page Content Container -->
-<div class="page_content content-wrap clear">
-<div class="row pad-tbl clear">
+<div class="container">
+<div class="align-items-center justify-content-center">
 
 
 <form enctype="multipart/form-data" name="process_enquiry" id="process_enquiry" action="" method="POST">
 
-<label for="daterange">Date range:</label>
-<input type="text" name="daterange" value="<?= $strDateRange; ?>" />
+<div class="row my-3">
 
-<label for="daterange">By Status:</label>
-<select id="" name="report_status">
-	<option value="ALL">ALL</option>
-	<option value="0" <?= ($_REQUEST['report_status'] == "0") ? "selected" : ""; ?>>PENDING</option>
-	<option value="1" <?= ($_REQUEST['report_status'] == "1") ? "selected" : ""; ?>>APPROVED</option>
-	<option value="2"<?= ($_REQUEST['report_status'] == "2") ? "selected" : ""; ?>>SENT</option>
-	<option value="3"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>REJECTED</option>
-	<option value="4"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>FAILED</option>
-</select>
+	<div class="col-6">
+		<label for="daterange">Date range:</label>
+	    <input type="text" name="daterange" value="<?= $strDateRange; ?>" />
+	</div>
 
-<? if ($oAuth->oUser->isAdmin) {  ?>
-	<label for="daterange">By Company:</label><?= $d['company_select_ddlist']; ?>
-<? } ?>
+	<div class="col-6">
+        <label for="daterange">By Status:</label>
+        <select id="" name="report_status">
+        	<option value="ALL">ALL</option>
+        	<option value="0" <?= ($_REQUEST['report_status'] == "0") ? "selected" : ""; ?>>PENDING</option>
+        	<option value="1" <?= ($_REQUEST['report_status'] == "1") ? "selected" : ""; ?>>APPROVED</option>
+        	<option value="2"<?= ($_REQUEST['report_status'] == "2") ? "selected" : ""; ?>>SENT</option>
+        	<option value="3"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>REJECTED</option>
+        	<option value="4"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>FAILED</option>
+        </select>
+	</div>	
+</div>
 
-<input type="submit" name="report_filter" value="go" onClick="this.form.submit()" />
+<div class="row my-3">
+	<div class="col-8">
+    <? if ($oAuth->oUser->isAdmin) {  ?>
+    	<label for="daterange">By Company:</label><?= $d['company_select_ddlist']; ?>
+    <? } ?>
+    </div>
+</div>
 
+<button class="btn btn-primary rounded-pill px-3" type="button" name="report_filter" value="go" onClick="this.form.submit()">submit</button>
+
+
+
+</div>
 	
 <? if (strlen($strMessage) >= 1) { ?>
-    <div style="font-weight: bold; margin: 20px 0px 20px 0px;">
+    <div class="alert alert-success" role="alert">
     <h3><img src="/images/icon_green_tick.png" border="0" /><?= $strMessage; ?></h3>
     </div>
 <?php } ?>
 
 
-<div class="span12">
+<div class="row my-3">
 
 <h1>Enquiry Report</h1>
 
+</div>
+
+<div class="row">
 <div style="clear: both;">
-<div style="float: right; margin-bottom: 20px;">
-		<select name="bulk_action">
-			<option value="">select</option>
-			<option value="approve">approve selected</option>
-			<option value="reject">reject selected</option>
-		</select>
-		<input type="button" name="go_batch" value="go" onClick="this.form.submit()" />
+    <div style="float: right;">
+    		<select name="bulk_action">
+    			<option value="">select</option>
+    			<option value="approve">approve selected</option>
+    			<option value="reject">reject selected</option>
+    		</select>
+    		<input type="button" name="go_batch" value="go" onClick="this.form.submit()" />
+    </div>
 </div>
 </div>
 
 
-<table id="report" class="display" cellspacing="2" cellpadding="4" border="0">	
+<div class="row my-3">
+
+
+<table id="report" class="display" cellspacing="2" cellpadding="4" border="0" class="table table-striped">	
 
 <thead>
-
 <tr>
 	<th>date</th>
 	<th>type</th>
@@ -242,15 +261,13 @@ $(document).ready(function() {
 
     $('#report').DataTable({
     	"pageLength": 100,
-    	"bSort" : false
+    	"bSort" : true
     });
 
 });
 
 </script>
 
-
-</form>
 
 </div>
 </div>
