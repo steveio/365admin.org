@@ -20,7 +20,7 @@
 
 <div class='row my-3'>
 
-	<h1>Search</h1>
+	<h2>Search</h2>
 
 	<div class="col">
 

@@ -10,22 +10,27 @@ body {
     padding: 0;
 }
 
+
 body * {
 	line-height:1.22em;
 }
 
 .red	{ color:red; }
 .grey { color: #016799; }
+.orange { #DD6900; } 
+.blue { color: #016799; }
 
 .p_small {
   font-style: italic;
 }
+
 
 h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
 	font-size: 1.4em;
+	color: #DD6900;
 }
 
 h2 {

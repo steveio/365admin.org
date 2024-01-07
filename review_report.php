@@ -81,6 +81,9 @@ print $oHeader->Render();
 <div class="container">
 <div class="align-items-center justify-content-center">
 
+<h1>Reviews</h1>
+
+
 <form name="report_filter" enctype="multipart/form-data" action="" method="POST">
 
 <div class="row my-3">
@@ -106,15 +109,10 @@ print $oHeader->Render();
 	
 <? if (strlen($strMessage) >= 1) { ?>
     <div class="alert alert-success" role="alert">
-    <h3><img src="/images/icon_green_tick.png" border="0" /><?= $strMessage; ?></h3>
+    <?= $strMessage; ?>
     </div>
 <?php } ?>
 
-<div class="row my-3">
-
-<h1>Reviews</h1>
-
-</div>
 
 <div class="row">
 <div style="clear: both;">
