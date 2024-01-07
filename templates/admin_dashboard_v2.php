@@ -20,19 +20,23 @@
 
 <div class='row my-3'>
 
-	<h2>Search</h2>
-
-	<div class="col">
-
-		Url or Keywords:
+	<div class="row my-3">
+		Search Url:
 		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
-		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI('<?= $_CONFIG['url'] ?>','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
-		Projects <input type="checkbox" id="search_exact" name="filter_project" />
-		Orgs <input type="checkbox" id="search_exact" name="filter_org" />		
+	</row>
+	<div class="row">
+		<div class="col-3 my-3">
+			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI('<?= $_CONFIG['url'] ?>','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
+		</div>
+		<!-- 
+		<div class="col-3">
+    		Projects <input type="checkbox" id="search_exact" name="filter_project" />
+    		Orgs <input type="checkbox" id="search_exact" name="filter_org" />
+    	</div>
+    	 -->		
 		<ul>
 			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/%hong-kong%  OR /company/camp%  OR /company/placement/%ski%"</i></span></li>
 		</ul>
-
 	</div>
 </div>
 

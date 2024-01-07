@@ -321,7 +321,7 @@ class Content  implements TemplateInterface {
 	public function GetLastIndexedSolr() {
 		return $this->last_indexed_solr;
 	}
-
+	
 
 	/*
 	 * Return relative to the website being viewed
@@ -331,14 +331,13 @@ class Content  implements TemplateInterface {
 		
 		if (strlen($this->url) < 1) $this->SetUrl();
 		
-		return $this->url;
-				
+		return $this->url;				
 	}
 	
 	public function SetUrl() {
 		
 		global $_CONFIG;
-		
+
 		if (!is_numeric($_CONFIG['site_id'])) return "";
 		
 		/*
@@ -350,15 +349,20 @@ class Content  implements TemplateInterface {
 		
 		$aMapping = $this->GetMappingBySiteId($_CONFIG['site_id']);
 	
-		if (count($aMapping) < 1) return $this->url = $defaultUrl;
+		if (count($aMapping) < 1) {
+		    $this->url = $defaultUrl;
+		}
 		
 		$oMapping = $aMapping[0]; /* pick the first publish mapping associated with the site being viewed */ 
 		
-		if (!is_object($oMapping)) return $this->url = $defaultUrl;
+		if (!is_object($oMapping)) {
+		    $this->url = $defaultUrl;
+		}
 		
 		$this->url = $oMapping->GetUrl();
 		$this->section_uri = $oMapping->GetSectionUri();
 		
+		return $this->url;
 	}
 
 	public function GetRelativeUrl()
@@ -1018,40 +1022,34 @@ class Content  implements TemplateInterface {
 	
 
 	public function Publish($aRequest,&$response) {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
-		$aWebsiteId = Mapping::GetIdByKey($aRequest,"web_");
+			
+	    global $aResponse;
+
+		$iWebsiteId = 0; // default to oneworld365.org, no longer multisite
 		$aDisplayOptions = Mapping::GetIdByKey($aRequest,"opt_");
 		
-		
-		if (count($aWebsiteId) < 1) {
-			$response['website_id'] = "ERROR : You must select one or more websites";
-			return false;
-		}
-		
+
 		$sSectionUri = trim($aRequest['section_uri']);
-		if (!preg_match("/^[\/]{1}/",$sSectionUri)) $sSectionUri = "/".$sSectionUri;
 		
 		if (strlen(trim($sSectionUri)) < 1) {
-			$response['section_uri'] = "ERROR : You must specify a valid section uri (eg /activity/animals)";
-			return false;
+		    $aResponse['msg'] = "ERROR : You must specify a valid relative uri (eg /activity/animals)";
+		    return false;
 		}
+
+		if (!preg_match("/^[\/]{1}/",$sSectionUri)) $sSectionUri = "/".$sSectionUri;
+		
 		
 		//if (DEBUG) Logger::Msg($aWebsiteId);
 		//if (DEBUG) Logger::Msg($sSectionUri);
 		
 		$aMapping = array();
 		
-		foreach($aWebsiteId as $id) {
-			$aMapping[] = array($id => $sSectionUri);
-		}
+		$aMapping[] = array($iWebsiteId => $sSectionUri);
 				
 		if (!$this->Map($aMapping,$bDeleteExisting = false,$response)) return false;
 		
 		
 		/* update cached pages for all pages on which this article is being published */
-		
 		
 		$this->SetMapping();
 		$aMapping = $this->GetMapping();
@@ -1548,8 +1546,7 @@ class ContentMapping {
 	
 	public function GetUrl() {
 		global $_CONFIG;
-                return "http://www.".$this->GetLabel();
-
+		return $_CONFIG['url'].$this->GetLabel();
 	}
 	
 	

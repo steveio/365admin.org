@@ -58,16 +58,17 @@ function ArticleMapOptions(mid) {
 	$.post(url, { mid: mid, opts: opts, q: q, pt: pt, ot: ot, nt: nt, pi: pi, oi: oi }, 
 		function(data){
 	
-			$('#msgtext').html(data.msg);
+			$('#alert-msg').show();
+			$('#alert-msg').html(data.msg);
+
+			setTimeout(function () {
+                $('#alert-msg').fadeOut('fast');
+            }, 5000);
+
 			return false;
 		
 	}, "json");
 	
-
-	//$.getJSON(url, pars, function(data){
-	//	$('#msgtext').html(data.msg);
-	//	return false;	
-	//});
 		
 	return false;
 }

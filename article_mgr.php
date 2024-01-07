@@ -54,39 +54,36 @@ print $oHeader->Render();
 ?>
 
 
-<!-- BEGIN Page Content Container -->
 <div class="container">
 <div class="align-items-center justify-content-center">
 
 
-
-<div id="msgtext" class="col-12" style="color: red; font-size: 10px;">
-<?= AppError::GetErrorHtml($aResponse['msg']);  ?>
+<? if (isset($response['msg']) && strlen($response['msg']) >= 1) { ?>
+<div id="msgtext" class="alert alert-warning" role="alert">
+<?= $response['msg'];  ?>
 </div>
-
+<? } ?>
 
 <form enctype="multipart/form-data" name="linkadmin" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
-
-
 <div class='row'>
 
-	<h1>Content Manager</h1>
+	<h1>Article Manager</h1>
 
-	<div class="col">
+	<div class="row my-3">
+		<div class="col-8">
+    		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
+		</div>
 
-		Url:
-		<input type="text" id="search_phrase" style="width: 350px;" value="<?= $_REQUEST['filter_uri'] ?>" />
-
-		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: ArticleSearch('<?= $_CONFIG['url'] ?>','search','','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
-
-
-		Exact? <input type="checkbox" id="search_exact" name="search_exact" />
-
+		<div class="col-4">
+    		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: ArticleSearch('<?= $_CONFIG['url'] ?>','search','','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
+    		Exact? <input type="checkbox" id="search_exact" name="search_exact" />
+		</div>
+	</div>	
+	<div class="row">
 		<ul>
 			<li>Patterns: <span class="p_small">"%" = all  OR  "%africa" = contains "africa" OR  "/activity/animals" OR "UNPUBLISHED" = new articles</i></span></li>
 		</ul>
-
 	</div>
 
 </div>
@@ -99,7 +96,7 @@ print $oHeader->Render();
 <div class="row">
 	<div class="col">
 		<span class="">
-			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: window.location = './article-editor'; return false;">New Article</button>
+			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = './article-editor'; return false;">New Article</button>
 		</span>
 	</div>
 </div>
