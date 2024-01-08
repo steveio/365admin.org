@@ -38,6 +38,7 @@ $aResponse['msg'] = "";
 
 $exp = $_GET['exp'];
 $template = $_GET['t'];
+$match = $_GET['match'];
 
 
 // Validate Input Params
@@ -53,18 +54,21 @@ if (!file_exists("./templates/".$template)) {
     $aResponse['msg'] = "ERROR : Invalid template";
     sendResponse($aResponse);
 }
+if(!is_numeric($match)) {
+    $aResponse['msg'] = "ERROR : Invalid match param";
+    sendResponse($aResponse);
+}
 
-
-Logger::DB(2,basename(__FILE__)." exp:".$exp.", t: ".$template);
+Logger::DB(2,basename(__FILE__)." exp:".$exp.", t: ".$template." match: ".$match);
 
 
 if (preg_match("/^\//",$exp))
 {
-    uriSearch($exp);    
+    uriSearch($exp, $match);    
 } 
 
 
-function uriSearch($uri)
+function uriSearch($uri, $match)
 {
     global $db, $aBrandConfig;
     
@@ -182,6 +186,10 @@ function uriSearch($uri)
         $template = "article_search_result_list_03.php";
         
         $oArticleCollection = new ArticleCollection();
+        
+        if ($match == ARTICLE_SEARCH_MODE_EXACT) {
+            $oArticleCollection->SetSearchMode(ARTICLE_SEARCH_MODE_EXACT);
+        }
 
         $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished = false);
         

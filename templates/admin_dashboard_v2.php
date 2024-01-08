@@ -27,6 +27,9 @@
 	<div class="row">
 		<div class="col-3 my-3">
 			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI('<?= $_CONFIG['url'] ?>','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
+			
+    		Exact? <input type="checkbox" id="search_exact" name="search_exact" />
+			
 		</div>
 		<!-- 
 		<div class="col-3">

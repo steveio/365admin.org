@@ -113,8 +113,13 @@ function SearchAPI(baseURL, template) {
 
 	$('#spinner').show();
 
+	var match = 0; /* default = fuzzy "like" matching */
+	if ($('#search_exact').is(':checked')) {
+		match = 1; /* exact "=" equal matching */
+	}
+	
     var url = baseURL +"/searchAPI_ajax.php";
-    var pars = '&exp='+exp+'&t='+template;
+    var pars = '&exp='+exp+'&t='+template+'&match='+match;
 
 	$.getJSON(url, pars, function(data){
 
