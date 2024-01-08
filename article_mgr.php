@@ -93,6 +93,11 @@ print $oHeader->Render();
 	<div id="article_search_result"></div>
 </div>
 
+<div id="spinner" style="display: none;">
+	<img src="/images/loading_triangles.gif" alt="loading..." />
+</div>
+
+
 <div class="row">
 	<div class="col">
 		<span class="">
