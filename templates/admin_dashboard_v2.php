@@ -25,11 +25,21 @@
 		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
 	</row>
 	<div class="row">
-		<div class="col-3 my-3">
+		<div class="col-1 my-3">
 			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI('<?= $_CONFIG['url'] ?>','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
-			
+		</div>
+		<div class="col-1 my-3">
     		Exact? <input type="checkbox" id="search_exact" name="search_exact" />
-			
+		</div>
+		<div class="col-3 my-3">
+		<?php 
+		$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 month"))." - ".date("d-m-Y");
+		?>
+        	<div class="col-6">
+        		<label for="daterange">Date range:</label>
+        		<input type="checkbox" id="filter_date" name="filter_date" />
+        	    <input type="text" id="daterange" name="daterange" value="<?= $strDateRange; ?>" />
+        	</div>
 		</div>
 		<!-- 
 		<div class="col-3">
@@ -38,7 +48,7 @@
     	</div>
     	 -->		
 		<ul>
-			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/%hong-kong%  OR /company/camp%  OR /company/placement/%ski%"</i></span></li>
+			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/%hong-kong%  OR /company/camp%  OR /company/placement/%ski%" OR UNPUBLISHED</i></span></li>
 		</ul>
 	</div>
 </div>
@@ -52,6 +62,25 @@
 <div id="spinner" style="display: none;">
 	<img src="/images/loading_triangles.gif" alt="loading..." />
 </div>
+
+<script>
+
+$(document).ready(function() {
+
+    $(function() {
+      $('input[name="daterange"]').daterangepicker({
+        opens: 'left',
+        locale: {
+            format: 'DD-MM-YYYY'
+        }
+      }, function(start, end, label) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+      });
+    });
+
+});
+
+</script>
 
 
 </div>

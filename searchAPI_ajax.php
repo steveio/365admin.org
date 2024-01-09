@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Search API AJAX - an endpoint for searching / retrieving profiles (companies / placements) & articles
  * 
@@ -39,6 +38,9 @@ $aResponse['msg'] = "";
 $exp = $_GET['exp'];
 $template = $_GET['t'];
 $match = $_GET['match'];
+$filterDate = $_GET['filterDate'];
+$fromDate = $_GET['fromDate'];
+$toDate = $_GET['toDate'];
 
 
 // Validate Input Params
@@ -62,13 +64,13 @@ if(!is_numeric($match)) {
 Logger::DB(2,basename(__FILE__)." exp:".$exp.", t: ".$template." match: ".$match);
 
 
-if (preg_match("/^\//",$exp))
+if (preg_match("/^\//",$exp) || $exp = "UNPUBLISHED")
 {
-    uriSearch($exp, $match);    
+    uriSearch($exp, $match, $filterDate, $fromDate, $toDate);
 } 
 
 
-function uriSearch($uri, $match)
+function uriSearch($uri, $match, $filterDate, $fromDate, $toDate)
 {
     global $db, $aBrandConfig;
     
@@ -184,6 +186,8 @@ function uriSearch($uri, $match)
     } else { // article search
 
         $template = "article_search_result_list_03.php";
+
+        $bUnpublished = ($uri == "UNPUBLISHED") ? true : false;
         
         $oArticleCollection = new ArticleCollection();
         
@@ -191,7 +195,7 @@ function uriSearch($uri, $match)
             $oArticleCollection->SetSearchMode(ARTICLE_SEARCH_MODE_EXACT);
         }
 
-        $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished = false);
+        $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished, $filterDate, $fromDate, $toDate);
         
         if ($oArticleCollection->Count() < 1) {
             $aResponse['msg'] = "No articles found matching uri: ".$uri."<br />Try again with a pattern match eg %".$uri;

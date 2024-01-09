@@ -108,18 +108,31 @@ function SearchAPI(baseURL, template) {
         return false;
     }
 
-	$('#search_msg').html('');
-	$('#search_result').html('');
-
-	$('#spinner').show();
-
 	var match = 0; /* default = fuzzy "like" matching */
 	if ($('#search_exact').is(':checked')) {
 		match = 1; /* exact "=" equal matching */
 	}
 	
+	var filterDate = 0;
+	var fromDate;
+	var toDate;
+
+	if ($('#filter_date').is(':checked')) {
+		filterDate = 1;
+		var daterangestr = $('#daterange').val();
+		const myDateArray = daterangestr.split(" - ");
+		fromDate = myDateArray[0];
+		toDate = myDateArray[1];
+	}
+
+	$('#search_msg').html('');
+	$('#search_result').html('');
+
+	$('#spinner').show();
+
+
     var url = baseURL +"/searchAPI_ajax.php";
-    var pars = '&exp='+exp+'&t='+template+'&match='+match;
+    var pars = '&exp='+exp+'&t='+template+'&match='+match+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
 
 	$.getJSON(url, pars, function(data){
 

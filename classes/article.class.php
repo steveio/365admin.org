@@ -350,7 +350,7 @@ class Content  implements TemplateInterface {
 		$aMapping = $this->GetMappingBySiteId($_CONFIG['site_id']);
 	
 		if (count($aMapping) < 1) {
-		    $this->url = $defaultUrl;
+		    return $this->url = $defaultUrl;
 		}
 		
 		$oMapping = $aMapping[0]; /* pick the first publish mapping associated with the site being viewed */ 
@@ -1707,9 +1707,7 @@ class ArticleCollection implements TemplateInterface  {
 	 *  By default articles are ordered by date DESC (ie most recent)
 	 * 
 	 */	
-	public function GetBySectionId($website_id,$sSectionUri,$getAttachedObj = true,$bUnPublished = false) {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
+	public function GetBySectionId($website_id,$sSectionUri,$getAttachedObj = true,$bUnPublished = false, $filterDate = false, $dateFrom = '', $dateTo = '') {
 
 		global $db;
 		
@@ -1727,15 +1725,23 @@ class ArticleCollection implements TemplateInterface  {
 			$scope_sql = "AND m.section_uri = '".$sSectionUri."'";
 		}
 
+		$sqlDateConstraint = "";
+
+		if ($filterDate == 1)
+		{
+		    $sqlDateConstraint = " AND a.last_updated >= '".$dateFrom ."' AND a.last_updated <= '".$dateTo."' ";
+		}
+		 
+		
 		if ($bUnPublished) {
-			
-			$db->query("select 
-							a.* 
-						from 
-							".DB__ARTICLE_TBL." a 
-						where not exists (
-							select 1 from ".DB__ARTICLE_MAP_TBL." m where a.id = m.article_id) 
-						ORDER BY a.published_date ASC;");			
+
+		    $sql = "select 
+        		    a.*
+        		    from
+        		    ".DB__ARTICLE_TBL." a
+        		    where not exists ( select 1 from ".DB__ARTICLE_MAP_TBL." m where a.id = m.article_id)
+        		        ".$sqlDateConstraint."
+        		        ORDER BY a.published_date ASC;";
 
 		} else {
 		
@@ -1750,17 +1756,14 @@ class ArticleCollection implements TemplateInterface  {
 					WHERE 
 						1=1
 						".$sWhere."
-					        ".$scope_sql." 	
+				        ".$scope_sql." 	
 						AND m.article_id = a.id
+                        ".$sqlDateConstraint."
 					ORDER BY 
 						a.published_date ASC;";
 		
-			
-			$db->query($sql);
-		
 		}
 
-		if (DEBUG) Logger::Msg("Found ".$db->getNumRows()." article(s).");
 		$db->query($sql);
 		
 		if ($db->getNumRows() < 1) return array();
@@ -1771,6 +1774,7 @@ class ArticleCollection implements TemplateInterface  {
 			$oArticle->SetFromArray($a);
 			$oArticle->SetMapping();
 			$oArticle->SetUrl();
+
 			if ($getAttachedObj) {
 				$oArticle->SetAttachedProfile();
 				$oArticle->SetAttachedImage();
@@ -1782,7 +1786,6 @@ class ArticleCollection implements TemplateInterface  {
 		}
 				
 		return $this->aArticle;
-
 	}
 	
 	public function GetSubSectionArticleDetails($iWebsiteId, $sSectionUri) {
