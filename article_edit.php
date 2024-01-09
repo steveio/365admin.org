@@ -490,7 +490,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 		<td align="right" width="800px">
 		From:
 		<input type="text" id="search_phrase" style="width: 150px;" value="<?= $_REQUEST['filter_uri'] ?>" />
-		<input type="submit" onclick="javascript: ArticleSearch('<?= $_CONFIG['url'] ?>','search',<?= $oArticle->GetId()  ?>,'article_search_result_list_01.php'); return false;" name="article_search" value="Search" />
+		<input type="submit" onclick="javascript: ArticleSearch('search',<?= $oArticle->GetId()  ?>,'article_search_result_list_01.php'); return false;" name="article_search" value="Search" />
 		</td>
 	</tr>
 	<tr>

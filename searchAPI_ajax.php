@@ -36,7 +36,6 @@ $aResponse['retVal'] = false;
 $aResponse['msg'] = "";
 
 $exp = $_GET['exp'];
-$template = $_GET['t'];
 $match = $_GET['match'];
 $filterDate = $_GET['filterDate'];
 $fromDate = $_GET['fromDate'];
@@ -51,10 +50,6 @@ if (preg_match("/[^a-zA-Z0-9\/ _\-\%]/",$exp)) {
 if (preg_match("/[^a-zA-Z0-9\/ _\-\%\.]/",$template)) {
 	$aResponse['msg'] = "ERROR : Invalid template name";
 	sendResponse($aResponse);
-}
-if (!file_exists("./templates/".$template)) {
-    $aResponse['msg'] = "ERROR : Invalid template";
-    sendResponse($aResponse);
 }
 if(!is_numeric($match)) {
     $aResponse['msg'] = "ERROR : Invalid match param";
@@ -202,8 +197,6 @@ function uriSearch($uri, $match, $filterDate, $fromDate, $toDate)
             sendResponse($aResponse);
         }
 
-        //Logger::DB(2,basename(__FILE__)." res: ".serialize($oArticleCollection->Get()));
-        
         $oArticleCollection->LoadTemplate($template);
         
         $aResponse['retVal'] = true;

@@ -99,7 +99,7 @@ function ArticleDeattach(url,pid,aid) {
  * 
  * @param string path to PHP file in /templates 
  */
-function SearchAPI(baseURL, template) {
+function SearchAPI() {
 
     var exp = escapePercent(document.getElementById('search_phrase').value);
 
@@ -131,8 +131,8 @@ function SearchAPI(baseURL, template) {
 	$('#spinner').show();
 
 
-    var url = baseURL +"/searchAPI_ajax.php";
-    var pars = '&exp='+exp+'&t='+template+'&match='+match+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
+    var url = "/searchAPI_ajax.php";
+    var pars = '&exp='+exp+'&match='+match+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
 
 	$.getJSON(url, pars, function(data){
 
@@ -153,7 +153,7 @@ function SearchAPI(baseURL, template) {
     return false;
 }
 
-function ArticleSearch(url,mode,aid,template) {
+function ArticleSearch(mode,aid,template) {
 
     var uri = escapePercent(document.getElementById('search_phrase').value);
 
@@ -186,7 +186,7 @@ function ArticleSearch(url,mode,aid,template) {
 		match = 1; /* exact "=" equal matching */
 	}
         
-    var url = url +"/article_search_ajax.php";
+    var url = "/article_search_ajax.php";
     var pars = '&m='+mode+'&uri='+uri+'&aid='+aid+'&r='+search_recursive+'&t='+template+'&match='+match+'&wid='+wid;
 
 	$.getJSON(url, pars, function(data){

@@ -76,7 +76,7 @@ print $oHeader->Render();
 		</div>
 
 		<div class="col-4">
-    		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: ArticleSearch('<?= $_CONFIG['url'] ?>','search','','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
+    		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: ArticleSearch('search','','article_search_result_list_03.php'); return false;" name="article_search">Search</button>
     		Exact? <input type="checkbox" id="search_exact" name="search_exact" />
 		</div>
 	</div>	
