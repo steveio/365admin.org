@@ -182,8 +182,6 @@ if (isset($_REQUEST['save'])) {
 	}
 
 
-
-
 }
 
 if(($mode == "EDIT") || ($mode == "ADD")) {
@@ -207,7 +205,6 @@ $sPlacementDDList = "<select id='placement_id' disabled><option value='NULL'>sel
 
 
 
-//Logger::Msg($oArticle);
 
 
 print $oHeader->Render();
@@ -219,8 +216,7 @@ print $oHeader->Render();
 
 <?
 if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
-    if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
-    ?>
+?>
 <div class="alert alert-<?= $alert; ?>" role="alert">
     <?= $aResponse['msg'];  ?>
 </div>
