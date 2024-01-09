@@ -1037,31 +1037,33 @@ class Content  implements TemplateInterface {
 		}
 
 		if (!preg_match("/^[\/]{1}/",$sSectionUri)) $sSectionUri = "/".$sSectionUri;
-		
-		
-		//if (DEBUG) Logger::Msg($aWebsiteId);
-		//if (DEBUG) Logger::Msg($sSectionUri);
-		
+				
 		$aMapping = array();
 		
 		$aMapping[] = array($iWebsiteId => $sSectionUri);
 				
-		if (!$this->Map($aMapping,$bDeleteExisting = false,$response)) return false;
-		
+		if (!$this->Map($aMapping,$bDeleteExisting = true,$response)) 
+		{
+		    return false;
+		}
+
 		
 		/* update cached pages for all pages on which this article is being published */
 		
 		$this->SetMapping();
-		$aMapping = $this->GetMapping();
+		$aWebsiteMapping = $this->GetMapping();
 		
-		if (count($aMapping) < 1) return true; /* not published, we are done */ 
+		if (count($aWebsiteMapping) < 1) return true; /* not published, we are done */ 
 		
-		foreach($aMapping as $oMapping) {
+		foreach($aWebsiteMapping as $oMapping) {
 			$oMapping->SetCacheUpdate(); /* re-generate the cached version of the page */
 		}
 
 		unset($this->aMapping);
 		
+		$aResponse['msg'] = "SUCCESS : Published article to ".implode(", ", $aMapping[0]);
+		$aResponse['status'] = "success";
+
 		return true;
 	}
 	
@@ -1217,22 +1219,26 @@ class Content  implements TemplateInterface {
 	 */
 	public function Map($aMapping,$bDeleteExisting = true,&$aResponse) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
 		global $db;
 
 		if ($bDeleteExisting) {
 			$this->MapDelete();
 		}
-
+		
 		$bError = false;
 		
 		for($i=0;$i<count($aMapping); $i++) {
 			foreach($aMapping[$i] as $iWebsiteId => $sSectionUri) {
 
-				if (!$this->MapExists($iWebsiteId,$sSectionUri,$aResponse)) {
+			    if (!$this->MapExists($iWebsiteId,$sSectionUri)) {
 					$db->query("INSERT INTO ".DB__ARTICLE_MAP_TBL." (article_id,website_id,section_uri) VALUES (".$this->GetId().",".$iWebsiteId.",'".$sSectionUri."');");
-				} else {
+					
+					if ($db->getAffectedRows() != 1)
+					{
+					   die("affected rows");
+					   $bError = true;
+					}
+			    } else {
 					$bError = true;
 				}
 			}
@@ -1244,23 +1250,25 @@ class Content  implements TemplateInterface {
 		
 	}
 
-	public function MapExists($iWebsiteId,$sSectionUri,&$aResponse) {
+	public function MapExists($iWebsiteId = 0,$sSectionUri) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
-		global $db;
+		global $db, $aResponse;
 		
-		$db->query("SELECT a.title FROM ".DB__ARTICLE_MAP_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.article_id = a.id AND m.website_id = ".$iWebsiteId." AND m.section_uri = '".$sSectionUri."'");
+		$db->query("SELECT a.id, a.title, m.section_uri FROM ".DB__ARTICLE_MAP_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.article_id = a.id AND m.website_id = ".$iWebsiteId." AND m.section_uri = '".$sSectionUri."'");
 		
 		if ($db->getNumRows() >= 1) {
 			$i = 0;
 			$aRes = $db->getRows();
+			
+			$aResponse['msg'] .= "ERROR : ";
 			foreach($aRes as $aRow) {
-				$aResponse['map_lock_'.$i++] = "ERROR : Article (".$aRow['title'].") is already published to this location.";
+			    $aResponse['msg'] .= "Article <a href='/article_pub.php?&id=".$aRow['id']."' target=\'_new\' >".$aRow['title']." </a> ( ".$aRow['section_uri']." ) is already published to this location. <br />";
+				$aResponse['status'] = "warning";
 			}
 			return true;
 		}
-		
 	}
 	
 	public function MapDelete() {

@@ -177,6 +177,7 @@ if (isset($_REQUEST['save'])) {
 
 	if ($oArticle->Save($aResponse)) {
 		$aResponse['msg'] = "SUCCESS : Article saved OK";
+		$aResponse['status'] = "success";
 		$_REQUEST['id'] = $oArticle->GetId();
 	}
 
@@ -211,23 +212,19 @@ $sPlacementDDList = "<select id='placement_id' disabled><option value='NULL'>sel
 
 print $oHeader->Render();
 
-
-$aResponse = (isset($aResponse['msg'])) ? $aResponse['msg'] : $aResponse;
-if(is_array($aResponse) && count($aResponse) >= 1) { ?>
-<div id="msgtext" class="alert alert-warning" role="alert">
-<?
-print AppError::GetErrorHtml($aResponse);
 ?>
-</div><?
-} ?>
-
 
 <div class="container">
 <div class="align-items-center justify-content-center">
 
-
-<div>
-<div>
+<?
+if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
+    if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
+    ?>
+<div class="alert alert-<?= $alert; ?>" role="alert">
+    <?= $aResponse['msg'];  ?>
+</div>
+<? } ?>
 
 
 <div class='row'>
@@ -550,11 +547,6 @@ print AppError::GetErrorHtml($aResponse);
 
 
 </div>
-
-</div>
-</div>
-
-
 
 
 </div>

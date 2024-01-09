@@ -37,11 +37,8 @@ if (isset($_REQUEST['publish'])) {
 
 	$oArticle->SetId($_REQUEST['article_id']);
 
-	if ($oArticle->Publish($_REQUEST,$aResponse)) {
-		$aResponse['msg'] = "SUCCESS : Published article to requested location(s)";
-		$aResponse['status'] = "success";
-	}
-	
+	$oArticle->Publish($_REQUEST,$aResponse);
+
 }
 
 
@@ -70,7 +67,7 @@ print $oHeader->Render();
 
 <? 
 if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) { 
-    $alert = (isset($aResponse['status']) && $aResponse['status'] == "success") ? "success" : "warning";
+    $alert = (isset($aResponse['status'])) ? $aResponse['status'] : "warning";
     ?>
 <div class="alert alert-<?= $alert; ?>" role="alert">
     <?= $aResponse['msg'];  ?>
@@ -78,7 +75,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 <? } ?>
 
 
-<form enctype="multipart/form-data" name="edit_article" id="edit_article" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
+<form enctype="multipart/form-data" name="edit_article" id="publish_article" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 <input type="hidden" name="article_id" value="<?= $oArticle->GetId(); ?>" />
 
 
@@ -91,7 +88,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 	<input type="hidden" name="web_0" value="on" />
 
     <div class="row">
-    	<span class="input_col"><input type="text" id="section_uri" class="form-control" name="section_uri" value="" /></span>
+    	<span class="input_col"><input type="text" id="section_uri" class="form-control" name="section_uri" value="<?= $_REQUEST['section_uri'] ?>" /></span>
     </div>
 
     <div class="row my-3">
@@ -101,7 +98,10 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 	</div>
 </div>
 
+</form>
 
+
+<form enctype="multipart/form-data" name="edit_article" id="publish_article" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
 <div class="row my-3">
 
