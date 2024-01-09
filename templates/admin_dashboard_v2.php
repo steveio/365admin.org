@@ -25,28 +25,26 @@
 		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
 	</row>
 	<div class="row">
-		<div class="col-1 my-3">
-			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI(); return false;" name="article_search">Search</button>
-		</div>
-		<div class="col-1 my-3">
+		<div class="col-12">
     		Exact? <input type="checkbox" id="search_exact" name="search_exact" />
-		</div>
-		<div class="col-3 my-3">
 		<?php 
 		$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 month"))." - ".date("d-m-Y");
 		?>
-        	<div class="col-6">
-        		<label for="daterange">Date range:</label>
-        		<input type="checkbox" id="filter_date" name="filter_date" />
+        	<label for="daterange">Date range:</label>
+        	<input type="checkbox" id="filter_date" name="filter_date" />
         	    <input type="text" id="daterange" name="daterange" value="<?= $strDateRange; ?>" />
-        	</div>
 		</div>
 		<!-- 
 		<div class="col-3">
     		Projects <input type="checkbox" id="search_exact" name="filter_project" />
     		Orgs <input type="checkbox" id="search_exact" name="filter_org" />
+		-->
     	</div>
-    	 -->		
+        <div class="row my-3">
+                <div class="col-3">
+                        <button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI(); return false;" name="article_search">Search</button>
+                </div>
+	</div>
 		<ul>
 			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/%hong-kong%  OR /company/camp%  OR /company/placement/%ski%" OR UNPUBLISHED</i></span></li>
 		</ul>
