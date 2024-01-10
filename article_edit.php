@@ -80,11 +80,14 @@ if (isset($_REQUEST['attach_profile'])) {
 
 
 if (isset($_REQUEST['remove_profile'])) {
-	$oArticle->SetId($article_id);
+
+    $oArticle->SetId($article_id);
 	if (is_numeric($_REQUEST['profile_id'])) {
 		 $oArticle->RemoveProfile($_REQUEST,$aResponse);
+		 $aResponse['msg'] = "SUCCESS : Removed attached profile";
+		 $aResponse['status'] = "success";
 	} else {
-		$aResponse['placement_id'] = "ERROR : Please select a placement to remove";
+		$aResponse['msg'] = "ERROR : Please select a placement to remove";
 	}
 }
 
@@ -201,9 +204,15 @@ if(($mode == "EDIT") || ($mode == "ADD")) {
 }
 
 $oCompany = new Company($db);
-$sCompDDList = $oCompany->getCompanyNameDropDown($_REQUEST['company_id'],null,'company_id',true,1,$sOnChange = "javascript: doPlacementListRequest('".$_CONFIG['url']."/placement_list_ajax.php','edit_article','company_id');");
-$sPlacementDDList = "<select id='placement_id' disabled><option value='NULL'>select</option></select>";
-
+$sCompDDList = $oCompany->getCompanyNameDropDown($_REQUEST['company_id'],null,'company_id',true,1,$sOnChangeJS = "this.form.submit();");
+if(isset($_REQUEST['company_id']))
+{
+    $oProfilePlacement = new PlacementProfile();
+    $sPlacementDDList = $oProfilePlacement->GetPlacementDDList($_REQUEST['company_id']);
+} else {
+    $sPlacementDDList = "<select class='form-select' id='placement_id' disabled><option value='NULL'>select</option></select>";
+    
+}
 
 
 
@@ -276,10 +285,6 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 	</span>
 </div>
 
-<div class="row">
-	<span class="input_col"><a href='./article-manager' title='Back to Article Manager'>Back to Article Manager >></a></span>
-</div>
-
 
 
 <div class="row" style="width: 800px;"><hr /></div>
@@ -288,13 +293,12 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 <? if (is_numeric($oArticle->GetId())) { ?>
 
 
-<div class="row" style="width: 400px;">
+<div class="row">
 
-	<div class="row" style="width: 400px;">
-	<h2>Attached Images :</h2>
+	<h2>Attached Images : <?= (count($oArticle->aImage) == 0) ? "0 images attached" : ""; ?></h2>
 	<div id="image_msg"></div>
 
-	<div class="row" style="width: 400px;">
+	<div class="row">
 	<?
 	if (count($oArticle->aImage) >= 1) {
 		foreach($oArticle->aImage as $oImage) {
@@ -312,6 +316,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 
 	<h2>Upload Images :</h2>
 
+	<div class="row">
 		<!-- MULTIPLE FILE UPLOAD -->
 
 		<script type="text/javascript">
@@ -344,7 +349,9 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 		<tbody id="files-root">
 			<tr><td><input type="file" name="file[]" size="30"></td></tr>
 		</table>
-		<input type="submit" name="do_file_upload" value="Upload Image">
+		<div class="col-1 my-3">
+			<input class="btn btn-primary rounded-pill px-3"  type="submit" name="do_file_upload" value="Upload Image">
+		</div>
 
 		<p style="font-size:8pt;">allowed extensions are: <strong>JPG, JPEG PNG, GIF</strong>; max size per file: <strong>5mb</strong>; max number of files per upload <strong><?php echo $max_uploads; ?></strong></p>
 		<?php
@@ -360,46 +367,11 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 		?>
 
 	</div>
-
 </div>
 
 
 
-<div class="row" style="width: 380px; margin-left: 20px;">
-
-	<div class="row" style="width: 400px;">
-	<h2>Attached Links :</h2>
-
-	<div id="link_msg"></div>
-	<div id="link_result">
-	<?= $oArticle->oLinkGroup->Render(); ?>
-	</div>
-
-
-	<h2>Attach a Link :</h2>
-
-	<div id="image_msg"></div>
-
-		<table>
-		<tbody id="links-root">
-			<tr>
-			<td>Url:</td>
-			<td><input type="text" id="link_url" maxlength="255" name="link_url" size="30" value="<?= $_REQUEST['link_url'] ?>"></td>
-			</tr>
-			<td>Label:</td>
-			<td><input type="text" id="link_title" maxlength="127" name="link_title" value="<?= $_REQUEST['link_title'] ?>" size="30"></td>
-			</tr>
-		</table>
-		<input type="submit" onclick="javascript: AttachLink('<?= $_CONFIG['url']; ?>','ARTICLE',<?= $oArticle->GetId() ?>); return false;" name="do_add_link" value="Add Link">
-
-</div>
-
-</div>
-
-	<div class="row" style="width: 800px;"><hr /></div>
-
-
-	<div class="row" style="width: 800px;">
+<div class="row my-3">
 	<h2>Attached Profiles :</h2>
 
 	<?
@@ -414,21 +386,20 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 
 		?>
 		<div class="border" style="float: left; width: 250px;">
-		<div style="float: right; padding-right: 10px;"><a class="p_small" title="Remove Profile" href="<?= $_SERVER['PHP_SELF'] ?>?&id=<?= $oArticle->GetId() ?>&profile_id=<?= $oProfile->GetId() ?>&profile_type=<?= $oProfile->GetType(); ?>&remove_profile=1">[REMOVE]</a></div>
-		<div style="height: 200px;">
-		<?= $oProfile->Render(); ?>
-		</div>
-
+    		<div style="float: right; padding-right: 10px;"><a class="p_small" title="Remove Profile" href="/article-editor/?&id=<?= $oArticle->GetId() ?>&profile_id=<?= $oProfile->GetId() ?>&profile_type=<?= $oProfile->GetType(); ?>&remove_profile=1">[REMOVE]</a></div>
+    		<div style="height: 200px;">
+    		<?= $oProfile->Render(); ?>
+			</div>
 		</div>
 		<?
 	}
 
-	?>
+?>
 
-	</div>
+</div>
 
 
-	<div class="row" style="width: 800px;">
+<div class="row my-3">
 
 	<h2>Attach Profiles :</h2>
 
@@ -445,59 +416,39 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 	<div class="row">
 		<span class="label_col"><label class="f_label">&nbsp;</label></span>
 		<span class="input_col">
-			<input type="submit" onclick="javascript: return validateAttachProfile();" title="attach profile" name="attach_profile" value="Attach" class="sub_col_but" />
+			<input class="btn btn-primary rounded-pill px-3" type="submit" onclick="javascript: return validateAttachProfile();" title="attach profile" name="attach_profile" value="Attach" class="sub_col_but" />
 		</span>
 	</div>
 
-	</div>
-
-	<div class="row" style="width: 800px;"><hr /></div>
+</div>
 
 
-	<div class="row" style="width: 800px;">
+
+<div class="row my-3">
 	<h2>Attached Articles :</h2>
 
 	<?
-
 	if ($oArticle->oArticleCollection->Count() >= 1) {
-
 		$oArticle->oArticleCollection->LoadTemplate("article_search_result_list_02.php");
-
 		print $oArticle->oArticleCollection->Render();
-
 	}
-
 	?>
 
-	</div>
+</div>
 
 
-	<div class="row">
+<div class="row my-3">
 
 	<h2>Attach Articles :</h2>
 
-	<p class="p_small">
-		<ul>
-			<li>Patterns: <span class="p_small">"%" = all  OR  "%africa" = contains "africa" OR  "/activity/animals"</i></span></li>
-		</ul>
-	</p>
-
-	<table cellspacing="2" cellpadding="4" border="0">
-	<tr class="hi">
-		<td align="right" width="800px">
-		From:
-		<input type="text" id="search_phrase" style="width: 150px;" value="<?= $_REQUEST['filter_uri'] ?>" />
-		<input type="submit" onclick="javascript: ArticleSearch('search',<?= $oArticle->GetId()  ?>,'article_search_result_list_01.php'); return false;" name="article_search" value="Search" />
-		</td>
-	</tr>
-	<tr>
-		<td align="right">
-			<div id="website_id" style="float: right;">
-			<?= $sWebSiteListHTML; ?>
-			</div>
-		</td>
-	</tr>
-	</table>
+	<div class="row my-3">
+    	<div class="">
+    		Article Url:
+    		<input class="form-control" type="text" id="search_phrase" value="<?= $_REQUEST['search_phrase'] ?>" />
+    		<input class="btn btn-primary rounded-pill px-3" type="submit" onclick="javascript: ArticleSearch('search',<?= $oArticle->GetId()  ?>,'article_search_result_list_01.php'); return false;" name="article_search" value="Search" />
+    		<input type="hidden" name="web_0" value="on" />
+    	</div>
+    </div>
 
 	<div id="article_search_msg"></div>
 	<div id="article_search_result"></div>
@@ -510,9 +461,9 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 
 	<p class="p_small">Shows other articles this article is attached to and where these are published</p>
 
-	<div id="article_deattach_msg" style="color: red; font-size: 12px;"></div>
+	<div id="article_deattach_msg" class="alert alert-success" style="display: none;" role="alert">
 
-	<table cellspacing="2" cellpadding="4" border="0" width="800px">
+	<table cellspacing="2" cellpadding="4" border="0" class="table table-striped">
 		<tr>
 			<th>Id</th>
 			<th>Article Title</th>
@@ -523,7 +474,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 		$prev_id = null;
 		foreach ($oArticle->GetAttachedTo() as $row) {
 			$url = "<a href='/article-editor?id=".$row['id']."' target='_new' title='View / Edit this Article'>".$row['title']."</a>";
-			$deattach_link = "<input type=\"submit\" onclick=\"javascript: ArticleDeattach('". $_CONFIG['url'] ."',".$row['id'].",". $oArticle->GetId() ."); return false;\" name=\"deattach\" value=\"Deattach\" />";
+			$deattach_link = "<input class=\"btn btn-primary rounded-pill px-3\" type=\"submit\" onclick=\"javascript: ArticleDeattach(".$row['id'].",". $oArticle->GetId() ."); return false;\" name=\"deattach\" value=\"Deattach\" />";
 		?>
 		<tr id="deattach_row<?= $row['id']; ?>">
 			<td valign="top"><?= $row['id']; ?></td>
@@ -537,11 +488,12 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 		?>
 	</table>
 
-	</div>
+</div>
 
 <? } // end is published check ?>
 
 
+</form>
 
 </div>
 

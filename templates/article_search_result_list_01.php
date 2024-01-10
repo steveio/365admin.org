@@ -1,5 +1,5 @@
 
-<table cellspacing="2" cellpadding="4" border="0" width="800px">
+<table cellspacing="2" cellpadding="4" border="0" class="table table-striped">
 <tr>
 	<th>&nbsp;</th>
 	<th>Title</th>
@@ -31,7 +31,7 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	<tr class="hi">
 		<td colspan="10" align="right" width="800px">
 		Attach Selected :
-		<input type="submit" name="attach_article" value="Attach" />
+		<input class="btn btn-primary rounded-pill px-3" type="submit" name="attach_article" value="Attach" />
 		</td>
 	</tr>
 <?

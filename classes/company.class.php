@@ -358,7 +358,7 @@ class Company {
 		$this->db->query("SELECT id,title FROM company WHERE $w status = 1 $w2 ORDER BY title asc");
 		
 		$result = $this->db->getRows();
-		$s = "<select id='".$name."' name='".$name."' class='form-select' onchange=\"".$sOnChangeJS."\">";
+		$s = "<select id='".$name."' name='".$name."' class='form-select' onchange='".$sOnChangeJS."'>";
 		if ($bSelect) {
 			$s .= "<option value='NULL'>select</option>";
 		}

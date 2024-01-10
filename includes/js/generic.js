@@ -75,16 +75,18 @@ function ArticleMapOptions(mid) {
 
 
 
-function ArticleDeattach(url,pid,aid) {
+function ArticleDeattach(pid,aid) {
 
-	var url = url +"/article_deattach_ajax.php";
+	var url = "/article_deattach_ajax.php";
     var pars = '&pid='+pid+'&aid='+aid;
-
+    
 	$.getJSON(url, pars, function(data){
 		
         if (data.retVal == 1) {
         	$('#deattach_row' + pid).remove();
         }
+        
+        $('#article_deattach_msg').show();
         $('#article_deattach_msg').html(data.msg);
         
         return false;
@@ -157,11 +159,9 @@ function SearchAPI() {
 }
 
 function ArticleSearch(mode,aid,template) {
-
+	
 	$('#recent_activity').hide();
 	$('#alert-msg').hide();
-
-	return false;
 
     var uri = escapePercent(document.getElementById('search_phrase').value);
 
@@ -193,7 +193,7 @@ function ArticleSearch(mode,aid,template) {
 	if ($('#search_exact').is(':checked')) {
 		match = 1; /* exact "=" equal matching */
 	}
-        
+	
     var url = "/article_search_ajax.php";
     var pars = '&m='+mode+'&uri='+uri+'&aid='+aid+'&r='+search_recursive+'&t='+template+'&match='+match+'&wid='+wid;
 
@@ -229,22 +229,6 @@ function validateAttachProfile() {
         
         return true;
 } 
-
-function doPlacementListRequest(url,form_id,comp_id) {
-
-        var comp_id = document.getElementById('company_id').value;
-
-        if (comp_id == 'NULL') {
-                alert('Please select a profile to attach');
-                return false;
-        }
-
-        var pars = '&cid=' + comp_id;
-        var target = 'placement_list';
-        $.getJSON(url, pars, function(data){
-                $('#placement_list').html(data.msg);
-    	});        
-}
 
 
 function setProfilePanelState(panel_id) {
@@ -332,21 +316,23 @@ function setLightSwitch(e,state) {
 }
 
 
-        function AttachLink(url,link_to,link_id) {
+	    function AttachLink(url,link_to,link_id) {
 
-                var link_title = document.getElementById('link_title').value;
-                var link_url = document.getElementById('link_url').value;
+            var link_title = document.getElementById('link_title').value;
+            var link_url = document.getElementById('link_url').value;
 
-                var url = url +"/attach_link_ajax.php";
-                var pars = '&m=ADD&link_to='+link_to+'&link_to_id='+link_id+'&link_title='+link_title+'&link_url='+link_url;
+            var url = url +"/attach_link_ajax.php";
+            var pars = '&m=ADD&link_to='+link_to+'&link_to_id='+link_id+'&link_title='+link_title+'&link_url='+link_url;
 
-		$.getJSON(url, pars, function(data){
-			if (data.retVal == 1) {
-				$('#link_msg').html('<span class="red">'+data.msg+'</span>');
-				$('#link_result').html(data.html);
-			}
-			return false;
-		});
+            console.log("attach link");
+            
+			$.getJSON(url, pars, function(data){
+				if (data.retVal == 1) {
+					$('#link_msg').html('<span class="red">'+data.msg+'</span>');
+					$('#link_result').html(data.html);
+				}
+				return false;
+			});
         }
 
         function RemoveLink(url,link_id,link_to_id) {

@@ -7,10 +7,9 @@
       </a>
       </div>
       <div class="profile-summary-01-sm-item">
-      <h4><?= $this->Get("COMPANY_NAME") ?></h4>
-      <p2><?= $this->Get("DESC_SHORT_60") ?></p2>
+      <p class="p_small"><?= $this->Get("TITLE") ?></p>
+      <p class="p_small"><?= $this->Get("COMPANY_NAME") ?></p>
       </div>
-      <a class="more-link" title="View <?= $this->Get("TITLE") ?>"  href="<?= $this->Get("PROFILE_LINK") ?>"><?= $this->Get("TITLE") ?></a>
    </div>
 </div>
 <!-- END Profile Summary 01 -->

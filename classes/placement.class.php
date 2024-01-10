@@ -304,7 +304,7 @@ class Placement {
 	}
 
 
-	function GetPlacementNameDDList() {
+	function GetPlacementNameDDList($comp_id = null) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
