@@ -21,7 +21,7 @@ class DashboardStep extends GenericStep {
 
 	public function Process() { 
 		
-		global $oAuth, $oHeader, $oFooter, $oBrand;
+		global $oAuth, $oHeader, $oFooter, $oBrand, $_CONFIG;
 
 		if (!$oAuth->ValidSession()) Http::Redirect(ROUTE_LOGIN);
 		
@@ -54,7 +54,13 @@ class DashboardStep extends GenericStep {
 					
 				}				
 			} else {
-				
+
+			    $oTemplate = new Template();
+			    $oTemplate->Set('WEBSITE_URL', $_CONFIG['url']);
+			    $oTemplate->Set('RECENT_ACTIVITY_ARRAY', $this->getRecentActivity());
+			    $oTemplate->LoadTemplate('search_result_list_recent.php');
+			    
+			    $oDashboard->Set('RECENT_ACTIVITY', $oTemplate->Render());
 				$oDashboard->LoadTemplate("admin_dashboard_v2.php");
 			}
 			
@@ -188,6 +194,50 @@ class DashboardStep extends GenericStep {
 		}
 		
 	}
+
+    public function getRecentActivity()
+    {
+        global $db;
+        
+        
+        $sql = "
+                (select 
+                c.id,
+                'COMPANY' as type,
+                c.title,
+                '/company/'||c.url_name as url,
+                c.last_updated
+                from 
+                company c
+                order by last_updated limit 20 )
+                union 
+                (select 
+                p.id,
+                'PLACEMENT' as type,
+                p.title,
+                '/company/'||c.url_name||'/'||p.url_name as url,
+                p.last_updated
+                from
+                profile_hdr p, 
+                company c
+                where p.company_id = c.id
+                order by last_updated limit 20 )
+                union 
+                (select 
+                a.id,
+                'ARTICLE' as type,
+                a.title,
+                (select m.section_uri from article_map m where m.article_id = a.id order by m.oid desc limit 1) as url,
+                a.last_updated
+                from
+                article a
+                order by last_updated limit 20 )";
+   
+            $db->query($sql);
+
+            return $db->getObjects();
+    }
+
 }
 
 

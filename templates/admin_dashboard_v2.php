@@ -61,6 +61,15 @@
 	<img src="/images/loading_triangles.gif" alt="loading..." />
 </div>
 
+
+<div class="row">
+	<div id="recent_activity">
+
+<?= $this->Get('RECENT_ACTIVITY'); ?>	
+	</div>
+</div>
+
+
 <script>
 
 $(document).ready(function() {
