@@ -1,15 +1,5 @@
 <h2>Recent Activity</h2>
 
-<?
-global $aResponse;
-if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
-?>
-<div class="alert alert-<?= (isset($aResponse['status'])) ? $aResponse['status'] : "warning";  ?>" role="alert">
-    <?= $aResponse['msg'];  ?>
-</div>
-<? } ?>
-
-
 <form enctype="multipart/form-data" id="recent_activity" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
 <table  id="report" class="display" cellspacing="2" cellpadding="0" border="0" width="" class="table table-striped">

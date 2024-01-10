@@ -101,6 +101,9 @@ function ArticleDeattach(url,pid,aid) {
  */
 function SearchAPI() {
 
+	$('#recent_activity').hide();
+	$('#alert-msg').hide();
+	
     var exp = escapePercent(document.getElementById('search_phrase').value);
 
     if (exp == "") {
@@ -154,6 +157,11 @@ function SearchAPI() {
 }
 
 function ArticleSearch(mode,aid,template) {
+
+	$('#recent_activity').hide();
+	$('#alert-msg').hide();
+
+	return false;
 
     var uri = escapePercent(document.getElementById('search_phrase').value);
 

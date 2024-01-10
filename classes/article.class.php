@@ -1672,7 +1672,8 @@ define("ARTICLE_SEARCH_MODE_EXACT",1);
  * 
  */
 class ArticleCollection implements TemplateInterface  {
-	
+
+    private $iLimit;
 	private $aArticle;	
 	private $iSearchMode;
 	
@@ -1680,6 +1681,14 @@ class ArticleCollection implements TemplateInterface  {
 		$this->aArticle = array();
 
 		$this->SetSearchMode(ARTICLE_SEARCH_MODE_FUZZY);
+	}
+
+	public function SetLimit($iLimit) {
+	    $this->iLimit = $iLimit;
+	}
+	
+	private function GetLimit() {
+	    return $this->iLimit;
 	}
 
 	public function SetSearchMode($mode) {
@@ -1739,25 +1748,44 @@ class ArticleCollection implements TemplateInterface  {
 		{
 		    $sqlDateConstraint = " AND a.last_updated >= '".$dateFrom ."' AND a.last_updated <= '".$dateTo."' ";
 		}
-		 
+
+		if ($getAttachedObj == false)
+		{
+		    $fields = " a.id
+                        ,a.title 
+						,to_char(a.created_date,'DD/MM/YYYY') as created_date
+					    ,to_char(a.last_updated,'DD/MM/YYYY') as last_updated
+						,to_char(a.last_indexed_solr,'DD/MM/YYYY') as last_indexed_solr
+                        ";
+		} else {
+		    $fields = " a.*
+						,to_char(a.created_date,'DD/MM/YYYY') as created_date
+					    ,to_char(a.last_updated,'DD/MM/YYYY') as last_updated
+						,to_char(a.last_indexed_solr,'DD/MM/YYYY') as last_indexed_solr
+                        ";
+		    
+		}
+
+		$sql_limit = ''; 
+        if (is_numeric($this->GetLimit()))
+        {
+            $sql_limit = "LIMIT ".$this->GetLimit();
+        }
 		
 		if ($bUnPublished) {
 
 		    $sql = "select 
-        		    a.*
+        		    ".$fields."
         		    from
         		    ".DB__ARTICLE_TBL." a
         		    where not exists ( select 1 from ".DB__ARTICLE_MAP_TBL." m where a.id = m.article_id)
         		        ".$sqlDateConstraint."
-        		        ORDER BY a.published_date ASC;";
+        		        ORDER BY a.last_updated DESC, a.created_date DESC ".$sql_limit.";";
 
 		} else {
 		
-			$sql = "SELECT 
-						a.* 
-						,to_char(a.created_date,'DD/MM/YYYY') as created_date
-					    ,to_char(a.last_updated,'DD/MM/YYYY') as last_updated
-						,to_char(a.last_indexed_solr,'DD/MM/YYYY') as last_indexed_solr
+			$sql = "SELECT
+                    ".$fields." 
 					FROM 
 						".DB__ARTICLE_TBL." a
 						,".DB__ARTICLE_MAP_TBL." m 
@@ -1768,7 +1796,7 @@ class ArticleCollection implements TemplateInterface  {
 						AND m.article_id = a.id
                         ".$sqlDateConstraint."
 					ORDER BY 
-						a.published_date ASC;";
+						a.last_updated DESC, a.created_date DESC ".$sql_limit.";";
 		
 		}
 

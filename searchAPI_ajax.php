@@ -190,6 +190,7 @@ function uriSearch($uri, $match, $filterDate, $fromDate, $toDate)
             $oArticleCollection->SetSearchMode(ARTICLE_SEARCH_MODE_EXACT);
         }
 
+        $oArticleCollection->SetLimit(250);
         $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished, $filterDate, $fromDate, $toDate);
         
         if ($oArticleCollection->Count() < 1) {

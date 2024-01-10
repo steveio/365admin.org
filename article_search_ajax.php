@@ -80,6 +80,9 @@ if ($mode == "search") { /* search for articles published to uri and return a re
 	if ($match == ARTICLE_SEARCH_MODE_EXACT) {
 		$oArticleCollection->SetSearchMode(ARTICLE_SEARCH_MODE_EXACT);
 	}
+	
+	$oArticleCollection->SetLimit(250);
+
 	$oArticleCollection->GetBySectionId($website_id,$uri,$getAttachedObj = false,$bUnpublished);
 	
 	if ($oArticleCollection->Count() < 1) {

@@ -56,17 +56,18 @@ class DashboardStep extends GenericStep {
 			} else {
 
 
-                if (isset($_POST))
+			    if (isset($_POST) && count($_POST) >= 1)
                 {
                     $this->DeleteArticle(); // handle recent content delete request
                 }
-			    
 			    $oTemplate = new Template();
 			    $oTemplate->Set('WEBSITE_URL', $_CONFIG['url']);
-			    $oTemplate->Set('RECENT_ACTIVITY_ARRAY', $this->getRecentActivity());
-			    $oTemplate->LoadTemplate('search_result_list_recent.php');
-			    
-			    $oDashboard->Set('RECENT_ACTIVITY', $oTemplate->Render());
+			    if (isset($_POST) && count($_POST) < 1) 
+			    {
+                    $oTemplate->Set('RECENT_ACTIVITY_ARRAY', $this->getRecentActivity());
+                    $oTemplate->LoadTemplate('search_result_list_recent.php');
+                    $oDashboard->Set('RECENT_ACTIVITY', $oTemplate->Render());
+			    }
 				$oDashboard->LoadTemplate("admin_dashboard_v2.php");
 			}
 			

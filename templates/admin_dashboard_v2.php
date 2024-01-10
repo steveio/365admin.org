@@ -22,7 +22,7 @@
 
 	<div class="row my-3">
 		Search Url:
-		<input type="text" id="search_phrase" class="form-control" value="<?= $_REQUEST['filter_uri'] ?>" />
+		<input type="text" id="search_phrase" name="search_phrase" class="form-control" value="<?= $_REQUEST['search_phrase'] ?>" />
 	</row>
 	<div class="row">
 		<div class="col-12">
@@ -50,6 +50,15 @@
 		</ul>
 	</div>
 </div>
+
+<?
+global $aResponse;
+if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
+?>
+<div id="alert-msg" class="alert alert-<?= (isset($aResponse['status'])) ? $aResponse['status'] : "warning";  ?>" role="alert">
+    <?= $aResponse['msg'];  ?>
+</div>
+<? } ?>
 
 <div class="row">
 	<div id="search_msg"></div>
