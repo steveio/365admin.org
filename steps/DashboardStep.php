@@ -209,7 +209,7 @@ class DashboardStep extends GenericStep {
                 c.last_updated
                 from 
                 company c
-                order by last_updated limit 20 )
+                order by last_updated desc limit 20 )
                 union 
                 (select 
                 p.id,
@@ -221,7 +221,7 @@ class DashboardStep extends GenericStep {
                 profile_hdr p, 
                 company c
                 where p.company_id = c.id
-                order by last_updated limit 20 )
+                order by last_updated desc limit 20 )
                 union 
                 (select 
                 a.id,
@@ -231,7 +231,7 @@ class DashboardStep extends GenericStep {
                 a.last_updated
                 from
                 article a
-                order by last_updated limit 20 )";
+                order by last_updated desc limit 20 )";
    
             $db->query($sql);
 
