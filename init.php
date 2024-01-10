@@ -5,6 +5,9 @@
  * 
  * Handles generic initialisation and includes 
  * 
+ * All routes should have alias URLs (rather than calling php script directly
+ *  and pass through index.php.  There may be some cases where legacy links 
+ * still refer to php script, so there's some duplication between index.php and init.php 
  * 
  */
 
@@ -148,6 +151,13 @@ try {
     
     /* start a new session */
     my_session_start();
+
+    try {
+        /* establish database connection */
+        $db = new db($dsn,$debug = false);
+        
+    } catch (Exception $e) {
+    }
     
     
     $oSession = new Session;
@@ -157,11 +167,23 @@ try {
     	$oSession = $oSession->Create();
     }
 
-    try {
-        /* establish database connection */
-        $db = new db($dsn,$debug = false);
-        
-    } catch (Exception $e) {
+    if (!is_object($oAuth))
+    {
+        /* setup an instance of session authentication */
+        $oAuth = new Authenticate($db,$redirect = TRUE, $redirect_url = "/".ROUTE_LOGIN, COOKIE_NAME);
+        $oAuth->ValidSession();
+    }
+
+    define('HOSTNAME',"oneworld365.org");
+    
+    /* set some additional $_CONFIG params so the legacy classes work */
+    $_CONFIG['site_id'] = $aBrandConfig[HOSTNAME]['site_id'];
+    $_CONFIG['admin_email'] = $aBrandConfig[HOSTNAME]['admin_email'];
+    $_CONFIG['website_email'] = $aBrandConfig[HOSTNAME]['website_email'];
+    
+    if (!is_object($oBrand))
+    {
+        $oBrand = new Brand($aBrandConfig[HOSTNAME]);
     }
 
     /* Global Exception Handler */
@@ -184,6 +206,7 @@ try {
     print_r($e);
     die();
 }
+
 
 
 

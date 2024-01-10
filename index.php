@@ -1,8 +1,8 @@
 <?php
 
 require_once("./conf/config.php");
-require_once("./init.php");
 require_once("./conf/brand_config.php");
+require_once("./init.php");
 
 
 $allowed_hosts = array("oneworld365.org", "gapyear365.com", "seasonaljobs365.com","summercamp365.com", "tefl365.com");
@@ -12,10 +12,12 @@ define('HOSTNAME',$hostname);
 define('BASE_URL','https://admin.'.$hostname);
 define("COOKIE_DOMAIN", ".".HOSTNAME);
 
-/* setup an instance of session authentication */
-$oAuth = new Authenticate($db,$redirect = TRUE, $redirect_url = "/".ROUTE_LOGIN, COOKIE_NAME);
-$oAuth->ValidSession();
-
+if (!is_object($oAuth))
+{
+    /* setup an instance of session authentication */
+    $oAuth = new Authenticate($db,$redirect = TRUE, $redirect_url = "/".ROUTE_LOGIN, COOKIE_NAME);
+    $oAuth->ValidSession();
+}
 
 
 /* set some additional $_CONFIG params so the legacy classes work */
@@ -23,8 +25,11 @@ $_CONFIG['site_id'] = $aBrandConfig[HOSTNAME]['site_id'];
 $_CONFIG['admin_email'] = $aBrandConfig[HOSTNAME]['admin_email'];
 $_CONFIG['website_email'] = $aBrandConfig[HOSTNAME]['website_email'];
 
-$oBrand = new Brand($aBrandConfig[HOSTNAME]);
 
+if (!is_object($oBrand))
+{
+    $oBrand = new Brand($aBrandConfig[HOSTNAME]);
+}
 
 include("./includes/header.php");
 include("./includes/footer.php");
