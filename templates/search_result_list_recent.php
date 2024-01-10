@@ -1,5 +1,17 @@
 <h2>Recent Activity</h2>
 
+<?
+global $aResponse;
+if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
+?>
+<div class="alert alert-<?= (isset($aResponse['status'])) ? $aResponse['status'] : "warning";  ?>" role="alert">
+    <?= $aResponse['msg'];  ?>
+</div>
+<? } ?>
+
+
+<form enctype="multipart/form-data" id="recent_activity" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
+
 <table  id="report" class="display" cellspacing="2" cellpadding="0" border="0" width="" class="table table-striped">
 <thead>
 <tr>
@@ -8,6 +20,7 @@
 	<th scope="col">Url</th>
 	<th scope="col">Last Updated</th>
 	<th scope="col">Edit</th>
+	<th scope="col">Delete</th>
 
 </tr>
 </thead>
@@ -44,6 +57,11 @@ if ((is_array($aResult)) && (count($aResult) >= 1)) {
 		<td>
 			<a class="btn btn-primary rounded-pill px-3" target="_new" role="button"  href="<?= $oResult->edit_link ?>" title="Edit">Edit</a>
 		</td>
+		<td>
+		<?php if ($oResult->type == "ARTICLE") { ?>
+			<button id="delete" onclick="javscript: return confirm('Are you sure you wish to delete article: <?= $oResult->title ?>?');" name="art_<?= $oResult->id ?>" class="btn btn-primary rounded-pill px-3" type="submit" value="delete">delete</button>
+		<?php } ?>			
+		</td>
 	</tr>
 <? 
 	}
@@ -56,6 +74,7 @@ if ((is_array($aResult)) && (count($aResult) >= 1)) {
 </tbody>
 </table>
 
+</form>
 
 <script>
 

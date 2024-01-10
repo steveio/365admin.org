@@ -55,6 +55,12 @@ class DashboardStep extends GenericStep {
 				}				
 			} else {
 
+
+                if (isset($_POST))
+                {
+                    $this->DeleteArticle(); // handle recent content delete request
+                }
+			    
 			    $oTemplate = new Template();
 			    $oTemplate->Set('WEBSITE_URL', $_CONFIG['url']);
 			    $oTemplate->Set('RECENT_ACTIVITY_ARRAY', $this->getRecentActivity());
@@ -104,7 +110,32 @@ class DashboardStep extends GenericStep {
 
 		
 	}
-	
+
+	public function DeleteArticle()
+	{
+	    global $aResponse;
+
+	    $aDelete = array();
+	    
+	    foreach($_REQUEST as $k => $v) {
+	        if (preg_match("/art_/",$k)) {
+	            $id = preg_replace("/art_/","",$k);
+	            if ($v == "delete") $aDelete[] = $id;
+	        }
+	    }
+
+	    if (count($aDelete) >= 1) {
+	        foreach($aDelete as $id) {
+	            $oArticle = new Article();
+	            $oArticle->SetId($id);
+	            if ($oArticle->Delete()) {
+	                $aResponse['msg'] = "SUCCESS : Deleted article.";
+	                $aResponse['status'] = "success";
+	            }
+	        }
+	    }
+
+	}
 	
 	public function SetCompanyProfile() {
 		

@@ -218,7 +218,7 @@ print $oHeader->Render();
 <?
 if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 ?>
-<div class="alert alert-<?= $alert; ?>" role="alert">
+<div class="alert alert-<?= (isset($aResponse['status'])) ? $aResponse['status'] : "warning";  ?>" role="alert">
     <?= $aResponse['msg'];  ?>
 </div>
 <? } ?>

@@ -64,7 +64,7 @@ print $oHeader->Render();
 </div>
 <? } ?>
 
-<form enctype="multipart/form-data" name="linkadmin" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
+<form enctype="multipart/form-data" name="article_mgr" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
 <div class='row'>
 
