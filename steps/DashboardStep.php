@@ -233,39 +233,43 @@ class DashboardStep extends GenericStep {
         
         
         $sql = "
-                (select 
-                c.id,
-                'COMPANY' as type,
-                c.title,
-                '/company/'||c.url_name as url,
-                c.last_updated
-                from 
-                company c
-                order by last_updated desc limit 20 )
-                union 
-                (select 
-                p.id,
-                'PLACEMENT' as type,
-                p.title,
-                '/company/'||c.url_name||'/'||p.url_name as url,
-                p.last_updated
-                from
-                profile_hdr p, 
-                company c
-                where p.company_id = c.id
-                order by last_updated desc limit 20 )
-                union 
-                (select 
-                a.id,
-                'ARTICLE' as type,
-                a.title,
-                m.section_uri as url,
-                a.last_updated
-                from
-                article a left outer join article_map m on a.id = m.article_id 
+		select * from 
+		((select
+		c.id,
+		'COMPANY' as type,
+		c.title,
+		'/company/'||c.url_name as url,
+		c.last_updated
+		from
+		company c
 		where last_updated is not null
-                order by last_updated desc limit 30 )";
-   
+		order by last_updated desc limit 20 )
+		union
+		(select
+		p.id,
+		'PLACEMENT' as type,
+		p.title,
+		'/company/'||c.url_name||'/'||p.url_name as url,
+		p.last_updated
+		from
+		profile_hdr p,
+		company c
+		where p.company_id = c.id
+		and p.last_updated is not null
+		order by last_updated desc limit 20 )
+		union
+		(select
+		a.id,
+		'ARTICLE' as type,
+		a.title,
+		m.section_uri as url,
+		a.published_date as last_updated
+		from
+		article a left outer join article_map m on a.id = m.article_id
+		where published_date is not null
+		order by published_date desc limit 30 )) q1
+		order by last_updated DESC";
+ 
             $db->query($sql);
 
             return $db->getObjects();

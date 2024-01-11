@@ -10,7 +10,6 @@ if (!$oAuth->oUser->isValidUser) AppError::StopRedirect($sUrl = $_CONFIG['url'].
 
 $oEnquiry = new Enquiry();
 
-$_REQUEST['report_status'] = 0; // default filter to PENDING
 
 // only admin approves / rejects enquiries, companies have a read-only view
 if ($oAuth->oUser->isAdmin) {
@@ -79,7 +78,7 @@ $aOptions['company_id'] = $company_id;
 //$aOptions['limit'] = 25;
 
 
-if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != -1)
+if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
 {
 
     switch($_REQUEST['report_status'])
@@ -103,18 +102,16 @@ if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != -1)
     
 }
 
-$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 month"))." - ".date("d-m-Y");
+$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 year"))." - ".date("d-m-Y");
 $aDate = explode(" - ", $strDateRange);
 $aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
 $aOptions['report_date_to'] = preg_replace("/\//","-",$aDate[1]);
 
-
 /*
 print_r("<pre>");
-print_r($_REQUEST);
+print_r($_POST);
 print_r($aOptions);
 print_r("</pre>");
-die();
 */
 
 $aEnquiry = $oEnquiry->GetAll($aOptions);
@@ -131,7 +128,7 @@ print $oHeader->Render();
 
 
 
-<form enctype="multipart/form-data" name="enquiry_search" id="enquiry_search" action="" method="POST">
+<form enctype="multipart/form-data" name="enquiry_report" id="enquiry_report" action="" method="POST">
 
 <div class="row my-3">
 
@@ -142,8 +139,13 @@ print $oHeader->Render();
 
 	<div class="col-6">
         <label for="daterange">By Status:</label>
+	<?
+	if (!isset($_REQUEST['report_status']))  {
+		$_REQUEST['report_status'] = 0;
+	}
+	?>
         <select id="" name="report_status">
-        	<option value="-1">ALL</option>
+        	<option value="ALL" <?= ($_REQUEST['report_status'] == "ALL") ? "selected" : ""; ?>>ALL</option>
         	<option value="0" <?= ($_REQUEST['report_status'] == "0") ? "selected" : ""; ?>>PENDING</option>
         	<option value="1" <?= ($_REQUEST['report_status'] == "1") ? "selected" : ""; ?>>APPROVED</option>
         	<option value="2"<?= ($_REQUEST['report_status'] == "2") ? "selected" : ""; ?>>SENT</option>
@@ -164,7 +166,6 @@ print $oHeader->Render();
 <button class="btn btn-primary rounded-pill px-3" type="submit" name="report_filter" value="submit">submit</button>
 
 
-</form>
 
 
 </div>
@@ -176,7 +177,6 @@ print $oHeader->Render();
 <?php } ?>
 
 
-<form enctype="multipart/form-data" name="process_enquiry" id="process_enquiry" action="" method="POST">
 
 <?php if (isset($_REQUEST['report_filter'])) { ?>
 
