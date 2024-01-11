@@ -6,7 +6,8 @@ require_once("../conf/config.php");
 require_once(BASE_PATH."/classes/db_pgsql.class.php");
 require_once(BASE_PATH."/classes/logger.php");
 
-$dsn = array("dbhost" => "localhost","dbuser" => "oneworld365_pgsql", "dbpass" => "","dbname" => "oneworld365","dbport" => "5432");
+$dsn = array("dbhost" => "localhost","dbuser" => "oneworld365_pgsql", "dbpass" => "tH3a1LAn6iA","dbname" => "oneworld365","dbport" => "5432");
+
 $db = new db($dsn,$debug = false);
 
 print_r($db);
