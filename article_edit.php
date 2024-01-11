@@ -347,7 +347,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 		<input type="hidden" name="MAX_FILE_SIZE" value="<?= IMAGE_MAX_UPLOAD_SIZE; ?>" />
 		<table>
 		<tbody id="files-root">
-			<tr><td><input type="file" name="file[]" size="30"></td></tr>
+			<tr><td><input class="form-control" type="file" name="file[]" size="30"></td></tr>
 		</table>
 		<div class="col-1 my-3">
 			<input class="btn btn-primary rounded-pill px-3"  type="submit" name="do_file_upload" value="Upload Image">

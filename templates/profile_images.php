@@ -1,21 +1,14 @@
-<!-- BEGIN Page Content Container -->
-<div class="page_content content-wrap clear">
-<div class="row pad-tbl clear">
-
-
-<div class="col four-sm pad">
+<div class="container">
+<div class="align-items-center justify-content-center">
+<div class="row">
 
 	
 <div class="row">
 	<h1>Upload / Edit Images</h1>
 </div>
 
+<div class="row">
 
-
-<!--BEGIN Existing Files -->
-<div class="row pad five">
-
-<div class="pad-tb">	
 	<h2>Existing Images</h2>
 
 	<?
@@ -37,20 +30,16 @@
 	<?	
 	}
 	?>
-	
-</div>
 
 </div>
-<!--END Existing Files -->
 
 
 
 
-<!--BEGIN Upload from File -->
-<div class="row pad five">
 
+<div class="row my-3">
 
-	<div class="pad-tb">	
+	<div>	
 		<h2>Upload Images</h2>
 		<p2>Upload images from files stored on your computer.</p2>
 	</div>
@@ -59,7 +48,7 @@
 		<div class="row" style="width: 400px;">
 		<h2>Existing Images :</h2>
 		
-		<div class="row" style="width: 400px;">
+		<div class="row my-2">
 		<?
 		if (count($oArticle->aImage) >= 1) {
 			foreach($oArticle->aImage as $oImage) {
@@ -102,7 +91,7 @@
 	-->
 	</script>
 
-		
+	<div class="row my-2">
 		<span onclick="addFile()" style="cursor:pointer;cursor:hand;">Add More +</span>
 
 		<input type="hidden" name="mode" value="misc" />
@@ -112,17 +101,17 @@
 		<input type="hidden" name="MAX_FILE_SIZE" value="<?= IMAGE_MAX_UPLOAD_SIZE ?>" />
 		<table>
 		<tbody id="files-root" style="border: 0;">
-			<tr><td><input type="file" name="file[]" size="30"></td></tr>
+			<tr><td><input class="form-control" type="file" name="file[]" size="30"></td></tr>
 		</table>
-		<input type="submit" name="do_file_upload" value="Upload Image">
-		<p style="font-size:8pt;">allowed extensions are: <strong>JPG, JPEG PNG, GIF</strong>; max size per file: <strong>5mb</strong>; max number of files per upload <strong><?php echo $max_uploads; ?></strong></p>
 		
+    	<div class="col-3 my-3">	
+    		<input class="btn btn-primary rounded-pill px-3"  type="submit"  name="do_file_upload" value="Upload Image">
+    		<p style="font-size:8pt;">allowed extensions are: <strong>JPG, JPEG PNG, GIF</strong>; max size per file: <strong>5mb</strong>; max number of files per upload <strong><?php echo $max_uploads; ?></strong></p>
+    	</div>
+	</div>
 </div>
 <!-- END Upload from FILE -->
 
 </div>
-
-
 </div>
 </div>
-<!-- END Page Content Container -->

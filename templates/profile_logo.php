@@ -1,21 +1,14 @@
-<!-- BEGIN Page Content Container -->
-<div class="page_content content-wrap clear">
-<div class="row pad-tbl clear">
-
-
-<div class="col five pad">
+<div class="container">
+<div class="align-items-center justify-content-center">
+<div class="row">
 
 	
-<div class="row five">
+<div class="row">
 	<h1>Add / Edit Logo</h1>
 	<p>Upload your organisation's logo to be displayed on your profiles.</p>
 </div>
 
-
-<!--BEGIN Existing Files -->
-<div class="row pad" >
-
-<div class="row five">	
+<div class="row">	
 	<h2>Current Logo: </h2>
 	<? 
 	$oImage = $oProfile->GetImage(0,LOGO_IMAGE);
@@ -35,7 +28,7 @@
 			</tr>
 		</table>
 
-		<a class="more-link p_small" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('<?= $_CONFIG['url'] ?>','COMPANY',<?= $oProfile->GetId() ?>,<?= $oImage->GetId() ?>)">Click here to delete existing logo</a>
+		<a class="btn btn-primary rounded-pill px-3" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('<?= $_CONFIG['url'] ?>','COMPANY',<?= $oProfile->GetId() ?>,<?= $oImage->GetId() ?>)">Click here to delete existing logo</a>
 	</div>
 
 	
@@ -47,16 +40,10 @@
 		
 </div>
 
-</div>
-<!--END Existing Files -->
 
+<div class="row">
 
-
-<!--BEGIN Upload from File -->
-<div class="row five pad">
-
-
-	<div class="pad-tb">
+	<div class="">
 		<?
 			$action = ($existing_logo) ? "Replace" : "Upload";
 		?>	
@@ -71,21 +58,22 @@
 	<input type="hidden" name="MAX_FILE_SIZE" value="<?= IMAGE_MAX_UPLOAD_SIZE; ?>" />
 	<table>
 	<tbody id="logo-files-root">
-		<tr><td><input type="file" name="logo[]" size="30"></td></tr>
+		<tr><td><input class="form-control" type="file" name="logo[]" size="30"></td></tr>
 	</table>
-	<input type="submit" name="do_logo_upload" value="<?= $action; ?> Logo">
+
+	<div class="col-3 my-3">	
+	<input class="btn btn-primary rounded-pill px-3" type="submit" name="do_logo_upload" value="<?= $action; ?> Logo">
+	</div>
+
 	<p class="p_small">
 		allowed extensions are: <strong>JPG, JPEG PNG, GIF</strong>; max size per file: <strong>5mb</strong>; 
 		<br />permitted dimensions (in pixels): width: <?= LOGO__DIMENSIONS_MINWIDTH ?>px to <?= LOGO__DIMENSIONS_MAXWIDTH ?>px, height: <?= LOGO__DIMENSIONS_MINHEIGHT ?>px to <?= LOGO__DIMENSIONS_MAXHEIGHT ?>px</strong>
 	</p>
 		
 </div>
-<!-- END Upload from FILE -->
 
 
 
 </div>
-
 </div>
 </div>
-<!-- END Page Content Container -->

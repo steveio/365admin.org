@@ -10,7 +10,7 @@
 		<?
 		foreach ($this->Get("TABS") as $oTab) {
 		?>
-		  <li id="<?= $oTab->GetId() ?>_LI" class="<?= $oTab->GetActive() ? "nav-link active" : "nav-link"; ?>">
+		  <li id="<?= $oTab->GetId() ?>_LI" class="<?= $oTab->GetActive() ? "nav-link tab active" : "tab nav-link"; ?>">
 				<a id="<?= $oTab->GetId() ?>" href="<?= $oTab->GetLink(); ?>" title="<?= $oTab->GetDesc(); ?>">
 				<?= $oTab->GetTitle(); ?>
 				</a>
@@ -32,4 +32,3 @@
 
 </div>
 </div>
-<!-- END Tabbed Panel -->

@@ -390,14 +390,7 @@ EOT;
 		 */
 		$this->SetTabbedPanel();
 
-		$oLinksTemplate = new Template;
-		if ($this->GetMode() == self::MODE_EDIT) {
-			$oLinksTemplate->Set('VIEW_URL',$oBrand->GetWebsiteUrl()."/".ROUTE_COMPANY."/".$this->GetCompanyUrlName());
-		}
-		$oLinksTemplate->LoadTemplate("edit_profile_links.php");
-
 		print $oHeader->Render();
-		//print $oLinksTemplate->Render();
 		print $this->GetTabbedPanel()->Render();
 		print $oFooter->Render();
 

@@ -2,7 +2,6 @@
 
 
 $response = $this->Get('VALIDATION_ERRORS');
-
 $oProfile = $this->Get('COMPANY_PROFILE');
 
 
@@ -176,13 +175,13 @@ $(document).ready(function(){
 </script>
 
 
+
 <div class="container">
 <div class="align-items-center justify-content-center">
-
-
 <div class="row">
 
 <h1><?= $this->Get('COMPANY_TITLE'); ?></h1>
+
 
 <div class="row my-2">
   <div class="col">
@@ -201,25 +200,19 @@ $(document).ready(function(){
 
 <div id="PROFILE_VERSION_MASTER">
 
+    <div class="row formgroup my-2">
+        <span class="label_col">
+          <label for="<?= PROFILE_FIELD_COMP_TITLE; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_TITLE]) > 1 ? "red" : ""; ?>"><?= $this->Get('COMPANY_TITLE'); ?> Name
+        <span class="red"> *</span></label></span>
+        <span class="input_col">
+          <input class="form-control" type="text" id="<?= PROFILE_FIELD_COMP_TITLE; ?>" maxlength="99" class="textinput_01" name="<?= PROFILE_FIELD_COMP_TITLE; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_TITLE]; ?>" />
+        </span>
+    </div>
+
 	<div class="row formgroup my-2">
-    <span class="label_col">
-      <label for="<?= PROFILE_FIELD_COMP_TITLE; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_TITLE]) > 1 ? "red" : ""; ?>"><?= $this->Get('COMPANY_TITLE'); ?> Name
-    <span class="red"> *</span></label></span>
-    <span class="input_col">
-      <input class="form-control" type="text" id="<?= PROFILE_FIELD_COMP_TITLE; ?>" maxlength="99" class="textinput_01" name="<?= PROFILE_FIELD_COMP_TITLE; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_TITLE]; ?>" />
-    </span>
-  </div>
-
-	<div class="row formgroup my-2"><span class="label_col"><label
-		for="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>"
-		class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_DESC_SHORT]) > 1 ? "red" : ""; ?>">Short
-	Description<span class="red"> *</span><br />
-	(300 chars or less)</label></span> <span class="input_col"><textarea
-		id="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>"
-		name="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>" class="form-control" /><?= stripslashes($_POST[PROFILE_FIELD_COMP_DESC_SHORT]); ?></textarea>
-		<br /><span class="p_small grey"></span>
+		<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_DESC_SHORT]) > 1 ? "red" : ""; ?>">Short Description<span class="red"> *</span><br />(30 chars or less)</label></span> 
+		<span class="input_col"><textarea id="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>" name="<?= PROFILE_FIELD_COMP_DESC_SHORT; ?>" class="form-control" /><?= stripslashes($_POST[PROFILE_FIELD_COMP_DESC_SHORT]); ?></textarea><br /><span class="p_small grey"></span>
 		</span>
-
 	</div>
 
 	<div class="row formgroup my-2"><span class="label_col">
@@ -230,8 +223,7 @@ $(document).ready(function(){
 	<label for="<?= PROFILE_FIELD_COMP_DESC_LONG; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_DESC_LONG]) > 1 ? "red" : ""; ?>"><?= $full_desc_label; ?><span class="red"> *</span></label></span> <span
 		class="input_col"><textarea id="<?= PROFILE_FIELD_COMP_DESC_LONG; ?>"
 		name="<?= PROFILE_FIELD_COMP_DESC_LONG; ?>" class="form-control" /><?= stripslashes($_POST[PROFILE_FIELD_COMP_DESC_LONG]); ?></textarea>
-		<br />
-		</span>
+	</span>
 	</div>
 
 </div>
@@ -239,94 +231,73 @@ $(document).ready(function(){
 
 <?php if ($this->Get('DISPLAY_CAT_ACT_CTY_OPTIONS')) {  
 	
-// Category, Activity, Country metadata common to all profile types
-require_once("profile_metadata_select.php");
+    // Category, Activity, Country metadata common to all profile types
+    require_once("profile_metadata_select.php");
 
 
 } // end IF DISPLAY_CAT_ACT_CTY_OPTIONS ?>
 
 
-<div class="row ormgroup my-2"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_URL; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_URL]) > 1 ? "red" : ""; ?>">Website
-Url <span class="red">*</span></label></span> <span class="input_col"><input
-	type="text" id="<?= PROFILE_FIELD_COMP_URL; ?>"
-	name="<?= PROFILE_FIELD_COMP_URL; ?>" class="form-control"
-	maxlength="255"
-	value="<?= (strlen($_POST[PROFILE_FIELD_COMP_URL]) > 1) ? $_POST[PROFILE_FIELD_COMP_URL] : "http://www."; ?>" /></span>
+<div class="row formgroup my-2">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_URL; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_URL]) > 1 ? "red" : ""; ?>">Website Url <span class="red">*</span></label></span> 
+	<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_COMP_URL; ?>" name="<?= PROFILE_FIELD_COMP_URL; ?>" class="form-control" maxlength="255" value="<?= (strlen($_POST[PROFILE_FIELD_COMP_URL]) > 1) ? $_POST[PROFILE_FIELD_COMP_URL] : "http://www."; ?>" /></span>
 </div>
 
-<div class="row formgroup my-2"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_EMAIL; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_EMAIL]) > 1 ? "red" : ""; ?>">Enquiry
-Email <span class="red">*</span></label></span> <span class="input_col"><input
-	type="text" id="<?= PROFILE_FIELD_COMP_EMAIL; ?>" class="form-control"
-	maxlength="60" name="<?= PROFILE_FIELD_COMP_EMAIL; ?>"
-	value="<?= $_POST[PROFILE_FIELD_COMP_EMAIL]; ?>" /></span></div>
+<div class="row formgroup my-2">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_EMAIL; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_EMAIL]) > 1 ? "red" : ""; ?>">Enquiry Email <span class="red">*</span></label></span> 
+	<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_COMP_EMAIL; ?>" class="form-control" maxlength="60" name="<?= PROFILE_FIELD_COMP_EMAIL; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_EMAIL]; ?>" /></span>
+</div>
 
-<div class="row formgroup my-2"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_APPLY_URL]) > 1 ? "red" : ""; ?>">Apply
-Url</label></span> <span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>" class="form-control"
-	maxlength="255" name="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>"
-	value="<?= $_POST[PROFILE_FIELD_COMP_APPLY_URL]; ?>" /> <br />
-<span class="p_small grey">(optional) supply a url if you want applicants sent directly to your booking/recruitment website</span> </span></div>
+<div class="row formgroup my-2">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_APPLY_URL]) > 1 ? "red" : ""; ?>">Apply Url</label></span> 
+	<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>" class="form-control" maxlength="255" name="<?= PROFILE_FIELD_COMP_APPLY_URL; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_APPLY_URL]; ?>" /> <br />
+	<span class="p_small grey">(optional) supply a url if you want applicants sent directly to your booking/recruitment website</span> </span>
+</div>
 
-<div class="row formgroup my-2"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_ADDRESS; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_ADDRESS]) > 1 ? "red" : ""; ?>">Address</label></span>
-<span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_ADDRESS; ?>" class="form-control"
-	maxlength="999" name="<?= PROFILE_FIELD_COMP_ADDRESS; ?>"
-	value="<?= $_POST[PROFILE_FIELD_COMP_ADDRESS]; ?>" /></span></div>
+<div class="row formgroup my-2">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_ADDRESS; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_ADDRESS]) > 1 ? "red" : ""; ?>">Address</label></span>
+	<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_COMP_ADDRESS; ?>" class="form-control" maxlength="999" name="<?= PROFILE_FIELD_COMP_ADDRESS; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_ADDRESS]; ?>" /></span>
+</div>
 
-<div class="row formgroup my-2"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_COUNTRY_ID; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_COUNTRY_ID]) > 1 ? "red" : ""; ?>">Country</label></span>
-<span class="input_col"> <?= $this->Get("COUNTRY_ID_LIST"); ?> </span></div>
+<div class="row formgroup my-2">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_COUNTRY_ID; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_COUNTRY_ID]) > 1 ? "red" : ""; ?>">Country</label></span>
+	<span class="input_col"> <?= $this->Get("COUNTRY_ID_LIST"); ?> </span>
+</div>
 
 <? $css = ($this->Get('COUNTRY_ID_SELECTED') != 71) ? "display: none;" : ""; ?>
-<div id="state_panel" class="row formgroup my-2" style="<?= $css; ?>"><span
-	class="label_col"><label for="<?= PROFILE_FIELD_COMP_STATE_ID; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_STATE_ID]) > 1 ? "red" : ""; ?>">State</label></span>
-<span class="input_col"> <?= $this->Get("US_STATE_LIST"); ?> </span></div>
+<div id="state_panel" class="row formgroup my-2" style="<?= $css; ?>">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_STATE_ID; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_STATE_ID]) > 1 ? "red" : ""; ?>">State</label></span>
+	<span class="input_col"> <?= $this->Get("US_STATE_LIST"); ?> </span>
+</div>
 
 <? $css = ($this->Get('COUNTRY_ID_SELECTED') == 71) ? "display: none;" : ""; ?>
-<div id="region_panel" class="row formgroup my-2"  style="<?= $css; ?>"><span
-	class="label_col"><label for="<?= PROFILE_FIELD_COMP_LOCATION; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LOCATION]) > 1 ? "red" : ""; ?>">Region</label></span>
-<span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_LOCATION; ?>" class="form-control"
-	maxlength="99" name="<?= PROFILE_FIELD_COMP_LOCATION; ?>"
-	value="<?= $_POST[PROFILE_FIELD_COMP_LOCATION]; ?>" /></span></div>
+<div id="region_panel" class="row formgroup my-2"  style="<?= $css; ?>">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_LOCATION; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_LOCATION]) > 1 ? "red" : ""; ?>">Region</label></span>
+	<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_COMP_LOCATION; ?>" class="form-control" maxlength="99" name="<?= PROFILE_FIELD_COMP_LOCATION; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_LOCATION]; ?>" /></span>
+</div>
 
-<div class="row formgroup my-2"><span class="label_col"><label
-	for="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>"
-	class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_TELEPHONE]) > 1 ? "red" : ""; ?>">Telephone</label></span>
-<span class="input_col"><input type="text"
-	id="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>" class="form-control"
-	maxlength="39" name="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>"
-	value="<?= $_POST[PROFILE_FIELD_COMP_TELEPHONE]; ?>" /> <br />
-<span class="p_small grey">Include international / regional dialing
-code(s)</span> </span></div>
+<div class="row formgroup my-2"><span class="label_col">
+	<label for="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_TELEPHONE]) > 1 ? "red" : ""; ?>">Telephone</label></span>
+	<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>" class="form-control" maxlength="39" name="<?= PROFILE_FIELD_COMP_TELEPHONE; ?>" value="<?= $_POST[PROFILE_FIELD_COMP_TELEPHONE]; ?>" /> <br />
+	<span class="p_small grey">Include international / regional dialing code(s)</span> </span>
+</div>
 
 <?php if ($this->Get("PROFILE_TYPE_COUNT") >  1) { ?>
-  <div class="row formgroup my-2">
+<div class="row formgroup my-2">
   <h2>Profile Type <span class="red"> *</span></h2>
-  </div>
+</div>
 
-  <div class="row my-2">
-	  <div class="col">
-  	  <span><img src="/images/icon_info.png" alt="" border="0" style="vertical-align: middle;" /></span>
-      <span class="p_small grey"> Choose profile type that best matches your organisation's activities.</span>
-	  </div>
-	</div>
-  <div class="row my-2">
-    <span class="input_col">
-      <?= $this->Get("PROFILE_TYPE_LIST"); ?> <br />
-    </span>
+<div class="row my-2">
+  <div class="col">
+  <span><img src="/images/icon_info.png" alt="" border="0" style="vertical-align: middle;" /></span>
+  <span class="p_small grey"> Choose profile type that best matches your organisation's activities.</span>
   </div>
+</div>
+<div class="row my-2">
+<span class="input_col">
+  <?= $this->Get("PROFILE_TYPE_LIST"); ?> <br />
+</span>
+</div>
 
 <?php } else { ?>
   <input type="hidden" name="<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>" value="<?= $this->Get("PROFILE_TYPE_SELECTED_ID"); ?>" />
@@ -371,10 +342,6 @@ $visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display
 <div id="profile_type_<?= PROFILE_TEACHING; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
   <?= $this->Get('EXTENDED_FIELDSET_TEACHING_PROJECT'); ?>
 </div>
-
-
-
-
 
 
 <? if ($oAuth->oUser->isAdmin) { ?>
@@ -530,7 +497,7 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
     <div class="form-check form-check-inline">
     Job<input type="checkbox" name="prof_opt_3" class="form-check-input"
     <? if (($oProfile->HasProfileOption(PROFILE_JOB)) || isset($_POST['prof_opt_3'])) print "checked"; ?>>
-  </div>
+	  </div>
   </div>
 </div>
 
@@ -601,5 +568,6 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
 </div>
 
 
+</div>
 </div>
 </div>
