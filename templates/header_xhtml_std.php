@@ -39,37 +39,29 @@ $(document).ready(function(){
 <div class="container-fluid">
 
 
-<header class="p-3 mb-3 border-bottom">
+<header class="border-bottom">
     <div class="container">
-      <div class="row">
-
-
+ 
+     <div class="row">
         <a href="/dashboard" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
           <img src="<?= $this->Get("LOGO_URL"); ?>" alt="<?= $this->Get("TITLE"); ?>" border="0" />
         </a>
+      </div>
 
 
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 link-secondary"></a></li>
-        </ul>
-
+     <div class="row my-1">
       <? if ($oAuth->oUser->isValidUser) { ?>
-        <!--
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-        </form>
-        -->
+	<div class="col-12">
+        <div class="float-end">
+        <div class="dropdown">
+          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu</a>
+  	  <!--<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-ibs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</a>-->
 
-        <div class="dropdown text-end">
-          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Menu
-          </a>
           <ul class="dropdown-menu text-small">
             <a class="dropdown-item" href="/dashboard">dashboard</a>
             <? if ($oAuth->oUser->isAdmin) { ?>
                     <a class="dropdown-item" href="/company/add" title="add a new company">add company</a>
                     <a class="dropdown-item" href="/placement/add" title="add a new placement">add placement</a>
-                    <a class="dropdown-item" href="/article-manager" title="manage articles">article</a>
                     <a class="dropdown-item"  href="/user/" title="manage users">user</a>
                     <a class="dropdown-item" href="/activity-admin" title="activity admin">activity</a>
             <? } ?>
@@ -83,13 +75,15 @@ $(document).ready(function(){
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/logout">Sign out</a></li>
           </ul>
-        </div>
+      </div>
+      </div>
       </div>
     <? } ?>
+    </div>
 
 
     </div>
   </header>
 
 
-<div class="container">
+<div class="container p-0 my-2">
