@@ -124,12 +124,9 @@ function my_session_start()
            $sessid = $_COOKIE['PHPSESSID'];
       } elseif (!ini_get('session.use_only_cookies') && isset($_GET['PHPSESSID'])) {
            $sessid = $_GET['PHPSESSID'];
-      } else {
-           session_start();
-           return false;
       }
-
-      if (!preg_match('/^[a-z0-9]{32}$/', $sessid)) {
+      
+      if (!preg_match('/[a-z0-9]/', $sessid)) {
            return false;
       }
       session_start();
@@ -157,10 +154,10 @@ try {
         $db = new db($dsn,$debug = false);
         
     } catch (Exception $e) {
+
     }
-    
-    
-    $oSession = new Session;
+
+    $oSession = new Session();
     if ($oSession->Exists()) {
     	$oSession = $oSession->Get();
     } else {
@@ -196,8 +193,7 @@ try {
     	$oSession->Save();
     
     	Logger::Msg($e);
-    	die();
-    	//Http::Redirect("/".ROUTE_ERROR); 
+    	Http::Redirect("/".ROUTE_ERROR); 
     }
     
     set_exception_handler('exception_handler');

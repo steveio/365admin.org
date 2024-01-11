@@ -268,7 +268,7 @@ class Login {
 
 	/* syntax check (uname & pass) */
 	private function validateStr($str,$key, $errorMsg) {
-		if (!preg_match("/".$this->validCharRegex."/", $str)) {
+		if (preg_match("/".$this->validCharRegex."/", $str)) {
 			return false;
 		} else {
 			$this->aError[$key] = $errorMsg;

@@ -23,7 +23,6 @@ if (is_array($aMessage) && count($aMessage) >= 1) {
 
 		    
 		    $str = "<div class=\"alert alert-".$type."\" role=\"alert\">";
-		    $str .= $oMessage->GetIconHtml();
 		    $str .= $oMessage->GetMsg();
 		    $str .= "</div>";
 			

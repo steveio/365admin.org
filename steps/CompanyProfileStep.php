@@ -1000,7 +1000,7 @@ EOT;
 	protected function AddProfile() {
 
 		global $oSession, $_CONFIG;
-
+		
 		$this->SetInValid();
 		$this->SetInComplete();
 		$this->UnsetUserMessages();
@@ -1008,16 +1008,15 @@ EOT;
 		$this->GetNewCompanyProfile();
 
 		if (isset($_POST['submit'])) {
-
+		    
 			/* add / update company db record */
 			if (!$this->AddUpdateCompanyDB($_POST)) {
 				return FALSE;
 			}
 
-
 			/* if this is a new registration, write account details */
-			if ($oSession->GetListingType() == "NEW") {
-
+			if ($oSession->GetListingType() == LISTING_REQUEST_NEW) {
+			    
 				if ($this->AddAccount($_POST)) { // its a user registration, redirect to confirmation page
 
 					$this->SetComplete();
@@ -1052,7 +1051,6 @@ EOT;
 			}
 
 		}
-
 	}
 
 	/*
