@@ -259,11 +259,12 @@ class DashboardStep extends GenericStep {
                 a.id,
                 'ARTICLE' as type,
                 a.title,
-                (select m.section_uri from article_map m where m.article_id = a.id order by m.oid desc limit 1) as url,
+                m.section_uri as url,
                 a.last_updated
                 from
-                article a
-                order by last_updated desc limit 20 )";
+                article a left outer join article_map m on a.id = m.article_id 
+		where last_updated is not null
+                order by last_updated desc limit 30 )";
    
             $db->query($sql);
 
