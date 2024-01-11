@@ -16,9 +16,9 @@ $oCProfile = $this->Get('oCProfile');
 	<h1><?= $oCProfile->GetTitle(); ?></h1>
 
 	<div class="col-12">
-		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '<?= $oBrand->GetWebsiteUrl(); ?>/<?= $oCProfile->GetProfileUrl() ?>'; return false;">View Company Profile</button>
-		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/<?= $oCProfile->GetProfileUrl() ?>/edit'; return false;">Edit Company Profile</button>
-		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '<?= "/".ROUTE_PLACEMENT ?>/add'; return false;">Add Placement</button>
+		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.open('<?= $oCProfile->GetProfileUrl() ?>'); return false;">View Company Profile</button>
+		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.open('/company/<?= $oCProfile->GetUrlName() ?>/edit'); return false;">Edit Company Profile</button>
+		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.open('<?= "/".ROUTE_PLACEMENT ?>/add'); return false;">Add Placement</button>
 
     	<?php if ($oAuth->oUser->isAdmin) { ?>
 			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="deleteProfile('/<?= $oCProfile->GetProfileUrl() ?>/delete'); return false;">Delete Company Profile</button>
