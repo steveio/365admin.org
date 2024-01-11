@@ -23,8 +23,14 @@ class LoginStep extends GenericStep {
 	
 	public function Process() { 
 
-		global $oHeader, $oFooter, $oBrand;
+		global $oHeader, $oFooter, $oBrand, $oAuth;
 
+		if ($oAuth->oUser->isValidUser)
+		{
+		    Http::Redirect("/".ROUTE_DASHBOARD);
+		    die();
+		}
+		
 		/* look for a referer url ie anything after /login */
 		$request_array = Request::GetUri("ARRAY");
 		$request_array = array_slice($request_array, 2);
