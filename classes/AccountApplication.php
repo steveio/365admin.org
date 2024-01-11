@@ -67,8 +67,8 @@ class AccountApplication {
 			$aResponse['msg']['password'] = "Password should be between 4 and 20 characters.";
 		}
 		
-		if (preg_match("/[^a-zA-Z0-9]/",$a['password'])) {
-			$aResponse['msg']['password'] = "Password should contain only letters and numbers.";
+		if (!preg_match("/[a-zA-Z0-9\W]/",$a['password'])) {
+			$aResponse['msg']['password'] = "Password should contain only letters, numbers and punctuation (special characters).";
 		}
 
 		if (trim($a['password']) !=  trim($a['password_confirm'])) {

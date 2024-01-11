@@ -39,7 +39,7 @@ class Login {
 	
 	private $bValid; // TRUE on valid login attempt
 
-	const VALID_CHAR_REGEX = "[^a-zA-Z0-9@_\-\.]";
+	const VALID_CHAR_REGEX = "[a-zA-Z0-9\W]";
 	const IP_ADDRESS_ACCESS_CHECK = FALSE;
 	
 	public function __construct() {
