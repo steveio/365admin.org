@@ -412,6 +412,9 @@ class Login {
 			{
 				return false; 
 			}
+		} else {
+		    $this->aError['INVALID_PASSWORD'] = "Please enter a valid password";
+		    return true;
 		}
 	}
 
