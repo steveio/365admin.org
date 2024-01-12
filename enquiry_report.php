@@ -165,10 +165,14 @@ print $oHeader->Render();
 
 <button class="btn btn-primary rounded-pill px-3" type="submit" name="report_filter" value="submit">submit</button>
 
-
-
-
 </div>
+
+
+</form>
+
+
+<form enctype="multipart/form-data" name="enquiry_result" id="enquiry_result" action="" method="POST">
+
 	
 <? if (strlen($strMessage) >= 1) { ?>
     <div class="alert alert-success my-3" role="alert">
