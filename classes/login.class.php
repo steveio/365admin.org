@@ -411,6 +411,9 @@ class Login {
 			if(password_verify($this->pass, $db_password_hash))
 			{
 				return false; 
+			} else {
+			    $this->aError['INVALID_PASSWORD'] = "Please enter a valid password";
+			    return true;
 			}
 		} else {
 		    $this->aError['INVALID_PASSWORD'] = "Please enter a valid password";
