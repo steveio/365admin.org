@@ -1,10 +1,22 @@
+<form enctype="multipart/form-data" id="recent_activity" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
-<table cellspacing="2" cellpadding="4" border="0" width="400px">
+<table  id="report" class="display" cellspacing="2" cellpadding="4" border="0" width="" class="table table-striped">
+<thead>
 <tr>
-	<th>&nbsp;</th>
-	<th>Title</th>
-	<th align="right">Select</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">Title</th>
+	<th scope="col">Published To</th>
+	<th scope="col">Created</th>
+	<th scope="col">Last Updated</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">&nbsp;</th>
+	<th scope="col">Select</th>
+
 </tr>
+</thead>
+<tbody>
+
 <? 
 $i = 1;
 
@@ -15,8 +27,20 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	?>
 	<? $class = ($class == "hi") ? "" : "hi"; ?>
 	<tr class='<?= $class ?>'>
-		<td width="20px" valign="top"><?= $i++ ?></td>
-		<td width="80px" valign="top"><a href='/article_edit.php?id=<?= $oArticle->GetId(); ?>' title='edit article (opens in new window)' target='_new'><?= $oArticle->GetTitle() ?></a></td>
+		<td valign="top"><?= $i++ ?></td>
+		<td valign="top"><?= $oArticle->GetTitle() ?></td>
+		<td valign="top"><a href="<?= $oArticle->GetUrl() ?>"><?= $oArticle->GetRelativeUrl() ?></td>
+		<td valign="top"><?= $oArticle->GetCreatedDate() ?></td>
+		<td valign="top"><?= $oArticle->GetLastUpdated() ?></td>
+		<td>
+			<a class="btn btn-primary rounded-pill px-3" role="button" href="<?= $oArticle->GetUrl() ?>" title="View">View</a>
+		</td>		
+		<td>
+			<a class="btn btn-primary rounded-pill px-3" role="button"  href="./article-editor?&id=<?= $oArticle->GetId() ?>" title="Edit">Edit</a>
+		</td>
+		<td>
+			<a class="btn btn-primary rounded-pill px-3" role="button"  href="./article-publisher?&id=<?= $oArticle->GetId() ?>" title="Edit">Publish</a>
+		</td>
 		<td width="20px" align="right"><input type="checkbox" name="art_<?= $oArticle->GetId() ?>" value="true" /></td>
 	</tr>
 <? 
@@ -25,7 +49,7 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	<tr class="hi">
 		<td colspan="10" align="right" width="800px">
 		Remove Selected :
-		<input type="submit" name="remove_article" value="Remove" />
+		<input  class="btn btn-primary rounded-pill px-3" type="submit" name="remove_article" value="Remove" />
 		</td>
 	</tr>
 <?
@@ -33,5 +57,5 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	print "<tr><td colspan=5>There are 0 articles found.</tr>";
 }
 ?>
-
+</tbody>
 </table>

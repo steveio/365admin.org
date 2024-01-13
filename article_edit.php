@@ -74,7 +74,7 @@ $_SESSION['article_id'] = $_REQUEST['id'];
 if (isset($_REQUEST['attach_profile'])) {
 	$oArticle->SetId($article_id);
 	if (!$oArticle->AttachProfile($_REQUEST,$aResponse)) {
-		$aResponse['placement_id'] = "ERROR : Please select a profile to attach";
+		$aResponse['msg'] = "ERROR : Please select a profile to attach";
 	}
 }
 
@@ -88,6 +88,7 @@ if (isset($_REQUEST['remove_profile'])) {
 		 $aResponse['status'] = "success";
 	} else {
 		$aResponse['msg'] = "ERROR : Please select a placement to remove";
+		$aResponse['status'] = "success";
 	}
 }
 
@@ -97,6 +98,7 @@ if (isset($_REQUEST['attach_article'])) {
 	$aId = Mapping::GetIdByKey($_REQUEST,"art_");
 	if ($oArticle->AttachArticleId($aId)) {
 		$aResponse['msg'] = "SUCCESS : Attached selected articles;";
+		$aResponse['status'] = "success";
 	}
 }
 
@@ -107,6 +109,7 @@ if (isset($_REQUEST['remove_article'])) {
 	$aId = Mapping::GetIdByKey($_REQUEST,"art_");
 	if ($oArticle->RemoveAttachedArticle($aId)) {
 		$aResponse['msg'] = "SUCCESS : Removed selected articles;";
+		$aResponse['status'] = "success";
 	}
 }
 
@@ -117,9 +120,6 @@ $max_uploads  = 4;
 $path = '/www/vhosts/oneworld365.org/htdocs/upload/images/';
 
 if (isset($_REQUEST['do_file_upload'])) {
-
-	if (DEBUG) Logger::Msg("Upload: Begin...");
-
 
 	if (count($_FILES['file']['name'])<=$max_uploads) {
 		if (DEBUG) Logger::Msg("Upload: Multiple...");
@@ -159,6 +159,7 @@ if (isset($_REQUEST['do_file_upload'])) {
 	} else {
 		$plural = (count($aResult['FILENAME']) > 1) ? "s" : "";
 		$aResponse['msg'] = "SUCCESS : uploaded ".count($aResult['FILENAME']) ." file".$plural."<br/>".implode("<br />",$aResult['FILENAME']);
+		$aResponse['status'] = "success";
 	}
 
 }
@@ -198,7 +199,7 @@ if(($mode == "EDIT") || ($mode == "ADD")) {
 	/* get article from DB */
 	if ($mode == "EDIT") {
 		if (!$oArticle->GetById($_REQUEST['id'])) {
-			$aResponse['get'] = "ERROR : Unable to retrieve article";
+			$aResponse['msg'] = "ERROR : Unable to retrieve article";
 		}
 	}
 }
