@@ -750,11 +750,7 @@ class Content  implements TemplateInterface {
 	 */
 	public function Save(&$response) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		if (!$this->Validate($response)) return false;
-		
-		
 		
 		if (!is_numeric($this->GetId())) {
 			$this->SetId($this->GetNextArticleSeq());
@@ -782,11 +778,11 @@ class Content  implements TemplateInterface {
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
 		if (strlen($this->GetTitle()) < 1) {
-			$aResponse['title'] = "Title must be supplied";
+			$aResponse['msg'] = "ERROR: Title must be supplied";
 		}
 		
 		if (strlen($this->GetTitle()) > 255) {
-			$aResponse['title'] = "Title must be less than 254 characters";
+			$aResponse['msg'] = "ERROR: Title must be less than 254 characters";
 		}
 
 		// disabled to allow creation of unpublished article "stubs"
@@ -795,7 +791,7 @@ class Content  implements TemplateInterface {
 		//}
 		
 		if (strlen($this->GetDescShort()) > 1999) {
-			$aResponse['desc_short'] = "Short Description must be less than 254 characters";
+			$aResponse['msg'] = "ERROR: Short Description must be less than 254 characters";
 		}
 		
 		
