@@ -158,7 +158,6 @@ class User {
 		   ,uname
 		   ,access_level
 		   ,pass_hash
-		   ,pass_salt
 		   ,company_id
 		   ,added
 		) VALUES (
@@ -168,7 +167,6 @@ class User {
 		   ,'".$this->uname."'
 		   ,1
 		   ,'".$encrypted_password."'
-		   ,''
 		   ,'".$this->company."'
 		   ,now()::timestamp
 		);";

@@ -227,6 +227,7 @@ class Login {
 		$this->recaptcha_challenge = isset($recaptcha_challenge) ? $recaptcha_challenge : "";
 		$this->recaptcha_response = isset($recaptcha_response) ? $recaptcha_response : "";
 
+		
 		/* true represents error condition */
 		switch (true) {
 
@@ -267,7 +268,7 @@ class Login {
 
 
 	/* syntax check (uname & pass) */
-	private function validateStr($str,$key, $errorMsg) {
+	private function validateStr($str,$key, $errorMsg) {	    
 		if (preg_match("/".$this->validCharRegex."/", $str)) {
 			return false;
 		} else {
@@ -284,7 +285,7 @@ class Login {
 
 		global $db;
 
-		$db->query("SELECT id,company_id, locked,pass_salt,ip FROM euser WHERE uname = '".$this->uname."'");
+		$db->query("SELECT id,company_id, locked,ip FROM euser WHERE uname = '".$this->uname."'");
 
 		if ($db->getNumRows() == 1) {
 			$aRes = $db->getRow();
@@ -295,7 +296,6 @@ class Login {
 				$this->aError['CREDENTIAL_ACCOUNT_LOCKED'] = "Your account has been suspended.  Please contact support";
 				return true;
 			}
-			$this->passHashSalt = $aRes['pass_salt'];
 			$this->userIP = $aRes['ip'];
 
 
