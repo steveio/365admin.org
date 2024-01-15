@@ -978,7 +978,7 @@ EOT;
 	/* process a request to edit a company profile */
 	protected function EditProfile() {
 
-                $this->GetCompanyProfileFromDb( $this->GetCompanyId() );
+        $this->GetCompanyProfileFromDb( $this->GetCompanyId() );
 
 		// handle update if form submitted
 		if (isset($_POST['submit'])) {
@@ -991,6 +991,10 @@ EOT;
 		$this->GetCompanyProfileFromDb( $this->GetCompanyId() );
 
 		$this->SetFormValuesFromCompanyProfile(); // set _POST form values from $this->oCompanyProfile
+
+		// put ID in session for image_upload.php
+		$_SESSION['id'] = $this->GetCompanyId();
+		$_SESSION['link_to'] = "COMPANY";
 
 	}
 

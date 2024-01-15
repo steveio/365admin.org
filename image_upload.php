@@ -18,12 +18,17 @@ error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
 
 
 define("DEBUG",FALSE);
-define("LOG", FALSE);
-define("LOG_PATH","/www/vhosts/365admin.org/logs/365admin_indexer.log");
+define("LOG", TRUE);
 define("JOBNAME","IMAGE_UPLOAD");
 
 if (LOG) Logger::DB(3,JOBNAME,'STARTED PROCESSING: ');
 
+// script must not be called directly
+if(!isset($_SERVER['HTTP_REFERER']) || strlen($_SERVER['HTTP_REFERER']) < 1)
+{
+    header("HTTP/1.1 403 Origin Denied");
+    die();
+}
 
 
 
@@ -42,7 +47,7 @@ if ($oSession->Exists()) {
 /***************************************************
 * Only these origins are allowed to upload images *
  ***************************************************/
-$accepted_origins = array("https://localhost", "https://192.168.1.1", "https://admin.oneworld365.org");
+$accepted_origins = array("https://localhost", "https://192.168.1.1", "https://admin.oneworld365.org", "http://admin.oneworld365.org");
 
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -62,8 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 
-$article_id = (is_numeric($_SESSION['article_id'])) ? $_SESSION['article_id'] : 0; // article may not be saved
+$link_id = (is_numeric($_SESSION['id'])) ? $_SESSION['id'] : 0; // article/profile must be saved
+$link_to = $_SESSION['link_to'];
 
+if (!is_numeric($link_id))
+{
+    die("ERROR: Article / Profile must be saved");
+}
 
 if (LOG) Logger::DB(3,JOBNAME,'ArticleId: '.$article_id);
 
@@ -101,9 +111,9 @@ try {
 	Logger::DB(3,JOBNAME,$url);
 
 
-	// generate small, medium, large proxy images, attach to article
+	// generate small, medium, large proxy images, attach to content
 	$oImageProcessor = new ImageProcessor_FileUpload();
-	$oImageProcessor->Process(array($aFile['TMP_PATH']), 'ARTICLE', $article_id);
+	$oImageProcessor->Process(array($aFile['TMP_PATH']), $link_to, $link_id);
 
 
 	$aId = $oImageProcessor->GetProcessedIds();

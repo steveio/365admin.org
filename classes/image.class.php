@@ -489,8 +489,7 @@ class ImageProcessor {
 		
 		if (!file_exists($sPath)) return false;
 		
-		$sCmd = $this->GetPath2Identify() . " " . $sPath; 
-		
+		$sCmd = $this->GetPath2Identify() . " \"" . $sPath ."\""; 
 		
 		$aOut = array();
 		
@@ -498,7 +497,7 @@ class ImageProcessor {
 		
 		/* split the output from identify */
 		$aBits = explode(" ",$aOut[0]);
-
+		
 		$aReturn['type'] = $aBits[1];
 		
 		switch($aReturn['type']) {

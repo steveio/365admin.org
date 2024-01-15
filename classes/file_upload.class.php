@@ -125,7 +125,7 @@ class File_upload {
 		}
 
 		// sanitize filename
-		$name = preg_replace('/[^a-zA-Z0-9. ]+/','_',$name);
+		$name = preg_replace('/[^a-zA-Z0-9.]+/','_',$name);
 		
 		
 		// write file details to database and get id

@@ -281,8 +281,9 @@ class PlacementStep extends ProfileStep {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 	
-                $this->GetProfileFromDb();
-	
+        $this->GetProfileFromDb();
+
+
 		// handle update if form submitted
 		if (isset($_POST['submit'])) {
 
@@ -320,7 +321,11 @@ class PlacementStep extends ProfileStep {
 		// get placement profile
 		$this->GetProfileFromDb();		
 		$this->SetFormValuesFromProfile();  
-		
+
+		// put ID in session for image_upload.php
+		$_SESSION['id'] = $this->GetPlacementId();
+		$_SESSION['link_to'] = "PLACEMENT";
+
 	}
 	
 	

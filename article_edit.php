@@ -183,7 +183,8 @@ if (isset($_REQUEST['save'])) {
 		$aResponse['msg'] = "SUCCESS : Article saved OK";
 		$aResponse['status'] = "success";
 		$_REQUEST['id'] = $oArticle->GetId();
-		$_SESSION['article_id'] = $oArticle->GetId();
+		$_SESSION['id'] = $oArticle->GetId();
+		$_SESSION['link_to'] = "ARTICLE";
 	}
 }
 

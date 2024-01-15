@@ -617,7 +617,10 @@ class PlacementProfile extends AbstractProfile {
 			$aResponse['edit_url'] = $edit_url; 
 			
 		}
-		
+
+		// put ID in session for image_upload.php
+		$_SESSION['id'] = $p['id'];
+		$_SESSION['link_to'] = "PLACEMENT";
 		
 		return TRUE;
 

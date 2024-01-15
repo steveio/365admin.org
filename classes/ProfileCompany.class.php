@@ -784,7 +784,6 @@ class CompanyProfile extends AbstractProfile {
 			
 		}
 		
-		
 		return true;
 		
 	}
