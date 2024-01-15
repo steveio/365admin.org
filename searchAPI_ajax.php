@@ -40,7 +40,8 @@ $match = $_GET['match'];
 $filterDate = $_GET['filterDate'];
 $fromDate = $_GET['fromDate'];
 $toDate = $_GET['toDate'];
-
+$fuzzy = true;
+$bUnpublished = false;
 
 // Validate Input Params
 if (preg_match("/[^a-zA-Z0-9\/ _\-\%]/",$exp)) {
@@ -56,157 +57,184 @@ if(!is_numeric($match)) {
     sendResponse($aResponse);
 }
 
-Logger::DB(2,basename(__FILE__)." exp:".$exp.", t: ".$template." match: ".$match);
+
+search($exp, $match, $filterDate, $fromDate, $toDate);
 
 
-if (preg_match("/^\//",$exp) || $exp = "UNPUBLISHED")
+
+function search($uri, $match, $filterDate, $fromDate, $toDate)
 {
-    uriSearch($exp, $match, $filterDate, $fromDate, $toDate);
-} 
+    global $fuzzy, $bUnpublished;
 
-
-function uriSearch($uri, $match, $filterDate, $fromDate, $toDate)
-{
-    global $db, $aBrandConfig;
-    
-    if (preg_match("/^\/company\//",$uri)) // org or placement uri search /company/*
+    if ($uri == "UNPUBLISHED")
     {
+        $bUnpublished = true;
+    }
 
-        $template = "search_result_list_profile.php";
-        
-        $uri_depth = substr_count($uri, '/');
+    $uri = strtolower($uri);
 
-        $uri = strtolower($uri);
+    // default to fuzzy search    
+    if ($match == ARTICLE_SEARCH_MODE_EXACT) 
+    {
         $fuzzy = false;
-        if (substr_count($uri, '%') >= 1)
+    } else {
+        $fuzzy = true;
+        if (substr_count($uri, '%') < 1)
         {
-            $fuzzy = true;
+            $uri = $uri."%";
         }
-
-        if ($uri_depth >= 1 && $uri_depth <= 2) // company search: /company/company-url  
+    }
+    
+    // URI or Keywords?
+    if (preg_match("/^\//",$uri))
+    {
+        if (preg_match("/^\/company\//",$uri)) // org or placement uri search /company/*
         {
-            
-            $oCompany = new Company($db);
+            $uri_depth = substr_count($uri, '/');
 
-            $uri = preg_replace("/\/company\//","",$uri);
-            $aResult = $oCompany->GetByUri($uri, $fuzzy);
-
-            if (is_array($aResult) && count($aResult) >= 1)
+            if ($uri_depth >= 1 && $uri_depth <= 2) // company search: /company/company-url
             {
-                $oTemplate = new Template();
-                $oTemplate->Set("RESULT_ARRAY",$aResult);
-                $oTemplate->Set("WEBSITE_URL",$aBrandConfig['oneworld365.org']['website_url']);
-                $oTemplate->Set("RESULT_TYPE",'COMPANY');
-                $oTemplate->LoadTemplate($template);
-                $oTemplate->Render();
-
-                $aResponse['retVal'] = true;
-                $aResponse['msg'] = "Found ".count($aResult)." result(s).";
-                $aResponse['html'] = $oTemplate->Render();
-                $aResponse['status'] = "success";
-                sendResponse($aResponse);
-
+                searchCompany($uri);
+                return;
             } else {
-
-                $aResponse['retVal'] = true;
-                $aResponse['msg'] = "Found 0 results.";
-                $aResponse['html'] = '';
-                $aResponse['status'] = "warning";
-                
+                searchPlacement($uri);
+                return;
             }
-            
+        }        
+    } else { // keywords
+        $uri = "%".preg_replace("/ /","-",$uri);
+    }
 
-        } else {  // placement search: /company/company-url/placememt-url
+    searchArticle($uri, $match, $filterDate, $fromDate, $toDate);
+}
 
 
-            $oPlacement = new Placement($db);
 
-            // extract placement uri from search expression
-            $aUri = explode("/",$uri);
+function searchCompany($uri)
+{
+    global $db, $aBrandConfig, $fuzzy, $aResponse;
 
-            if (!isset($aUri[3]) || strlen($aUri[3]) < 1)
-            {
-                $aResponse['msg'] = "Invalid url";
-                $aResponse['status'] = "warning";
-                sendResponse($aResponse);
-            }
+    $template = "search_result_list_profile.php";
 
-            $uri = $aUri[3];
-
-            if ($uri == "%") // wildcard return all profile for /company/comp-name/% 
-            {
-                $comp_id = Company::GetIdByUri($aUri[2]);
-                if (!is_numeric($comp_id))
-                {
-                    $aResponse['msg'] = "Invalid company url";
-                    $aResponse['status'] = "warning";
-                    sendResponse($aResponse);
-                }
-
-                $aResult = $oPlacement->GetByCompId($comp_id);
-
-            } else {
-                $aResult = $oPlacement->GetByUri($uri, $fuzzy);
-            }
-            
-            if (is_array($aResult) && count($aResult) >= 1)
-            {
-                $oTemplate = new Template();
-                $oTemplate->Set("RESULT_ARRAY",$aResult);
-                $oTemplate->Set("WEBSITE_URL",$aBrandConfig['oneworld365.org']['website_url']);
-                $oTemplate->Set("RESULT_TYPE",'PLACEMENT');
-                $oTemplate->LoadTemplate($template);
-                $oTemplate->Render();
-                
-                $aResponse['retVal'] = true;
-                $aResponse['msg'] = "Found ".count($aResult)." result(s).";
-                $aResponse['html'] = $oTemplate->Render();
-                $aResponse['status'] = "success";
-                sendResponse($aResponse);
-                
-            } else {
-                
-                $aResponse['retVal'] = true;
-                $aResponse['msg'] = "Found 0 results.";
-                $aResponse['html'] = '';
-                $aResponse['status'] = "warning";
-                
-            }
-            
-
-        }
-
-        sendResponse($aResponse);
-        
-    } else { // article search
-
-        $template = "article_search_result_list_03.php";
-
-        $bUnpublished = ($uri == "UNPUBLISHED") ? true : false;
-        
-        $oArticleCollection = new ArticleCollection();
-        
-        if ($match == ARTICLE_SEARCH_MODE_EXACT) {
-            $oArticleCollection->SetSearchMode(ARTICLE_SEARCH_MODE_EXACT);
-        }
-
-        $oArticleCollection->SetLimit(250);
-        $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished, $filterDate, $fromDate, $toDate);
-        
-        if ($oArticleCollection->Count() < 1) {
-            $aResponse['msg'] = "No articles found matching uri: ".$uri."<br />Try again with a pattern match eg %".$uri;
-            sendResponse($aResponse);
-        }
-
-        $oArticleCollection->LoadTemplate($template);
+    $oCompany = new Company($db);
+    
+    $uri = preg_replace("/\/company\//","",$uri);
+    $aResult = $oCompany->GetByUri($uri, $fuzzy);
+    
+    if (is_array($aResult) && count($aResult) >= 1)
+    {
+        $oTemplate = new Template();
+        $oTemplate->Set("RESULT_ARRAY",$aResult);
+        $oTemplate->Set("WEBSITE_URL",$aBrandConfig['oneworld365.org']['website_url']);
+        $oTemplate->Set("RESULT_TYPE",'COMPANY');
+        $oTemplate->LoadTemplate($template);
+        $oTemplate->Render();
         
         $aResponse['retVal'] = true;
-        $aResponse['msg'] = "Found ".$oArticleCollection->Count()." articles.";
-        $aResponse['html'] = $oArticleCollection->Render();
+        $aResponse['msg'] = "Found ".count($aResult)." result(s).";
+        $aResponse['html'] = $oTemplate->Render();
         $aResponse['status'] = "success";
         sendResponse($aResponse);
-
+        
+    } else {
+        
+        $aResponse['retVal'] = true;
+        $aResponse['msg'] = "Found 0 results.";
+        $aResponse['html'] = '';
+        $aResponse['status'] = "warning";
+        
     }
+}
+
+function searchPlacement($uri)
+{
+    global $db, $aBrandConfig, $fuzzy, $aResponse;
+
+    $oPlacement = new Placement($db);
+
+    $template = "search_result_list_profile.php";
+
+    // extract placement uri from search expression
+    $aUri = explode("/",$uri);
+
+    if (!isset($aUri[3]) || strlen($aUri[3]) < 1)
+    {
+        $aResponse['msg'] = "Invalid url";
+        $aResponse['status'] = "warning";
+        sendResponse($aResponse);
+    }
+
+    $uri = $aUri[3];
+
+    if ($uri == "%") // wildcard return all profile for /company/comp-name/%
+    {
+        $comp_id = Company::GetIdByUri($aUri[2]);
+        if (!is_numeric($comp_id))
+        {
+            $aResponse['msg'] = "Invalid company url";
+            $aResponse['status'] = "warning";
+            sendResponse($aResponse);
+        }
+        
+        $aResult = $oPlacement->GetByCompId($comp_id);
+        
+    } else {
+        $aResult = $oPlacement->GetByUri($uri, $fuzzy);
+    }
+    
+    if (is_array($aResult) && count($aResult) >= 1)
+    {
+        $oTemplate = new Template();
+        $oTemplate->Set("RESULT_ARRAY",$aResult);
+        $oTemplate->Set("WEBSITE_URL",$aBrandConfig['oneworld365.org']['website_url']);
+        $oTemplate->Set("RESULT_TYPE",'PLACEMENT');
+        $oTemplate->LoadTemplate($template);
+        
+        $aResponse['retVal'] = true;
+        $aResponse['msg'] = "Found ".count($aResult)." result(s).";
+        $aResponse['html'] = $oTemplate->Render();
+        $aResponse['status'] = "success";
+        
+    } else {
+        
+        $aResponse['retVal'] = true;
+        $aResponse['msg'] = "Found 0 results.";
+        $aResponse['html'] = '';
+        $aResponse['status'] = "warning";
+        
+    }
+
+    sendResponse($aResponse);
+
+}
+
+function searchArticle($uri, $match = null, $filterDate = null, $fromDate = '', $toDate = '')
+{
+    global $fuzzy, $bUnpublished;
+
+    $template = "article_search_result_list_03.php";
+
+    $oArticleCollection = new ArticleCollection();
+    
+    if ($match == ARTICLE_SEARCH_MODE_EXACT) {
+        $oArticleCollection->SetSearchMode(ARTICLE_SEARCH_MODE_EXACT);
+    }
+    
+    //$oArticleCollection->SetLimit(250);
+    $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished, $filterDate, $fromDate, $toDate);
+
+    if ($oArticleCollection->Count() < 1) {
+        $aResponse['msg'] = "No articles found matching uri: ".$uri."<br />Try again with a pattern match eg %".$uri;
+        sendResponse($aResponse);
+    }
+    
+    $oArticleCollection->LoadTemplate($template);
+    
+    $aResponse['retVal'] = true;
+    $aResponse['msg'] = "Found ".$oArticleCollection->Count()." articles.";
+    $aResponse['html'] = $oArticleCollection->Render();
+    $aResponse['status'] = "success";
+    sendResponse($aResponse);
 }
 
 
