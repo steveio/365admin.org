@@ -41,10 +41,7 @@
                 <div class="col-3">
                         <button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI(); return false;" name="article_search">Search</button>
                 </div>
-	</div>
-		<ul>
-			<li>Patterns: <span class="p_small">"%" = fuzzy eg /blog/%hong-kong%  OR /company/camp%  OR /company/placement/%ski%" OR UNPUBLISHED</i></span></li>
-		</ul>
+		</div>
 	</div>
 </div>
 
