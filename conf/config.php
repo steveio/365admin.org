@@ -9,7 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
 date_default_timezone_set('Europe/London');
 
 // db connection... (@todo - move into $_CONFIG for consistancy)
-$dsn = array("dbhost" => "localhost","dbuser" => "oneworld365_pgsql", "dbpass" => "bra@zi1","dbname" => "oneworld365","dbport" => "5432");
+$dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "oneworld365","dbport" => "5432");
 
 $solr_config = array(
     'adapteroptions' => array(
@@ -335,6 +335,8 @@ define('ERROR_ADD_ACCOUNT_FAILED','Add account failed :');
 
 /* config params required to make classes work */
 $_CONFIG = array( 
+        'site_id' => 0,
+        'url' => 'https://www.oneworld365.org',
         'company_table' => 'company',
         'placement_table' => 'profile_hdr',
         'profile_hdr_table' => 'profile_hdr', /* placement table is a view in some sites, these must use profile_hdr for add/update */
