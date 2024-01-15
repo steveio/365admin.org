@@ -8,7 +8,7 @@ include_once("./includes/header.php");
 include_once("./includes/footer.php");
 
 
-if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/client_login.php",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
+if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = "/",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
 $oArticle = new Article();

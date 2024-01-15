@@ -75,7 +75,7 @@ class db {
 		global $_CONFIG;
 
 		header('HTTP/1.1 503 Service Temporarily Unavailable');
-		header("Location: ".$_CONFIG['url']."/back_soon.php");
+		header("Location: /back_soon.php");
 	
 	}
 

@@ -11,7 +11,7 @@ include_once("./includes/footer.php");
 
 
 
-if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/client_login.php",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
+if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = "/",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
 $oJsInclude = new JsInclude();
@@ -122,7 +122,6 @@ $path = '/www/vhosts/oneworld365.org/htdocs/upload/images/';
 if (isset($_REQUEST['do_file_upload'])) {
 
 	if (count($_FILES['file']['name'])<=$max_uploads) {
-		if (DEBUG) Logger::Msg("Upload: Multiple...");
 		$upload = new File_upload();
 		$upload->allow('images');
 		$upload->set_path($path);
@@ -184,10 +183,10 @@ if (isset($_REQUEST['save'])) {
 		$aResponse['msg'] = "SUCCESS : Article saved OK";
 		$aResponse['status'] = "success";
 		$_REQUEST['id'] = $oArticle->GetId();
+		$_SESSION['article_id'] = $oArticle->GetId();
 	}
-
-
 }
+
 
 if(($mode == "EDIT") || ($mode == "ADD")) {
 
