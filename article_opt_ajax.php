@@ -36,6 +36,7 @@ $o_title = trim($_POST['ot']);
 $n_title = trim($_POST['nt']);
 $p_intro = trim($_POST['pi']);
 $o_intro = trim($_POST['oi']);
+$tid = $_POST['tid'];
 
 
 if (!is_numeric($mid)) {
@@ -77,6 +78,8 @@ $aTextFieldOpts = array(
 					"o_intro" => $o_intro
 					);
 
+$opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = $tid;
+
 $oContentMapping->SetOptions($mid,$opts_array, $aTextFieldOpts);
 
 // update cache
@@ -91,11 +94,11 @@ sendResponse($aResponse);
 
 function sendResponse($aResponse) {
 
-	/* return response back to the caller */
-	$oJson = new Services_JSON;
-	header('Content-type: application/x-json');
-	print $oJson->encode($aResponse);
-	die();	
+    /* return response back to the caller */
+    $oJson = new Services_JSON;
+    header('Content-type: application/x-json');
+    print $oJson->encode($aResponse);
+    die();	
 
 }
 

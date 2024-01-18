@@ -39,6 +39,16 @@ define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER",11);
 define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY",12);
 define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER",13);
 
+define("ARTICLE_DISPLAY_OPT_TEMPLATE_ID",20);
+define("ARTICLE_DISPLAY_OPT_PATH",21);
+define("ARTICLE_DISPLAY_OPT_ATTACHED",22);
+
+// templates
+define("ARTICLE_TEMPLATE_DEFAULT",0);
+define("ARTICLE_TEMPLATE_ARTICLE",1);
+define("ARTICLE_TEMPLATE_RESULTS",2);
+define("ARTICLE_TEMPLATE_BLOG",3);
+
 
 
 define ("DB__ARTICLE_TBL","article");
@@ -713,6 +723,11 @@ class Content  implements TemplateInterface {
 			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER] = ($aRow['opt_txtalignh'] == 't') ? 't' : 'f';
 			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY] = ($aRow['opt_txtalignb'] == 't') ? 't' : 'f';
 			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER] = ($aRow['opt_txtalignf'] == 't') ? 't' : 'f';
+			
+			$opts[ARTICLE_DISPLAY_OPT_ATTACHED] = ($aRow['opt_attached'] == 't') ? 't' : 'f';
+			$opts[ARTICLE_DISPLAY_OPT_PATH] = ($aRow['opt_path'] == 't') ? 't' : 'f';
+
+			$opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = $aRow['template_id'];
 																			
 			
 			$opts[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD] = stripslashes($aRow['search_keywords']);
@@ -1614,6 +1629,7 @@ class ContentMapping {
 		$n_title = addslashes($aTextFieldOpts['n_title']);
 		$p_intro = addslashes($aTextFieldOpts['p_intro']);
 		$o_intro = addslashes($aTextFieldOpts['o_intro']);
+
 		
 		$sql = "INSERT INTO ".DB__ARTICLE_MAP_OPTS." (	article_map_oid, 
 												opt_placement, 
@@ -1628,7 +1644,10 @@ class ContentMapping {
 												p_intro,
 												o_intro,
                                                 opt_ads,
-                                                opt_img
+                                                opt_img,
+                                                template_id,
+                                                opt_path,
+                                                opt_attached
 											 ) VALUES (
 												".$mid.",
 												'".$opts_array[ARTICLE_DISPLAY_OPT_PLACEMENT]."',						
@@ -1643,7 +1662,10 @@ class ContentMapping {
 												'".$p_intro."',
 												'".$o_intro."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_ADS]."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_IMG]."'
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_IMG]."',
+                                                ".$opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID].",
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_PATH]."',
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ATTACHED]."'
 											 );";
 
 		$db->query($sql);

@@ -49,13 +49,15 @@ function ArticleMapOptions(mid) {
     var nt = $("#ntitle_"+mid).val();
     var pi = $("#pintro_"+mid).val();
     var oi = $("#ointro_"+mid).val();
-    
+    var tid = $("#opt_"+mid+"_20").val(); // template_id
+
+    console.log("TemplateId: "+tid);
     
     var opts = w.join('::');
 	var url = "/article_opt_ajax.php";
-    var pars = '&mid='+mid+'&opts='+opts+'&q='+q+'&pt='+pt+'&ot='+ot+'&nt='+nt;
+    var pars = '&mid='+mid+'&opts='+opts+'&q='+q+'&pt='+pt+'&ot='+ot+'&nt='+nt+'&tid='+tid;
     
-	$.post(url, { mid: mid, opts: opts, q: q, pt: pt, ot: ot, nt: nt, pi: pi, oi: oi }, 
+	$.post(url, { mid: mid, opts: opts, q: q, pt: pt, ot: ot, nt: nt, pi: pi, oi: oi, tid: tid }, 
 		function(data){
 	
 			$('#alert-msg').show();

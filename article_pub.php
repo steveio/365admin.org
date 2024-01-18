@@ -153,7 +153,30 @@ if (count($oArticle->GetMapping()) >= 1) {
 			Google Ads <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ADS; ?>" <?= $checked ?> />		
 		</td>
 	</tr>
+    <tr>
+        <td colspan="2">
 
+      	<div class="row">
+    		<div class="col-2">
+    			Template: 
+    		</div>
+    		<div class="col-9">
+				<select id="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_TEMPLATE_ID; ?>" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_TEMPLATE_ID; ?>" class="form-select">
+					<option value="<?= ARTICLE_TEMPLATE_DEFAULT ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_DEFAULT) ? "selected" : ""; ?>>Default</option>
+					<option value="<?= ARTICLE_TEMPLATE_ARTICLE ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_ARTICLE) ? "selected" : ""; ?>>Article</option>
+					<option value="<?= ARTICLE_TEMPLATE_RESULTS ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_RESULTS) ? "selected" : ""; ?>>Results</option>
+					<option value="<?= ARTICLE_TEMPLATE_BLOG ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_BLOG) ? "selected" : ""; ?>>Blog</option>
+				</select>
+				Content From:
+    			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ATTACHED) == "t") ? "checked" : "" ; ?>
+    			Path <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ATTACHED; ?>" <?= $checked ?> />
+    			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PATH) == "t") ? "checked" : "" ; ?>
+    			Attached <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PATH; ?>" <?= $checked ?> />
+
+    		</div>
+		</div>
+		</td>
+	</tr>
     <tr>
         <td colspan="2">
 
