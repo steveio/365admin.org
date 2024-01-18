@@ -11,6 +11,9 @@
 */
 
 
+require_once(BASE_PATH."/classes/file.class.php");
+
+
 
 class Logger{
 
