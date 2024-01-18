@@ -362,9 +362,9 @@ function setLightSwitch(e,state) {
         }
 
 
-function RemoveImage(url,link_type,link_id,image_id) {
+function RemoveImage(link_type,link_id,image_id) {
 
-        var url = url +"/image_detach_ajax.php";
+        var url = "/image_detach_ajax.php";
         var target = '';
         var pars = '&link_to='+link_type+'&link_id='+link_id+'&image_id='+image_id;
 

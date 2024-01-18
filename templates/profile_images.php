@@ -18,7 +18,7 @@
 			$type = ($oProfile->GetGeneralType() == PROFILE_COMPANY) ? "COMPANY" : "PLACEMENT";
 			?>
 			<div id="img_<?= $oImage->GetId() ?>" style="float: left; padding-right: 6px;">
-			<a class="p_small" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('<?= $_CONFIG['url'] ?>','<?= $type; ?>',<?= $oProfile->GetId(); ?>,<?= $oImage->GetId() ?>)">[REMOVE]</a>
+			<a class="p_small" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('<?= $type; ?>',<?= $oProfile->GetId(); ?>,<?= $oImage->GetId() ?>)">[REMOVE]</a>
 			<br />
 			<?= $oImage->GetHtml("_s","") ?>
 			</div>

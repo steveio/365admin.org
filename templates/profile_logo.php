@@ -28,7 +28,7 @@
 			</tr>
 		</table>
 
-		<a class="btn btn-primary rounded-pill px-3" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('<?= $_CONFIG['url'] ?>','COMPANY',<?= $oProfile->GetId() ?>,<?= $oImage->GetId() ?>)">Click here to delete existing logo</a>
+		<a class="btn btn-primary rounded-pill px-3" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('COMPANY',<?= $oProfile->GetId() ?>,<?= $oImage->GetId() ?>)">Click here to delete existing logo</a>
 	</div>
 
 	
