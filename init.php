@@ -126,9 +126,6 @@ function my_session_start()
            $sessid = $_GET['PHPSESSID'];
       }
       
-      if (!preg_match('/[a-z0-9]/', $sessid)) {
-           return false;
-      }
       session_start();
 
       return true;
@@ -163,7 +160,7 @@ try {
     } else {
     	$oSession = $oSession->Create();
     }
-
+   
     if (!is_object($oAuth))
     {
         /* setup an instance of session authentication */
