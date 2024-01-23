@@ -21,8 +21,6 @@ $oWebsite = new Website($db);
 $sWebSiteListHTML = $oWebsite->GetSiteSelectList(array());
 
 
-//print_r($_REQUEST);
-
 
 /* unpublish (delete article mapping) */
 $aMappingId = Mapping::GetIdByKey($_REQUEST,"map_");
@@ -45,6 +43,7 @@ if (isset($_REQUEST['publish'])) {
 if (!$oArticle->GetById($_REQUEST['id'])) {
 	$aResponse['msg'] = "ERROR : Unable to retrieve article";
 }
+
 
 
 print $oHeader->Render();
@@ -169,9 +168,9 @@ if (count($oArticle->GetMapping()) >= 1) {
 				</select>
 				Content From:
     			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ATTACHED) == "t") ? "checked" : "" ; ?>
-    			Path <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ATTACHED; ?>" <?= $checked ?> />
+    			Attached <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ATTACHED; ?>" <?= $checked ?> />
     			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PATH) == "t") ? "checked" : "" ; ?>
-    			Attached <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PATH; ?>" <?= $checked ?> />
+    			Path <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PATH; ?>" <?= $checked ?> />
 
     		</div>
 		</div>

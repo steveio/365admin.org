@@ -40,6 +40,7 @@ define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY",12);
 define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER",13);
 
 define("ARTICLE_DISPLAY_OPT_TEMPLATE_ID",20);
+define("ARTICLE_DISPLAY_OPT_TEMPLATE_PATH",23);
 define("ARTICLE_DISPLAY_OPT_PATH",21);
 define("ARTICLE_DISPLAY_OPT_ATTACHED",22);
 
@@ -49,6 +50,9 @@ define("ARTICLE_TEMPLATE_ARTICLE",1);
 define("ARTICLE_TEMPLATE_RESULTS",2);
 define("ARTICLE_TEMPLATE_BLOG",3);
 
+define("ARTICLE_TEMPLATE_ARTICLE_FILE","article_01.php");
+define("ARTICLE_TEMPLATE_BLOG_FILE","blog.php");
+define("ARTICLE_TEMPLATE_BLOG_ARTICLE_FILE","blog_article.php");
 
 
 define ("DB__ARTICLE_TBL","article");
@@ -58,7 +62,8 @@ define ("DB__ARTICLE_LINK_TBL","article_link"); /* other articles that are assoc
 define ("DB__ARTICLE_MAP_OPTS","article_map_opts");
 
 
-$_CONFIG['site_id'] = 0;
+$_CONFIG['site_id'] = 0; // @deprecated multi-website white label config, now defaults to primary site
+
 
 /*
  * Abstract Base class for all content elements eg. articles, sections
@@ -97,7 +102,9 @@ class Content  implements TemplateInterface {
 	public  $oLinkGroup; /* a collection of links associated with article */
 
 	public $fetch_mode; /* FETCHMODE__FULL || FETCHMODE__SUMMARY */
-	public $fetch_children; // bool whether to fetch attached articles
+	public $fetchAttachedArticle = TRUE; 
+	public $fetchAttachedProfile = TRUE; 
+	public $fetchAttachedImage = TRUE; 
 	public $fetch_child_mode; /* FETCHMODE__FULL || FETCHMODE__SUMMARY */
 	public $fetch_current_mapping_only; /* fetch just mapping info associated with URL being viewed */
 	public $fetch_mapped_profiles; // bool whether to fetch attached profiles
@@ -117,8 +124,6 @@ class Content  implements TemplateInterface {
 		$this->oArticleCollection = new ArticleCollection();
 		$this->oLinkGroup = new LinkGroup();
 		$this->SetFetchMode(FETCHMODE__FULL);
-		$this->fetch_children = TRUE;
-		$this->fetch_mapped_profiles = TRUE;
 		$this->fetch_child_mode = FETCHMODE__SUMMARY;
 		$this->fetch_current_mapping_only = FALSE;
 		$this->bFetchAttachedTo = FALSE;
@@ -145,14 +150,30 @@ class Content  implements TemplateInterface {
 		return $this->bFetchAttachedTo;
 	}
 	
-	public function SetFetchChildren($bool) {
-		$this->fetch_children = $bool;
+	public function SetFetchAttachedArticle($bool) {
+		$this->fetchAttachedArticle = $bool;
+	}
+
+	public function GetFetchAttachedArticle() {
+		return $this->fetchAttachedArticle;	
+	}
+
+	public function SetFetchAttachedProfile($bool) {
+	    $this->fetchAttachedProfile = $bool;
 	}
 	
-	public function GetFetchChildren() {
-		return $this->fetch_children;	
+	public function GetFetchAttachedProfile() {
+	    return $this->fetchAttachedProfile;
+	}
+
+	public function SetFetchAttachedImage($bool) {
+	    $this->fetchAttachedImage = $bool;
 	}
 	
+	public function GetFetchAttachedImage() {
+	    return $this->fetchAttachedImage;
+	}
+
 	public function SetFetchProfiles($bool) { 
 		$this->fetch_mapped_profiles = $bool;
 	}
@@ -355,7 +376,7 @@ class Content  implements TemplateInterface {
 		 * or not published to the site being viewed
 		 * return a default URL for viewing
 		*/
-		$defaultUrl = $_CONFIG['url'] . "/article.php?&id=".$this->GetId();
+		$defaultUrl = "/article?&id=".$this->GetId();
 		
 		$aMapping = $this->GetMappingBySiteId($_CONFIG['site_id']);
 	
@@ -467,8 +488,8 @@ class Content  implements TemplateInterface {
 		if (!is_numeric($id)) return false;
 	
 		$field_sql = ($this->GetFetchMode() == FETCHMODE__FULL) ? "a.*" : "a.id, a.title, a.short_desc, a.meta_desc, a.meta_keywords, a.published_status, a.published_date";	
-	
-		$db->query("SELECT 
+
+        $sql = "SELECT 
 						$field_sql  
 						,to_char(a.created_date,'DD/MM/YYYY') as created_date
 						,to_char(a.last_updated,'DD/MM/YYYY') as last_updated
@@ -478,7 +499,9 @@ class Content  implements TemplateInterface {
 						".DB__ARTICLE_TBL." a 
 					WHERE
 						a.id = ".$id." 
-					");
+					";
+
+		$db->query($sql);
 		
 		if ($db->getNumRows() != 1) return false;
 		
@@ -490,13 +513,12 @@ class Content  implements TemplateInterface {
 		$this->SetMapping();
 		$this->SetAttachedImage();
 		if ($this->GetFetchMode() == FETCHMODE__FULL) {
-			if ($this->GetFetchProfiles()) {
+			if ($this->GetFetchAttachedProfile()) {
 				$this->SetAttachedProfile();
 			}
-			if ($this->GetFetchChildren()) {
+			if ($this->GetFetchAttachedArticle()) {
 				$this->SetAttachedArticle();
 			}
-			$this->SetAttachedLink();
 			if ($this->GetFetchAttachedTo()) {
 				$this->SetAttachedTo();
 			}
@@ -578,14 +600,10 @@ class Content  implements TemplateInterface {
 	 */
 	public function Get($iWebsiteId,$sSectionUri,$iLimit = -1,$exact = true) {
 		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
 		global $db;
 		
 		if (!is_numeric($iWebsiteId)) return false;
 		if (strlen($sSectionUri) < 1) return false;
-		
-		/* @todo - validate URI */
 	
 		$sLimit = ($iLimit >= 1) ? "LIMIT ".$iLimit : "";
 	
@@ -597,8 +615,8 @@ class Content  implements TemplateInterface {
 			$wildcard = "";
 		}
 
-		$field_sql = ($this->GetFetchMode() == FETCHMODE__FULL) ? "a.*" : "a.id, a.title, a.short_desc, a.published_status, a.published_date";
-		
+		$field_sql = ($this->GetFetchMode() == FETCHMODE__FULL) ? "a.*" : "a.id, a.title, a.short_desc, a.published_status, m.section_uri ";
+
 		$sql = "SELECT 
 						$field_sql 
 						,to_char(a.published_date,'DD/MM/YYYY') as published_date
@@ -616,22 +634,48 @@ class Content  implements TemplateInterface {
 						".$sLimit."
 						;
 					";
-		
+
 		$db->query($sql);
-		
-		if ($db->getNumRows() != 1) return false;
-		
-		$aRes = $db->getRow(PGSQL_ASSOC);
 
-		$this->SetFromArray($aRes);
+		if ($exact) // exact path, shouuld return single article
+		{
+		    if ($db->getNumRows() != 1) throw new Exception("ERROR: fetch article failed");
 		
-		/* get associated publish mappings, attached profiles, attached images */ 
-		$this->SetMapping($sSectionUri);
-		$this->SetAttachedProfile();
-		$this->SetAttachedImage();
-		$this->SetAttachedArticle();
-		$this->SetAttachedLink();
+    		$aRes = $db->getRow(PGSQL_ASSOC);
+    
+    		$this->SetFromArray($aRes);
+    		
+    		/* get associated publish mappings, attached profiles, attached images */ 
+    		$this->SetMapping($sSectionUri);
 
+    		if($this->GetFetchAttachedProfile())
+    		{
+    		    $this->SetAttachedProfile();
+    		}
+    		if($this->GetFetchAttachedImage())
+    		{
+    		    $this->SetAttachedImage();
+    		}
+    		if($this->GetFetchAttachedArticle())
+    		{
+    		    $this->SetAttachedArticle();
+    		}
+		} else { // fuzzy path search, multiple results
+
+		    $aResult = $db->getRows(PGSQL_ASSOC);
+
+		    if (!is_array($aResult) || count($aResult) < 1)  throw new Exception("ERROR: fetch article failed");
+		    
+		    foreach($aResult as $aRow)
+		    {
+		        $oArticle = new Article();
+		        $oArticle->SetFromArray($aRow);
+		        $oArticle->SetAttachedImage();
+
+		        $this->oArticleCollection->Add($oArticle);
+		    }
+		    
+		}
 		return true;
 		
 	}
@@ -677,19 +721,17 @@ class Content  implements TemplateInterface {
 
 	public function SetMapping($section_uri = "") {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		global $db; 
 		
 		if ($this->GetFetchCurrentMappingOnly() && strlen($section_uri) > 1) {
 			$sWhere = " AND m.section_uri = '".$section_uri."'";
 		}
-		
+
 		$sql = "SELECT 
-						m.oid,
-						m.website_id,
-						m.section_uri,
-						o.* 
+						m.oid
+						,m.website_id
+						,m.section_uri
+						,o.* 
 					FROM 
 						".DB__ARTICLE_MAP_TBL." m  
 						LEFT OUTER JOIN ".DB__ARTICLE_MAP_OPTS." o ON m.oid = o.article_map_oid  
@@ -697,47 +739,17 @@ class Content  implements TemplateInterface {
 						article_id = ".$this->GetId() ."
 						$sWhere
 						";
-					
 
 		$db->query($sql);
 
 		if ($db->getNumRows() < 1) return false;
 		
 		$aRes = $db->getRows();
-		
-		
-		foreach($aRes as $aRow) {
-			$oContentMapping = new ContentMapping($aRow['oid'],$aRow['website_id'],$aRow['section_uri']);
-			
-			$opts = array();
-			$opts[ARTICLE_DISPLAY_OPT_PLACEMENT] = ($aRow['opt_placement'] == NULL) ? "t" : $aRow['opt_placement'];
-			$opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "t" : $aRow['opt_article'];
-			$opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "t" : $aRow['opt_profile'];
-			$opts[ARTICLE_DISPLAY_OPT_REVIEW] = ($aRow['opt_review'] == NULL) ? "t" : $aRow['opt_review'];
-			$opts[ARTICLE_DISPLAY_OPT_SOCIAL] = ($aRow['opt_social'] == NULL) ? "t" : $aRow['opt_social'];
-			$opts[ARTICLE_DISPLAY_OPT_PARENT_TABS] = ($aRow['opt_ptab'] == 't') ? 't' : 'f';
-			$opts[ARTICLE_DISPLAY_OPT_FEATURED_PROJECT] = ($aRow['opt_fproject'] == 't') ? 't' : 'f';
-			$opts[ARTICLE_DISPLAY_OPT_ADS] = ($aRow['opt_ads'] == NULL) ? "t" : $aRow['opt_ads'];
-			$opts[ARTICLE_DISPLAY_OPT_IMG] = ($aRow['opt_img'] == NULL) ? "t" : $aRow['opt_img'];
-			
-			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER] = ($aRow['opt_txtalignh'] == 't') ? 't' : 'f';
-			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY] = ($aRow['opt_txtalignb'] == 't') ? 't' : 'f';
-			$opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER] = ($aRow['opt_txtalignf'] == 't') ? 't' : 'f';
-			
-			$opts[ARTICLE_DISPLAY_OPT_ATTACHED] = ($aRow['opt_attached'] == 't') ? 't' : 'f';
-			$opts[ARTICLE_DISPLAY_OPT_PATH] = ($aRow['opt_path'] == 't') ? 't' : 'f';
 
-			$opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = $aRow['template_id'];
-																			
-			
-			$opts[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD] = stripslashes($aRow['search_keywords']);
-			$opts[ARTICLE_DISPLAY_OPT_PTITLE] = stripslashes($aRow['p_title']);
-			$opts[ARTICLE_DISPLAY_OPT_OTITLE] = stripslashes($aRow['o_title']);
-			$opts[ARTICLE_DISPLAY_OPT_NTITLE] = stripslashes($aRow['n_title']);
-			$opts[ARTICLE_DISPLAY_OPT_PINTRO] = stripslashes($aRow['p_intro']);
-			$opts[ARTICLE_DISPLAY_OPT_OINTRO] = stripslashes($aRow['o_intro']);
-			
-			$oContentMapping->SetOptionsFromArray($opts);
+		foreach($aRes as $aRow) {
+
+			$oContentMapping = new ContentMapping($aRow['oid'],$aRow['website_id'],$aRow['section_uri']);
+			$oContentMapping->SetContentPubOpts($aRow);
 			$this->aMapping[] = $oContentMapping; 
 		}
 		
@@ -755,7 +767,17 @@ class Content  implements TemplateInterface {
 	}
 	
 	
-	
+	public static function convertCkEditorFont2Html($text,$title) {
+	    //$text = preg_replace('/(?<=<div.*?)(?<!=\t*?"?\t*?)(class|style)=".*?"/', "<table>$1</table>", $text);
+	    $text = preg_replace('/<p>[ \t\r\n]+<span style="font-size:[ ]?([20|22|24].*?)".*?>(.*?)<\/span><\/p>/si', '<'.$title.'>${2}</'.$title.'>', $text);
+	    $text = preg_replace('/<span style="font-size:[ ]?([20|22|24].*?)".*?>(.*?)<\/span>/si', '<'.$title.'>${2}</'.$title.'>', $text);
+	    $text = preg_replace('/<span style="font-size:[ ]?(14.*?)".*?>(.*?)<\/span>/si', '${2}', $text);
+	    return $text = preg_replace('/<table .*?>/si', '<table>', $text);
+	    
+	    //return preg_replace('/\<[\/]?(table)([^\>]*)\>/i', '', $text);
+	    
+	}
+
 	
 	/*
 	 * INSERT / UPDATE Article
@@ -1138,10 +1160,8 @@ class Content  implements TemplateInterface {
 	 * Get attached articles objects and add to article collection  
 	 * 
 	 */
-	public function  SetAttachedArticle($fetch = TRUE) {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
+	public function  SetAttachedArticle($fetch = TRUE) 
+	{	
 		global $db;
 
 		if ($fetch) $this->SetAttachedArticleId();
@@ -1149,8 +1169,8 @@ class Content  implements TemplateInterface {
 		foreach($this->GetAttachedArticleId() as $id) {
 			$oArticle = new Article();
 			$oArticle->SetFetchMode($this->GetChildFetchMode());
-			$oArticle->SetFetchChildren(FALSE);
-			$oArticle->SetFetchProfiles(FALSE);
+			$oArticle->SetFetchAttachedArticle(FALSE);
+			$oArticle->SetFetchAttachedProfile(FALSE);
 			if ($oArticle->GetById($id)) {
 				$this->oArticleCollection->Add($oArticle);
 			}
@@ -1160,10 +1180,8 @@ class Content  implements TemplateInterface {
 	}
 	
 	
-	public function  SetAttachedArticleId() {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
+	public function  SetAttachedArticleId() 
+	{
 		global $db;
 		
 		$limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
@@ -1176,9 +1194,15 @@ class Content  implements TemplateInterface {
 				$this->aArticleId[] = $row['id'];
 			}
 		}
-		
+
+		$this->iAttachedArticleTotal = count($this->aArticleId);
 	}
-	
+
+	public function GetAttachedArticleTotal()
+	{
+	    return $this->iAttachedArticleTotal;
+	}
+
 	public function SetAttachedArticleFetchLimit($iLimit) {
 		$this->iAttachedArticleFetchLimit = $iLimit;
 	}
@@ -1330,8 +1354,6 @@ class Content  implements TemplateInterface {
 	 */
 	public function SetAttachedImages($iType = PROFILE_IMAGE) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		global $db,$_CONFIG;
 		
 		$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = 'ARTICLE' AND m.link_id = ".$this->GetId()." ORDER BY i.id ASC");
@@ -1404,7 +1426,10 @@ class Content  implements TemplateInterface {
 	 * 
 	 * 
 	 */
-	
+	public function initTemplate() {
+	    $this->oTemplate = new Template();
+	}
+
 	
 	public function LoadTemplate($sFilename,$aOptions = array()) {
 
@@ -1502,391 +1527,5 @@ class Section extends Content {
 }
 
 
-
-class ContentMapping {
-
-	private $oid;
-	private $website_id;
-	private $section_uri;
-	
-	private $opts_array; // array of bool values signal 2 template what content to display
-	
-	public function __Construct($oid,$website_id,$section_uri) {
-		
-		$this->oid = $oid;
-		$this->website_id = $website_id;
-		$this->section_uri = $section_uri;
-		
-		$this->opts_array = array();
-	}
-	
-	public function GetById() {
-		
-		global $db;
-		
-		$sql = "SELECT m.oid,m.website_id,m.section_uri FROM ".DB__ARTICLE_MAP_TBL." m WHERE oid = ".$this->GetId();
-		
-		$db->query($sql);
-		
-		if ($db->getNumRows() == 1) {
-			$result = $db->getRow();
-			$this->website_id = $result['website_id'];
-			$this->section_uri = $result['section_uri'];
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
-	
-	public function GetId() {
-		return $this->oid;
-	}
-	
-	public function GetWebsiteId() {
-		return $this->website_id;	
-	}
-
-	public function GetSectionUri() {
-		return $this->section_uri;
-	}
-
-	
-	/*
-	 * @return mapping location as display label 
-	 * 
-	 */
-	public function GetLabel() {
-
-        	 global $_CONFIG;
-                return $_CONFIG['sites'][$this->GetWebsiteId()] . $this->GetSectionUri();
-
-		
-	}
-	
-	public function GetUrl() {
-		global $_CONFIG;
-		return $_CONFIG['url'].$this->GetLabel();
-	}
-	
-	
-	public function SetCacheUpdate() {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
-		$sUrl = "http://www.".$this->GetLabel();
-		Cache::Generate($sUrl,$this->GetSectionUri(),$this->GetWebsiteId(),$sleep = false);	
-		
-	}
-
-
-	/* update content mapping url matching specified criterea */
-	public static function UpdateUrl($url_from,$url_to) {
-
-		global $db;
-
-		if ((strlen($url_from) < 1) || (strlen($url_to) < 1)) return FALSE;
-
-		$db->query("SELECT * from ".DB__ARTICLE_MAP_TBL." WHERE section_uri = '".$url_from."'");
-		if ($db->getNumRows() >= 1) {
-			$db->query("UPDATE ".DB__ARTICLE_MAP_TBL." SET section_uri = '".$url_to."' WHERE section_uri = '".$url_from."'");
-			return TRUE;
-		}
-	}
-	
-	public function GetOptionById($opt_id) {
-		
-		if (isset($this->opts_array[$opt_id])) {
-			return $this->opts_array[$opt_id];
-		}
-		 
-	}
-	
-	public function GetOptions() {
-		return $this->opts_array;
-	}
-	
-	public function SetOptionsFromArray($opts_array) {
-		
-		if (!is_array($opts_array)) return FALSE;
-		
-		$this->opts_array = $opts_array;
-	}
-	
-	/* set signals to instruct template to toggle display of content */
-	public function SetOptions($mid, $opts_array, $aTextFieldOpts) {
-		
-		if (!is_array($opts_array) || !is_numeric($mid)) return FALSE;
-		
-		global $db;
-		
-		$sql = "DELETE FROM ".DB__ARTICLE_MAP_OPTS." WHERE article_map_oid = ".$mid;
-		
-		$db->query($sql);
-		
-		$search_keywords = addslashes($aTextFieldOpts['search_keywords']);
-		$p_title = addslashes($aTextFieldOpts['p_title']);
-		$o_title = addslashes($aTextFieldOpts['o_title']);
-		$n_title = addslashes($aTextFieldOpts['n_title']);
-		$p_intro = addslashes($aTextFieldOpts['p_intro']);
-		$o_intro = addslashes($aTextFieldOpts['o_intro']);
-
-		
-		$sql = "INSERT INTO ".DB__ARTICLE_MAP_OPTS." (	article_map_oid, 
-												opt_placement, 
-												opt_article,
-                                                opt_profile,
-                                                opt_review,
-                                                opt_social,
-												search_keywords,
-												p_title,
-												o_title,
-												n_title,
-												p_intro,
-												o_intro,
-                                                opt_ads,
-                                                opt_img,
-                                                template_id,
-                                                opt_path,
-                                                opt_attached
-											 ) VALUES (
-												".$mid.",
-												'".$opts_array[ARTICLE_DISPLAY_OPT_PLACEMENT]."',						
-												'".$opts_array[ARTICLE_DISPLAY_OPT_ARTICLE]."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_PROFILE]."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_REVIEW]."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_SOCIAL]."',
-												'".$search_keywords."',
-												'".$p_title."',
-												'".$o_title."',
-												'".$n_title."',
-												'".$p_intro."',
-												'".$o_intro."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ADS]."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_IMG]."',
-                                                ".$opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID].",
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_PATH]."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ATTACHED]."'
-											 );";
-
-		$db->query($sql);
-		
-		if ($db->getNumRows() == 1)
-		{
-		    return TRUE;
-		} else {
-		    error_log($sql);
-		}
-	}
-	
-}
-
-/* when retrieving articles, use exact "=" or fuzzy "like" pattern matching */
-define("ARTICLE_SEARCH_MODE_FUZZY",0);
-define("ARTICLE_SEARCH_MODE_EXACT",1);
-
-/*
- * A collection of articles, with various retrieval methods 
- * 
- * 
- */
-class ArticleCollection implements TemplateInterface  {
-
-    private $iLimit;
-	private $aArticle;	
-	private $iSearchMode;
-	
-	public function __Construct() {
-		$this->aArticle = array();
-
-		$this->SetSearchMode(ARTICLE_SEARCH_MODE_FUZZY);
-	}
-
-	public function SetLimit($iLimit) {
-	    $this->iLimit = $iLimit;
-	}
-	
-	private function GetLimit() {
-	    return $this->iLimit;
-	}
-
-	public function SetSearchMode($mode) {
-		$this->iSearchMode = $mode;
-	}
-
-	private function GetSearchMode() {
-		return $this->iSearchMode;
-	}
-
-	public function Count() {
-		return count($this->aArticle);
-	}
-	
-	public function Get() {
-		return $this->aArticle;
-	}
-	
-	public function Add($oArticle) {
-		
-		if ((is_object($oArticle)) && ($oArticle instanceof Article)) {
-			$this->aArticle[] = $oArticle;
-		}
-	}
-	
-	/*
-	 * Get all articles associated with a section uri
-	 * 	eg.  uri = "/news"
-	 * 	returns :
-	 * 		/news/2010/january/camp-america-events
-	 * 		/news/2010/january/bunac-special-offers
-	 * 		...
-	 *  By default articles are ordered by date DESC (ie most recent)
-	 * 
-	 */	
-	public function GetBySectionId($website_id,$sSectionUri,$getAttachedObj = true,$bUnPublished = false, $filterDate = false, $dateFrom = '', $dateTo = '') {
-
-		global $db;
-		
-		if (strlen($sSectionUri) < 1) return false;
-		
-		if (is_numeric($website_id)) { 
-			$sWhere = "AND m.website_id = ".$website_id;	
-		} elseif (is_array($website_id) && count($website_id) >= 1) {
-			$sWhere = "AND m.website_id IN (".implode(",",$website_id) .")";
-		}
-		
-		if ($this->GetSearchMode() == ARTICLE_SEARCH_MODE_FUZZY) {
-			$scope_sql = "AND m.section_uri LIKE '".$sSectionUri."%'";
-		} elseif ($this->GetSearchMode() == ARTICLE_SEARCH_MODE_EXACT) {
-			$scope_sql = "AND m.section_uri = '".$sSectionUri."'";
-		}
-
-		$sqlDateConstraint = "";
-
-		if ($filterDate == 1)
-		{
-		    $sqlDateConstraint = " AND a.last_updated >= '".$dateFrom ."' AND a.last_updated <= '".$dateTo."' ";
-		}
-
-		if ($getAttachedObj == false)
-		{
-		    $fields = " a.id
-                        ,a.title 
-						,to_char(a.created_date,'DD/MM/YYYY') as created_date
-					    ,to_char(a.last_updated,'DD/MM/YYYY') as last_updated
-						,to_char(a.last_indexed_solr,'DD/MM/YYYY') as last_indexed_solr
-                        ";
-		} else {
-		    $fields = " a.*
-						,to_char(a.created_date,'DD/MM/YYYY') as created_date
-					    ,to_char(a.last_updated,'DD/MM/YYYY') as last_updated
-						,to_char(a.last_indexed_solr,'DD/MM/YYYY') as last_indexed_solr
-                        ";
-		    
-		}
-
-		$sql_limit = ''; 
-        if (is_numeric($this->GetLimit()))
-        {
-            $sql_limit = "LIMIT ".$this->GetLimit();
-        }
-		
-		if ($bUnPublished) {
-
-		    $sql = "select 
-        		    ".$fields."
-        		    from
-        		    ".DB__ARTICLE_TBL." a
-        		    where not exists ( select 1 from ".DB__ARTICLE_MAP_TBL." m where a.id = m.article_id)
-        		        ".$sqlDateConstraint."
-        		        ORDER BY a.last_updated DESC, a.created_date DESC ".$sql_limit.";";
-
-		} else {
-		
-			$sql = "SELECT
-                    ".$fields." 
-					FROM 
-						".DB__ARTICLE_TBL." a
-						,".DB__ARTICLE_MAP_TBL." m 
-					WHERE 
-						1=1
-						".$sWhere."
-				        ".$scope_sql." 	
-						AND m.article_id = a.id
-                        ".$sqlDateConstraint."
-					ORDER BY 
-						a.last_updated DESC, a.created_date DESC ".$sql_limit.";";
-		
-		}
-
-		$db->query($sql);
-		
-		if ($db->getNumRows() < 1) return array();
-		
-		foreach ($db->getRows() as $a) {
-		
-			$oArticle = new Article();	
-			$oArticle->SetFromArray($a);
-			$oArticle->SetMapping();
-			$oArticle->SetUrl();
-
-			if ($getAttachedObj) {
-				$oArticle->SetAttachedProfile();
-				$oArticle->SetAttachedImage();
-				$oArticle->SetAttachedArticle();
-			}
-			
-			$this->aArticle[$oArticle->GetId()] = $oArticle;
-			 			
-		}
-				
-		return $this->aArticle;
-	}
-	
-	public function GetSubSectionArticleDetails($iWebsiteId, $sSectionUri) {
-
-		global $db;
-		
-		//if ((strlen($sSectionUri) < 1) || (!is_numeric($iWebsiteId))) return false;
-		
-		$sql = "select
-				a.id,
-				a.title,
-				a.short_desc,
-				m.section_uri
-				from
-				article_map m LEFT JOIN article a ON m.article_id = a.id
-				where
-				m.website_id = ".$iWebsiteId." AND 
-				m.section_uri like '".$sSectionUri."/%'";
-		
-		$db->query($sql);
-		
-		if ($db->getNumRows() < 1) return array();
-		
-		return $db->getRows();
-	}
-
-	
-	public function LoadTemplate($sFilename,$iWebSiteId = null) {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
-		$this->oTemplate = new Template(); 
-		
-		$this->oTemplate->Set("ARTICLE_ARRAY",$this->aArticle);
-
-		$this->oTemplate->LoadTemplate($sFilename);		
-
-	}
-	
-	
-	
-	public function Render() {
-
-		return $this->oTemplate->Render();
-		
-	}
-	
-}
 
 ?>

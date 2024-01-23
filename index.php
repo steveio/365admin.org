@@ -102,7 +102,11 @@ try {
 			require_once("article_pub.php");
 			die();
 			break;
-
+		case "/article-preview" :
+		    require_once("article.php");
+		    die();
+		    break;
+		    
 	}
 
 } catch (Exception $e) {

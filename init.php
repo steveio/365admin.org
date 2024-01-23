@@ -82,6 +82,9 @@ require_once(BASE_PATH."/classes/file.class.php");
 require_once(BASE_PATH."/classes/ip_address.class.php");
 require_once(BASE_PATH."/classes/link.class.php");
 require_once(BASE_PATH."/classes/article.class.php");
+require_once(BASE_PATH."/classes/ContentMapping.class.php");
+require_once(BASE_PATH."/classes/ArticleCollection.class.php");
+require_once(BASE_PATH."/classes/ArticleAssembler.class.php");
 require_once(BASE_PATH."/classes/search_result.class.php");
 require_once(BASE_PATH."/classes/file_upload.class.php");
 require_once(BASE_PATH."/classes/json.class.php");
@@ -188,7 +191,10 @@ try {
     	$oSession->SetErrorCode($e->getCode());
     	$oSession->SetErrorData($e->getMessage());
     	$oSession->Save();
-    
+
+    	print_r($e);
+    	die();
+
     	Logger::Msg($e);
     	Http::Redirect("/".ROUTE_ERROR); 
     }
