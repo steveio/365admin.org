@@ -24,6 +24,55 @@ body * {
   font-style: italic;
 }
 
+.box {
+    flex: 1;
+    border-radius: 0.5em;
+    padding: 20px;
+}
+.box1 {
+  background-color: #000;
+  opacity: .5;
+}
+
+.box2 {
+  background-color: rgba(0,0,0,.5);
+  --background-color: #95b176;
+  color: #fff;
+}
+
+.colorBlue {
+  background-color: #558ab4;
+}
+
+.colorOrange {
+  background-color: #DD6900;
+}
+
+.colorGreen {
+  background-color: #95b176;
+}
+
+.orange {
+    color: #DD6900;
+}
+
+.green{
+    color: #95b176;
+}
+
+.blue {
+	color: #558ab4;
+}
+
+.light-blue {
+    color: #72b6ed;
+}
+
+.card-title {
+	color: #72b6ed;
+	font-weight: bold;
+}
+}
 
 h1, h2, h3, h4, h5, h6 {
 }

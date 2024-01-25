@@ -1,15 +1,13 @@
 <? $oArticle = $this->Get('ARTICLE_OBJECT'); ?>
 <div class="row">
-<!-- start: Page section -->
-<section class="article span12">
 
-<div class="span12" style="margin: 20px;">
-<div class="pull-right sharethis-inline-share-buttons"></div>
+
+<div class="row">
+	<div class="pull-right sharethis-inline-share-buttons"></div>
 </div>
 
 
-<div class="span12 article-body">
-
+<div class="row">
 	<div class="pull-right image">
 	<?
 	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_l",'')) {
@@ -22,47 +20,67 @@
 
 	<h1><?= $oArticle->GetTitle(); ?></h1>
 
-	<p class="lead"><?= strip_tags($oArticle->GetDescShort()); ?></p>
+	<p><?= strip_tags($oArticle->GetDescShort()); ?></p>
 
-	<?
-		$oSearchResultPanel = $this->Get('oSearchResult');
-		if (is_object($oSearchResultPanel))
-			print $oSearchResultPanel->Render(); 
-	?>
-
-	<div class='lead'>	
-	<p>	<?= Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3"); ?> </p>
+	<div>	
+	<p><?= Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3"); ?> </p>
 	</div>
 	
 </div>
 
 
-<!-- BEGIN display blog articles -->
-<div class="row-fluid">
+<div class="row">
         <?
-        if (is_array($oArticle->GetArticleCollection()->Get())) {
-            $aArticle = $oArticle->GetArticleCollection()->Get();
-
         $oPager = new PagedResultSet();
-		$oPager->SetResultsPerPage(30);
-		$oPager->GetByCount($oArticle->GetAttachedArticleTotal(),"Page");
-        $count = count($aArticle);
+        $oPager->SetResultsPerPage(30);
+        $oPager->GetByCount($oArticle->GetAttachedArticleTotal(),"Page");
 
-        for ($i=0;$i<$count;$i++) {
-                if (is_object($aArticle[$i])) {
-                        $aArticle[$i]->SetImgDisplay(FALSE);
-                        $aArticle[$i]->LoadTemplate(ARTICLE_TEMPLATE_BLOG_ARTICLE_FILE);
-                        print $aArticle[$i]->Render();
-                }
+        if (is_array($oArticle->GetArticleCollection()->Get()))
+        {
+            foreach($oArticle->GetArticleCollection()->Get() as $oArticle)
+            {
+        ?>        
+        <div class="card-group col-sm-4">
+            <div class="card border-0  py-2 my-2">
+            
+                <? if (is_object($oArticle->GetImage(0))) { ?>
+                    <a title="<?= $oArticle->GetTitle() ?>" href="<?= $oArticle->GetUrl() ?>">
+                        <?= $oArticle->GetImage(0)->GetHtml("_l",$oArticle->GetTitle(),"card-img-top"); ?>
+                    </a>
+                <? } else { 
+                    // try to grab an image from article body text
+                    $html = $oArticle->GetDescFull();
+                    $arrImgUrl = array();
+                    preg_match_all( '|<img.*?src=[\'"](.*?)[\'"].*?>|i',$html, $arrImgUrl );
+                    if (count($arrImgUrl[1]) >= 1)
+                    { ?>
+                	<a title="<?= $oArticle->GetTitle() ?>" href="<?= $oArticle->GetUrl() ?>">
+                		<img class='img-responsive img-rounded' src='<?= $arrImgUrl[1][0] ?>' alt='<?= $oArticle->GetTitle(); ?>' border='0' />
+                	</a><?php 
+                    }
+                }?>
+            
+                <div class="card-body">
+                	<div class="">
+                        <h2 class="card-title"><a class="blue" href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
+                        <p class="card-text"><?= $oArticle->GetDescShort(); ?></p>
+                		<p class="card-text"><small class="text-muted"><?= $oArticle->GetPublishedDate(); ?></small></p>
+            		</div>        
+                </div>
+            </div>
+        </div> 
+
+        <?php 
+            }
         }
-
-		print '<div id="pager" class="span12 pagination pagination-large pagination-centered">';	
-		print $oPager->RenderHTML();
-		print '</div>';
-    } ?>
+        ?>
 </div>
-<!--  END display blog articles -->
+
+<div class="row">
+		<div id="pager" class="row pagination pagination-large pagination-centered">	
+		<?= $oPager->RenderHTML(); ?>
+		</div>
+</div>
 
 
-</section>
 </div>

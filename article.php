@@ -20,7 +20,7 @@ try {
 
     $article_path = "";
 
-    $oArticleAssembler = new ArticleAssembler();    
+    $oArticleAssembler = new ContentAssembler();    
 
     // 1.  Extract Article Path from URI (Published Articles)
     if (count($request_array) > 2)

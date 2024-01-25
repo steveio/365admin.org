@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Article Assembler - handles fetching article(s), associated content & template for rendering 
+ * Content Assembler - handles fetching article(s), associated content & template for rendering 
  * 
  * 
  * @author stevee
  *
  */
 
-class ArticleAssembler {
+class ContentAssembler {
   
     public function __Construct() {}
 

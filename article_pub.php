@@ -45,6 +45,9 @@ if (!$oArticle->GetById($_REQUEST['id'])) {
 }
 
 
+$oTemplateList = new TemplateList();
+$oTemplateList->GetFromDB();
+
 
 print $oHeader->Render();
 
@@ -161,10 +164,13 @@ if (count($oArticle->GetMapping()) >= 1) {
     		</div>
     		<div class="col-9">
 				<select id="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_TEMPLATE_ID; ?>" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_TEMPLATE_ID; ?>" class="form-select">
-					<option value="<?= ARTICLE_TEMPLATE_DEFAULT ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_DEFAULT) ? "selected" : ""; ?>>Default</option>
-					<option value="<?= ARTICLE_TEMPLATE_ARTICLE ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_ARTICLE) ? "selected" : ""; ?>>Article</option>
-					<option value="<?= ARTICLE_TEMPLATE_RESULTS ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_RESULTS) ? "selected" : ""; ?>>Results</option>
-					<option value="<?= ARTICLE_TEMPLATE_BLOG ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == ARTICLE_TEMPLATE_BLOG) ? "selected" : ""; ?>>Blog</option>
+				<?php 
+				foreach($oTemplateList->GetTemplateList() as $oTemplate)
+				{ ?>
+					<option value="<?= $oTemplate->id ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_TEMPLATE_ID) == $oTemplate->id) ? "selected" : ""; ?>><?= $oTemplate->title ?> : <?= $oTemplate->desc_short ?></option>
+				<?php 
+				}
+				?>
 				</select>
 				Content From:
     			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ATTACHED) == "t") ? "checked" : "" ; ?>
@@ -206,6 +212,7 @@ if (count($oArticle->GetMapping()) >= 1) {
 	<tr>
 		<td colspan="2">
 	    	<button class="btn btn-primary rounded-pill px-3" type="submit" name="opt_<?= $oArticleMapping->GetId() ?>" onclick="javascript: return ArticleMapOptions(<?= $oArticleMapping->GetId(); ?>);" value="update" >Update</button>
+	    	<button class="btn btn-primary rounded-pill px-3" type="submit" name="" onclick="javascript: window.open('/article<?=  $oArticleMapping->GetSectionUri(); ?>');" value="Preview" >Preview</button>
 		</td>
 	</tr>
 
