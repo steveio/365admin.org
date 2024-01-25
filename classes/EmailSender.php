@@ -1,4 +1,7 @@
 <?php
+
+define('TEST_MODE',false);
+
 /*
 * Created on 07-Nov-2008
 * Author: Steve Edwards (13/06/2008)
@@ -25,7 +28,7 @@ class EmailSender {
 		
 		if (DEBUG) Logger::Msg(get_class()."::".__FUNCTION__);
 		
-		if (DEBUG) {
+		if (TEST_MODE) {
 			Logger::Msg("EmailHtmlTemplatePath: ".$sHtmlTemplatePath);
 			Logger::Msg("EmailTextTemplatePath: ".$sTextTemplatePath);			
 			Logger::Msg("EmailMsgParams :");
@@ -40,11 +43,11 @@ class EmailSender {
 		
 		
 		/* load the html and plain text message templates */
-		$sHtmlTemplate = file_get_contents (ROOT_PATH."/templates/email_html_header.php");
+		$sHtmlTemplate = file_get_contents ($_CONFIG['root_path'].$_CONFIG['template_home'].$_CONFIG['email_template_hdr']);
 		$sHtmlTemplate .= file_get_contents ($sHtmlTemplatePath);
-		$sHtmlTemplate .= file_get_contents (ROOT_PATH."/templates/email_html_footer.php");
+		$sHtmlTemplate .= file_get_contents ($_CONFIG['root_path'].$_CONFIG['template_home'].$_CONFIG['email_template_footer']);
 		$sTextTemplate = file_get_contents ($sTextTemplatePath);
-		$sTextTemplate .= file_get_contents(ROOT_PATH."/templates/email_txt_footer.php");
+		$sTextTemplate .= file_get_contents($_CONFIG['root_path'].$_CONFIG['template_home']."/email_txt_footer.php");
 
 		/* check that we have a set of msg params */
 		if (!is_array($aMsgParams)) {
@@ -53,7 +56,7 @@ class EmailSender {
 	
 		/* add the global site-specific params */
 		$aMsgParams["SITE_TITLE"] = $_CONFIG['page_description'];
-		$aMsgParams["SITE_INFO"] = $_CONFIG['site_info'];
+		$aMsgParams["SITE_INFO"] = $_CONFIG['site_info_email'];
 		$aMsgParams["SITE_URL"] = $_CONFIG['url'];
 		$aMsgParams["SITE_LOGO_URL"] = $_CONFIG['logo_url'];
 		$aMsgParams["SITE_NAME"] = $_CONFIG['brand'];
@@ -67,10 +70,13 @@ class EmailSender {
 			$sTextTemplate = preg_replace("/::$k::/",$v,$sTextTemplate);			
 		}
 	
-		//Logger::Msg($sHtmlTemplate);
-		//Logger::Msg($sTextTemplate);
-		//die(__FILE__."::".__LINE__);
-		
+		if (TEST_MODE) {
+	    		Logger::Msg("\n\n\n\n");
+    			Logger::Msg($sHtmlTemplate);
+    			Logger::Msg("\n\n\n\n");
+   	 		Logger::Msg($sTextTemplate);
+		}
+
 		/* check that required msg details were supplied */
 		if ((strlen($sReturnPath) < 1) ||
 			(strlen($sSubject) < 1) ||
@@ -114,12 +120,6 @@ class EmailSender {
 		
 		$sTo = (DEV) ? TEST_EMAIL : $sTo;
 
-
-		if (DEBUG) {
-			Logger::Msg($mail);
-			die();
-		}
-		
 		
 		/* send the message */
 		$result = $mail->send(array($sTo), 'mail');

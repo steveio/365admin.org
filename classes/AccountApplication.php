@@ -286,7 +286,7 @@ class AccountApplication {
 				FROM 
 					 act_app a
 					,company c
-					,counry cty 
+					,country cty 
 				WHERE 
 					a.company_id = c.id
 					AND a.country = cty.id 

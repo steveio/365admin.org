@@ -88,16 +88,11 @@ class htmlMimeMail
     */
     var $smtp_params;
 
-    public function __construct()
-    {
-	$this->htmlMimeMail();
-    }
-
     /**
     * Constructor function. Sets the headers
     * if supplied.
     */
-    function htmlMimeMail()
+    function __construct()
     {
         /**
         * Initialise some variables.
@@ -185,11 +180,11 @@ class htmlMimeMail
     function setCrlf($crlf = "\n")
     {
         if (!defined('CRLF')) {
-            define('CRLF', $crlf);
+            define('CRLF', $crlf, true);
         }
 
         if (!defined('MAIL_MIMEPART_CRLF')) {
-            define('MAIL_MIMEPART_CRLF', $crlf);
+            define('MAIL_MIMEPART_CRLF', $crlf, true);
         }
     }
 

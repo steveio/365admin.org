@@ -140,7 +140,7 @@ print $oHeader->Render();
 
 
 
-<form action="<?= $_CONFIG['url'] ?>/approve" id="user_edit_form" method="get">
+<form action="/approve" id="user_edit_form" method="get">
 
 <div class="row">	
 
