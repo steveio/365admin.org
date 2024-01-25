@@ -18,6 +18,9 @@ $aResponse = array();
 
 try {
 
+    $oTemplateList = new TemplateList();
+    $oTemplateList->GetFromDB();
+
     $article_path = "";
 
     $oArticleAssembler = new ContentAssembler();    
@@ -38,7 +41,8 @@ try {
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
         if(!is_numeric($id)) throw new Exception("ERROR: Invalid Article ID");
 
-        $oArticle = $oArticleAssembler->GetById($id);
+        $templatePath = $oTemplateList->GetFilenameById(ARTICLE_TEMPLATE_ARTICLE_DEFAULT);
+        $oArticle = $oArticleAssembler->GetById($id, $templatePath);
         
     }
 

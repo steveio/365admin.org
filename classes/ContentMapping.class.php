@@ -111,20 +111,6 @@ class ContentMapping {
         $opts[ARTICLE_DISPLAY_OPT_OINTRO] = stripslashes($aRow['o_intro']);
         
         $opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = $aRow['template_id'];
-        
-        switch($opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID])
-        {
-            case ARTICLE_TEMPLATE_DEFAULT :
-            case ARTICLE_TEMPLATE_ARTICLE :
-            case ARTICLE_TEMPLATE_RESULTS :
-                $this->template = ARTICLE_TEMPLATE_ARTICLE_FILE;
-                $this->fetch_mode = FETCHMODE__FULL;
-                break;
-            case ARTICLE_TEMPLATE_BLOG :
-                $this->template = ARTICLE_TEMPLATE_BLOG_FILE;
-                $this->fetch_mode = FETCHMODE__SUMMARY;
-                break;
-        }
 
         $this->SetOptionsFromArray($opts);
         
@@ -141,16 +127,12 @@ class ContentMapping {
         return $this->website_id;
     }
 
-    public function GetFetchMode() {
-        return $this->fetch_mode;
-    }
-
     public function GetSectionUri() {
         return $this->section_uri;
     }
 
-    public function GetTemplate() {
-        return $this->template;
+    public function GetTemplateId() {
+        return $this->opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID];
     }
 
     /*

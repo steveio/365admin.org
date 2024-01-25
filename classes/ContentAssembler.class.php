@@ -10,14 +10,20 @@
 
 class ContentAssembler {
   
-    public function __Construct() {}
+    private $oTemplateList;
 
-    public function GetById()
+    public function __Construct() 
+    {
+        $this->oTemplateList = new TemplateList();
+        $this->oTemplateList->GetFromDB();
+    }
+
+    public function GetById($templatePath)
     {
         /* retrieve an unpublished article */
         $oArticle = new Article();
         $oArticle->GetById($id);
-        $oArticle->LoadTemplate(ARTICLE_TEMPLATE_ARTICLE_FILE,$aOptions = array());
+        $oArticle->LoadTemplate($templatePath,$aOptions = array());
         
         return $oArticle;
     }
@@ -28,16 +34,18 @@ class ContentAssembler {
         try {
             $oContentMapping = new ContentMapping(null, null, null);
             $oContentMapping->GetByPath($article_path);
-            
+
+            $oTemplate = $this->oTemplateList->GetById($oContentMapping->GetTemplateId());
+
             $oArticle = new Article;
 
-            if ($oContentMapping->GetFetchMode() == FETCHMODE__SUMMARY)
+            if ($oTemplate->fetch_mode == FETCHMODE__SUMMARY)
             {
                 $oArticle->SetFetchMode(FETCHMODE__SUMMARY);
             }
             
             $exact = true; // exact or fuzzy path match
-            $limit = 25;
+            $limit = 100;
 
             if ($oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_PATH))
             {
@@ -65,7 +73,7 @@ class ContentAssembler {
                 $oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, false);
             }
 
-            $oArticle->LoadTemplate($oContentMapping->GetTemplate(),$aOptions = array());
+            $oArticle->LoadTemplate($oTemplate->filename,$aOptions = array());
 
             return $oArticle;
 
