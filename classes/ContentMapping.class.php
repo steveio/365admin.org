@@ -261,7 +261,7 @@ class ContentMapping {
         
         $db->query($sql);
         
-        if ($db->getNumRows() == 1)
+        if ($db->getAffectedRows() == 1)
         {
             return TRUE;
         } else {
