@@ -468,7 +468,7 @@ $oJsInclude->SetReferrerPolicy("origin");
 $oHeader->SetJsInclude($oJsInclude);
 
 
-$ckeditor_js = <<<EOT
+$ckeditor_js_admin = <<<EOT
 
 tinymce.init({
         selector: '#desc_short',
@@ -487,6 +487,32 @@ tinymce.init({
 });
 
 EOT;
+
+$ckeditor_js_comp = <<<EOT
+
+tinymce.init({
+        selector: '#desc_short',
+        menubar : false,
+        height:"291"
+});
+
+
+tinymce.init({
+        selector: '#desc_long',
+        menubar: false,
+        toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image | table | numlist bullist",
+        plugins: "image link lists table code",
+        images_upload_url : '/image_upload.php'
+});
+
+EOT;
+
+        if ($oAuth->oUser->isAdmin)
+        {
+            $ckeditor_js = $ckeditor_js_admin;
+        } else {
+            $ckeditor_js = $ckeditor_js_comp;
+        }
 
 
 		$oHeader->SetJsOnload($ckeditor_js);
