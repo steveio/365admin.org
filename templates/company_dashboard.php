@@ -18,7 +18,10 @@ $oCProfile = $this->Get('oCProfile');
 	<div class="col-12">
 		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.open('<?= $oCProfile->GetProfileUrl() ?>'); return false;">View Company Profile</button>
 		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.open('/company/<?= $oCProfile->GetUrlName() ?>/edit'); return false;">Edit Company Profile</button>
+
+		<?php if ($oCProfile->GetListingType() >= BASIC_LISTING) { ?>
 		<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.open('<?= "/".ROUTE_PLACEMENT ?>/add'); return false;">Add Placement</button>
+		<?php } ?>
 
     	<?php if ($oAuth->oUser->isAdmin) { ?>
 			<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="deleteProfile('/<?= $oCProfile->GetProfileUrl() ?>/delete'); return false;">Delete Company Profile</button>
@@ -32,6 +35,8 @@ $oCProfile = $this->Get('oCProfile');
 	<? } ?>
 	</div>
 </row>
+
+<?= $this->Get('PROFILE_QUOTA'); ?>
 
 <div class="row my-3">
 
