@@ -66,6 +66,10 @@ try {
 		    require_once("user.php");
 		    die();
 		    break;
+		case "/approve" :
+		    require_once("approve.php");
+		    die();
+		    break;
 		case "/category-admin" :
 			require_once("category_admin.php");
 			die();
