@@ -19,6 +19,9 @@ require_once("./classes/logger.php");
 require_once("./classes/template.class.php");
 require_once("./classes/link.class.php");
 require_once("./classes/article.class.php");
+require_once("./classes/ArticleCollection.class.php");
+require_once("./classes/ContentMapping.class.php");
+
 
 
 $db = new db($dsn,$debug = false);

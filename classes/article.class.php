@@ -398,7 +398,10 @@ class Content  implements TemplateInterface {
 	{
 	    return $this->section_uri;
 	}
-	
+
+	public function GetSectionUri() {
+	    return $this->section_uri;
+	}
 	
 	public function GetAll($aFilter = array(),$fields = '',$fetch = TRUE) {
 

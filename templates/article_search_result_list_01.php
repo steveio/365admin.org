@@ -1,5 +1,6 @@
 
 <table cellspacing="2" cellpadding="4" border="0" class="table table-striped">
+<thead>
 <tr>
 	<th>&nbsp;</th>
 	<th>Title</th>
@@ -8,6 +9,8 @@
 	<th>&nbsp;</th>
 	<th>Select</th>
 </tr>
+</thead>
+<tbody>
 <? 
 $i = 1;
 
@@ -18,12 +21,12 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	?>
 	<? $class = ($class == "hi") ? "" : "hi"; ?>
 	<tr class='<?= $class ?>'>
-		<td width="20px" valign="top"><?= $i++ ?></td>
-		<td width="80px" valign="top"><?= $oArticle->GetTitle() ?></td>
-		<td width="80px" valign="top"><?= $oArticle->GetCreatedDate() ?></td>
-		<td width="260px" valign="top"><?= $oArticle->GetMappingLabel() ?></td>
-		<td width="20px"><input type="submit" onclick="javascript: go('./article.php?&id=<?= $oArticle->GetId() ?>'); return false;" name="art_<?= $oArticle->GetId() ?>" value="view" /></td>
-		<td width="20px"><input type="checkbox" name="art_<?= $oArticle->GetId() ?>" value="true" /></td>
+		<td><?= $i++ ?></td>
+		<td><?= $oArticle->GetTitle() ?></td>
+		<td><?= $oArticle->GetCreatedDate() ?></td>
+		<td><?= $oArticle->GetSectionUri() ?></td>
+		<td><input class="btn btn-primary rounded-pill px-3" type="submit" onclick="javascript: window.open("<?= $oArticle->GetUrl(); ?>")" name="view_article" value="View" /></td>		
+		<td><input class="form-check-input" type="checkbox" name="art_<?= $oArticle->GetId() ?>" value="true" /></td>
 	</tr>
 <? 
 	}
@@ -39,5 +42,5 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	print "<tr><td colspan=5>There are 0 articles found.</tr>";
 }
 ?>
-
+</tbody>
 </table>
