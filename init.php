@@ -19,7 +19,7 @@ function class_autoload($classname) {
     $classpath = PATH_2_ROUTE_CLASSES . $classname.".php";
 
     if (!file_exists($classpath)) {
-        throw new Exception("Unable to load step class: ".$classname);
+        throw new Exception("Unable to load controller class: ".$classpath);
     }
 
     require_once($classpath);
@@ -27,7 +27,6 @@ function class_autoload($classname) {
 }
 
 spl_autoload_register("class_autoload");
-
 
 /* global php includes */
 require_once(BASE_PATH."/classes/Exceptions.php");
@@ -123,7 +122,6 @@ require_once(BASE_PATH."/classes/RFC822.php");
 require_once(BASE_PATH."/classes/smtp.php");
 require_once(BASE_PATH."/classes/mimePart.php");
 
-
 function my_session_start()
 {
       if (ini_get('session.use_cookies') && isset($_COOKIE['PHPSESSID'])) {
@@ -171,7 +169,6 @@ try {
     } else {
     	$oSession = $oSession->Create();
     }
-
     
     if (!is_object($oAuth))
     {

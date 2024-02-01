@@ -3,7 +3,7 @@
 	<route>
 		<id>0</id>
 		<name>Index</name>
-		<classname>IndexControllerController</classname>
+		<classname>IndexController</classname>
 		<uri>/</uri>
 		<label>Index route</label>
 	</route>

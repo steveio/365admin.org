@@ -133,7 +133,6 @@ class MVCController{
 				}
 			
 			} // end foreach route
-		
 	}
 	
 	public function SetRoutes($aRoutes) {
