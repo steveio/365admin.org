@@ -1,16 +1,16 @@
 <?php
 
 /*
- * AbstractStep.php
+ * AbstractController.php
  * 
- * Contains core step functionality
+ * Contains core base controller functionality
  * 
  * Should only be instantiated via a derived class 
  * and must not contain any domain specific data
  * 
  */
 
-abstract class AbstractStep {
+abstract class AbstractController {
 	
 	protected $iId;
 	protected $sName;
@@ -22,7 +22,7 @@ abstract class AbstractStep {
 	protected $aValidationErrors; // array of form validation exceptions
 	protected $aUserMessages; // array of messages to display eg add company successful 
 	
-	protected $bComplete; // is processing of step complete?
+	protected $bComplete; // is processing complete?
 	protected $bValid; // did any errors occur during processing?
 	
 		
@@ -47,8 +47,8 @@ abstract class AbstractStep {
 		
 	}
 
-	public function SetId($step_id) {
-		$this->iId = $step_id;
+	public function SetId($route_id) {
+		$this->iId = $route_id;
 	}
 
 	public function GetId() {
@@ -200,7 +200,7 @@ abstract class AbstractStep {
 		return $this->bValid;
 	}
 		
-	/* these methods must be available on all steps although a step may not provide an implementation */
+	/* these methods must be available on all routes although a controller may not provide an implementation */
 	
 	abstract protected function PreProcess();
 	

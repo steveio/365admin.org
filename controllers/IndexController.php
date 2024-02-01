@@ -2,7 +2,7 @@
 
 
 
-class IndexStep extends GenericStep {
+class IndexController extends GenericController {
 	
 	public function __construct( ){
 		

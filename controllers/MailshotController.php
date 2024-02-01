@@ -4,7 +4,7 @@ require_once(BASE_PATH."/classes/Mailshot.php");
 
 
 
-class MailshotStep extends GenericStep {
+class MailshotController extends GenericController {
 
 	public $oMailshot;
 	

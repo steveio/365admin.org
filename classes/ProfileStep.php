@@ -2,12 +2,12 @@
 
 /*
  * ProfileStep - 
- * Functionality common to both Company and Placement steps
+ * Functionality common to both Company and Placement routes
  * for example image / video upload handler
  * 
  */
 
-class ProfileStep extends GenericStep {
+class ProfileStep extends GenericController {
 	
 	protected function __construct( ){
 		

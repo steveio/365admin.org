@@ -2,7 +2,7 @@
 
 
 
-class RegistrationStep extends GenericStep {
+class RegistrationController extends GenericController {
 	
 	public function __construct( ){
 		

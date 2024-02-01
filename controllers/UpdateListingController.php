@@ -2,7 +2,7 @@
 
 
 
-class UpdateListingStep extends GenericStep {
+class UpdateListingController extends GenericController {
 	
 	private $company_url_name; // string validated unique company url token from request eg /company/<company-url-name>
 	private $company_id; // int id of profile to be editted 

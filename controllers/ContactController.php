@@ -1,7 +1,7 @@
 <?php
 
 
-class ContactStep extends GenericStep {
+class ContactController extends GenericController {
 
 	public function __construct( ){
 

@@ -2,7 +2,7 @@
 
 
 
-class DashboardStep extends GenericStep {
+class DashboardController extends GenericController {
 
 	private $iCompanyId; // int id of company being editted
 	private $company_url_name; // string validated unique company url token from request eg /dashboard/company/<company-url-name>

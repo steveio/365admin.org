@@ -2,7 +2,7 @@
 
 
 
-class CompanyProfileStep extends ProfileStep {
+class CompanyProfileController extends ProfileStep {
 
 	const MODE_VIEW  = 0;
 	const MODE_ADD  = 1;
@@ -987,9 +987,9 @@ EOT;
 			global $oSession;
 
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_ADD_COMPANY, $message = "Sorry, an error has occured and it was not possible to retrieve this company profile.  We've logged the error and will look into it.  Contact us for assistance.");
-			$oErrorStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_ERROR);
-			$oErrorStep->UnsetUserMessages();
-			$oErrorStep->SetUserMessage($oMessage);
+			$oErrorController = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_ERROR);
+			$oErrorController->UnsetUserMessages();
+			$oErrorController->SetUserMessage($oMessage);
 
 			$oSession->Save();
 
@@ -1237,7 +1237,7 @@ EOT;
 		$oAccount = new AccountApplication();
 
 		$aValidationErrors = array();
-		$aFormValues = $oSession->GetMVCController()->GetStepByName('Registration')->GetFormValues();
+		$aFormValues = $oSession->GetMVCController()->GetRouteByName('Registration')->GetFormValues();
 		$aFormValues['company_id'] = $this->GetCompanyID();
 
 
@@ -1675,9 +1675,9 @@ EOT;
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_DELETE_PLACEMENT, $message);
 		}
 
-		$oDashboardStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
-		$oDashboardStep->UnsetUserMessages();
-		$oDashboardStep->SetUserMessage($oMessage);
+		$oDashboardController = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
+		$oDashboardController->UnsetUserMessages();
+		$oDashboardController->SetUserMessage($oMessage);
 		$oSession->Save();
 
 		Http::Redirect("/".ROUTE_DASHBOARD);

@@ -8,8 +8,10 @@ error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
 
 date_default_timezone_set('Europe/London');
 
-// db connection... (@todo - move into $_CONFIG for consistancy)
+// db connection
 $dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "oneworld365","dbport" => "5432");
+
+
 
 $solr_config = array(
     'adapteroptions' => array(
@@ -27,14 +29,18 @@ define('DEV',FALSE);
 define('TEST_EMAIL','steveedwards01@yahoo.co.uk');
 
 /* 0 = none, 1 = error, 2 = debug, 3 = verbose debug */
-define('LOG_PATH',"/www/vhosts/365admin.org/logs/oneworld365_debug.log");
+define('LOG_PATH',"/www/vhosts/365admin.org/logs/365admin_app.log");
 define('LOG_LEVEL',3);
 
 define('BASE_PATH','/www/vhosts/365admin.org/htdocs');
 define('ROOT_PATH',BASE_PATH); // required for some classes
 define('ROOT_PATH_IMAGE_UPLOAD','/www/vhosts/oneworld365.org/htdocs'); // required for some classes
-define('PATH_2_STEP_CLASSES',BASE_PATH. '/steps/');
+define('PATH_2_ROUTE_CLASSES',BASE_PATH. '/controllers/');
 define('PATH_2_DATA_DIR',BASE_PATH. '/data/');
+
+define('HOSTNAME',"oneworld365.org");
+define('BASE_URL','https://admin.'.HOSTNAME);
+define("COOKIE_DOMAIN", ".".HOSTNAME);
 
 define('SITE_TITLE','365 Admin');
 
@@ -319,9 +325,9 @@ define('MESSAGE_ID_GENERAL_ERROR',5);
 /* error messages */
 define('ERROR_INVALID_SESSION','No valid session or session expired');
 define('ERROR_INVALID_XML_FILE_PATH','No XML step config file found at supplied path: ');
-define('ERROR_INVALID_XML_STEP_DEFS','XML step definitions missing or in an invalid format');
+define('ERROR_INVALID_XML_ROUTE_DEFS','XML step definitions missing or in an invalid format');
 define('ERROR_404_REQUEST_URI_NOT_FOUND','No step defination found for request uri: ');
-define('ERROR_404_STEP_NOT_FOUND','No step defination found for request uri: ');
+define('ERROR_404_ROUTE_NOT_FOUND','No step defination found for request uri: ');
 define('ERROR_404_INVALID_REQUEST','Invalid request uri: ');
 define('ERROR_INVALID_PROFILE_TYPE','Invalid profile type for: ');
 define('ERROR_COMPANY_PROFILE_NOT_FOUND','Company profile not found id: ');

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+	<route>
+		<id>0</id>
+		<name>Index</name>
+		<classname>IndexControllerController</classname>
+		<uri>/</uri>
+		<label>Index route</label>
+	</route>
+	<route>
+		<id>1</id>
+		<name>NewListing</name>
+		<classname>NewListingController</classname>
+		<uri>/new</uri>
+		<label>Entry for new listing request</label>
+	</route>
+	<route>
+		<id>2</id>
+		<name>EditListing</name>
+		<classname>EditListingController</classname>
+		<uri>/edit</uri>
+		<label>Not a route, used as a suffix to allow editting of profiles</label>
+	</route>
+	<route>
+		<id>3</id>
+		<name>UpdateListing</name>
+		<classname>UpdateListingController</classname>
+		<uri>/update</uri>
+		<label>Request to update an existing listing</label>
+	</route>
+	<route>
+		<id>4</id>
+		<name>Dashboard</name>
+		<classname>DashboardController</classname>
+		<uri>/dashboard</uri>
+		<label>Account Dashboard</label>
+	</route>
+	<route>
+		<id>5</id>
+		<name>Login</name>
+		<classname>LoginController</classname>
+		<uri>/login</uri>
+		<label>Login Controller</label>
+	</route>
+	<route>
+		<id>6</id>
+		<name>Password</name>
+		<classname>PasswordController</classname>
+		<uri>/password</uri>
+		<label>Password reminder</label>
+	</route>
+	<route>
+		<id>7</id>
+		<name>Registration</name>
+		<classname>RegistrationController</classname>
+		<uri>/registration</uri>
+		<label>Registration / Personal Details Controller</label>
+	</route>
+	<route>
+		<id>9</id>
+		<name>CompanyProfile</name>
+		<classname>CompanyProfileController</classname>
+		<uri>/company</uri>
+		<label>Add / Edit / View Company Controller</label>
+	</route>
+	<route>
+		<id>10</id>
+		<name>Placement</name>
+		<classname>PlacementController</classname>
+		<uri>/placement</uri>
+		<label>Add / Edit / View Placement Controller</label>
+	</route>
+	<route>
+		<id>11</id>
+		<name>Confirmation</name>
+		<classname>ConfirmationController</classname>
+		<uri>/confirmation</uri>
+		<label>Confirmation Controller</label>
+	</route>
+	<route>
+		<id>12</id>
+		<name>Error</name>
+		<classname>ErrorController</classname>
+		<uri>/error</uri>
+		<label>Error Page</label>
+	</route>	
+	<route>
+		<id>13</id>
+		<name>Contact</name>
+		<classname>ContactController</classname>
+		<uri>/contact</uri>
+		<label>Contact Page</label>
+	</route>	
+	<route>
+		<id>14</id>
+		<name>Mailshot</name>
+		<classname>MailshotController</classname>
+		<uri>/mailshot</uri>
+		<label>Mailshot Creator</label>
+	</route>	
+</routes> 

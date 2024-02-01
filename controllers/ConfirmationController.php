@@ -2,7 +2,7 @@
 
 
 
-class ConfirmationStep extends GenericStep {
+class ConfirmationController extends GenericController {
 
 	public function __construct( ){
 

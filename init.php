@@ -15,13 +15,14 @@
 /* class auto-loader
  */
 function class_autoload($classname) {
-        $classpath = PATH_2_STEP_CLASSES . $classname.".php";
+
+    $classpath = PATH_2_ROUTE_CLASSES . $classname.".php";
 
     if (!file_exists($classpath)) {
         throw new Exception("Unable to load step class: ".$classname);
     }
 
-        require_once($classpath);
+    require_once($classpath);
 
 }
 
@@ -32,8 +33,8 @@ spl_autoload_register("class_autoload");
 require_once(BASE_PATH."/classes/Exceptions.php");
 require_once(BASE_PATH."/classes/RequestRouter.class.php");
 require_once(BASE_PATH."/classes/MVCController.php");
-require_once(BASE_PATH."/classes/AbstractStep.php");
-require_once(BASE_PATH."/classes/GenericStep.php");
+require_once(BASE_PATH."/classes/AbstractController.php");
+require_once(BASE_PATH."/classes/GenericController.php");
 require_once(BASE_PATH."/classes/ProfileStep.php");
 require_once(BASE_PATH."/classes/Brand.php");
 require_once(BASE_PATH."/classes/request.php");

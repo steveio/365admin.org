@@ -2,7 +2,7 @@
 
 
 
-class SelectCompanyStep extends GenericStep {
+class SelectCompanyController extends GenericController {
 	
 	public function __construct( ){
 		

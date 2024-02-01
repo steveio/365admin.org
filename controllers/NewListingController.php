@@ -2,7 +2,7 @@
 
 
 
-class NewListingStep extends GenericStep {
+class NewListingController extends GenericController {
 	
 	public function __construct( ){
 		

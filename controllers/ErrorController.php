@@ -2,7 +2,7 @@
 
 
 
-class ErrorStep extends GenericStep {
+class ErrorController extends GenericController {
 	
 	public function __construct( ){
 		

@@ -3,7 +3,7 @@
 define("HEADER_HTTP_404", "HTTP/1.0 404 Not Found");
 define("HEADER_HTTP_500", "HTTP/1.0 500 Internal Server Error");
 
-define("PATH_TO_MVC_ROUTE_MAP", "/conf/steps.xml");
+define("PATH_TO_MVC_ROUTE_MAP", "/conf/routes.xml");
 
 
 class RequestRouter {
@@ -129,7 +129,7 @@ class RequestRouter {
     }
         
 
-    /*  Handle MVC routes (defained & mapped as "steps" in /conf/steps.xml) */
+    /*  Handle MVC routes (mapped to "controllers" in /conf/routes.xml) */
     public function RouteMapMVC()
     {
 
@@ -138,7 +138,7 @@ class RequestRouter {
         try {
             
             /**
-             * Now attept to match MVC step routes
+             * Now attept to match MVC routes
              */
             $oController = $oSession->GetMVCController();
             

@@ -5,26 +5,31 @@
  * 
  * A simple front controller implementation
  * 
- * A collection of step class definitions corresponding to known 
- * application request routes are loaded from steps.xml file.
- * Each step must have a corresponding class implementation defined in /steps
+ * Handles both:
+ *   static route mapping (URL Path Alias -> PHP script filename)
+ *   MVC route mapping (URL path -> Controller Class) 
+ * 
+ * Static routes are defined in this file.
+ * 
+ * MVC routes use a collection of URL path -> class mappings defined in routes.xml file.
+ * Each route must have a corresponding class implementation defined in /controllers
  * 
  * The first uri segment of a request after the host specifier
- * is used to map a request onto a defined step eg 
+ * is used to map a request onto a defined route eg 
  * http://www.domain.com/login  would map to LoginRoute where LoginRoute->uri = '/login'    
  *
  * On successfuly mapping a request methods are called to fullfill the request - 
  * RouteClass->PreProcess()
  * RouteClass->Process() 
  * RouteClass->PostProcess()
- * Generally a step class will only provide an implementation for ->Process()
- *   
+ * Generally a controller class will only provide an implementation for ->Process()
+ *
  */
 
 class MVCController{
 	
 	protected $sBasePath; // path to project http root
-	protected $sRequestUri;  // string request uri eg /step1, maps to $oRoute->uri-mapping if matched 
+	protected $sRequestUri;  // string request uri eg /route1, maps to $oRoute->uri-mapping if matched 
 	protected $nCurrentRouteId;  // int id of route to process, a pointer into $aRoutes
 	protected $aRoutes; // array of route objects
 
@@ -95,15 +100,15 @@ class MVCController{
 		
 		$oXml = simplexml_load_file($xml_file_path);
 		
-		if (!is_object($oXml) || count($oXml->step) < 1) throw new Exception(ERROR_INVALID_XML_STEP_DEFS);
+		if (!is_object($oXml) || count($oXml->route) < 1) throw new Exception(ERROR_INVALID_XML_ROUTE_DEFS);
 		
-		foreach($oXml->step as $oXmlElement) {
+		foreach($oXml->route as $oXmlElement) {
 			
 			try {
 
 					$class_ext_found = FALSE;
 					
-					if (isset($oXmlElement->brandextension)) { // look for a brand specific step class 
+					if (isset($oXmlElement->brandextension)) { // look for a brand specific controller class 
 						
 						foreach($oXmlElement->brandextension->brand as $oBrandXmlNode) {
 							if ($brand_id == (int)$oBrandXmlNode->attributes()->id[0]) {
@@ -114,7 +119,7 @@ class MVCController{
 						
 					}
 						
-					if (!$class_ext_found) { // use generic step class
+					if (!$class_ext_found) { // use generic controller class
 						$classname = (string) $oXmlElement->classname;
 					}
 
@@ -127,7 +132,7 @@ class MVCController{
 					throw new Exception($e->getMessage());
 				}
 			
-			} // end foreach step
+			} // end foreach route
 		
 	}
 	
@@ -139,21 +144,21 @@ class MVCController{
 		return $this->aRoutes;
 	}
 	
-	public function GetRouteById($step_id) {
+	public function GetRouteById($route_id) {
 	    
 		foreach($this->GetRoutes() as $oRoute) {
-			if ($oRoute->GetId() == $step_id) return $oRoute;
+			if ($oRoute->GetId() == $route_id) return $oRoute;
 		}
 
-		throw new NotFoundException(ERROR_404_STEP_NOT_FOUND." id: ".$step_id);
+		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." id: ".$route_id);
 	}
 	
-	public function GetRouteByName($step_name) {
+	public function GetRouteByName($route_name) {
 		foreach($this->GetRoutes() as $oRoute) {
-			if ($oRoute->GetName() == $step_name) return $oRoute;
+			if ($oRoute->GetName() == $route_name) return $oRoute;
 		}
 		
-		throw new NotFoundException(ERROR_404_STEP_NOT_FOUND." name: ".$step_name);
+		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." name: ".$route_name);
 	}
 
 	public function GetRouteByUriMapping($uri) {
@@ -161,7 +166,7 @@ class MVCController{
 			if ($oRoute->GetUriMapping() == $uri) return $oRoute;
 		}
 		
-		throw new NotFoundException(ERROR_404_STEP_NOT_FOUND." request_uri: ".$uri);
+		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." request_uri: ".$uri);
 	}
 	
 		

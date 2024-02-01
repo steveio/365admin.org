@@ -6,7 +6,7 @@
  */
 
 
-class EditListingStep extends GenericStep {
+class EditListingController extends GenericController {
 	
 	public function __construct( ){
 		

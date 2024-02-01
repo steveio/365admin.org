@@ -1,13 +1,13 @@
 <?php
 
 /*
- * GenericStep.php
+ * GenericController.php
  * 
- * extends AbstractStep
+ * extends AbstractController
  * 
- * Handles domain specific processing / functionality that is common to all steps
+ * Handles domain specific processing / functionality that is common to all routes
  * 
- * Will generally only be instantiated via a derived step class
+ * Will generally only be instantiated via a derived controller class
  *  
  * For example -
  * 		setup page header / footer objects
@@ -19,15 +19,13 @@
 
 
 
-class GenericStep extends AbstractStep {
+class GenericController extends AbstractController {
 	
 	protected function __construct( ){
 		
 		parent::__construct();
 		
 	}
-		
-	
 	
 	protected function Process() {}
 

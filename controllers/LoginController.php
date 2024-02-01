@@ -2,7 +2,7 @@
 
 
 
-class LoginStep extends GenericStep {
+class LoginController extends GenericController {
 
 	private $forward_uri;
 	

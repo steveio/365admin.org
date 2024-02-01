@@ -2,7 +2,7 @@
 
 
 
-class SignupStep extends GenericStep {
+class SignupController extends GenericController {
 	
 	public function __construct( ){
 		

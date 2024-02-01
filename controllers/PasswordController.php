@@ -2,7 +2,7 @@
 
 
 
-class PasswordStep extends GenericStep
+class PasswordController extends GenericController
 {
 
 	public function __construct( ){

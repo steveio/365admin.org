@@ -3,7 +3,7 @@
 
 
 
-class PlacementStep extends ProfileStep {
+class PlacementController extends ProfileStep {
 	
 	const MODE_VIEW  = 0;
 	const MODE_ADD  = 1;
@@ -200,7 +200,7 @@ class PlacementStep extends ProfileStep {
 		global $oSession, $db;
 		
 		$this->GetProfileFromDb();
-		$oDashboardStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
+		$oDashboardController = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
 		
 		$oArchiveManager = new ArchiveManager;
 		$result = $oArchiveManager->ArchivePlacement($this->GetPlacementProfile()->GetId());
@@ -213,10 +213,10 @@ class PlacementStep extends ProfileStep {
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_DELETE_PLACEMENT, $message);			
 		}
 		
-		$oDashboardStep->UnsetUserMessages();
-		$oDashboardStep->SetUserMessage($oMessage);					
+		$oDashboardController->UnsetUserMessages();
+		$oDashboardController->SetUserMessage($oMessage);					
 		$oSession->Save();		
-		
+
 		Http::Redirect("/".ROUTE_DASHBOARD);
 	}
 	 
@@ -1126,7 +1126,7 @@ EOT;
 	}
 
 	/* 
-	 * oStepController and steps are stored in session -
+	 * oMVCController routes and are stored in session -
 	 * clear all data attributes from this instance
 	 * to prevent data being saved/passed via session
 	 * 

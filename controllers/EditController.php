@@ -2,7 +2,7 @@
 
 
 
-class EditStep extends GenericStep {
+class EditController extends GenericController {
 	
 	public function __construct( ){
 		
