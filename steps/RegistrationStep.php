@@ -110,7 +110,7 @@ class RegistrationStep extends GenericStep {
 			$message .= "<p>Thanks for registering, one of our team will contact you shortly.</p>"; 
 			$oMessage = new Message(MESSAGE_TYPE_SUCCESS, 'update_account_request', $message);
 			
-			$oConfirmationStep = $oSession->GetStepController()->GetStepByUriMapping("/".ROUTE_CONFIRMATION);
+			$oConfirmationStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_CONFIRMATION);
 			$oConfirmationStep->UnsetUserMessages();
 			$oConfirmationStep->SetUserMessage($oMessage);
 			

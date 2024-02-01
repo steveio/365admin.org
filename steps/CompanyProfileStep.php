@@ -176,7 +176,7 @@ class CompanyProfileStep extends ProfileStep {
 
 
 		// these should always be set correctly, for logged in and public users
-		if (($oSession->GetListingType() == NULL) || ($oSession->GetStepController() == NULL)) {
+		if (($oSession->GetListingType() == NULL) || ($oSession->GetMVCController() == NULL)) {
 			throw new InvalidSessionException(ERROR_INVALID_SESSION);
 		}
 
@@ -987,7 +987,7 @@ EOT;
 			global $oSession;
 
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_ADD_COMPANY, $message = "Sorry, an error has occured and it was not possible to retrieve this company profile.  We've logged the error and will look into it.  Contact us for assistance.");
-			$oErrorStep = $oSession->GetStepController()->GetStepByUriMapping("/".ROUTE_ERROR);
+			$oErrorStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_ERROR);
 			$oErrorStep->UnsetUserMessages();
 			$oErrorStep->SetUserMessage($oMessage);
 
@@ -1057,7 +1057,7 @@ EOT;
 					$message .= "<p>Thanks for registering, one of our team will contact you shortly.</p>";
 					$oMessage = new Message(MESSAGE_TYPE_SUCCESS, 'add_account_request', $message);
 
-					$oConfirmationStep = $oSession->GetStepController()->GetStepByUriMapping("/".ROUTE_CONFIRMATION);
+					$oConfirmationStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_CONFIRMATION);
 					$oConfirmationStep->UnsetUserMessages();
 					$oConfirmationStep->SetUserMessage($oMessage);
 
@@ -1177,7 +1177,7 @@ EOT;
 
 				// setup user notification success msg
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_ADD_COMPANY, "SUCCESS - updated profile");
-				$oSession->GetStepController()->GetCurrentStep()->SetUserMessage($oMessage);
+				$oSession->GetMVCController()->GetCurrentRoute()->SetUserMessage($oMessage);
 				$oSession->Save();
 
 				if ($response['url_change'] == TRUE) {
@@ -1237,7 +1237,7 @@ EOT;
 		$oAccount = new AccountApplication();
 
 		$aValidationErrors = array();
-		$aFormValues = $oSession->GetStepController()->GetStepByName('Registration')->GetFormValues();
+		$aFormValues = $oSession->GetMVCController()->GetStepByName('Registration')->GetFormValues();
 		$aFormValues['company_id'] = $this->GetCompanyID();
 
 
@@ -1675,7 +1675,7 @@ EOT;
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_DELETE_PLACEMENT, $message);
 		}
 
-		$oDashboardStep = $oSession->GetStepController()->GetStepByUriMapping("/".ROUTE_DASHBOARD);
+		$oDashboardStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
 		$oDashboardStep->UnsetUserMessages();
 		$oDashboardStep->SetUserMessage($oMessage);
 		$oSession->Save();

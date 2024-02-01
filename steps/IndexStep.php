@@ -11,9 +11,9 @@ class IndexStep extends GenericStep {
 	}
 	
 	public function Process() { 
-		
-		Http::Redirect("/".ROUTE_LOGIN);
-		
+
+	    Http::Redirect("/".ROUTE_LOGIN);
+
 	}
 	
 

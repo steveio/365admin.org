@@ -18,7 +18,7 @@ class ContentAssembler {
         $this->oTemplateList->GetFromDB();
     }
 
-    public function GetById($templatePath)
+    public function GetArticleById($templatePath)
     {
         /* retrieve an unpublished article */
         $oArticle = new Article();
@@ -28,7 +28,7 @@ class ContentAssembler {
         return $oArticle;
     }
 
-    public function GetByPath($article_path, $website_id)
+    public function GetArticleByPath($article_path, $website_id)
     {
 
         try {

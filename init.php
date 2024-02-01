@@ -30,7 +30,8 @@ spl_autoload_register("class_autoload");
 
 /* global php includes */
 require_once(BASE_PATH."/classes/Exceptions.php");
-require_once(BASE_PATH."/classes/StepController.php");
+require_once(BASE_PATH."/classes/RequestRouter.class.php");
+require_once(BASE_PATH."/classes/MVCController.php");
 require_once(BASE_PATH."/classes/AbstractStep.php");
 require_once(BASE_PATH."/classes/GenericStep.php");
 require_once(BASE_PATH."/classes/ProfileStep.php");
@@ -135,6 +136,13 @@ function my_session_start()
       return true;
 }
 
+/* Global Exception Handler */
+function exception_handler($e) {
+    Logger::DB(1,__FUNCTION__."()",$e->getMessage());
+    Http::Redirect("/".ROUTE_ERROR);
+}
+
+
 try {
     /* set no cache headers */
     header( 'Expires: Sat, 26 Jul 1997 05:00:00 GMT' ); 
@@ -145,18 +153,16 @@ try {
     
     /* enforce UTF-8 rendering */
     header('Content-Type: text/html; charset=utf-8');
-    
-    
-    /* start a new session */
-    my_session_start();
 
     try {
         /* establish database connection */
         $db = new db($dsn,$debug = false);
-        
     } catch (Exception $e) {
-
+        
     }
+
+    /* start a new session */
+    my_session_start();
 
     $oSession = new Session();
     if ($oSession->Exists()) {
@@ -164,16 +170,22 @@ try {
     } else {
     	$oSession = $oSession->Create();
     }
-   
+
+    
     if (!is_object($oAuth))
     {
         /* setup an instance of session authentication */
-        $oAuth = new Authenticate($db,$redirect = TRUE, $redirect_url = "/".ROUTE_LOGIN, COOKIE_NAME);
+        $oAuth = new Authenticate($db,$redirect = TRUE, "/".ROUTE_LOGIN, COOKIE_NAME);
         $oAuth->ValidSession();
     }
 
-    define('HOSTNAME',"oneworld365.org");
-    
+    /*
+    print_r("<pre>");
+    print_r($oAuth);
+    print_r($oSession);
+    print_r("</pre>");
+    */
+
     /* set some additional $_CONFIG params so the legacy classes work */
     $_CONFIG['site_id'] = $aBrandConfig[HOSTNAME]['site_id'];
     $_CONFIG['admin_email'] = $aBrandConfig[HOSTNAME]['admin_email'];
@@ -182,22 +194,6 @@ try {
     if (!is_object($oBrand))
     {
         $oBrand = new Brand($aBrandConfig[HOSTNAME]);
-    }
-
-    /* Global Exception Handler */
-    function exception_handler($e) {
-    	
-    	global $oSession;
-    	
-    	$oSession->SetErrorCode($e->getCode());
-    	$oSession->SetErrorData($e->getMessage());
-    	$oSession->Save();
-
-    	print_r($e);
-    	die();
-
-    	Logger::Msg($e);
-    	Http::Redirect("/".ROUTE_ERROR); 
     }
     
     set_exception_handler('exception_handler');

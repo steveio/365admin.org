@@ -24,7 +24,7 @@ class LoginStep extends GenericStep {
 	public function Process() { 
 
 		global $oHeader, $oFooter, $oBrand, $oAuth;
-
+		
 		if ($oAuth->oUser->isValidUser)
 		{
 		    Http::Redirect("/".ROUTE_DASHBOARD);

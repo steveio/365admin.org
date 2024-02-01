@@ -33,7 +33,7 @@ try {
         $article_path = implode("/",$request_array);
         $article_path = "/".$article_path;
         
-        $oArticle = $oArticleAssembler->GetByPath($article_path, $oBrand->GetSiteId());
+        $oArticle = $oArticleAssembler->GetArticleByPath($article_path, $oBrand->GetSiteId());
 
     } else {
 
@@ -42,7 +42,7 @@ try {
         if(!is_numeric($id)) throw new Exception("ERROR: Invalid Article ID");
 
         $templatePath = $oTemplateList->GetFilenameById(ARTICLE_TEMPLATE_ARTICLE_DEFAULT);
-        $oArticle = $oArticleAssembler->GetById($id, $templatePath);
+        $oArticle = $oArticleAssembler->GetArticleById($id, $templatePath);
         
     }
 

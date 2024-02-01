@@ -152,10 +152,10 @@ abstract class AbstractStep {
 	protected function GetUserMsg() {
 		global $oSession;
 
-		if (!is_object($oSession->GetStepController())) return FALSE;
+		if (!is_object($oSession->GetMVCController())) return FALSE;
 		
-		$aMessages = $oSession->GetStepController()->GetCurrentStep()->GetUserMessages();		
-		$oSession->GetStepController()->GetCurrentStep()->UnsetUserMessages();
+		$aMessages = $oSession->GetMVCController()->GetCurrentRoute()->GetUserMessages();		
+		$oSession->GetMVCController()->GetCurrentRoute()->UnsetUserMessages();
 		$oSession->Save();
 		return $aMessages;
 	}

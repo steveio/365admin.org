@@ -160,7 +160,7 @@ class PlacementStep extends ProfileStep {
 
 		
 		// these should always be set correctly
-		if (($oSession->GetListingType() == NULL) || ($oSession->GetStepController() == NULL)) {
+		if (($oSession->GetListingType() == NULL) || ($oSession->GetMVCController() == NULL)) {
 			throw new InvalidSessionException(ERROR_INVALID_SESSION);			
 		}
 		
@@ -200,7 +200,7 @@ class PlacementStep extends ProfileStep {
 		global $oSession, $db;
 		
 		$this->GetProfileFromDb();
-		$oDashboardStep = $oSession->GetStepController()->GetStepByUriMapping("/".ROUTE_DASHBOARD);
+		$oDashboardStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
 		
 		$oArchiveManager = new ArchiveManager;
 		$result = $oArchiveManager->ArchivePlacement($this->GetPlacementProfile()->GetId());
@@ -244,7 +244,7 @@ class PlacementStep extends ProfileStep {
 				// setup user notification success msg				
 				$msg = "SUCCESS - Added Profile <br /><a href='/".ROUTE_DASHBOARD."' title='Return to Dashboard'>Click here</a> to return to dashboard";
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_ADD_PLACEMENT, $msg);
-				$oSession->GetStepController()->GetCurrentStep()->SetUserMessage($oMessage);
+				$oSession->GetMVCController()->GetCurrentRoute()->SetUserMessage($oMessage);
 				
 				// clear all attributes on this step instance, as we want to rebuild the form
 				$this->Clear();

@@ -1,9 +1,5 @@
 <?php
 
-include_once("./includes/header_fullwidth.php");
-include_once("./includes/footer.php");
-
-
 
 if (!$oAuth->oUser->isValidUser) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
@@ -107,12 +103,6 @@ $aDate = explode(" - ", $strDateRange);
 $aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
 $aOptions['report_date_to'] = preg_replace("/\//","-",$aDate[1]);
 
-/*
-print_r("<pre>");
-print_r($_POST);
-print_r($aOptions);
-print_r("</pre>");
-*/
 
 $aEnquiry = $oEnquiry->GetAll($aOptions);
 

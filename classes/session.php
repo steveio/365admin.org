@@ -7,7 +7,7 @@ class Session {
 	private $listing_type; // NEW || EXISTING
 	private $company_id; // int id of company profile if editting
 	
-	private $oStepController;
+	private $oMVCController;
 	
 	private $error_code;
 	private $error_data;
@@ -64,12 +64,12 @@ class Session {
 		$this->error_msg = $error_msg;
 	}
 	
-	public function SetStepController($oStepController) {
-		$this->oStepController = $oStepController;
+	public function SetMVCController($oMVCController) {
+		$this->oMVCController = $oMVCController;
 	}
 	
-	public function GetStepController() {
-		return is_object($this->oStepController) ? $this->oStepController : FALSE;
+	public function GetMVCController() {
+		return is_object($this->oMVCController) ? $this->oMVCController : FALSE;
 	}
 
 	

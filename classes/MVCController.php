@@ -1,7 +1,7 @@
 <?php
 
 /*
- * StepController.php
+ * RouteController.php
  * 
  * A simple front controller implementation
  * 
@@ -11,29 +11,29 @@
  * 
  * The first uri segment of a request after the host specifier
  * is used to map a request onto a defined step eg 
- * http://www.domain.com/login  would map to LoginStep where LoginStep->uri = '/login'    
+ * http://www.domain.com/login  would map to LoginRoute where LoginRoute->uri = '/login'    
  *
  * On successfuly mapping a request methods are called to fullfill the request - 
- * StepClass->PreProcess()
- * StepClass->Process() 
- * StepClass->PostProcess()
+ * RouteClass->PreProcess()
+ * RouteClass->Process() 
+ * RouteClass->PostProcess()
  * Generally a step class will only provide an implementation for ->Process()
  *   
  */
 
-class StepController{
+class MVCController{
 	
 	protected $sBasePath; // path to project http root
-	protected $sRequestUri;  // string request uri eg /step1, maps to $oStep->uri-mapping if matched 
-	protected $nCurrentStepId;  // int id of step to process, a pointer into $aSteps
-	protected $aSteps; // array of step objects
+	protected $sRequestUri;  // string request uri eg /step1, maps to $oRoute->uri-mapping if matched 
+	protected $nCurrentRouteId;  // int id of route to process, a pointer into $aRoutes
+	protected $aRoutes; // array of route objects
 
 	
 	public function __construct($sBasePath){
 
 		$this->sBasePath = $sBasePath;
-		$this->aSteps = array();
-		$this->aStepsProcessed = array();
+		$this->aRoutes = array();
+		$this->aRoutesProcessed = array();
 		
 	}
 	
@@ -41,8 +41,12 @@ class StepController{
 		
 		try {
 
-			$this->GetStepById($this->GetCurrentStepId())->Process();
-			
+			$oRoute = $this->GetRouteById($this->GetCurrentRouteId());			
+
+			Logger::DB(3,__CLASS__."->".__FUNCTION__."()","MVC Route: request uri: ".$this->sRequestUri." : route_id: ".$this->GetCurrentRouteId());
+
+			$oRoute->Process();
+
 		} catch (InvalidSessionException $e) {
 			throw new InvalidSessionException($e->getMessage());
 		} catch (Exception $e) {
@@ -54,7 +58,7 @@ class StepController{
 	public function MapRequest() {
 		
 		try {
-			$this->SetCurrentStepId( $this->GetStepByUriMapping($this->GetRequestUri())->GetId() );
+			$this->SetCurrentRouteId( $this->GetRouteByUriMapping($this->GetRequestUri())->GetId() );
 			
 		} catch (Exception $e) {
 			throw new NotFoundException($e->getMessage());
@@ -71,19 +75,19 @@ class StepController{
 		return $this->sRequestUri;
 	}
 	
-	public function SetCurrentStepId($id) {
-		$this->nCurrentStepId = $id;
+	public function SetCurrentRouteId($id) {
+		$this->nCurrentRouteId = $id;
 	}
 	
-	public function GetCurrentStepId() {
-		return $this->nCurrentStepId;
+	public function GetCurrentRouteId() {
+		return $this->nCurrentRouteId;
 	}	
 	
-	public function GetCurrentStep() {
-		return $this->GetStepById($this->GetCurrentStepId());
+	public function GetCurrentRoute() {
+		return $this->GetRouteById($this->GetCurrentRouteId());
 	}
 
-	public function SetStepsFromXmlFile($xml_file_path, $brand_id) {
+	public function SetRouteFromXmlFile($xml_file_path, $brand_id) {
 		
 		if (!file_exists($xml_file_path)) {
 			throw new Exception(ERROR_INVALID_XML_FILE_PATH . $xml_file_path);
@@ -114,10 +118,10 @@ class StepController{
 						$classname = (string) $oXmlElement->classname;
 					}
 
-					$oStep = new $classname();
-					$oStep->SetFromXml($oXmlElement);
+					$oRoute = new $classname();
+					$oRoute->SetFromXml($oXmlElement);
 														
-					$this->aSteps[$oStep->GetId()] = $oStep;
+					$this->aRoutes[$oRoute->GetId()] = $oRoute;
 					
 				} catch (Exception $e) {
 					throw new Exception($e->getMessage());
@@ -127,33 +131,34 @@ class StepController{
 		
 	}
 	
-	public function SetSteps($aSteps) {
-		if (is_array($aSteps)) $this->aSteps = $aSteps;
+	public function SetRoutes($aRoutes) {
+		if (is_array($aRoutes)) $this->aRoutes = $aRoutes;
 	}
 	
-	public function GetSteps() {
-		return $this->aSteps;
+	public function GetRoutes() {
+		return $this->aRoutes;
 	}
 	
-	public function GetStepById($step_id) {
-		foreach($this->GetSteps() as $oStep) {
-			if ($oStep->GetId() == $step_id) return $oStep;
+	public function GetRouteById($step_id) {
+	    
+		foreach($this->GetRoutes() as $oRoute) {
+			if ($oRoute->GetId() == $step_id) return $oRoute;
 		}
-		
+
 		throw new NotFoundException(ERROR_404_STEP_NOT_FOUND." id: ".$step_id);
 	}
 	
-	public function GetStepByName($step_name) {
-		foreach($this->GetSteps() as $oStep) {
-			if ($oStep->GetName() == $step_name) return $oStep;
+	public function GetRouteByName($step_name) {
+		foreach($this->GetRoutes() as $oRoute) {
+			if ($oRoute->GetName() == $step_name) return $oRoute;
 		}
 		
 		throw new NotFoundException(ERROR_404_STEP_NOT_FOUND." name: ".$step_name);
 	}
 
-	public function GetStepByUriMapping($uri) {
-		foreach($this->GetSteps() as $oStep) {
-			if ($oStep->GetUriMapping() == $uri) return $oStep;
+	public function GetRouteByUriMapping($uri) {
+		foreach($this->GetRoutes() as $oRoute) {
+			if ($oRoute->GetUriMapping() == $uri) return $oRoute;
 		}
 		
 		throw new NotFoundException(ERROR_404_STEP_NOT_FOUND." request_uri: ".$uri);
