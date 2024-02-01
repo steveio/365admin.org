@@ -1,16 +1,15 @@
 <?php
 
 /*
- * RouteController.php
+ * MVCController.php
  * 
  * A simple front controller implementation
  * 
  * Handles both:
- *   static route mapping (URL Path Alias -> PHP script filename)
- *   MVC route mapping (URL path -> Controller Class) 
+ *   - static (inline) route mapping (URL Alias -> PHP script filename)
+ *   - MVC route mapping (URL path -> Controller Class) 
  * 
- * Static routes are defined in this file.
- * 
+ *
  * MVC routes use a collection of URL path -> class mappings defined in routes.xml file.
  * Each route must have a corresponding class implementation defined in /controllers
  * 
