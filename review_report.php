@@ -1,10 +1,7 @@
 <?php
 
-include_once("./includes/header_fullwidth.php");
+include_once("./includes/header.php");
 include_once("./includes/footer.php");
-include_once("/www/vhosts/oneworld365.org/htdocs/classes/review.class.php");
-
-//include("./footer_new.php");
 
 
 if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
