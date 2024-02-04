@@ -219,7 +219,7 @@ class CompanyProfileController extends ProfileController {
 	public function ViewProfile() {
 
 	    try {
-	      
+
             $oContentAssembler = new CompanyProfileContentAssembler();
 	        $oContentAssembler->GetByPath($this->GetCompanyUrlName());
 	        

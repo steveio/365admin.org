@@ -3,14 +3,13 @@
 define("HEADER_HTTP_404", "HTTP/1.0 404 Not Found");
 define("HEADER_HTTP_500", "HTTP/1.0 500 Internal Server Error");
 
-define("PATH_TO_MVC_ROUTE_MAP", "/conf/routes.xml");
-
 
 class RequestRouter {
     
     protected $aRequestUri; // array URI from $_REQUEST
     protected $strRequestUri; // string URL path eg /blog/article01
-    protected $strContentType; // requested page content type     
+    protected $strContentType; // content general type: CONTENT_COMPANY, CONTENT_PLACEMENT, CONTENT_ARTICLE
+    protected $strContentSubType; // content sub type
     
     public function __Construct() {} 
 
@@ -18,7 +17,7 @@ class RequestRouter {
     {
 
         try {
-            
+
             $this->SetRequestUri($aRequestUri);            
             $this->RouteMapStatic();            
             $this->RouteMapMVC();
@@ -343,7 +342,7 @@ class RequestRouter {
         
         if (!isset($this->strContentType) )
         {
-            $this->strContentType = CONTENT_TYPE_ARTICLE;
+            $this->strContentType = CONTENT_ARTICLE;
         }
 
 

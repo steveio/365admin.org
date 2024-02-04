@@ -123,11 +123,6 @@ class MVCController{
 					}
 
 					$oRoute = new $classname();
-
-					print_r($oRoute);
-					die(here);
-					
-					
 					$oRoute->SetFromXml($oXmlElement);														
 					$this->aRoutes[$oRoute->GetId()] = $oRoute;
 					

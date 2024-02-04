@@ -173,8 +173,8 @@ class SolrMoreLikeSearch extends SolrSearch {
 		}
 	}
 
-	// generalised to return any profile type
-	function getPlacementsByPlacement($oid,$company_id,$profile_type = "1", $arrFilterQuery = array()) {
+	// Get Related content
+	function getRelatedProfile($solr_id,$profile_type = "1", $arrFilterQuery = array()) {
 
 		if (!is_numeric($oid)) return FALSE;
 

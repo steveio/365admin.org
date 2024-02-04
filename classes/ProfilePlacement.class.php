@@ -1030,6 +1030,14 @@ class PlacementProfile extends AbstractProfile {
 				$where = "p.last_updated > p.last_indexed_solr AND p.company_id = c.id ";
 				$order_by = " ORDER BY p.title asc ";
 				break;
+			case "ID_LIST_SEARCH_RESULT" :
+			    if (!is_array($id) || count($id) < 1) return FALSE;
+			    $where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
+			    if ($filter_from_search == true)
+			        $where .= " and c.profile_filter_from_search != 't'";
+			        
+		        $select = "p.id, p.type";
+		        break;
 			case "ID_LIST" :
 				$where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
 				$order_by = "ORDER BY RANDOM() ";

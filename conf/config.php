@@ -1,7 +1,7 @@
 <?php
 
 
-ini_set('display_errors',0);
+ini_set('display_errors',1);
 ini_set('log_errors', 1);
 ini_set('error_log', '/www/vhosts/365admin.org/logs/365admin_error.log');
 error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
@@ -37,6 +37,7 @@ define('ROOT_PATH',BASE_PATH); // required for some classes
 define('ROOT_PATH_IMAGE_UPLOAD','/www/vhosts/oneworld365.org/htdocs'); // required for some classes
 define('PATH_CLASSES',BASE_PATH. '/classes/');
 define('PATH_CONTROLLERS',BASE_PATH. '/controllers/');
+define("PATH_TO_MVC_ROUTE_MAP", "/conf/routes.xml");
 define('PATH_2_DATA_DIR',BASE_PATH. '/data/');
 define('PATH_UNDER_MAINTENANCE','/back_soon.php');
 

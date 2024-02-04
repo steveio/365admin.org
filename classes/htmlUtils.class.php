@@ -19,7 +19,7 @@ class htmlUtils
         return trim(strip_tags(preg_replace("/&#?[a-z0-9]+;/i"," ",$str)));
     }
 
-    public function StripLinks($str) {
+    public static function stripLinks($str) {
         return preg_replace('/<a href=\"(.*?)\">(.*?)<\/a>/', "\\2", $str);
     }
 

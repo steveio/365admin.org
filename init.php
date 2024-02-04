@@ -132,6 +132,14 @@ require_once(BASE_PATH."/classes/ProfileSeasonalJobsEmployer.php");
 require_once(BASE_PATH."/classes/ProfileTeachingProject.php");
 require_once(BASE_PATH."/classes/ArchiveManager.php");
 
+
+require_once(BASE_PATH."/classes/review.class.php");
+
+// SOLR API
+require_once(BASE_PATH."/classes/SolrSearch.php");
+require_once(BASE_PATH."/classes/SolrMoreLikeSearch.php");
+
+
 // email classes
 require_once(BASE_PATH."/classes/EmailSender.php");
 require_once(BASE_PATH."/classes/htmlMimeMail.php");

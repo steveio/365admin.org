@@ -14,6 +14,9 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     public function __Construct() 
     {
         parent::__construct();
+
+        $this->SetLinkTo("ARTICLE");
+
     }
 
     public function GetById($id)
@@ -66,11 +69,18 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             // fetch article mapped directly to URL path eg /blog
             $oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, true);
 
+            // put content id in scope of parent class for fetching associated content
+            $this->SetLinkId($oArticle->GetId()); 
+            $this->SetLinkLabel($oArticle->GetTitle());
+
             if (!$exact)
             {
                 // fetch content as articles published to main article sub-path eg /blog/post1, /blog/post2
                 $oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, false);
             }
+
+            $this->GetReviews();
+
 
             $oArticle->LoadTemplate($oTemplate->filename,$aOptions = array());
 
