@@ -35,8 +35,11 @@ define('LOG_LEVEL',3);
 define('BASE_PATH','/www/vhosts/365admin.org/htdocs');
 define('ROOT_PATH',BASE_PATH); // required for some classes
 define('ROOT_PATH_IMAGE_UPLOAD','/www/vhosts/oneworld365.org/htdocs'); // required for some classes
-define('PATH_2_ROUTE_CLASSES',BASE_PATH. '/controllers/');
+define('PATH_CLASSES',BASE_PATH. '/classes/');
+define('PATH_CONTROLLERS',BASE_PATH. '/controllers/');
 define('PATH_2_DATA_DIR',BASE_PATH. '/data/');
+define('PATH_UNDER_MAINTENANCE','/back_soon.php');
+
 
 define('HOSTNAME',"oneworld365.org");
 define('BASE_URL','https://admin.'.HOSTNAME);
@@ -324,15 +327,15 @@ define('MESSAGE_ID_GENERAL_ERROR',5);
 
 /* error messages */
 define('ERROR_INVALID_SESSION','No valid session or session expired');
-define('ERROR_INVALID_XML_FILE_PATH','No XML step config file found at supplied path: ');
-define('ERROR_INVALID_XML_ROUTE_DEFS','XML step definitions missing or in an invalid format');
-define('ERROR_404_REQUEST_URI_NOT_FOUND','No step defination found for request uri: ');
-define('ERROR_404_ROUTE_NOT_FOUND','No step defination found for request uri: ');
+define('ERROR_INVALID_XML_FILE_PATH','No XML route config file found at supplied path: ');
+define('ERROR_INVALID_XML_ROUTE_DEFS','XML route definitions missing or in an invalid format');
+define('ERROR_404_REQUEST_URI_NOT_FOUND','No route defination found for request uri: ');
+define('ERROR_404_ROUTE_NOT_FOUND','Route not found : URL: ');
 define('ERROR_404_INVALID_REQUEST','Invalid request uri: ');
 define('ERROR_INVALID_PROFILE_TYPE','Invalid profile type for: ');
 define('ERROR_COMPANY_PROFILE_NOT_FOUND','Company profile not found id: ');
 define('ERROR_PLACEMENT_PROFILE_NOT_FOUND','Placement profile not found id: ');
-define('ERROR_INVALID_MODE','Profile step mode (add/edit/view) not set');
+define('ERROR_INVALID_MODE','Profile mode (add/edit/view) not set');
 define('ERROR_COMPANY_PROFILE_INVALID_URL','Company profile url was missing or not valid: ');
 define('ERROR_COMPANY_PROFILE_PERMISSIONS_FAIL','Insufficient access writes for operation: ');
 define('ERROR_COMPANY_PROFILE_EXTENDED_ERROR','An error occured updating profile - contact us for assistance');

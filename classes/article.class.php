@@ -1440,9 +1440,9 @@ class Content  implements TemplateInterface {
 		
 		$aDefaultOptions = array(
 				"TITLE" => $this->GetTitle(),
-				"DESC_SHORT" => nl2br($this->GetDescShort()),
-				"DESC_SHORT_160" => nl2br($this->GetDescShort(160)),
-				"FULL_DESC" => nl2br($this->GetDescFull()),
+				"DESC_SHORT" => htmlUtils::convertToPlainText($this->GetDescShort()),
+		        "DESC_SHORT_160" => htmlUtils::convertToPlainText($this->GetDescShort(160)),
+		        "FULL_DESC" => htmlUtils::convertToPlainTextnl2br($this->GetDescFull()),
 				"URL" => $this->GetUrl(),
 				"PUBLISHED_DATE" => $this->GetPublishedDate(),
 				"IMG_SIZE" => $this->GetImgSize(),
@@ -1496,7 +1496,6 @@ class Content  implements TemplateInterface {
 			}
 		}
 	}	
-	
 	
 }
 

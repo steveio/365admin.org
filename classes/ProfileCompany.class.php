@@ -1331,6 +1331,46 @@ class CompanyProfile extends AbstractProfile {
 		return $this->oTemplate->Render();
 	}
 	
+
+	
+	/*
+	 * Doesn't call json_encode() to prevent double encoding
+	 * if caller also does this downstream
+	 */
+	public function toJSON() {
+	    
+	    $aImageDetails = $this->GetImageUrlArray();
+	    
+	    $fields = array(
+	        'id' => $this->GetId(),
+	        'profile_type' => 0,
+	        'profile_type_label' => $this->GetProfileTypeLabel($this),
+	        'title' => $this->GetTitle(),
+	        'desc_short' => htmlUtils::convertToPlainText($this->GetDescShort()),
+	        'desc_short_160' => htmlUtils::convertToPlainText($this->GetDescShort(160)),
+	        'profile_url' => $this->GetProfileUrl(),
+	        'profile_uri' => "/company/".$this->GetUrlName(),
+	        "company_name" => $this->GetCompanyName(),
+	        "company_logo_url" => $this->GetCompanyLogoUrl(),
+	        "company_profile_url" => $this->GetCompanyProfileUrl(),
+	        "logo_url" => $aImageDetails['LOGO']['URL'],
+	        "image_url_small" => $aImageDetails['SMALL']['URL'],
+	        "image_url_medium" => $aImageDetails['MEDIUM']['URL'],
+	        "image_url_large" => $aImageDetails['LARGE']['URL'],
+	        "country_txt" => '',
+	        "enquiry_url" => Enquiry::GetRequestUrl('GENERAL',$this->GetId(),PROFILE_COMPANY),
+	        "location" => $this->GetLocationLabel(),
+	        "price_from" => "",
+	        "price_to" => "",
+	        "currency_label" => "",
+	        "duration_from" => "",
+	        "duration_to" => "",
+	        "review_count" => $this->GetReviewCount(),
+	        "review_rating" => $this->GetRating()
+	    );
+	    
+	    return $fields;
+	}
 	
 	
 }

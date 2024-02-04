@@ -66,6 +66,20 @@ class Company {
 	    }
 	}
 	
+	// used by request router to validate request and setup page header
+	public function GetByUrlName($url_name)
+	{
+	    global $db ,$_CONFIG;
+
+	    $sql = "SELECT id,title, desc_short FROM ".$_CONFIG['company_table']." WHERE url_name = '".$url_name."'";
+
+	    $db->query($sql);
+	    if ($db->getNumRows() == 1) {
+	        return $aRes = $db->getRow();
+	    } else {
+	        throw new NotFoundException("404 Company Profile ".$url_name." not found");
+	    }
+	}
 
 	function GetByUri($uri, $fuzzy = false) {
 	    

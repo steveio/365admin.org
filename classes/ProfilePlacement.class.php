@@ -1153,6 +1153,65 @@ class PlacementProfile extends AbstractProfile {
 		return $this->oTemplate->Render();
 	}
 	
+
+	public function toJSON() {
+	    
+	    $aImageDetails = $this->GetImageUrlArray();
+	    
+	    $fields = array(
+	        "id" => $this->GetId(),
+	        "profile_type" => 1,
+	        "profile_type_label" => $this->GetProfileTypeLabel($this),
+	        "title" => $this->GetTitle(64),
+	        'desc_short' => htmlUtils::convertToPlainText($this->GetDescShort()),
+	        'desc_short_160' => htmlUtils::convertToPlainText($this->GetDescShort(160)),
+	        "profile_url" => "/company/".$this->GetCompUrlName()."/".$this->GetUrlName(),
+	        "profile_uri" => "/placement/".$this->GetUrlName(),
+	        "company_name" => $this->GetCompanyName(),
+	        "company_logo_url" => "",
+	        "company_profile_url" => $this->GetCompanyProfileUrl(),
+	        "company_profile_edit_url" => "/company/".$this->GetCompUrlName()."/edit",
+	        "image_url_small" => $aImageDetails['SMALL']['URL'],
+	        "image_url_medium" => $aImageDetails['MEDIUM']['URL'],
+	        "image_url_large" => $aImageDetails['LARGE']['URL'],
+	        "country_txt" => "",
+	        "booking_url" => "",
+	        "location" => $this->GetLocationLabel(),
+	        "price_from" => $this->GetPriceFromLabel(),
+	        "price_to" => $this->GetPriceToLabel(),
+	        "currency_label" => $this->GetCurrencyLabel(),
+	        "duration_from" => $this->GetDurationFromLabel(),
+	        "duration_to" => $this->GetDurationToLabel(),
+	        "review_count" => $this->GetReviewCount(),
+	        "review_rating" => $this->GetRating()
+	    );
+	    
+	    $fields['company_logo_url'] = $this->GetCompanyLogoUrl();
+	    
+	    if (strlen($this->GetCountryTxt()) > 1) {
+	        $fields['country_txt'] = $this->GetCountryTxt();
+	    }
+	    
+	    if (is_numeric($this->GetDurationFrom())) {
+	        $fields['duration'] = $this->GetDurationFromLabel() ." - " .$this->GetDurationToLabel();
+	    } else {
+	        $fields['duration'] = '';
+	    }
+	    
+	    // booking / enquiry url
+	    
+	    if (in_array($this->GetProfileType(), array(PROFILE_VOLUNTEER,PROFILE_TOUR))) {
+	        if (strlen($this->GetApplyUrl()) > 1 && $this->GetApplyUrl() != "http://") {
+	            $fields['booking_url'] = $this->GetApplyUrl();
+	        } else {
+	            $fields['booking_url'] = Enquiry::GetRequestUrl('BOOKING',$this->GetId(),PROFILE_PLACEMENT);
+	        }
+	    } else {
+	        $fields['booking_url'] = Enquiry::GetRequestUrl('GENERAL',$this->GetId(),PROFILE_PLACEMENT);
+	    }
+	    
+	    return $fields;
+	}
 	
 };
 

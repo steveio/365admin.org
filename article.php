@@ -2,7 +2,8 @@
 
 /*
  * Controller for rendering / display of Articles 
- * @author  
+ * 
+ * @deprecated - see RequestRouter, ArticleContentAssembler  
  * 
 */
 
@@ -23,7 +24,7 @@ try {
 
     $article_path = "";
 
-    $oArticleAssembler = new ContentAssembler();    
+    $oArticleAssembler = new ArticleContentAssembler();
 
     // 1.  Extract Article Path from URI (Published Articles)
     if (count($request_array) > 2)
@@ -42,7 +43,8 @@ try {
         if(!is_numeric($id)) throw new Exception("ERROR: Invalid Article ID");
 
         $templatePath = $oTemplateList->GetFilenameById(ARTICLE_TEMPLATE_ARTICLE_DEFAULT);
-        $oArticle = $oArticleAssembler->GetArticleById($id, $templatePath);
+        $oArticleAssembler->SetTemplatePath($templatePath);
+        $oArticle = $oArticleAssembler->GetArticleById($id);
         
     }
 

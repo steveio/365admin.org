@@ -13,28 +13,37 @@
 
 
 /* class auto-loader
+ * 
+ * @note namespaces not yet supported due to legacy codebase
  */
 function class_autoload($classname) {
 
-    $classpath = PATH_2_ROUTE_CLASSES . $classname.".php";
+    $sources = array(PATH_CLASSES . $classname.".php", PATH_CONTROLLERS . $classname.".php" );
+    
+    foreach ($sources as $source) {
+        if (file_exists($source)) {
+            require_once $source;
+            return;
+        }
+    } 
 
-    if (!file_exists($classpath)) {
-        throw new Exception("Unable to load controller class: ".$classpath);
-    }
-
-    require_once($classpath);
+    throw new Exception("Unable to load class: ".$classname);
 
 }
 
 spl_autoload_register("class_autoload");
 
-/* global php includes */
+/* 
+ * Global php includes 
+ * 
+ * Note - /controllers/ are auto loaded by naming convention by class_autoload*9 
+ * 
+ */
 require_once(BASE_PATH."/classes/Exceptions.php");
 require_once(BASE_PATH."/classes/RequestRouter.class.php");
-require_once(BASE_PATH."/classes/MVCController.php");
-require_once(BASE_PATH."/classes/AbstractController.php");
-require_once(BASE_PATH."/classes/GenericController.php");
-require_once(BASE_PATH."/classes/ProfileStep.php");
+require_once(BASE_PATH."/classes/MVCController.class.php");
+require_once(BASE_PATH."/classes/AbstractController.class.php");
+require_once(BASE_PATH."/classes/GenericController.class.php");
 require_once(BASE_PATH."/classes/Brand.php");
 require_once(BASE_PATH."/classes/request.php");
 require_once(BASE_PATH."/classes/http.php");
@@ -47,6 +56,7 @@ require_once(BASE_PATH."/classes/login.class.php");
 require_once(BASE_PATH."/classes/user.class.php");
 require_once(BASE_PATH."/classes/AccountApplication.php");
 require_once(BASE_PATH."/classes/error.class.php");
+require_once(BASE_PATH."/classes/htmlUtils.class.php");
 require_once(BASE_PATH."/classes/Message.php");
 require_once(BASE_PATH."/classes/template.class.php");
 require_once(BASE_PATH."/classes/layout.class.php");
@@ -82,17 +92,24 @@ require_once(BASE_PATH."/classes/listing.class.php");
 require_once(BASE_PATH."/classes/file.class.php");
 require_once(BASE_PATH."/classes/ip_address.class.php");
 require_once(BASE_PATH."/classes/link.class.php");
-require_once(BASE_PATH."/classes/article.class.php");
-require_once(BASE_PATH."/classes/ContentMapping.class.php");
-require_once(BASE_PATH."/classes/ArticleCollection.class.php");
-require_once(BASE_PATH."/classes/ContentAssembler.class.php");
-require_once(BASE_PATH."/classes/TemplateList.class.php");
 require_once(BASE_PATH."/classes/search_result.class.php");
 require_once(BASE_PATH."/classes/file_upload.class.php");
 require_once(BASE_PATH."/classes/json.class.php");
 require_once(BASE_PATH."/classes/tabbed_panel.class.php");
 require_once(BASE_PATH."/classes/SalesEnquiry.php");
 require_once(BASE_PATH."/classes/SecurityQuestion.php");
+
+
+/* Content Retrieval and Template Render Provisioning */
+require_once(BASE_PATH."/classes/AbstractContentAssembler.class.php");
+require_once(BASE_PATH."/classes/ArticleContentAssembler.class.php");
+require_once(BASE_PATH."/classes/ProfileContentAssembler.class.php");
+require_once(BASE_PATH."/classes/CompanyProfileContentAssembler.class.php");
+
+require_once(BASE_PATH."/classes/TemplateList.class.php");
+require_once(BASE_PATH."/classes/article.class.php");
+require_once(BASE_PATH."/classes/ArticleCollection.class.php");
+require_once(BASE_PATH."/classes/ContentMapping.class.php");
 
 
 /* @depreciated - to be replaced by Profile* class topology below */
@@ -122,6 +139,7 @@ require_once(BASE_PATH."/classes/RFC822.php");
 require_once(BASE_PATH."/classes/smtp.php");
 require_once(BASE_PATH."/classes/mimePart.php");
 
+
 function my_session_start()
 {
       if (ini_get('session.use_cookies') && isset($_COOKIE['PHPSESSID'])) {
@@ -135,10 +153,17 @@ function my_session_start()
       return true;
 }
 
-/* Global Exception Handler */
+/* Global (Uncaught / Unhandled) Exception Handler */
 function exception_handler($e) {
-    Logger::DB(1,__FUNCTION__."()",$e->getMessage());
-    Http::Redirect("/".ROUTE_ERROR);
+    
+    print_r("<pre>");
+    print_r($e);
+    print_r("</pre>");
+    Logger::DB(1,__FUNCTION__."()",$e->getMessage(). " ".$e->getFile(). " " . $e->getLine());
+    Logger::DB(1,__FUNCTION__."()",$e->getTraceAsString());
+    
+    die();
+    Http::Redirect(PATH_UNDER_MAINTENANCE);
 }
 
 
@@ -159,23 +184,25 @@ try {
     } catch (Exception $e) {
         
     }
-
+    
     /* start a new session */
     my_session_start();
 
     $oSession = new Session();
-    if ($oSession->Exists()) {
-    	$oSession = $oSession->Get();
-    } else {
-    	$oSession = $oSession->Create();
-    }
     
+    if ($oSession->Exists()) {        
+        $oSession = $oSession->Get();
+    } else {
+        $oSession = $oSession->Create();
+    }
+
     if (!is_object($oAuth))
     {
         /* setup an instance of session authentication */
         $oAuth = new Authenticate($db,$redirect = TRUE, "/".ROUTE_LOGIN, COOKIE_NAME);
         $oAuth->ValidSession();
     }
+
 
     /*
     print_r("<pre>");
@@ -195,7 +222,7 @@ try {
     }
     
     set_exception_handler('exception_handler');
-
+    
 } catch (Exception $e) {
     print_r($e);
     die();

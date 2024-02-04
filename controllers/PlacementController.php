@@ -3,7 +3,7 @@
 
 
 
-class PlacementController extends ProfileStep {
+class PlacementController extends ProfileController {
 	
 	const MODE_VIEW  = 0;
 	const MODE_ADD  = 1;

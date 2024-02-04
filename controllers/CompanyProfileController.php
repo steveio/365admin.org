@@ -1,8 +1,18 @@
 <?php
 
+/*
+ * MVC Controller for Company Profile Requests
+ * 
+ * Handles requests to VIEW, EDIT, ADD, DELETE
+ * 
+ * Fetches, processes, persists assembles profile data 
+ * 
+ * Handles UI template rendering 
+ * 
+ */
 
 
-class CompanyProfileController extends ProfileStep {
+class CompanyProfileController extends ProfileController {
 
 	const MODE_VIEW  = 0;
 	const MODE_ADD  = 1;
@@ -37,8 +47,6 @@ class CompanyProfileController extends ProfileStep {
 	 *
 	 */
 	public function Process() {
-
-		if (DEBUG)  Logger::Msg(__CLASS__."->".__FUNCTION__."()");
 
 		global $oSession;
 
@@ -77,24 +85,29 @@ class CompanyProfileController extends ProfileStep {
 	}
 
 
+	public function SetMVCMode($intMode)
+	{
+	    if ($intMode != null)
+	    {
+	        $this->mode = $intMode;
+	    }
+	}
 
-	private function SetMode() {
+	private function SetMode($intMode) {
 
 		if (DEBUG)  Logger::Msg(__CLASS__."->".__FUNCTION__."()");
 
 		global $oBrand;
-
+		
 		$request_array = Request::GetUri("ARRAY");
 
 		if ($request_array[1] != ROUTE_COMPANY) throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$request_array));
-
 
 		switch(TRUE) {
 			case $this->RequestAdd($request_array) :
 				return $this->mode = self::MODE_ADD;
 			case $this->RequestView($request_array) :
-				Http::Redirect($oBrand->GetWebsiteUrl()."/".ROUTE_COMPANY."/".$request_array[2]);
-				die();
+			    return $this->mode = self::MODE_VIEW;
 			case $this->RequestDelete($request_array) :
 				$this->SetCompanyUrlName($request_array[2]);
 				return $this->mode = self::MODE_DELETE;
@@ -203,12 +216,17 @@ class CompanyProfileController extends ProfileStep {
 
 	}
 
-	protected function ViewProfile() {
+	public function ViewProfile() {
 
-		if (DEBUG)  Logger::Msg(__CLASS__."->".__FUNCTION__."()");
-
-
-		// @todo -
+	    try {
+	      
+            $oContentAssembler = new CompanyProfileContentAssembler();
+	        $oContentAssembler->GetByPath($this->GetCompanyUrlName());
+	        
+	    } catch (Exception $e) {
+	        throw $e;
+	    }
+	    
 	}
 
 	private function GetCompanyIdFromUrl() {
@@ -1438,21 +1456,21 @@ EOT;
 		return $aSelected;
 	}
 
-	protected function SetCompanyId($id) {
+	public function SetCompanyId($id) {
 		if (is_numeric($id)) {
 			$this->company_id = $id;
 		}
 	}
 
-	protected function GetCompanyId() {
+	public function GetCompanyId() {
 		return $this->company_id;
 	}
 
-	protected function GetCompanyUrlName() {
+	public function GetCompanyUrlName() {
 		return $this->company_url_name;
 	}
 
-	protected function SetCompanyUrlName($company_url_name) {
+	public function SetCompanyUrlName($company_url_name) {
 		$this->company_url_name = $company_url_name;
 	}
 

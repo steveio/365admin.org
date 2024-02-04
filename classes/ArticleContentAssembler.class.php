@@ -1,39 +1,38 @@
 <?php
 
 /**
- * Content Assembler - handles fetching article(s), associated content & template for rendering 
+ * Article Content Assembler 
+ * 
+ * Class to fetch article, associated content & provision template rendering 
  * 
  * 
- * @author stevee
  *
  */
 
-class ContentAssembler {
-  
-    private $oTemplateList;
+class ArticleContentAssembler extends AbstractContentAssembler {
 
     public function __Construct() 
     {
-        $this->oTemplateList = new TemplateList();
-        $this->oTemplateList->GetFromDB();
+        parent::__construct();
     }
 
-    public function GetArticleById($templatePath)
+    public function GetById($id)
     {
         /* retrieve an unpublished article */
         $oArticle = new Article();
         $oArticle->GetById($id);
-        $oArticle->LoadTemplate($templatePath,$aOptions = array());
+        $oArticle->LoadTemplate($this->strTemplatePath,$aOptions = array());
         
         return $oArticle;
     }
-
-    public function GetArticleByPath($article_path, $website_id)
+    
+    
+    public function GetByPath($path, $website_id = 0)
     {
 
         try {
             $oContentMapping = new ContentMapping(null, null, null);
-            $oContentMapping->GetByPath($article_path);
+            $oContentMapping->GetByPath($path);
 
             $oTemplate = $this->oTemplateList->GetById($oContentMapping->GetTemplateId());
 

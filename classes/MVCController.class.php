@@ -1,7 +1,7 @@
 <?php
 
 /*
- * MVCController.php
+ * MVCController.class.php
  * 
  * A simple front controller implementation
  * 
@@ -123,8 +123,12 @@ class MVCController{
 					}
 
 					$oRoute = new $classname();
-					$oRoute->SetFromXml($oXmlElement);
-														
+
+					print_r($oRoute);
+					die(here);
+					
+					
+					$oRoute->SetFromXml($oXmlElement);														
 					$this->aRoutes[$oRoute->GetId()] = $oRoute;
 					
 				} catch (Exception $e) {
@@ -156,7 +160,7 @@ class MVCController{
 			if ($oRoute->GetName() == $route_name) return $oRoute;
 		}
 		
-		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." name: ".$route_name);
+		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." ".$route_name);
 	}
 
 	public function GetRouteByUriMapping($uri) {
@@ -164,7 +168,7 @@ class MVCController{
 			if ($oRoute->GetUriMapping() == $uri) return $oRoute;
 		}
 		
-		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." request_uri: ".$uri);
+		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." ".$uri);
 	}
 	
 		

@@ -1,20 +1,20 @@
 <?php
 
 /*
- * ProfileStep - 
+ * ProfileController
  * Functionality common to both Company and Placement routes
- * for example image / video upload handler
+ * for example upload image / video
  * 
  */
 
-class ProfileStep extends GenericController {
+class ProfileController extends GenericController {
 	
 	protected function __construct( ){
 		
 		parent::__construct();
 		
 	}
-
+ 
 	public function SaveYouTubeVideo($link_to, $link_id, $video_str) {
 		
 		//if (strlen(trim($video_str)) < 1) return FALSE; 
