@@ -105,6 +105,7 @@ require_once(BASE_PATH."/classes/AbstractContentAssembler.class.php");
 require_once(BASE_PATH."/classes/ArticleContentAssembler.class.php");
 require_once(BASE_PATH."/classes/ProfileContentAssembler.class.php");
 require_once(BASE_PATH."/classes/CompanyProfileContentAssembler.class.php");
+require_once(BASE_PATH."/classes/PlacementProfileContentAssembler.class.php");
 
 require_once(BASE_PATH."/classes/TemplateList.class.php");
 require_once(BASE_PATH."/classes/article.class.php");

@@ -311,11 +311,6 @@ class RequestRouter {
     protected function ProcessCompanyPageRequest()
     {
         global $db, $_CONFIG, $oHeader;
-        
-        // edit company /company/<comp-name>/edit  ( defined as MVC route )
-        if (isset($this->aRequestUri[3]) && $this->aRequestUri[3] == "edit") {
-            return;
-        }
 
         // Placement request /company/<comp-name>/<placement-name>
         if ((isset( $this->aRequestUri[3]) && 
@@ -323,20 +318,19 @@ class RequestRouter {
                     && ($this->aRequestUri[3] != "edit") 
                     && ($this->aRequestUri[2] != "a-z")) 
         {
-            $this->ProcessPlacementPageRequest();
+            return $this->ProcessPlacementPageRequest();
         }
 
         // Company AZ request /company/a-z/<letter>
         if ((isset($this->aRequestUri[2]) && $this->aRequestUri[2] != "") && ($this->aRequestUri[2] == "a-z")) 
         {
             $this->ProcessCompanyAZPageRequest();
+            die();
         }
 
-        // view company profile
+        // view/add/edit/delete company profile
         $oCompanyProfileController = new CompanyProfileController();
-        $oCompanyProfileController->SetMVCMode(CompanyProfileController::MODE_VIEW);
-        $oCompanyProfileController->SetCompanyUrlName($this->aRequestUri[2]);
-        $oCompanyProfileController->ViewProfile();
+        $oCompanyProfileController->Process();
 
         die();
     }
@@ -356,13 +350,17 @@ class RequestRouter {
     {
         global $db, $_CONFIG;
 
-        // view all placements
+        // placement list - view all placement for company /company/<comp-name>/placements
         if ($this->aRequestUri[3] == "placements") {
-            
-        } else { // view a single placement
-            
-            
+
         }
+
+        // view/add/edit/delete placement
+        $oProfileController = new PlacementController();
+        $oProfileController->Process();
+
+        die();
+        
     }
 
     protected function ProcessArticlePageRequest()

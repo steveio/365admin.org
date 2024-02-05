@@ -1,11 +1,9 @@
 <?php
 
 /**
- * Profile Content Assembler 
+ * Company Profile Content Assembler 
  * 
- * Base class for fetching profile (company | placement) data & template rendering 
- * 
- * Contains functionality company to all profile types
+ * Handles content provisioning & render of company profile pages  
  *
  */
 

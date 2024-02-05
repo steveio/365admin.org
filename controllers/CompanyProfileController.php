@@ -84,7 +84,6 @@ class CompanyProfileController extends ProfileController {
 		}
 	}
 
-
 	public function SetMVCMode($intMode)
 	{
 	    if ($intMode != null)
@@ -94,8 +93,6 @@ class CompanyProfileController extends ProfileController {
 	}
 
 	private function SetMode() {
-
-		if (DEBUG)  Logger::Msg(__CLASS__."->".__FUNCTION__."()");
 
 		global $oBrand;
 		
@@ -107,6 +104,7 @@ class CompanyProfileController extends ProfileController {
 			case $this->RequestAdd($request_array) :
 				return $this->mode = self::MODE_ADD;
 			case $this->RequestView($request_array) :
+			    $this->SetCompanyUrlName($request_array[2]);
 			    return $this->mode = self::MODE_VIEW;
 			case $this->RequestDelete($request_array) :
 				$this->SetCompanyUrlName($request_array[2]);
@@ -130,7 +128,7 @@ class CompanyProfileController extends ProfileController {
 	}
 
 	private function RequestView($request_array) {
-		if ((strlen($request_array[2]) > 1) && (strlen($request_array[3]) < 1)) {
+        if (($request_array[1] == ROUTE_COMPANY) && (strlen($request_array[2]) > 2) && (strlen($request_array[3]) < 1)) {
 			return TRUE;
 		}
 	}

@@ -58,6 +58,9 @@ class PlacementController extends ProfileController {
 				$this->CheckPermissions();
 				$this->DeleteProfile();
 				break;
+			case self::MODE_VIEW :
+			    $this->ViewProfile();
+			    break;
 			default:
 				throw new Exception(ERROR_INVALID_MODE);
 				
@@ -70,6 +73,8 @@ class PlacementController extends ProfileController {
 		global $db;
 		
 		$oProfile = new PlacementProfile();
+		print $this->GetPlacementUrlName();
+		die();
 		$aResult = $oProfile->GetDetailsByUri($this->GetPlacementUrlName());
 
 		if (!$aResult) throw new Exception(ERROR_PLACEMENT_PROFILE_NOT_FOUND.$this->GetPlacementUrlName());
@@ -78,7 +83,6 @@ class PlacementController extends ProfileController {
 		$this->SetCompanyId($aResult['company_id']);
 		
 	}
-	
 	
 	/*
 	 * Set mode -
@@ -92,30 +96,41 @@ class PlacementController extends ProfileController {
 
 		$request_array = Request::GetUri("ARRAY");
 
+		$this->SetPlacementUrlName($request_array);
+
 		switch(TRUE) {
 			case $this->RequestAdd($request_array) :
 				return $this->mode = self::MODE_ADD;	
 			case $this->RequestEdit($request_array) :
-				$this->SetPlacementUrlName($request_array[2]);
 				return $this->mode = self::MODE_EDIT;	
 			case $this->RequestDelete($request_array) :
-				$this->SetPlacementUrlName($request_array[2]);
 				return $this->mode = self::MODE_DELETE;	
 			case $this->RequestView($request_array) :
-				return $this->mode = self::MODE_VIEW;	
+				return $this->mode = self::MODE_VIEW;
 				default :
 				throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$request_array));
 		}
-		
 	}	
+
 	
 	private function RequestEdit($request_array) {
+	    // /placement/<placement-name/>/edit
 		if (($request_array[1] == ROUTE_PLACEMENT) &&
 			(strlen($request_array[2]) > 1) && 
 			($request_array[3] == ROUTE_EDIT)) 
 		{
 			return TRUE;			
 		}
+
+		// /company/<company-name>/<placement-name/>/edit
+		if (($request_array[1] == ROUTE_COMPANY) &&
+		    (strlen($request_array[2]) > 1) &&
+		    (strlen($request_array[3]) > 1) &&
+		    ($request_array[4] == ROUTE_EDIT))
+		{
+		    return TRUE;
+		}
+
 	}
 	
 	private function RequestDelete($request_array) {
@@ -136,9 +151,9 @@ class PlacementController extends ProfileController {
 	}
 	
 	private function RequestView($request_array) {
-		if (($request_array[1] == ROUTE_PLACEMENT) &&
+	    if (($request_array[1] == ROUTE_COMPANY) &&
 			(strlen($request_array[2]) > 1) && 
-			(strlen($request_array[3]) < 1))
+			(strlen($request_array[3]) > 1))
 		{
 			return TRUE;			
 		}
@@ -193,8 +208,20 @@ class PlacementController extends ProfileController {
 		
 		
 	}
-	
-	
+
+	public function ViewProfile()
+	{
+	    try {
+
+	        $oContentAssembler = new PlacementProfileContentAssembler();
+	        $oContentAssembler->GetByPath($this->GetPlacementUrlName());
+
+	    } catch (Exception $e) {
+	        throw $e;
+	    }
+	    
+	}
+
 	private function DeleteProfile() { 
 		
 		global $oSession, $db;
@@ -1117,8 +1144,22 @@ EOT;
 		return $this->placement_id;
 	}
 
-	private function SetPlacementUrlName($url_name) {
-		$this->placement_url_name = $url_name;
+	private function SetPlacementUrlName($request_array) {
+	    
+	    if (($request_array[1] == ROUTE_PLACEMENT) &&
+	        (strlen($request_array[2]) > 1) &&
+	        ($request_array[3] == ROUTE_EDIT))
+	    {
+	        $this->placement_url_name = $request_array[2];
+	    }
+	    
+	    // /company/<company-name>/<placement-name/>/edit
+	    if (($request_array[1] == ROUTE_COMPANY) &&
+	        (strlen($request_array[2]) > 1) &&
+	        (strlen($request_array[3]) > 1))
+	    {
+	        $this->placement_url_name = $request_array[3];
+	    }
 	}
 	
 	private function GetPlacementUrlName() {
