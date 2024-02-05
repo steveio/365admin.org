@@ -52,4 +52,9 @@
 		<url>/article-preview</url>
 		<filename>article.php</filename>
 	</route>
+	<route>
+		<url>/company</url>
+		<callback>$this->ProcessCompanyPageRequest()</callback>
+	</route>
+
 </routes> 
