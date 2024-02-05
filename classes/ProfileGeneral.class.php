@@ -33,10 +33,6 @@ class GeneralProfile extends PlacementProfile implements ProfileInterface {
 		
 	}
 
-	public function GetTypeLabel() {
-		return "Profile";
-	}
-	
 	public function GetById($id) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");		

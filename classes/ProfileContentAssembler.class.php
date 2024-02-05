@@ -18,10 +18,57 @@ class ProfileContentAssembler extends AbstractContentAssembler {
         parent::__construct();
     }
 
+    public function GetByPath($path, $website_id = 0) {}
     
     public function GetById($id) {}
-    
-    public function GetByPath($path, $website_id = 0) {}
+
+    /*
+     * Handle fetch (data provision) common to all profile types
+     */
+    public function GetByUrlName($path, $website_id = 0) 
+    {
+
+        global $db, $oHeader, $oFooter;
+
+        if (strlen($path) < 1) throw new Exception("View profile: invalid path".$path);
+        
+        // pre-fetch to validate resource exists
+        $aRes = $this->oProfile->GetByUrlName($path);
+
+        if (!is_array($aRes) || !is_numeric($aRes['id']))
+        {
+            throw new NotFoundException("Profile ".$this->oProfile->GetTypeLabel()." '".$path."' not found");
+        }
+        
+        // setup page header / metadata
+        $title = htmlUtils::convertToPlainText($aRes['title']);
+        $desc_short = htmlUtils::convertToPlainText($aRes['desc_short'],0,160);
+        
+        $oHeader->SetTitle($title);
+        $oHeader->SetDesc($desc_short);
+        $oHeader->SetKeywords("");
+        
+        // @deprecated
+        $_REQUEST['page_title'] = $title;
+        $_REQUEST['page_meta_description'] = $desc_short;
+        $_REQUEST['page_keywords'] = "";
+        
+        // fetch full company profile
+        $this->oProfile->SetFromArray($this->oProfile->GetProfileById($aRes['id']));
+        if ($this->oProfile->GetId() != $aRes['id']) {
+            throw new Exception("Profile notfound  id:".$aRes['id'].", title: ".$aRes['title']." url_name: ".$path);
+        }
+        
+        $this->SetLinkId($aRes['id']); // put profile id in scope of parent class for fetching associated content
+        
+        $this->oProfile->GetImages();
+        $this->oProfile->GetCategoryInfo();
+        $this->oProfile->GetCountryInfo();
+        $this->oProfile->GetActivityInfo();
+
+        $this->GetReviews($this->oProfile->GetId(), CONTENT_TYPE_COMPANY, $this->oProfile->GetTitle());
+
+    }
 
     public function GetType() {
         return $this->profile_type;

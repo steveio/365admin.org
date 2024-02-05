@@ -21,6 +21,8 @@ class CompanyProfileController extends ProfileController {
 
 	private $mode; // set according to request type
 
+	private $aRequestArray = array(); // Request URI
+
 	private $company_url_name; // string validated unique company url token from request eg /company/<company-url-name>
 	private $company_id; // int id of profile to be editted
 	private $oCompanyProfile; // object instance of company profile being editted (if listing = EXISTING)
@@ -96,81 +98,63 @@ class CompanyProfileController extends ProfileController {
 
 		global $oBrand;
 		
-		$request_array = Request::GetUri("ARRAY");
+		$this->aRequestArray = Request::GetUri("ARRAY");
 
-		if ($request_array[1] != ROUTE_COMPANY) throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$request_array));
+		if ($this->aRequestArray[1] != ROUTE_COMPANY) throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$$this->aRequestArray));
+		
+		$this->SetCompanyUrlName($this->aRequestArray[2]);
 
 		switch(TRUE) {
-			case $this->RequestAdd($request_array) :
+			case $this->RequestAdd() :
 				return $this->mode = self::MODE_ADD;
-			case $this->RequestView($request_array) :
-			    $this->SetCompanyUrlName($request_array[2]);
+			case $this->RequestView() :
 			    return $this->mode = self::MODE_VIEW;
-			case $this->RequestDelete($request_array) :
-				$this->SetCompanyUrlName($request_array[2]);
+			case $this->RequestDelete() :
 				return $this->mode = self::MODE_DELETE;
-			case $this->RequestEdit($request_array) :
-				$this->SetCompanyUrlName($request_array[2]);
+			case $this->RequestEdit() :
 				return $this->mode = self::MODE_EDIT;
-			case $this->RequestEditPlacement($request_array) :
-				// redirect to /placement/url-name/edit
-				Http::Redirect("/".ROUTE_PLACEMENT."/".$request_array[3]."/".ROUTE_EDIT);
 			default :
-				throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$request_array));
+			    throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$this->aRequestArray));
 		}
 
 	}
 
-	private function RequestAdd($request_array) {
-		if (strtoupper($request_array[2]) == "ADD") {
+	private function RequestAdd() {
+		if (strtoupper($this->aRequestArray[2]) == "ADD") {
 			return TRUE;
 		}
 	}
 
-	private function RequestView($request_array) {
-        if (($request_array[1] == ROUTE_COMPANY) && (strlen($request_array[2]) > 2) && (strlen($request_array[3]) < 1)) {
+	private function RequestView() {
+	    if (($this->aRequestArray[1] == ROUTE_COMPANY) && (strlen($this->aRequestArray[2]) > 2) && (strlen($this->aRequestArray[3]) < 1)) {
 			return TRUE;
 		}
 	}
 
 	// delete company request eg. /company/kumuku/delete
-	private function RequestDelete($request_array) {
+	private function RequestDelete() {
 
-		if (!Validation::ValidUriNamespaceIdentifier($request_array[2])) {
-			throw new Exception(ERROR_COMPANY_PROFILE_INVALID_URL.$request_array[2]);
+	    if (!Validation::ValidUriNamespaceIdentifier($this->aRequestArray[2])) {
+	        throw new Exception(ERROR_COMPANY_PROFILE_INVALID_URL.$this->aRequestArray[2]);
 		}
 
-		if (strtolower($request_array[3]) == ROUTE_DELETE) {
+		if (strtolower($this->aRequestArray[3]) == ROUTE_DELETE) {
 			return TRUE;
 		}
 
 	}
-
-
 
 	// edit company request eg. /company/bunac/edit
-	private function RequestEdit($request_array) {
+	private function RequestEdit() {
 
-		if (!Validation::ValidUriNamespaceIdentifier($request_array[2])) {
-			throw new Exception(ERROR_COMPANY_PROFILE_INVALID_URL.$request_array[2]);
+	    if (!Validation::ValidUriNamespaceIdentifier($this->aRequestArray[2])) {
+	        throw new Exception(ERROR_COMPANY_PROFILE_INVALID_URL.$this->aRequestArray[2]);
 		}
 
-		if (strtolower($request_array[3]) == ROUTE_EDIT) {
+		if (strtolower($this->aRequestArray[3]) == ROUTE_EDIT) {
 			return TRUE;
 		}
 
-	}
-
-	// edit placement request eg /company/bunac/summer-camp-counsellors/edit
-	private function RequestEditPlacement($request_array) {
-		if (isset($request_array[3]) &&
-			(strlen(trim($request_array[3])) >= 1) &&
-			Validation::ValidUriNamespaceIdentifier($request_array[3]))
-		{
-			if (strtolower($request_array[4]) == ROUTE_EDIT) {
-				return TRUE;
-			}
-		}
 	}
 
 	private function GetMode() {

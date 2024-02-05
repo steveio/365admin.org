@@ -10,6 +10,8 @@ class PlacementController extends ProfileController {
 	const MODE_EDIT  = 2;
 	const MODE_DELETE  = 3;
 	
+	private $aRequestArray = array(); // Request URI 
+
 	private $company_url_name; // string validated unique company url token from request eg /company/<company-url-name>
 	private $company_id; // int id of profile to be editted
 	private $oCompanyProfile; 
@@ -73,8 +75,6 @@ class PlacementController extends ProfileController {
 		global $db;
 		
 		$oProfile = new PlacementProfile();
-		print $this->GetPlacementUrlName();
-		die();
 		$aResult = $oProfile->GetDetailsByUri($this->GetPlacementUrlName());
 
 		if (!$aResult) throw new Exception(ERROR_PLACEMENT_PROFILE_NOT_FOUND.$this->GetPlacementUrlName());
@@ -83,7 +83,7 @@ class PlacementController extends ProfileController {
 		$this->SetCompanyId($aResult['company_id']);
 		
 	}
-	
+
 	/*
 	 * Set mode -
 	 * 
@@ -94,66 +94,66 @@ class PlacementController extends ProfileController {
 	 */
 	private function SetMode() {
 
-		$request_array = Request::GetUri("ARRAY");
+		$this->aRequestArray = Request::GetUri("ARRAY");
 
-		$this->SetPlacementUrlName($request_array);
+		$this->SetPlacementUrlName($this->aRequestArray);
 
 		switch(TRUE) {
-			case $this->RequestAdd($request_array) :
+			case $this->RequestAdd() :
 				return $this->mode = self::MODE_ADD;	
-			case $this->RequestEdit($request_array) :
+			case $this->RequestEdit() :
 				return $this->mode = self::MODE_EDIT;	
-			case $this->RequestDelete($request_array) :
+			case $this->RequestDelete() :
 				return $this->mode = self::MODE_DELETE;	
-			case $this->RequestView($request_array) :
+			case $this->RequestView() :
 				return $this->mode = self::MODE_VIEW;
 				default :
-				throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$request_array));
+				    throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$this->aRequestArray));
 		}
 	}	
 
 	
-	private function RequestEdit($request_array) {
+	private function RequestEdit() {
 	    // /placement/<placement-name/>/edit
-		if (($request_array[1] == ROUTE_PLACEMENT) &&
-			(strlen($request_array[2]) > 1) && 
-			($request_array[3] == ROUTE_EDIT)) 
+	    if (($this->aRequestArray[1] == ROUTE_PLACEMENT) &&
+	        (strlen($this->aRequestArray[2]) > 1) && 
+	        ($this->aRequestArray[3] == ROUTE_EDIT)) 
 		{
 			return TRUE;			
 		}
 
 		// /company/<company-name>/<placement-name/>/edit
-		if (($request_array[1] == ROUTE_COMPANY) &&
-		    (strlen($request_array[2]) > 1) &&
-		    (strlen($request_array[3]) > 1) &&
-		    ($request_array[4] == ROUTE_EDIT))
+		if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
+		    (strlen($this->aRequestArray[2]) > 1) &&
+		    (strlen($this->aRequestArray[3]) > 1) &&
+		    ($this->aRequestArray[4] == ROUTE_EDIT))
 		{
 		    return TRUE;
 		}
 
 	}
 	
-	private function RequestDelete($request_array) {
-		if (($request_array[1] == ROUTE_PLACEMENT) &&
-			(strlen($request_array[2]) > 1) && 
-			($request_array[3] == ROUTE_DELETE)) 
+	private function RequestDelete() {
+	    if (($this->aRequestArray[1] == ROUTE_PLACEMENT) &&
+	        (strlen($this->aRequestArray[2]) > 1) && 
+	        ($this->aRequestArray[3] == ROUTE_DELETE)) 
 		{
 			return TRUE;			
 		}
 	}
 	
-	private function RequestAdd($request_array) {
+	private function RequestAdd() {
 		
-		if (strtoupper($request_array[2]) == "ADD" || !isset($request_array[2])) {
+	    if (strtoupper($this->aRequestArray[2]) == "ADD" || !isset($this->aRequestArray[2])) {
 			return TRUE;
 		}
 		
 	}
 	
-	private function RequestView($request_array) {
-	    if (($request_array[1] == ROUTE_COMPANY) &&
-			(strlen($request_array[2]) > 1) && 
-			(strlen($request_array[3]) > 1))
+	private function RequestView() {
+	    if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
+	        (strlen($this->aRequestArray[2]) > 1) && 
+	        (strlen($this->aRequestArray[3]) > 1))
 		{
 			return TRUE;			
 		}
@@ -215,6 +215,8 @@ class PlacementController extends ProfileController {
 
 	        $oContentAssembler = new PlacementProfileContentAssembler();
 	        $oContentAssembler->GetByPath($this->GetPlacementUrlName());
+
+	        die(__FILE__."::".__LINE__);
 
 	    } catch (Exception $e) {
 	        throw $e;

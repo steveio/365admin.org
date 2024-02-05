@@ -38,7 +38,7 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
     /*
      * Get By Path
      * 
-     * Resolves profile based on URL segment <placement-name>  eg. /company/<company-name>/<placement-name>
+     * Resolves profile based on placement URL segment <placement-name>  eg. /company/<company-name>/<placement-name>
      * 
      */
     public function GetByPath($path, $website_id = 0)
@@ -48,9 +48,12 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
 
         try {
             
-            if (strlen($path) < 1) throw new Exception("View placement: invalid path: ".$path);
+            parent::GetByUrlName($path);            
 
-            die(__CLASS__."::".__METHOD__);
+            $this->oTemplate->Set("oProfile",$this->oProfile);
+            $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
+            $this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);
+            $this->oTemplate->LoadTemplate("profile_placement_view.php");
 
             print $oHeader->Render();
             print $this->oTemplate->Render();

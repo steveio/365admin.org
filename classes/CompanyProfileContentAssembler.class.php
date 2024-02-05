@@ -46,42 +46,9 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
         global $db, $oHeader, $oFooter;
 
         try {
+
+            parent::GetByUrlName($path);
             
-            if (strlen($path) < 1) throw new Exception("View company: invalid path");
-
-            // pre-fetch to validate resource exists
-            $aRes = $this->oProfile->GetByUrlName($path);
-
-            if (!is_array($aRes) || !is_numeric($aRes['id']))
-            {
-                throw new NotFoundException("Company Profile '".$path."' not found");
-            }
-
-            // setup page header / metadata
-            $title = htmlUtils::convertToPlainText($aRes['title']);
-            $desc_short = htmlUtils::convertToPlainText($aRes['desc_short'],0,160);
-            
-            $oHeader->SetTitle($title);
-            $oHeader->SetDesc($desc_short);
-            $oHeader->SetKeywords("");
-            
-            // @deprecated
-            $_REQUEST['page_title'] = $title;
-            $_REQUEST['page_meta_description'] = $desc_short;
-            $_REQUEST['page_keywords'] = "";
-
-            // fetch full company profile
-            $this->oProfile->SetFromArray($this->oProfile->GetProfileById($aRes['id']));
-            if ($this->oProfile->GetId() != $aRes['id']) {
-                throw new Exception("Company data not found  id:".$aRes['id'].", title: ".$aRes['title']." url_name: ".$path);
-            }
-
-            $this->SetLinkId($aRes['id']); // put profile id in scope of parent class for fetching associated content
-
-            $this->oProfile->GetImages();
-            $this->oProfile->GetCategoryInfo();
-            $this->oProfile->GetCountryInfo();
-            $this->oProfile->GetActivityInfo();
             $this->oProfile->SetProfileCount();
 
             // set Logo & Banner images
@@ -96,10 +63,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
                 $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT);
             }
 
-            $this->GetReviews($this->oProfile->GetId(), CONTENT_TYPE_COMPANY, $this->oProfile->GetTitle());
-
-
-            $this->oTemplate->Set("aPlacemet",$this->aPlacement);
+            $this->oTemplate->Set("aPlacement",$this->aPlacement);
             $this->oTemplate->Set("oProfile",$this->oProfile);
             $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
             $this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);            

@@ -58,10 +58,6 @@ class PlacementProfile extends AbstractProfile {
 		$this->SetLinkTo("PLACEMENT");
 		
 	}
-
-	public function GetTypeLabel() {
-		return "Placement";
-	}	
 	
 	
 	/*
@@ -972,7 +968,32 @@ class PlacementProfile extends AbstractProfile {
 		
 	}
 
+	// used by request router to validate request and setup page header
+	public function GetByUrlName($url_name)
+	{
+	    global $db ,$_CONFIG;
+	    
+	    $sql = "SELECT 
+                    p.id,
+                    p.title, 
+                    p.desc_short, 
+                    c.id as company_id, 
+                    c.title as company_title,
+                    c.url_name as company_url_name
+                FROM 
+                    ".$_CONFIG['placement_table']." p, 
+                    ".$_CONFIG['company_table']." c 
+                WHERE 
+                    p.url_name = '".$url_name."' 
+                AND p.company_id = c.id";
 
+	    $db->query($sql);
+	    if ($db->getNumRows() == 1) {
+	        return $aRes = $db->getRow();
+	    } else {
+	        throw new NotFoundException("Placement Profile url: '".$url_name."' not found");
+	    }
+	}
 	
 	public static function Get($key,$id) {
 

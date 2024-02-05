@@ -156,10 +156,6 @@ class CompanyProfile extends AbstractProfile {
 		$this->id = $id;
 	}
 	
-	public function GetTypeLabel() {
-		return "Profile";
-	}	
-
   	public function GetTitle($trunc = 0) {
   		
   		$title = (is_numeric($this->GetProfileVersionIdToFetch())) ? $this->GetFieldByProfileVersion('title') : $this->title;

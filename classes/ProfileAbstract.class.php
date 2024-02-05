@@ -88,9 +88,23 @@ abstract class AbstractProfile implements TemplateInterface {
 		}
 	
 	}
-	
+
 	public function GetType() {
 		return $this->profile_type;
+	}
+
+	public function GetTypeLabel() 
+	{
+	    switch($this->GetGeneralType())
+	    {
+	        case PROFILE_COMPANY :
+                return "COMPANY";
+                break;
+	        case PROFILE_PLACEMENT :
+	            return "PLACEMENT";
+	            break;
+	    }
+
 	}
 
 	public function SetType($iType) {

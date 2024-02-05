@@ -34,11 +34,6 @@ class JobProfile extends PlacementProfile {
 
 		$this->job_options = array();
 	}
-
-	public function GetTypeLabel() {
-		return "Job";
-	}	
-	
 	
 	public function GetById($id) {
 

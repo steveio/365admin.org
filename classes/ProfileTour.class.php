@@ -50,11 +50,6 @@ class TourProfile extends PlacementProfile {
 		$this->meals_labels = array();
 		$this->accomodation_labels = array();
 	}
-
-	
-	public function GetTypeLabel() {
-		return "Tour";
-	}	
 	
 
 	public function GetById($id) {
