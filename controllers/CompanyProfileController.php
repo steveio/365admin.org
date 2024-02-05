@@ -93,7 +93,7 @@ class CompanyProfileController extends ProfileController {
 	    }
 	}
 
-	private function SetMode($intMode) {
+	private function SetMode() {
 
 		if (DEBUG)  Logger::Msg(__CLASS__."->".__FUNCTION__."()");
 

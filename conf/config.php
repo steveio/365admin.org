@@ -9,7 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
 date_default_timezone_set('Europe/London');
 
 // db connection
-$dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "oneworld365","dbport" => "5432");
+$dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "","dbport" => "5432");
 
 
 
@@ -37,7 +37,9 @@ define('ROOT_PATH',BASE_PATH); // required for some classes
 define('ROOT_PATH_IMAGE_UPLOAD','/www/vhosts/oneworld365.org/htdocs'); // required for some classes
 define('PATH_CLASSES',BASE_PATH. '/classes/');
 define('PATH_CONTROLLERS',BASE_PATH. '/controllers/');
-define("PATH_TO_MVC_ROUTE_MAP", "/conf/routes.xml");
+define("PATH_TO_MVC_ROUTE_MAP", BASE_PATH."/conf/routes.xml"); // MVC routes (URL -> Class / Method)
+define("PATH_TO_STATIC_ROUTE_MAP", BASE_PATH."/conf/routes_static.xml"); // Static routes (URL -> PHP Script file)
+
 define('PATH_2_DATA_DIR',BASE_PATH. '/data/');
 define('PATH_UNDER_MAINTENANCE','/back_soon.php');
 

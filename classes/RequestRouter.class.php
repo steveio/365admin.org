@@ -11,17 +11,18 @@ class RequestRouter {
     protected $strContentType; // content general type: CONTENT_COMPANY, CONTENT_PLACEMENT, CONTENT_ARTICLE
     protected $strContentSubType; // content sub type
     
+    protected $aStaticRoute = array(); // key/value array of static (url -> php script) route mappings
+
     public function __Construct() {} 
 
     public function Route($aRequestUri)
     {
 
-        try {
+        try {            
 
             $this->SetRequestUri($aRequestUri);            
-            $this->RouteMapStatic();            
+            $this->RouteMapStatic();
             $this->RouteMapMVC();
-
           
         } catch (Exception $e)
         {
@@ -89,6 +90,25 @@ class RequestRouter {
         }
     }
 
+    public function LoadStaticRoutes($xml_file_path)
+    {
+
+        if (!file_exists($xml_file_path)) {
+            throw new Exception(ERROR_INVALID_XML_FILE_PATH . $xml_file_path);
+        }
+            
+        $oXml = simplexml_load_file($xml_file_path);
+            
+        if (!is_object($oXml) || count($oXml->route) < 1) throw new Exception(ERROR_INVALID_XML_ROUTE_DEFS);
+            
+        foreach($oXml->route as $oXmlElement) {
+            $url = (string) $oXmlElement->url;
+            $filename = (string) $oXmlElement->filename;
+            $this->aStaticRoute[$url] = $filename;
+        }
+                
+    }
+
     /* static URL alias -> php filename route mapping 
      * 
      * @todo - load static routes from config  
@@ -102,60 +122,28 @@ class RequestRouter {
 
         try {
 
-            switch ($this->GetRequestUri()) 
+            // load static routes from configuration 
+            $this->LoadStaticRoutes(PATH_TO_STATIC_ROUTE_MAP);
+            
+            if (array_key_exists($this->GetRequestUri(), $this->aStaticRoute))
             {
-                case "/logout" :
-                    $script = "logout.php";
-                    break;
-                case "/user" :
-                    $script = "user.php";
-                    break;
-                case "/approve" :
-                    $script = "approve.php";
-                    break;
-                case "/category-admin" :
-                    $script = "category_admin.php";
-                    break;
-                case "/activity-admin" :
-                    $script = "activity_admin.php";
-                    break;
-                case "/review-report" :
-                    $script = "review_report.php";
-                    break;
-                case "/edit_review" :
-                    $script = "edit_review.php";
-                    break;
-                case "/enquiry-report" :
-                    $script = "enquiry_report.php";
-                    break;
-                case "/article" :
-                    $script = "article.php";
-                    break;
-                case "/article-manager" :
-                    $script = "article_mgr.php";
-                    break;
-                case "/article-editor" :
-                    $script = "article_edit.php";
-                    break;
-                case "/article-publisher" :
-                    $script = "article_pub.php";
-                    break;
-                case "/article-preview" :
-                    $script = "article.php";
-                    break;
-                case "/company" :
-                    $this->ProcessCompanyPageRequest();
-                    die();
-                    break;
-                    
+                $script = $this->aStaticRoute[$this->GetRequestUri()];
             }
+
+            /*
+             *                 case "/company" :
+                    $this->ProcessCompanyPageRequest();
+                    break
+             * 
+             */
 
             if (strlen($script) >= 1) // matched static route
             {
 
                 Logger::DB(2,__CLASS__."->".__FUNCTION__."()","Static Route: ".$script);
 
-                if (file_exists($script))
+                // handle static route -> PHP script mappings
+                if (isset($script) && strlen($script) >=1 && file_exists($script))
                 {
                     require_once($script);
                     die();
@@ -181,16 +169,16 @@ class RequestRouter {
              * Now attept to match MVC routes
              */
             $oController = $oSession->GetMVCController();
-
+            
             if (!$oController) {
-                $oController = new MVCController(BASE_PATH);
-                $oController->SetRouteFromXmlFile(BASE_PATH.PATH_TO_MVC_ROUTE_MAP,$oBrand->GetSiteId());                
+                $oController = new MVCController();
+                $oController->SetRouteFromXmlFile(PATH_TO_MVC_ROUTE_MAP,$oBrand->GetSiteId());                
                 $oSession->SetMVCController($oController);
             }
 
             
             $oController->SetRequestUri($this->GetRequestUri());
-            $oController->MapRequest();
+            $oController->MapRequest();            
             $oController->Process();
 
             $oSession->Save();
@@ -281,25 +269,25 @@ class RequestRouter {
     {
         global $db, $_CONFIG, $oHeader;
 
+        
+        // edit company /company/<comp-name>/edit  ( defined as MVC route )
+        if (isset($this->aRequestUri[3]) && $this->aRequestUri[3] == "edit") {
+            return;
+        }
+
         // Placement request /company/<comp-name>/<placement-name>
         if ((isset( $this->aRequestUri[3]) && 
                     $this->aRequestUri[3] != "") 
                     && ($this->aRequestUri[3] != "edit") 
                     && ($this->aRequestUri[2] != "a-z")) 
         {
-            $this->PorcessPlacementPageRequest();
+            $this->ProcessPlacementPageRequest();
         }
 
         // Company AZ request /company/a-z/<letter>
         if ((isset($this->aRequestUri[2]) && $this->aRequestUri[2] != "") && ($this->aRequestUri[2] == "a-z")) 
         {
             $this->ProcessCompanyAZPageRequest();
-        }
-
-        if ($this->aRequestUri[3] == "edit") { // redirect to admin.oneworld365.org/company/<name>/edit
-            $url = preg_replace("/www/","admin",$_CONFIG['url']);
-            header("Location: ".$url.$_SERVER['REQUEST_URI']);
-            die();
         }
 
         // view company profile

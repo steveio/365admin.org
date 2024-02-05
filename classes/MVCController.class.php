@@ -27,15 +27,13 @@
 
 class MVCController{
 	
-	protected $sBasePath; // path to project http root
 	protected $sRequestUri;  // string request uri eg /route1, maps to $oRoute->uri-mapping if matched 
 	protected $nCurrentRouteId;  // int id of route to process, a pointer into $aRoutes
 	protected $aRoutes; // array of route objects
 
 	
-	public function __construct($sBasePath){
+	public function __construct(){
 
-		$this->sBasePath = $sBasePath;
 		$this->aRoutes = array();
 		$this->aRoutesProcessed = array();
 		
