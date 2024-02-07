@@ -1,15 +1,5 @@
 <?php
 
-require_once("./conf/config.php");
-require_once("./conf/brand_config.php");
-require_once("./init.php");
-
-
-include_once("./includes/header.php");
-include_once("./includes/footer.php");
-
-
-
 
 if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = "/",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 

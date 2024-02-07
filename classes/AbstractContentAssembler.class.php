@@ -21,7 +21,12 @@ define("CONTENT_TYPE_ARTICLE", "ARTICLE");
 define("CONTENT_TYPE_CATEGORY", "CATEGORY");
 define("CONTENT_TYPE_ACTVITY", "ACTIVITY");
 define("CONTENT_TYPE_COUNTRY", "COUNTRY");
+define("CONTENT_TYPE_CONTINENT", "CONTINENT");
 define("CONTENT_TYPE_RESULTS", "RESULTS");
+define("CONTENT_TYPE_DESTINATION", "DESTINATION");
+
+// default results template for an unpublished URL 
+define("CONTENT_DEFAULT_RESULT_TEMPLATE", "0");
 
 
 abstract class AbstractContentAssembler {
@@ -30,12 +35,14 @@ abstract class AbstractContentAssembler {
     protected $link_id; /* int id of profile associated content is linked to */
     protected $link_label; /* string label for linked content type */
 
-    private $oTemplateList;
-    private $strTemplatePath;
+    protected $oTemplateList;
+    protected $strTemplatePath;
 
     protected $oReviewTemplate;
     protected $aRelatedProfile = array();
     protected $oRelatedArticle;
+    
+    protected $oRequestRouter; // reference to RequestRouter 
 
     public function __Construct() 
     {
@@ -43,6 +50,17 @@ abstract class AbstractContentAssembler {
         $this->oTemplateList->GetFromDB();
         
         $this->oRelatedArticle = new Article();
+
+    }
+
+    public function SetRequestRouter($oRequestRouter)
+    {
+        $this->oRequestRouter = $oRequestRouter;
+    }
+
+    public function GetRequestRouter()
+    {
+        return $this->oRequestRouter;        
     }
 
     public function SetTemplatePath($templatePath)
@@ -112,13 +130,18 @@ abstract class AbstractContentAssembler {
     {
         global $solr_config;
         
-        // get some related placements
         $oSolrMoreLikeSearch = new SolrMoreLikeSearch($solr_config);
+
+        print_r("<pre>");
+        print_r($oSolrMoreLikeSearch);
+        print_r("</pre>");
+        die("here");
+        
         $oSolrMoreLikeSearch->getRelatedProfile($solr_id, $profile_type);
         
         $oSolrMoreLikeSearch->setRows($limit);
-
         $aTmp = $oSolrMoreLikeSearch->getId();
+
         $aRelatedProfile = array();
         if (is_array($aTmp) && count($aTmp) >= 1) {
             $aRelatedId = array();

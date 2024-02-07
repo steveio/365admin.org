@@ -100,17 +100,18 @@ require_once(BASE_PATH."/classes/SalesEnquiry.php");
 require_once(BASE_PATH."/classes/SecurityQuestion.php");
 
 
-/* Content Retrieval and Template Render Provisioning */
+/* Content Retrieval and UI Template Rendering API */
+require_once(BASE_PATH."/classes/TemplateList.class.php");
+require_once(BASE_PATH."/classes/ContentMapping.class.php");
 require_once(BASE_PATH."/classes/AbstractContentAssembler.class.php");
 require_once(BASE_PATH."/classes/ArticleContentAssembler.class.php");
+require_once(BASE_PATH."/classes/SearchResultContentAssembler.class.php");
 require_once(BASE_PATH."/classes/ProfileContentAssembler.class.php");
 require_once(BASE_PATH."/classes/CompanyProfileContentAssembler.class.php");
 require_once(BASE_PATH."/classes/PlacementProfileContentAssembler.class.php");
 
-require_once(BASE_PATH."/classes/TemplateList.class.php");
 require_once(BASE_PATH."/classes/article.class.php");
 require_once(BASE_PATH."/classes/ArticleCollection.class.php");
-require_once(BASE_PATH."/classes/ContentMapping.class.php");
 
 
 /* @depreciated - to be replaced by Profile* class topology below */
@@ -133,8 +134,9 @@ require_once(BASE_PATH."/classes/ProfileSeasonalJobsEmployer.php");
 require_once(BASE_PATH."/classes/ProfileTeachingProject.php");
 require_once(BASE_PATH."/classes/ArchiveManager.php");
 
-
+// associated (linked) content
 require_once(BASE_PATH."/classes/review.class.php");
+
 
 // SOLR API
 require_once(BASE_PATH."/classes/SolrSearch.php");

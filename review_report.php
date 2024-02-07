@@ -1,5 +1,6 @@
 <?php
 
+
 include_once("./includes/header.php");
 include_once("./includes/footer.php");
 
@@ -132,11 +133,14 @@ print $oHeader->Render();
     
 	<thead>
     	<tr><?
-    $aRow = $aReport[0];
-    
-    $aKeys = array_keys($aRow);
-    foreach($aKeys as $idx => $key) { ?>
-    	<th><?= $key; ?></th><? 
+
+	$aRow = $aReport[0];
+    if (is_array($aRow))
+    {
+        $aKeys = array_keys($aRow);
+        foreach($aKeys as $idx => $key) { ?>
+        	<th><?= $key; ?></th><? 
+        } 
     } ?>
     	<th>edit</th>
     	<th>approve</th>
@@ -148,18 +152,21 @@ print $oHeader->Render();
 	<tbody>
     
     <?
-    foreach($aReport as $aRow) { ?>
-    	<tr><?php 
-        foreach($aRow as $key => $value)
-        { ?>
-    		<td id="<?= $key; ?>" valign="top"><?= $value; ?></td><? 
-        } ?>
-    	<td width="20px"><a href="../edit_review/?&id=<?= $aRow['post_id'] ?>" target="_new">edit</a></td>
-    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this review?');" name="enq_<?= $aRow['post_id'] ?>_approve" value="approve" /></td>
-    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $aRow['post_id'] ?>_reject" value="reject" /></td>
-    	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $aRow['post_id'] ?>" name="enq_<?= $aRow['post_id'] ?>" value="approve" /></td>
-    
-    	</tr><?
+    if (is_array($aReport))
+    {
+        foreach($aReport as $aRow) { ?>
+        	<tr><?php 
+            foreach($aRow as $key => $value)
+            { ?>
+        		<td id="<?= $key; ?>" valign="top"><?= $value; ?></td><? 
+            } ?>
+        	<td width="20px"><a href="../edit_review/?&id=<?= $aRow['post_id'] ?>" target="_new">edit</a></td>
+        	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this review?');" name="enq_<?= $aRow['post_id'] ?>_approve" value="approve" /></td>
+        	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $aRow['post_id'] ?>_reject" value="reject" /></td>
+        	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $aRow['post_id'] ?>" name="enq_<?= $aRow['post_id'] ?>" value="approve" /></td>
+        
+        	</tr><?
+        } 
     } ?>
     </tbody>
     </table>

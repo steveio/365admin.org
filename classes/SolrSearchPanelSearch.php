@@ -142,7 +142,7 @@ class SolrSearchPanelSearch {
 		$this->setActivity($oAct);
 		$this->setCountry($oCty);
 		$this->setContinent($oCtn);
-		//$this->setKeywords($aSearchParams['search-panel-keywords']);
+		$this->setKeywords($aSearchParams['search-panel-keywords']);
 	
 		$this->setForwardUrl();
 	}

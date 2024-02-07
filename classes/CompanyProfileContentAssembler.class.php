@@ -121,4 +121,16 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
         }
     }
 
+    public function ProcessCompanyAZPageRequest()
+    {
+        if ($this->aRequestUri[2] == "a-z" && $this->aRequestUri[3] != "") {
+            $this->isLowerCaseLetter($this->aRequestUri[3]);
+            $_REQUEST['letter'] = $this->aRequestUri[3];
+        } else {
+            $_REQUEST['letter'] = "a";
+        }
+        // @todo - migrate to OO template API
+        require_once("./company_list.php");
+    }
+    
 }

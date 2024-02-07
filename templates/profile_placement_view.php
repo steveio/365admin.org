@@ -2,9 +2,6 @@
 
 $oProfile = $this->Get("oProfile");
 
-print_r($oProfile);
-die();
-
 
 ?>
 
@@ -16,8 +13,8 @@ die();
     <div class="span12" style="margin: 20px;">
 	<div class="pull-right sharethis-inline-share-buttons"></div>
 
-	<? if (strlen($t->Get('company_logo')) >1) { ?>
-		<div style=""><?= $t->Get('company_logo') ?></div>
+	<? if (strlen($this->Get('company_logo')) >1) { ?>
+		<div style=""><?= $this->Get('company_logo') ?></div>
 	<? } ?>
 
 	<h1><?= $oProfile->GetTitle(); ?></h1>
@@ -26,22 +23,22 @@ die();
 
 
 	<p>
-	<? if (in_array($t->Get('profile_type'),array(PROFILE_VOLUNTEER, PROFILE_TOUR))) { ?>
-		<b>Company :</b> <a href="<?= $t->Get('company_url'); ?>" title="Find out more about <?= $t->Get('company_name'); ?>" style="color: #DD6900;"><?= $t->Get('company_name'); ?></a><br/>
+	<? if (in_array($this->Get('profile_type'),array(PROFILE_VOLUNTEER, PROFILE_TOUR))) { ?>
+		<b>Company :</b> <a href="<?= $this->Get('company_url'); ?>" title="Find out more about <?= $this->Get('company_name'); ?>" style="color: #DD6900;"><?= $this->Get('company_name'); ?></a><br/>
 		<?php 
 		if (count($oProfile->GetActivityArray()) > 1 && count($oProfile->GetActivityArray()) < 3) {
 			$label = "Activities: "; ?>
-			<b><?= $label; ?></b> <?= $t->Get('activity_txt'); ?><br/><?
+			<b><?= $label; ?></b> <?= $this->Get('activity_txt'); ?><br/><?
 		}
 		?>
 		<?php 
 		if (count($oProfile->GetCountryArray()) > 1 && count($oProfile->GetCountryArray()) < 3) {
 			$label = "Countries: "; ?>
-			<b><?= $label; ?></b> <?= $t->Get('country_txt') ?><br/><?
+			<b><?= $label; ?></b> <?= $this->Get('country_txt') ?><br/><?
 		} 
 		?>
-		<? if (strlen($t->Get('location')) > 1) { ?>
-			<b>Location :</b> <?= $t->Get('location'); ?><br/>
+		<? if (strlen($this->Get('location')) > 1) { ?>
+			<b>Location :</b> <?= $this->Get('location'); ?><br/>
 		<? } ?>
 		<? if (is_numeric($oProfile->GetDurationFromId())) { ?>
 			<b>Duration:</b> <?= $oProfile->GetDurationFromLabel(); ?> to <?= $oProfile->GetDurationToLabel(); ?><br />
@@ -51,40 +48,40 @@ die();
 			<?= $oProfile->GetCurrencyLabel(); ?><br />
 		<?php } ?>
 
-		<? if (strlen($t->Get('code')) > 1) { ?>
-			<b>Tour Code :</b> <?= $t->Get('code'); ?>
+		<? if (strlen($this->Get('code')) > 1) { ?>
+			<b>Tour Code :</b> <?= $this->Get('code'); ?>
 		<? } ?>
 	<? } ?>
 
-	<? if ($t->Get('profile_type') == PROFILE_JOB) { /* JOB */ ?>
-		<b>Job Ref :</b> <?= $t->Get('reference'); ?><br/>
-		<b>Company :</b> <?= $t->Get('company_name'); ?><br/>
-		<b>Country :</b> <?= $t->Get('country_txt'); ?><br/>
-		<? if (strlen($t->Get('location')) > 1) { ?>
-			<b>Location :</b> <?= $t->Get('location'); ?><br/>
+	<? if ($this->Get('profile_type') == PROFILE_JOB) { /* JOB */ ?>
+		<b>Job Ref :</b> <?= $this->Get('reference'); ?><br/>
+		<b>Company :</b> <?= $this->Get('company_name'); ?><br/>
+		<b>Country :</b> <?= $this->Get('country_txt'); ?><br/>
+		<? if (strlen($this->Get('location')) > 1) { ?>
+			<b>Location :</b> <?= $this->Get('location'); ?><br/>
 		<? } ?>
-		<? if (strlen($t->Get('contract_type_label')) > 1) { ?>
-			<b>Contract :</b> <?= $t->Get('contract_type_label'); ?><br/>
+		<? if (strlen($this->Get('contract_type_label')) > 1) { ?>
+			<b>Contract :</b> <?= $this->Get('contract_type_label'); ?><br/>
 		<? } ?>
-		<? if (strlen($t->Get('start_dt_exact')) > 1) { ?>
-			<b>Start Date :</b> <?= $t->Get('start_dt_exact'); ?><br/>
-		<? } elseif(strlen($t->Get('start_dt_multiple')) > 1) { ?>
-			<b>Start Dates :</b> <?= $t->Get('start_dt_multiple'); ?><br/>
+		<? if (strlen($this->Get('start_dt_exact')) > 1) { ?>
+			<b>Start Date :</b> <?= $this->Get('start_dt_exact'); ?><br/>
+		<? } elseif(strlen($this->Get('start_dt_multiple')) > 1) { ?>
+			<b>Start Dates :</b> <?= $this->Get('start_dt_multiple'); ?><br/>
 		<? } ?>
-		<? if (strlen($t->Get('closing_dt')) > 1) { ?>
-			<b>Apply By :</b> <?= $t->Get('closing_dt'); ?><br/>
+		<? if (strlen($this->Get('closing_dt')) > 1) { ?>
+			<b>Apply By :</b> <?= $this->Get('closing_dt'); ?><br/>
 		<? } ?>
 	<? } ?>
 	
 	</p>
 	
-	<? if ($t->Get('profile_type') == PROFILE_JOB) { /* JOB */ ?>
+	<? if ($this->Get('profile_type') == PROFILE_JOB) { /* JOB */ ?>
 	<h3>Job Description</h3>
 	<? } ?>
 
 	<div class='lead' style='padding-bottom: 20px;'>
 	
-	<p class="lead"><strong><?= $t->Get('desc_short'); ?></strong></p>			
+	<p class="lead"><strong><?= $oProfile->GetDescShort(); ?></strong></p>			
 
 
     <div class="profile-image-container span12">
@@ -141,56 +138,56 @@ die();
             </script>
     </div>
 
-	<p><?= $t->Get('desc_long'); ?></p>
+	<p><?= $oProfile->GetDescLong(); ?></p>
 
-	<? if (strlen(trim($t->Get('video1'))) > 1) { ?>
+	<? if (strlen(trim($this->Get('video1'))) > 1) { ?>
 		<div class='span12'>
 		<h3>Video</h3>
-			<?= $t->Get('video1') ?>
+			<?= $this->Get('video1') ?>
 		</div>
 	<? } ?>		
 	
-	<? if ($t->Get('profile_type') == PROFILE_VOLUNTEER) { /* VOLUNTEER */ ?>
+	<? if ($this->Get('profile_type') == PROFILE_VOLUNTEER) { /* VOLUNTEER */ ?>
 					
-		<? if (strlen($t->Get('duration_txt')) >= 1) { ?>
+		<? if (strlen($this->Get('duration_txt')) >= 1) { ?>
 			<h3>Duration</h3>
-			<p><?= $t->Get('duration_txt') ?></p>
+			<p><?= $this->Get('duration_txt') ?></p>
 		<? } ?>
 			
-		<? if (strlen($t->Get('start_dates')) >= 1) { ?>
+		<? if (strlen($this->Get('start_dates')) >= 1) { ?>
 			<h3>Start Dates</h3>
-			<p><?= nl2br($t->Get('start_dates')) ?></p>
+			<p><?= nl2br($this->Get('start_dates')) ?></p>
 		<? } ?>
 		
 
-		<? if (strlen($t->Get('benefits')) >= 1) { ?>
+		<? if (strlen($this->Get('benefits')) >= 1) { ?>
 			<h3>Costs / Benefits</h3>
-			<p><?= nl2br($t->Get('benefits')) ?></p>
+			<p><?= nl2br($this->Get('benefits')) ?></p>
 		<? } ?>
 
-		<? if (strlen($t->Get('requirements')) >= 1) { ?>
+		<? if (strlen($this->Get('requirements')) >= 1) { ?>
 			<h3>Requirements</h3>
-			<p><?= nl2br($t->Get('requirements')) ?></p>
+			<p><?= nl2br($this->Get('requirements')) ?></p>
 		<? } ?>
 
 	<? } ?>
 	
 	
-	<? if ($t->Get('profile_type') == PROFILE_TOUR) { /* TOUR */ ?>
+	<? if ($this->Get('profile_type') == PROFILE_TOUR) { /* TOUR */ ?>
 
-		<? if (strlen($t->Get('itinery')) >= 1) { ?>
+		<? if (strlen($this->Get('itinery')) >= 1) { ?>
 					
 			<h3>Itinerary</h3>
-			<p><?= $t->Get('itinery'); ?></p>
+			<p><?= $this->Get('itinery'); ?></p>
 		<? } ?>	
 		
 			<div>
-			<?php if (is_array($t->Get('REFDATA_TRAVEL_ARRAY')) && count($t->Get('REFDATA_TRAVEL_ARRAY')) >= 1) { ?>
+			<?php if (is_array($this->Get('REFDATA_TRAVEL_ARRAY')) && count($this->Get('REFDATA_TRAVEL_ARRAY')) >= 1) { ?>
 				<div>
 				<h3>Travel</h3>
 				<ul class='select_list'>
 				<?php 
-				foreach($t->Get('REFDATA_TRAVEL_ARRAY') as $li) {
+				foreach($this->Get('REFDATA_TRAVEL_ARRAY') as $li) {
 					print $li;
 				}
 				?>
@@ -198,12 +195,12 @@ die();
 				</div>
 			<?php } ?>
 			
-			<?php if (is_array($t->Get('REFDATA_ACCOM_ARRAY')) && count($t->Get('REFDATA_ACCOM_ARRAY')) >= 1) { ?>
+			<?php if (is_array($this->Get('REFDATA_ACCOM_ARRAY')) && count($this->Get('REFDATA_ACCOM_ARRAY')) >= 1) { ?>
 				<div>
 				<h3>Accomodation</h3>
 				<ul class='select_list'>
 				<?php 
-				foreach($t->Get('REFDATA_ACCOM_ARRAY') as $li) {
+				foreach($this->Get('REFDATA_ACCOM_ARRAY') as $li) {
 					print $li;
 				}
 				?>
@@ -211,12 +208,12 @@ die();
 				</div>
 			<?php } ?>
 			
-			<?php if (is_array($t->Get('REFDATA_MEALS_ARRAY')) && count($t->Get('REFDATA_MEALS_ARRAY')) >= 1) { ?>				
+			<?php if (is_array($this->Get('REFDATA_MEALS_ARRAY')) && count($this->Get('REFDATA_MEALS_ARRAY')) >= 1) { ?>				
 				<div>
 				<h3>Meals</h3>
 				<ul class='select_list'>
 				<?php 
-				foreach($t->Get('REFDATA_MEALS_ARRAY') as $li) {
+				foreach($this->Get('REFDATA_MEALS_ARRAY') as $li) {
 					print $li;
 				}
 				?>
@@ -227,34 +224,34 @@ die();
 		
 
 		<div>
-		<?  if (strlen($t->Get('tour_price')) > 1) { ?>
+		<?  if (strlen($this->Get('tour_price')) > 1) { ?>
 			<h3>Tour Price</h3>
-			<p><?= $t->Get('tour_price'); ?></p>
+			<p><?= $this->Get('tour_price'); ?></p>
 		<? } ?>
 
-		<?php if (strlen($t->Get('included')) > 1) { ?>
+		<?php if (strlen($this->Get('included')) > 1) { ?>
 			<h3>Included in Price</h3>
-			<p><?= nl2br($t->Get('included')) ?></p>
+			<p><?= nl2br($this->Get('included')) ?></p>
 		<?php } ?>
 
-		<?php if (strlen($t->Get('local_payment')) > 1) { ?>
+		<?php if (strlen($this->Get('local_payment')) > 1) { ?>
 			<h3>Local Payment</h3>
-			<p><?= $t->Get('local_payment') ?></p>
+			<p><?= $this->Get('local_payment') ?></p>
 		<?php } ?>
 			
-		<?php if (strlen($t->Get('not_included')) > 1) { ?>				
+		<?php if (strlen($this->Get('not_included')) > 1) { ?>				
 			<h3>Not Included in Price</h3>
-			<p><?= nl2br($t->Get('not_included')); ?></p>
+			<p><?= nl2br($this->Get('not_included')); ?></p>
 		<?php } ?>
 			
-		<?php if (strlen($t->Get('dates')) > 1) { ?>
+		<?php if (strlen($this->Get('dates')) > 1) { ?>
 			<h3>Start Dates</h3>
-			<p><?= nl2br($t->Get('dates')) ?></p>
+			<p><?= nl2br($this->Get('dates')) ?></p>
 		<?php } ?>
 
-		<?php if (strlen($t->Get('grp_size')) > 1) { ?>
+		<?php if (strlen($this->Get('grp_size')) > 1) { ?>
 			<h3>Group Size</h3>
-			<p><?= $t->Get('grp_size') ?></p>
+			<p><?= $this->Get('grp_size') ?></p>
 		<?php } ?>
 			
 		</div>
@@ -263,30 +260,30 @@ die();
 			
 	<? } // end profile tour ?>
 
-	<? if ($t->Get('profile_type') == PROFILE_JOB) { /* JOB */ ?>
+	<? if ($this->Get('profile_type') == PROFILE_JOB) { /* JOB */ ?>
 			<h3>Salary / Pay</h3>
-			<p><?= $t->Get('job_salary') ?></p>
+			<p><?= $this->Get('job_salary') ?></p>
 
-			<? if (strlen($t->Get('job_benefits')) > 1) { ?>
+			<? if (strlen($this->Get('job_benefits')) > 1) { ?>
 				<h3>Benefits</h3>
-				<p><?= $t->Get('job_benefits') ?></p>
+				<p><?= $this->Get('job_benefits') ?></p>
 			<? } ?>
 
-			<? if ($t->Get('live_in') == "t" || $t->Get('meals_inc') == "t" || $t->Get('pickup_inc') == "t") { ?>
+			<? if ($this->Get('live_in') == "t" || $this->Get('meals_inc') == "t" || $this->Get('pickup_inc') == "t") { ?>
 			<h3>Extras</h3>
 			<table cellpadding="0" cellspacing="0" border="0">
 				<tr>
-					<td width="40px" align="left" valign="top"><input type="checkbox" name="live_in" id="live_in" class="text_input" disabled <?= ($t->Get('live_in') == "t") ? "checked" : "";  ?>  /><label for="live_in" class="checkbox_label">Live In</label></td>
-					<td width="40px" align="left" valign="top"><input type="checkbox" name="meals_inc" id="meals_inc" class="text_input" disabled <?= ($t->Get('meals_inc') == "t") ? "checked" : "";  ?> /><label for="meals" class="checkbox_label">Meals</label></td>
-					<td width="40px" align="left" valign="top"><input type="checkbox" name="pickup_inc" id="pickup_inc" class="text_input" disabled <?= ($t->Get('pickup_inc') == "t") ? "checked" : "";  ?> /><label for="pickup_inc" class="checkbox_label">(Airport) Pickup</label></td>	
+					<td width="40px" align="left" valign="top"><input type="checkbox" name="live_in" id="live_in" class="text_input" disabled <?= ($this->Get('live_in') == "t") ? "checked" : "";  ?>  /><label for="live_in" class="checkbox_label">Live In</label></td>
+					<td width="40px" align="left" valign="top"><input type="checkbox" name="meals_inc" id="meals_inc" class="text_input" disabled <?= ($this->Get('meals_inc') == "t") ? "checked" : "";  ?> /><label for="meals" class="checkbox_label">Meals</label></td>
+					<td width="40px" align="left" valign="top"><input type="checkbox" name="pickup_inc" id="pickup_inc" class="text_input" disabled <?= ($this->Get('pickup_inc') == "t") ? "checked" : "";  ?> /><label for="pickup_inc" class="checkbox_label">(Airport) Pickup</label></td>	
 				</tr>
 			</table>
 			<? } ?>
 
 
-			<? if (strlen($t->Get('experience')) > 1) { ?>
+			<? if (strlen($this->Get('experience')) > 1) { ?>
 				<h3>Experience Required</h3>
-				<p><?= $t->Get('experience') ?></p>
+				<p><?= $this->Get('experience') ?></p>
 			<? } ?>
 			
 	<? } ?>
@@ -298,7 +295,7 @@ die();
 
 <div class="row-fluid">
 <div class="booking-enquiry">	
-	<? if ($t->Get('profile_type') == PROFILE_JOB) { ?>
+	<? if ($this->Get('profile_type') == PROFILE_JOB) { ?>
 		<h3>Apply / More Info</h3>
 	<? } else { ?>
 		<h2>Booking / Enquiry</h2>
@@ -308,15 +305,15 @@ die();
 	
 	<?
 	/* defaults for the profile type being viewed */
-	if (in_array($t->Get('profile_type'), array(PROFILE_VOLUNTEER,PROFILE_TOUR))) {			
+	if (in_array($this->Get('profile_type'), array(PROFILE_VOLUNTEER,PROFILE_TOUR))) {			
 		/* is this enquiry type enabled / disabled on the company profile? */
-		if ($t->Get('comp_profile')->HasEnquiryOption(ENQUIRY_BOOKING)) {
+		if ($this->Get('comp_profile')->HasEnquiryOption(ENQUIRY_BOOKING)) {
 			
 			/* finally if apply/booking url is specified, button should redirect to external site */
-			if (strlen($t->Get('apply_url')) > 1) {
+			if (strlen($this->Get('apply_url')) > 1) {
 				/* button links to external apply/booking page */
 				?>
-				<a class="btn btn-primary" href="#" onclick="javascript: travel('<?= $t->Get('apply_url') ?>','/outgoing/<?= $t->Get('comp_url_name'); ?>/<?= $t->Get('url_name') ?>/www');" title="Apply Online" >Apply Online</a>
+				<a class="btn btn-primary" href="#" onclick="javascript: travel('<?= $this->Get('apply_url') ?>','/outgoing/<?= $this->Get('comp_url_name'); ?>/<?= $this->Get('url_name') ?>/www');" title="Apply Online" >Apply Online</a>
 			
 				<?					
 			} else {
@@ -327,25 +324,25 @@ die();
 			}
 		}
 	}
-	if (in_array($t->Get('profile_type'), array(PROFILE_VOLUNTEER,PROFILE_TOUR)) && ! $t->Get('comp_profile')->HasEnquiryOption(ENQUIRY_BOOKING)) {
-		if ($t->Get('comp_profile')->HasEnquiryOption(ENQUIRY_GENERAL)) {
+	if (in_array($this->Get('profile_type'), array(PROFILE_VOLUNTEER,PROFILE_TOUR)) && ! $this->Get('comp_profile')->HasEnquiryOption(ENQUIRY_BOOKING)) {
+		if ($this->Get('comp_profile')->HasEnquiryOption(ENQUIRY_GENERAL)) {
 		?>
 		<a class="btn btn-primary" href="<?= $aEnquiryUrl['GENERAL']; ?>" title="Make an enquiry">Enquiry</a>
 		<?
 		}
 	}
-	if (in_array($t->Get('profile_type'), array())) {
+	if (in_array($this->Get('profile_type'), array())) {
 		?>
 		<a class="btn btn-primary"  href="<?= $aEnquiryUrl['BROCHURE']; ?>" title="Request a brochure">Brouchure Request</a>
 		<?
 	}		
 
-	if (in_array($t->Get('profile_type'), array(PROFILE_JOB,PROFILE_VOLUNTEER))) {
-		if ($t->Get('comp_profile')->HasEnquiryOption(ENQUIRY_JOB_APP)) {
-			if (strlen($t->Get('apply_url')) > 1) {
+	if (in_array($this->Get('profile_type'), array(PROFILE_JOB,PROFILE_VOLUNTEER))) {
+		if ($this->Get('comp_profile')->HasEnquiryOption(ENQUIRY_JOB_APP)) {
+			if (strlen($this->Get('apply_url')) > 1) {
 				/* button links to external apply page */
 				?>
-				<a class="btn btn-primary" target="_blank"  href="<?= $t->Get('apply_url') ?>" onclick="javascript: travel('<?= $t->Get('apply_url') ?>','/outgoing/<?= $t->Get('comp_url_name'); ?>/<?= $t->Get('url_name') ?>/www');" title="Apply Online">Apply Online</a>
+				<a class="btn btn-primary" target="_blank"  href="<?= $this->Get('apply_url') ?>" onclick="javascript: travel('<?= $this->Get('apply_url') ?>','/outgoing/<?= $this->Get('comp_url_name'); ?>/<?= $this->Get('url_name') ?>/www');" title="Apply Online">Apply Online</a>
 				<?					
 			} else {				
 				?>
@@ -357,9 +354,9 @@ die();
 	?>
 
 	<?
-	if (strlen($t->Get('url')) > 1 && $t->Get('url') != "http://") {
+	if (strlen($this->Get('url')) > 1 && $this->Get('url') != "http://") {
 	?>
-	<a class="btn btn-primary" href="#" onclick="javascript: travel('<?= $t->Get('url'); ?>','/outgoing/<?= $t->Get('comp_url_name'); ?>/<?= $t->Get('url_name') ?>/www');">Visit Website</a>
+	<a class="btn btn-primary" href="#" onclick="javascript: travel('<?= $this->Get('url'); ?>','/outgoing/<?= $this->Get('comp_url_name'); ?>/<?= $this->Get('url_name') ?>/www');">Visit Website</a>
 	<? } ?>
 	
 	</div>
@@ -367,19 +364,25 @@ die();
 </div>
 
 
-<div class="row-fluid">
-<div class="span12">
+<div class="row">
+<div class="col12">
+	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
+<?php 
 
-	<h2><?= $oProfile->GetCompanyName(); ?> <?= $oProfile->GetTitle(); ?> Reviews</h2>
-	<?php 
-	$oReviewTemplate->LoadTemplate("/review.php");
-	print $oReviewTemplate->Render();
-	?>
+$oReviewTemplate = $this->Get("oReviewTemplate");
+print $oReviewTemplate->Render();
+
+?>
 </div>
-</div>		
+</div>
 
 
 <?php 
+$aRelatedProfile = $this->Get("aRelatedProfile");
+
+print_r($aRelatedProfile);
+die();
+
 if (count($aRelatedProfile) >= 1) { 
 ?>
 

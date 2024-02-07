@@ -31,6 +31,7 @@ class MVCController{
 	protected $nCurrentRouteId;  // int id of route to process, a pointer into $aRoutes
 	protected $aRoutes; // array of route objects
 
+	protected $bExceptionOnNotFound = true;
 	
 	public function __construct(){
 
@@ -38,16 +39,28 @@ class MVCController{
 		$this->aRoutesProcessed = array();
 		
 	}
-	
+
+	public function SetExceptionOnNotFound($bExceptionOnNotFound)
+	{
+	    $this->bExceptionOnNotFound = $bExceptionOnNotFound;
+	}
+
 	public function Process() {
 		
 		try {
 
-			$oRoute = $this->GetRouteById($this->GetCurrentRouteId());			
+		    $this->MapRequest();
 
-			Logger::DB(3,__CLASS__."->".__FUNCTION__."()","MVC Route: request uri: ".$this->sRequestUri." : route_id: ".$this->GetCurrentRouteId());
-
+			$oRoute = $this->GetRouteById($this->GetCurrentRouteId());
 			$oRoute->Process();
+
+		} catch (NotFoundException $e) {
+
+			if ($this->bExceptionOnNotFound)
+			{
+			    throw $e;
+			}			
+			return false;
 
 		} catch (InvalidSessionException $e) {
 			throw new InvalidSessionException($e->getMessage());
@@ -62,8 +75,10 @@ class MVCController{
 		try {
 			$this->SetCurrentRouteId( $this->GetRouteByUriMapping($this->GetRequestUri())->GetId() );
 			
-		} catch (Exception $e) {
-			throw new NotFoundException($e->getMessage());
+		} catch (NotFoundException $e) {
+            throw $e;
+		} catch (Exception $e) { // general exception
+            throw $e;
 		}
 		
 	}

@@ -1442,7 +1442,7 @@ class Content  implements TemplateInterface {
 				"TITLE" => $this->GetTitle(),
 				"DESC_SHORT" => htmlUtils::convertToPlainText($this->GetDescShort()),
 		        "DESC_SHORT_160" => htmlUtils::convertToPlainText($this->GetDescShort(160)),
-		        "FULL_DESC" => htmlUtils::convertToPlainTextnl2br($this->GetDescFull()),
+		        "FULL_DESC" => htmlUtils::convertToPlainText($this->GetDescFull()),
 				"URL" => $this->GetUrl(),
 				"PUBLISHED_DATE" => $this->GetPublishedDate(),
 				"IMG_SIZE" => $this->GetImgSize(),

@@ -56,5 +56,25 @@
 		<url>/company</url>
 		<callback>$this->ProcessCompanyPageRequest()</callback>
 	</route>
+	<route>
+		<url>/travel</url>
+		<callback>$this->ProcessDestinationPageRequest()</callback>
+	</route>
+	<route>
+		<url>/country</url>
+		<callback>$this->ProcessDestinationPageRequest()</callback>
+	</route>
+	<route>
+		<url>/continent</url>
+		<callback>$this->ProcessDestinationPageRequest()</callback>
+	</route>
+	<route>
+		<url>/search</url>
+		<callback>$this->ProcessSearchResultPageRequest()</callback>
+	</route>
+	<route>
+		<url>/search-dispatch</url>
+		<filename>searchPanelDispatch_ajax.php</filename>
+	</route>
 
 </routes> 

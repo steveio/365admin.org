@@ -10,25 +10,27 @@
 
 class NameService {
 
-	public function __construct()
-	{
-		$this->NameService();
-	}
+    public function __construct()
+    {
+        $this->NameService();        
+    }
 
 	function NameService() {
  	}
 
- 	public static function ValidNamespaceToken($str) { 
-		return preg_match('/[a-zA-Z0-9_\-\/]{1,120}/',$str) ? TRUE : FALSE;	
- 	}
- 	
 
 	static function Redirect($url) {
 
 		header("Location: ".$url);
 		die();
 	}
-
+	
+	public static function validUriNamespaceIdentifier($str) {
+		if (preg_match('/[a-zA-Z0-9_\-\/]{1,120}/',$str)) {
+			return TRUE;
+		}
+	}
+	
 
 	/* 
 	 * return a routing rule old_url -> new_url 
@@ -37,11 +39,13 @@ class NameService {
 	 *
 	 * @return FALSE on not found, url redirect on found if $fwd = TRUE
 	*/
-	static function GetUrlMapping($uri,$fwd = TRUE) {
+	static function GetUrlMapping($uri,$fwd = TRUE, $sid = null) {
 
 	   global $db,$_CONFIG;
 
-	   $db->query("SELECT url_to FROM url_map WHERE url_from = '".$uri."'");
+	   $sql = "SELECT url_to FROM url_map WHERE url_from = '".$uri."'";
+	   
+	   $db->query($sql);
 
 	   if ($db->GetNumRows() == 1) {
 	      $row = $db->getRow();
@@ -63,24 +67,41 @@ class NameService {
 	function AddUrlMapping($url_from, $url_to) {
 
 		global $db, $_CONFIG;
+	
+		if (!NameService::GetUrlMapping($url_from,$fwd = FALSE)) {
 
-		// the old and new pages shouldn't already be redirected
-		$db->query("delete from url_map where url_from = '".$url_to."'");
-
-		$db->query("delete from url_map where url_from = '".$url_from."'");
-
-		$db->query("INSERT INTO url_map (url_from,url_to,date) VALUES ('".$url_from."','".$url_to."',now()::timestamp);");
-		if ($db->GetAffectedRows() == 1) {
-			return TRUE;
+			$db->query("INSERT INTO url_map (url_from,url_to,date) VALUES ('".$url_from."','".$url_to."',now()::timestamp);");
+			if ($db->GetAffectedRows() == 1) {
+				return TRUE;
+			}
 		}
 
 	}
 
+	public static function lookupNameSpaceIdentifier($tbl,$uri) {
+	
+		global $db;
+	
+		$sql = "SELECT id,name,url_name FROM ".$tbl." WHERE url_name = '".$uri."'";
+		$db->query($sql);
+		$response = array();
+		if ($db->getNumRows() == 1) {
+			$aRes = $db->getRow();
+			$response['name'] = $aRes['name'];
+			$response['id'] = $aRes['id'];
+	
+	
+		} else {
+			throw new Exception("Namespace Identifier DB Lookup Failed : ".$sql);
+		}
+		return $response;
+	}
+	
 
 	function isUnique($str,$tbl,$col) {
 		global $db;
 		// check that the url namespace identifier is unique
-		$sql = "SELECT 1 FROM $tbl WHERE $col = '".$str."'";
+		$sql = "SELECT oid FROM $tbl WHERE $col = '".$str."'";
 		$db->query($sql);
 		if ($db->getNumRows() >= 1) {
 			return false;

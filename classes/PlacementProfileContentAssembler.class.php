@@ -50,9 +50,11 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
             
             parent::GetByUrlName($path);            
 
+            $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT);
+
             $this->oTemplate->Set("oProfile",$this->oProfile);
             $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
-            $this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);
+            $this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);// placement list - view all placement for company /company/<comp-name>/placements
             $this->oTemplate->LoadTemplate("profile_placement_view.php");
 
             print $oHeader->Render();
@@ -99,4 +101,10 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
         }
     }
 
+    public function ProcessPlacementList()
+    {
+        // @todo - placement list - view all placement for company /company/<comp-name>/placements
+        die("DISPLAY PLACEMENT LIST");
+        
+    }
 }

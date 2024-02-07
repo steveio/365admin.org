@@ -4,12 +4,21 @@ define("HEADER_HTTP_404", "HTTP/1.0 404 Not Found");
 define("HEADER_HTTP_500", "HTTP/1.0 500 Internal Server Error");
 
 
+/*
+ * RequestRouter -
+ * 
+ * Handles static and dynamic URL route mappings
+ * 
+ * 
+ * 
+ */
+
+
 class RequestRouter {
     
     protected $aRequestUri; // array URI from $_REQUEST
     protected $strRequestUri; // string URL path eg /blog/article01
     protected $strContentType; // content general type: CONTENT_COMPANY, CONTENT_PLACEMENT, CONTENT_ARTICLE
-    protected $strContentSubType; // content sub type
     
     protected $aStaticRoute = array(); // key/value array of static (url -> php script) route mappings
     protected $aStaticCallback = array();  // key/value array of callback route (url -> $class->method() ) mappings
@@ -21,9 +30,9 @@ class RequestRouter {
 
         try {            
 
-            $this->SetRequestUri($aRequestUri);            
-            $this->RouteMapStatic();
+            $this->SetRequestUri($aRequestUri);
             $this->RouteMapMVC();
+            $this->RouteMapStatic();
           
         } catch (Exception $e)
         {
@@ -129,6 +138,7 @@ class RequestRouter {
             // load static routes from configuration 
             $this->LoadStaticRoutes(PATH_TO_STATIC_ROUTE_MAP);
 
+            
             // url -> php script mappings
             if (array_key_exists($this->GetRequestUri(), $this->aStaticRoute))
             {
@@ -144,10 +154,11 @@ class RequestRouter {
             /*
             print_r("<pre>");
             print_r($this);
+            print_r($script);
             print_r($callback);
             print_r("</pre>");
+            die();
             */
-
 
             if (strlen($script) >= 1) // matched static url -> php script route
             {
@@ -159,6 +170,9 @@ class RequestRouter {
                 $this->processCallback($callback);
             }
             
+            // unamatched route, try to categorise request type
+            $this->GetPageTypeFromUri();
+
         } catch (Exception $e) {
             die($e->getMessage());
             throw $e;
@@ -167,7 +181,9 @@ class RequestRouter {
 
     // include dependency script, then call die();
     private function processInclude($script)
-    {
+    {   
+        global $db, $oBrand, $oAuth, $oHeader, $oFooter;
+
         // handle static route -> PHP script mappings
         if (isset($script) && strlen($script) >=1 && file_exists($script))
         {
@@ -181,6 +197,8 @@ class RequestRouter {
     // execute callback string in format $class->method(), then continue processing
     private function processCallback($callback)
     {
+        global $db, $oBrand, $oAuth, $oHeader, $oFooter;
+
         if (isset($callback) && strlen($callback) >=1)
         {
             $aBits = explode("->",$callback);
@@ -219,9 +237,9 @@ class RequestRouter {
                 $oSession->SetMVCController($oController);
             }
 
-            
+            $oController->SetExceptionOnNotFound(false);
+
             $oController->SetRequestUri($this->GetRequestUri());
-            $oController->MapRequest();            
             $oController->Process();
 
             $oSession->Save();
@@ -234,84 +252,62 @@ class RequestRouter {
 
     public function GetPageTypeFromUri()
     {
-        global $db;
         
-        if (RequestRouter::isCategory($this->GetRequestUri()))
+        switch(true)
         {
-            $sql = "SELECT id,name FROM category WHERE url_name = '".$this->GetRequestUri()."'";
-            $db->query($sql);
-            if ($db->getNumRows() == 1) {
-                $this->strContentType = CONTENT_TYPE_CATEGORY;
-                $aRes = $db->getRow();
-                $this->ProcessCategoryPageRequest($aRes);
-                return true;
-            }
-        } elseif (RequestRouter::isActivity($this->GetRequestUri())) {
-            
-            $sql = "SELECT id,name FROM activity WHERE url_name = '".$this->GetRequestUri()."'";
-            $db->query($sql);
-            if ($db->getNumRows() == 1) {
-                $this->strContentType = CONTENT_TYPE_ACTIVITY;
-                $aRes = $db->getRow();
-                $this->ProcessActivityPageRequest($aRes);
-                return true;
-            }
-            
-        } else {
-            $this->ProcessArticlePageRequest();
+            case $this->isCategory($this->GetRequestUri()) :
+                break;
+            case $this->isActivity($this->GetRequestUri()) :
+                break;
+            default:
+                $this->ProcessArticlePageRequest();
         }
     }
 
-    public static function isCategory($strUrlName)
-    {
-        global $db;
-        
-        $sql = "SELECT 1 FROM category WHERE url_name = '".$strUrlName."'";
-        $db->query($sql);
-        
-        return ($db->getNumRows() == 1) ? true : false;
-    }
-    
-    public static function isActivity($strUrlName)
-    {
-        global $db;
-        
-        $sql = "SELECT 1 FROM activity WHERE url_name = '".$strUrlName."'";
-        $db->query($sql);
-        
-        return ($db->getNumRows() == 1) ? true : false;
-    }
-
-    protected function ProcessActivityPageRequest($aRes)
-    {
-        global $_CONFIG;
-        
-        $_REQUEST['cat'] = "activity";
-        $_REQUEST['cat_name'] = $aRes['name'];
-        $_REQUEST['id'] = $aRes['id'];
-        $_REQUEST['clean_url'] = $_CONFIG['url']."/".$this->aRequestUri[1];
-        
-        $_REQUEST['page_meta_description'] = trim($_CONFIG['txt_pattern_generic']) ." ". $aRes['name']. ". " .$aRes['description'];
-        
-        return $this->ProcessArticlePageRequest();
-    }
-    
-    protected function ProcessCategoryPageRequest($aRes)
+    public function isCategory($strUrlName)
     {
         global $db, $_CONFIG;
         
-        $_REQUEST['cat'] = "category";
-        $_REQUEST['cat_name'] = $aRes['name'];
-        $_REQUEST['id'] = $aRes['id'];
-        $_REQUEST['clean_url'] = $_CONFIG['url'].$this->aRequestUri[1];
-        
-        return $this->ProcessArticlePageRequest();
+        $sql = "SELECT id,name FROM category WHERE url_name = '".$this->GetRequestUri()."'";
+        $db->query($sql);
+        if ($db->getNumRows() == 1) {
+            $this->strContentType = CONTENT_TYPE_CATEGORY;
+            $aRes = $db->getRow();
+
+            $_REQUEST['cat'] = "category";
+            $_REQUEST['cat_name'] = $aRes['name'];
+            $_REQUEST['id'] = $aRes['id'];
+            $_REQUEST['clean_url'] = $_CONFIG['url'].$this->aRequestUri[1];
+
+            return true;
+        }
+
     }
+    
+    public function isActivity($strUrlName)
+    {
+        global $db, $_CONFIG;
+        
+        $sql = "SELECT id,name FROM activity WHERE url_name = '".$this->GetRequestUri()."'";
+        $db->query($sql);
+        if ($db->getNumRows() == 1) {
+            $this->strContentType = CONTENT_TYPE_ACTIVITY;
+            $aRes = $db->getRow();
+
+            $_REQUEST['cat'] = "activity";
+            $_REQUEST['cat_name'] = $aRes['name'];
+            $_REQUEST['id'] = $aRes['id'];
+            $_REQUEST['clean_url'] = $_CONFIG['url']."/".$this->aRequestUri[1];
+            
+            $_REQUEST['page_meta_description'] = trim($_CONFIG['txt_pattern_generic']) ." ". $aRes['name']. ". " .$aRes['description'];
+
+            return true;
+        }
+    }
+
 
     protected function ProcessCompanyPageRequest()
     {
-        global $db, $_CONFIG, $oHeader;
-
         // Placement request /company/<comp-name>/<placement-name>
         if ((isset( $this->aRequestUri[3]) && 
                     $this->aRequestUri[3] != "") 
@@ -324,35 +320,26 @@ class RequestRouter {
         // Company AZ request /company/a-z/<letter>
         if ((isset($this->aRequestUri[2]) && $this->aRequestUri[2] != "") && ($this->aRequestUri[2] == "a-z")) 
         {
-            $this->ProcessCompanyAZPageRequest();
+            $oContentAssembler = new CompanyProfileContentAssembler();
+            $oContentAssembler->SetRequestRouter($this);
+            $oContentAssembler->ProcessCompanyAZPageRequest();
             die();
         }
 
         // view/add/edit/delete company profile
         $oCompanyProfileController = new CompanyProfileController();
         $oCompanyProfileController->Process();
-
         die();
-    }
-
-    protected function ProcessCompanyAZPageRequest()
-    {
-        if ($this->aRequestUri[2] == "a-z" && $this->aRequestUri[3] != "") {
-            $this->isLowerCaseLetter($this->aRequestUri[3]);
-            $_REQUEST['letter'] = $this->aRequestUri[3];
-        } else {
-            $_REQUEST['letter'] = "a";
-        }
-        require_once("./company_list.php");
     }
 
     protected function ProcessPlacementPageRequest()
     {
-        global $db, $_CONFIG;
 
         // placement list - view all placement for company /company/<comp-name>/placements
         if ($this->aRequestUri[3] == "placements") {
-
+            $oContentAssembler = new PlacementProfileContentAssembler();
+            $oContentAssembler->SetRequestRouter($this);
+            $oContentAssembler->ProcessPlacementList();
         }
 
         // view/add/edit/delete placement
@@ -360,30 +347,65 @@ class RequestRouter {
         $oProfileController->Process();
 
         die();
-        
+    }
+
+    /*
+     * Route mapped via routes_static.xml
+     * 
+     */
+    protected function ProcessDestinationPageRequest()
+    {
+        global $db, $_CONFIG;
+
+        if (strtolower($this->aRequestUri[1]) == "travel")
+            $this->aRequestUri[1] = "country";
+
+        $sql = "SELECT id,name,url_name FROM ".$this->aRequestUri[1]." WHERE url_name = '".$this->aRequestUri[2]."'";
+        $db->query($sql);
+        if ($db->getNumRows() == 1) {
+            $aRes = $db->getRow();
+
+            $_REQUEST['cat'] = $this->aRequestUri[1];
+            $_REQUEST['cat_name'] = $aRes['name'];
+            $_REQUEST['cat_url_name'] = $aRes['url_name'];
+            $_REQUEST['sub_cat'] = isset($this->aRequestUri[3]) ? $this->aRequestUri[3] : "";
+            $_REQUEST['id'] = $aRes['id'];
+            $_REQUEST['clean_url'] = $_CONFIG['url']."/".$this->aRequestUri[1]."/".$this->aRequestUri[2];
+            if (strlen($this->aRequestUri[3]) > 1) { /* append /<country>/[travel-tour||volunteer] etc  */
+                $_REQUEST['clean_url'] = $_REQUEST['clean_url']."/".$this->aRequestUri[3];
+            }
+            $_REQUEST['page_title'] = $_CONFIG['txt_pattern_generic'] . " in " . trim($aRes['name']);
+            $_REQUEST['page_meta_description'] = $_CONFIG['page_description']." ".$_CONFIG['site_title']." listings for '".$_CONFIG['txt_pattern_generic'] ." in ". trim($aRes['name'])."'. ".$_CONFIG['txt_pattern_generic'] . " in " . trim($aRes['name']).". " . $aRes['name']." ".trim($_CONFIG['txt_pattern_generic']) .".  Find " . $_CONFIG['txt_pattern_generic'] ." in ". $aRes['name'] .".";
+
+            $this->strRequestPageType = CONTENT_TYPE_DESTINATION;
+
+            return $this->ProcessArticlePageRequest();
+
+        } else {
+            throw new NotFoundException("Destination page '".$this->aRequestUri[1]."' / ".$this->aRequestUri[2]. "' not found");
+        }
     }
 
     protected function ProcessArticlePageRequest()
     {
         global $_CONFIG, $oBrand;
 
-        
         if (!isset($this->strContentType) )
         {
-            $this->strContentType = CONTENT_ARTICLE;
+            $this->strContentType = CONTENT_TYPE_ARTICLE;
         }
 
-
         try {
-
-            $oArticleAssembler = new ArticleContentAssembler();
+            
+            $oContentAssembler = new ArticleContentAssembler();
+            $oContentAssembler->SetRequestRouter($this);
             
             // 1.  Extract Article Path from URI (Published Articles)
             if (count($this->GetRequestArray()) > 2)
             {
 
-                $oArticle = $oArticleAssembler->GetArticleByPath($this->GetRequestUri(), $oBrand->GetSiteId());
-                
+                $oArticle = $oContentAssembler->GetByPath($this->GetRequestUri(), $oBrand->GetSiteId());
+
             } else {
                 
                 // 2.  Extract Article ID from $_REQUEST (UnPublished Articles)
@@ -394,16 +416,76 @@ class RequestRouter {
                 $oTemplateList->GetFromDB();
                 $templatePath = $oTemplateList->GetFilenameById(ARTICLE_TEMPLATE_ARTICLE_DEFAULT);
 
-                $oArticleAssembler->SetTemplatePath($templatePath);
-                $oArticle = $oArticleAssembler->GetArticleById($id);
+                $oContentAssembler->SetTemplatePath($templatePath);
+                $oArticle = $oContentAssembler->GetArticleById($id);
                 
             }
-            
+
         } catch (Exception $e) {
             $aResponse['msg'] = "ERROR: ".$e->getMessage();
             $aResponse['status'] = "danger";
         }
 
+    }
+
+
+    /*
+    * Handles pages that display result sets:
+    * 			/search/<search-phrase>
+    * 
+    * having no associated (mapped) article
+    *  
+    */
+    protected function ProcessSearchResultPageRequest()
+    {
+
+        $_REQUEST['page_title'] = $this->aRequestUri[2];
+        $_REQUEST['cat_name'] = $this->aRequestUri[2];
+        $_REQUEST['cat'] = "search";
+
+        $oContentAssembler = new SearchResultContentAssembler();
+        $oContentAssembler->SetRequestRouter($this);
+        $oContentAssembler->GetByPath($this->GetRequestUri());
+        
+        die(__FILE__."::".__LINE__);
+    }
+
+    /**
+     * Check if all URI segments eg /<seg-1>/<seg-2> map to valid namespace ( Category | Activity | Country | Continent 0 identifiers
+     * @return boolean
+     */
+    public function isNamespaceMatchedURL()
+    {
+        $aRequestUri = $this->aRequestUri;
+        array_shift($aRequestUri);
+        
+        foreach($aRequestUri as $strKeyword)
+        {
+            if (strlen($strKeyword) < 1) continue;
+            
+            // in order of match probability
+            $arrIdentifier = array("activity","country","continent","category");
+            
+            $bValid = false;
+            
+            foreach($arrIdentifier as $strIdentifierKeyword)
+            {
+                try {
+                    
+                    $result = NameService::lookupNameSpaceIdentifier($strIdentifierKeyword,$strKeyword);
+                    
+                    if (!isset($result['id']) || !is_numeric($result['id']))
+                    {
+                        throw new ErrorException("Unmatched URI segment");
+                    } else {
+                        $bValid = true;
+                    }
+                    
+                } catch (Exception $e) {}
+            }
+            if (!$bValid) return false;
+        }
+        return true;
     }
 
     public function HttpRedirect($strHttpHeader, $redirectUrl )

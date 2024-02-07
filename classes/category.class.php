@@ -1,88 +1,48 @@
 <?
 
-class Category implements TemplateInterface {
+class Category {
 
-	private $id;
-	private $name;
-	private $url_name;
-	private $description;
-	private $desc_short;
-	private $img_url;
-	private $sort_order;
-	
-	private $aCategory;
-
-	public function __construct(&$db = NULL)
-	{
-		$this->_Category($db);
-	}
-
-	public function _Category(&$db = NULL) {
+    public function __construct(&$db)
+    {
+        return $this->Category($db);
+    }
+ 
+	function Category(&$db) {
 	
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
 		$this->db = $db;
 	}
 	
-	public function GetId() {
-		return $this->id;
-	}
-	
-	public function GetTitle() {
-		return $this->name;
-	}
 
-	public function GetName() {
-		return stripslashes($this->name);
-	}
-	
-	public function GetUrlName() {
-		return $this->url_name;
-	}
-	
-	public function GetDescription() {
-		return $this->description;
-	}
-	
-	public function GetDescShort() {
-		return stripslashes($this->desc_short);
-	}
-	
-	public function GetImgUrl() {
-		return $this->img_url;
-	}
-	
-	public function GetUrl() {
-		global $_CONFIG;
-		return $_CONFIG['url']."/".$this->url_name;
-	}
-	
-	
-	public function GetAll() {
+	function GetAll() {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
-		global $db;
 		
 		$sql = "SELECT c.id,c.name,c.url_name FROM category c ORDER BY sort_order DESC;";
-		$db->query($sql);
-		return $db->getRows();
+		$this->db->query($sql);
+		return $this->db->getRows();
 	}
 	
-	public function GetCategoriesByWebsite($iSiteId,$sReturn = "ROWS") {
+	function GetCategoriesByWebsite($iSiteId,$sReturn = "ROWS") {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
 		global $db;
-	
+		
 		$sql = "SELECT 
 					c.id
 					,c.name
 					,c.url_name
 				FROM 
 					category c
-				ORDER by c.id asc";
-	
+					,website_category_map m 
+				WHERE 
+					m.website_id = ".$iSiteId." 
+					AND m.category_id = c.id 
+				ORDER BY 
+					c.sort_order ASC;";
+		
 		$db->query($sql);
 		
 		if ($sReturn == "ROWS") {
@@ -95,28 +55,25 @@ class Category implements TemplateInterface {
 			return $this->aCategory = $aNew;
 		}
 		if ($sReturn == "OBJECTS") {
-			$this->SetCategory($this->Cast($db->getObjects()));
-			return $this->GetCategory();  
+			return $db->getObjects(); 
 		}
 	}
 
-	public function GetCategoriesById($id,$type) {
+	function GetCategoriesById($id,$type) {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
-		global $db;
 		
 		if ($type == "company_id") {
 			$sql = "SELECT a.id,a.name FROM comp_cat_map c, category a WHERE c.company_id = ".$id." AND c.category_id=a.id ";
 		} elseif ($type == "placement_id") {
 			$sql = "SELECT a.id,a.name FROM prod_cat_map c, category a WHERE c.prod_id = ".$id." AND c.category_id=a.id ";
 		}
-		$db->query($sql);
-		return $db->getRows();
+		$this->db->query($sql);
+		return $this->db->getRows();
 	}
 
 
-	public function GetCategoryLinkList($mode = "post",$aSelected = array(),$slash = true,$all =false) {
+	function GetCategoryLinkList($mode = "post",$aSelected = array(),$slash = true,$all =false) {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
@@ -130,18 +87,17 @@ class Category implements TemplateInterface {
 		
 		$idx = 0;
 		unset($ct_text);
-		$ct_text = '';
 		// get category text links
+		$ct_text = '';
+		if (is_array($aCategories)) {
 		foreach($aCategories as $c) {
 			
 			if ($slash == true) {
 				$delimeter = ($idx < count($aCategories) -1) ? " / " : " " ;
-			} else {
-				$delimeter = '';
 			}
 			if ($mode == "input") {
 				$checked = (in_array($c['id'],$aSelected)) ? "checked" : "";
-				$ct_text .= "<li class='select_list'><input class='inputCheckBox' type='checkbox' name='cat_".$c['id']."' $checked /> ".$c['name']." ".$delimeter ."</li>";
+				$ct_text .= $c['name'] . " <input class='inputCheckBox' type='checkbox' name='cat_".$c['id']."' $checked />  $delimeter  ";
 			} else {
 				$checked = ($_POST['cat_'.$c['id']] == "on") ? "checked" : "";
 				$ct_text .= $c['name'];
@@ -149,14 +105,15 @@ class Category implements TemplateInterface {
 			
 			$idx++;
 		}
+		}
 		return $ct_text;
 	}
 
-	public function GetSelected($link_to,$link_id) {
+	function GetSelected($link_to,$link_id) {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
-		global $_CONFIG, $db;
+		global $_CONFIG;
 		
 		switch ($link_to) {
 			case "website" : 
@@ -165,51 +122,15 @@ class Category implements TemplateInterface {
 		}
 		
 		$sql = "SELECT c.id FROM category c,".$tbl." m WHERE m.".$key." = ".$link_id." AND m.category_id = c.id ORDER BY c.name ASC;";
-		$db->query($sql);
-		$aResult = $db->getRows();
+		$this->db->query($sql);
+		$aResult = $this->db->getRows();
 		$aRes = array();
 		for($i=0;$i<count($aResult);$i++) {
 			$aRes[] = (int) $aResult[$i]['id'];
 		}
 		return $aRes;
 	}
-	
-	// return comma seperated keywords for all categories in id list
-	public function GetMetaKeywords($aCategoryId) {
-		
-		$aCategory = $this->GetByIdArray($aCategoryId);
 
-		$idx = 1;
-		foreach($aCategory as $oCategory) {
-			$comma = ($idx++ == count($aCategoryId) -1) ? "," : ""; 
-			$keyword_str .= preg_replace("/[-\/]/",",",$oCategory->GetDescription()) .$comma;
-		}
-		
-		return $keyword_str;
-		
-		// randomize the keywords to add uniqueness
-		//$a = explode(",",$keyword_str);
-		//shuffle($a);
-		//return $keyword_str_sorted = implode(",",$a);
-		
-	}
-
-	
-	public function GetByIdArray($aId) {
-		
-		if (!is_array($aId)) return FALSE;
-		
-		$a = array();
-		
-		foreach($aId as $id) {
-			$o = new Category();
-			$o->SetFromObject($this->GetById($id));
-			$a[$id] = $o;
-		}
-		
-		return $a;
-	}
-	
 	
 	public function GetById($iId) {
 		
@@ -219,7 +140,7 @@ class Category implements TemplateInterface {
 		
 		if (!is_numeric($iId)) return false;
 		
-		$db->query("SELECT id,name,url_name FROM category WHERE id = ".$iId.";");
+		$db->query("SELECT id,name,url_name,desc_short as description,img_url FROM category WHERE id = ".$iId.";");
 		
 		$oRes = $db->getObject();
 		$oRes->name = stripslashes($oRes->name);
@@ -248,7 +169,7 @@ class Category implements TemplateInterface {
 			$sUrlName = $oNs->GetUrlName($sName,'category','name');			
 		}
 		
-		$sSql = "UPDATE category SET name = '".addslashes($sName)."',url_name='".$sUrlName."' WHERE id = '".$iId."'";
+		$sSql = "UPDATE category SET name = '".addslashes($sName)."',url_name='".$sUrlName."',desc_short='".addslashes($sDesc)."' WHERE id = '".$iId."'";
 		
 		return $db->query($sSql);
 
@@ -267,7 +188,7 @@ class Category implements TemplateInterface {
 		$oNs = new NameService();
 		$sUrlName = $oNs->GetUrlName($sName,'category','name');
 				
-		return $db->query("INSERT INTO category (id,name,url_name) VALUES (".$iId.",'".addslashes(ucfirst(strtolower($sName)))."','".$sUrlName."');");
+		return $db->query("INSERT INTO category (id,name,url_name,desc_short) VALUES (".$iId.",'".addslashes(ucfirst(strtolower($sName)))."','".$sUrlName."','".addslashes($sDescription)."');");
 			
 	}
 
@@ -288,19 +209,18 @@ class Category implements TemplateInterface {
 		
 	}
 	
-	public function GetDDList($sName = "category_id",$iSelectedValue = null) {
-
+	public function GetDDList($sName = "category_id") {
+		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
+		
 		$aCategories = $this->GetAll();
 		
-		$sStr = "<select name='".$sName."'  class='form-select'>";
+		$sStr = "<select name='".$sName."'  class='ddlist'>";
 		
 		$sStr .= "<option value='null'>select</option>";
 		
 		foreach ($aCategories as $aCategory) {	
-			$checked = ($iSelectedValue == $aCategory['id']) ? "selected" : ""; 
-			$sStr .= "<option value='".$aCategory['id']."' ".$checked.">".$aCategory['name']."</option>";
+			$sStr .= "<option value='".$aCategory['id']."'>".$aCategory['name']."</option>";
 		}
 
 		$sStr .= "</select>";
@@ -308,36 +228,7 @@ class Category implements TemplateInterface {
 		return $sStr;
 		
 	}
-	
-	public function SetFromObject($o) {
-	
-		if (!is_object($o)) return FALSE; 
-		foreach($o as $k => $v) {
-			$this->$k = $v;
-		}
-		return TRUE;
-	}
-	
-	public function GetCategory() {
-		return $this->aCategory;
-	}
-	
-	public function SetCategory($aCategory) {
-		$this->aCategory = is_array($aCategory) ? $aCategory : array();
-	}
 
-	private function Cast($in) {
-		$out = array();
-		if(is_array($in)) {
-			foreach($in as $o) {
-				$c = new Category();
-				$c->SetFromObject($o);
-				$out[] = $c;	
-			}
-		}
-		return $out;
-	}
-	
 	public function GetCategoryPanelHTML() {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -345,27 +236,44 @@ class Category implements TemplateInterface {
 		global $db,$_CONFIG;
 		
 		// display the category select list
-		$db->query("SELECT c.id,c.name,c.url_name FROM category c ORDER BY c.id, name asc");
-		$this->SetCategory($db->getObjects());
-				
+		$db->query("SELECT c.id,c.name,c.url_name,c.desc_short,c.img_url FROM category c, website_category_map m WHERE m.website_id = ".$_CONFIG['site_id']." AND m.category_id = c.id ORDER BY sort_order, name asc");
+		$aCategory = $db->getObjects();
+		
+		if (count($aCategory) == 1) $singleCategorySite = true;
+		if (!$_CONFIG['no_category_panel']) {
+
+			$width = ($singleCategorySite) ? "200px" : "600px";
+			$s .= "<div id='main_cat_panel' style='width: $width;'>";
+				foreach ($aCategory as $c) {
+					$s .= "<div id='category_panel_item' style='margin-top: 12px;'>";
+					$s .= "<div id='category_panel_img'><a href='".$_CONFIG['url']."/placement/category/".$c->url_name."' title='Category : ".$c->name."'><img src='".$c->img_url."' alt='".$c->name."' width='140' height='100' border=0></a></div>";
+					$s .= "<a class='category_panel_title' href='".$_CONFIG['url']."/placement/category/".$c->url_name."' title='Category : ".$c->name."'>".stripslashes($c->name)."</a><br />";
+					$s .= "<p class='category_panel_desc'>".stripslashes($c->desc_short)."</p>";
+					$s .= "</div>";
+				}
+			$s .= "</div>";
+		} // end category panel
+		
+		return $s;
 	}	
+
+	public function GetByName($sName) {
 	
-   public function LoadTemplate($sFilename) {
-		$this->oTemplate = new Template();
-		$this->oTemplate->SetFromArray(array(
-										"CATEGORY_OBJECT" => $this,
-										"CATEGORY_ARRAY" => $this->GetCategory(),
-			
-										));
-		$this->oTemplate->LoadTemplate($sFilename);
+		global $db;
+	
+		$sql = "SELECT id,name,url_name FROM category WHERE name = '".addslashes($sName)."';";
+	
+		$db->query($sql);
+	
+		if ($db->getNumRows() == 1)
+		{
+			$oRes = $db->getObject();
+			$oRes->id = $oRes->id;
+			$oRes->name = stripslashes($oRes->name);
+			$oRes->url_name = $oRes->url_name;
+			return $oRes;
+		}
 	}
-
-	public function Render() {
-		return $this->oTemplate->Render();
-	}
-
 }
-
-
 
 ?>

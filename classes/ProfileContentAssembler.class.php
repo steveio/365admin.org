@@ -66,7 +66,7 @@ class ProfileContentAssembler extends AbstractContentAssembler {
         $this->oProfile->GetCountryInfo();
         $this->oProfile->GetActivityInfo();
 
-        $this->GetReviews($this->oProfile->GetId(), CONTENT_TYPE_COMPANY, $this->oProfile->GetTitle());
+        $this->GetReviews($this->oProfile->GetId(), $this->oProfile->GetTypeLabel(), $this->oProfile->GetTitle());
 
     }
 

@@ -15,7 +15,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     {
         parent::__construct();
 
-        $this->SetLinkTo("ARTICLE");
+        $this->SetLinkTo(CONTENT_TYPE_ARTICLE);
 
     }
 
@@ -35,9 +35,13 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
         try {
             $oContentMapping = new ContentMapping(null, null, null);
-            $oContentMapping->GetByPath($path);
-
-            $oTemplate = $this->oTemplateList->GetById($oContentMapping->GetTemplateId());
+            
+            if ($oContentMapping->GetByPath($path))
+            {
+                $oTemplate = $this->oTemplateList->GetById($oContentMapping->GetTemplateId());
+            } else {
+                $oTemplate = $this->oTemplateList->GetById(CONTENT_DEFAULT_RESULT_TEMPLATE);
+            }
 
             $oArticle = new Article;
 
@@ -66,12 +70,18 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $oArticle->SetAttachedArticleFetchLimit($limit);
             }
 
-            // fetch article mapped directly to URL path eg /blog
-            $oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, true);
-
+            // fetch article mapped directly to URL path eg /blog, /country/brazil
+            if (!$oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, true))
+            {
+                // no mapped article content, treat namespaced URL as search request
+                if ($this->GetRequestRouter()->isNamespaceMatchedURL()) 
+                {
+                    return $this->oRequestRouter->ProcessSearchPageRequest();
+                }
+            }
+            
             // put content id in scope of parent class for fetching associated content
             $this->SetLinkId($oArticle->GetId()); 
-            $this->SetLinkLabel($oArticle->GetTitle());
 
             if (!$exact)
             {
@@ -79,7 +89,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, false);
             }
 
-            $this->GetReviews();
+            $this->GetReviews($oArticle->GetId(), CONTENT_TYPE_ARTICLE, $oArticle->GetTitle());
 
 
             $oArticle->LoadTemplate($oTemplate->filename,$aOptions = array());

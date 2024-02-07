@@ -8,13 +8,13 @@ class Continent {
 	private $url_name;
 	private $description;		
 
-	public function __construct($db = NULL)
+	public function __construct()
 	{
-		$this->_Continent($db);
+	    $this->Continent();
 	}
-	
+
 	/* @param depreciated $db */
-	function _Continent($db = NULL) {
+	function Continent($db = NULL) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
@@ -99,6 +99,24 @@ class Continent {
 		return $oRes;
 				
 	}
+	
+	public function GetByName($sName) {
+	
+		global $db;
+	
+		$db->query("SELECT id,name,url_name FROM continent WHERE name = '".addslashes($sName)."';");
+	
+		if ($db->getNumRows() == 1)
+		{
+			$oRes = $db->getObject();
+			$oRes->id = $oRes->id;
+			$oRes->name = stripslashes($oRes->name);
+			$oRes->url_name = $oRes->url_name;
+			return $oRes;
+		}
+		return false;
+	}
+	
 	
 	function GetContinents() {
 		
@@ -209,7 +227,7 @@ class Continent {
 		
 		}
 		$result = $db->getRows();
-		$s = "<select name='".$name."' class='form-select' onchange=\"".$onchange."\">";
+		$s = "<select name='".$name."' class='ddlist' onchange=\"".$onchange."\">";
 		$s .= "<option value='NULL'>select</option>";
 		if (is_array($result)) {
 			foreach($result as $row) {

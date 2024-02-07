@@ -15,6 +15,7 @@ define("CK_EDITOR_PROFILE_INTRO_DT","2013-01-03");
 
 class PlacementProfile extends AbstractProfile {
 
+    protected $oid; // unique across all profile types
 	protected $id;
 	protected $type;
 	protected $company_id;
@@ -151,7 +152,9 @@ class PlacementProfile extends AbstractProfile {
 				break;
 		}
 		
-		$sSql = "SELECT	p.id
+		$sSql = "SELECT	
+                        p.oid
+                        ,p.id
 						,p.type as profile_type
 						,p.company_id
 						,c.logo_url
@@ -219,7 +222,11 @@ class PlacementProfile extends AbstractProfile {
 				return $aProfile;
 			}
 	}
-		
+
+	public function GetOid() {
+	    return $this->oid;
+	}
+
 	public function GetId() { 
 		return $this->id;
 	}
