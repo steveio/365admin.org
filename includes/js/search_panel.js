@@ -27,7 +27,7 @@ $(document).ready(function(){
 		$.getJSON(url,pars, function(json) {
 			if (json.status == 1) {
 				if (json.action == 'dispatch') {
-					//window.location.href=json.url;
+					//console.log(json.url);
 				}
 			} else {
 				processError();
@@ -100,7 +100,7 @@ $(document).ready(function(){
 		}	
 	});
 
-	$('#search-panel-destinations').click(function(e) {
+	$('#search-panel-destination').click(function(e) {
 	    if ($(this).val() == "Destination")
 	    	$(this).val("");
 	});

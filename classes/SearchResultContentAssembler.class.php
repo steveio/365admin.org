@@ -40,9 +40,16 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
             $oHeader->SetJsInclude($oJsInclude);
             
             $oHeader->Reload();
-            
-            
+
             $oSearchPanel = new Template();
+
+            // retrieve any previously submitted search keywords
+            $oSearchParameters = SolrSearchPanelSearch::getFromSession();
+            if (is_object($oSearchParameters))
+            {
+                $oSearchPanel->Set('SEARCH_KEYWORDS', $oSearchParameters->getKeywords());
+            }
+
             $oSearchPanel->Set('ACTIVITY_LIST',Activity::getActivitySelectList());
 
             $oSearchPanel->LoadTemplate("search_panel.php");

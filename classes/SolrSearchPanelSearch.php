@@ -124,10 +124,10 @@ class SolrSearchPanelSearch {
 			if (!$oCat)
 				$oAct = $oActivity->GetByName($aSearchParams['search-panel-activity']);
 		}
-		if ($aSearchParams['search-panel-destinations'] != "NULL") {
-			$oCtn = $oContinent->GetByName($aSearchParams['search-panel-destinations']);
+		if ($aSearchParams['search-panel-destination'] != "NULL") {
+			$oCtn = $oContinent->GetByName($aSearchParams['search-panel-destination']);
 			if (!$oCtn)
-				$oCty = $oCountry->GetByName($aSearchParams['search-panel-destinations']);
+				$oCty = $oCountry->GetByName($aSearchParams['search-panel-destination']);
 			
 		}
 		if (is_numeric($aSearchParams['search-panel-duration-from'])) {
@@ -136,76 +136,72 @@ class SolrSearchPanelSearch {
 		if (is_numeric($aSearchParams['search-panel-duration-to'])) {
 			$this->setDurationToId($aSearchParams['search-panel-duration-to']);
 		}
-		
 	
 		$this->setCategory($oCat);
 		$this->setActivity($oAct);
 		$this->setCountry($oCty);
 		$this->setContinent($oCtn);
 		$this->setKeywords($aSearchParams['search-panel-keywords']);
-	
+
 		$this->setForwardUrl();
 	}
 	
 	/*
-	 * Work out which search result page 
-	 * search routes to
+	 * Work out which search result page search parameters should route to -
+	 * 
+	 * Destination (country | continent) takes precedence: 
+	 * 
+	 * /travel/<destination>/<activity>/<keywords>
+	 * eg
+	 * /travel/thailand/volunteer/elephants
+	 * 
+	 * If no destination is specified, activity page becomes URL route (target):
+	 * 
+	 * /<activity>/<keywords>
+	 * 
+	 * Otherwise if only keywords are entered we default to search result template:
+	 * 
+	 * /search/<keywords>
+	 * 
+	 * Additional search parameters are forwarded to search engine as structure data via _SESSION
 	 * 
 	 */
 	public function setForwardUrl() {
-		
-		/*
-		 * Straightforward single variable routes - 
-		 * 	 an activity
-		 * 	 a country	
-		 *   a continent
-		 *   keywords
-		 */
-		if ($this->haveActivity() && !$this->haveCategory() && !$this->haveCountry() && !$this->haveContinent() && !$this->haveKeywords()) {
-			return $this->sForwardUrl = "/".$this->getActivity()->url_name;
-		} elseif ($this->haveCategory() && !$this->haveActivity() && !$this->haveCountry() && !$this->haveContinent() && !$this->haveKeywords()) {
-			return $this->sForwardUrl = "/".$this->getCategory()->url_name;
-		} elseif ($this->haveCountry() && !$this->haveCategory() && !$this->haveActivity() && !$this->haveContinent() && !$this->haveKeywords()) {
-			return $this->sForwardUrl = "/travel/".$this->getCountry()->url_name;
-		} elseif ($this->haveContinent() && !$this->haveCategory() && !$this->haveActivity() && !$this->haveCountry() && !$this->haveKeywords()) {
-			return $this->sForwardUrl = "/continent/".$this->getContinent()->url_name;
-		} elseif ($this->haveKeywords() && !$this->haveCategory() && !$this->haveActivity() && !$this->haveCountry() && !$this->haveContinent()) {
-			return $this->sForwardUrl = "/search/".$this->getKeywords();
+
+	    $isKeywordSearch = false;
+
+	    if ($this->haveCountry() && !$this->haveCategory() && !$this->haveActivity() && !$this->haveContinent()) {
+	       $this->sForwardUrl = "/travel/".$this->getCountry()->url_name;
+	    } elseif ($this->haveContinent() && !$this->haveCategory() && !$this->haveActivity() && !$this->haveCountry()) {
+	       $this->sForwardUrl = "/continent/".$this->getContinent()->url_name;
+	    } elseif ($this->haveActivity() && !$this->haveCategory() && !$this->haveCountry() && !$this->haveContinent()) {
+			$this->sForwardUrl = "/".$this->getActivity()->url_name;
+		} elseif ($this->haveCategory() && !$this->haveActivity() && !$this->haveCountry() && !$this->haveContinent()) {
+			$this->sForwardUrl = "/".$this->getCategory()->url_name;
+		} elseif ($this->haveKeywords() && !$this->haveCategory() && !$this->haveActivity() && !$this->haveCountry()) {
+		    $isKeywordSearch = true;
+		    $this->sForwardUrl = "/search/".strtolower(str_replace(" ", "-",$this->getKeywords()));
 		}
 
 		/*
 		 * Compound searchs eg -
-		 *  { activity OR keywords } and  { country OR continent }
-		 *  { activity OR country OR continent } AND keywords
+		 *  { destination } and { activity } and/or { keywords }
+		 *  { activity } and/or { keywords }
 		 */
-		if ($this->haveActivity() && $this->haveCountry()) {
-			return $this->sForwardUrl = "/".$this->getActivity()->url_name."/".$this->getCountry()->url_name;;
+		if ($this->haveCountry() && $this->haveActivity()) {
+		    $this->sForwardUrl = "/travel/".$this->getCountry()->url_name."/".$this->getActivity()->url_name;
+		}
+	
+		if ($this->haveContinent() && $this->haveActivity()) {
+		    return $this->sForwardUrl = "/continent/".$this->getContinent()->url_name."/".$this->getActivity()->url_name;
 		}
 
-                if ($this->haveActivity() && $this->haveContinent()) {
-                        return $this->sForwardUrl = "/".$this->getActivity()->url_name."/".$this->getContinent()->url_name;;
-                }
+        // now append any keywords
+        if ($this->haveKeywords() && !$isKeywordSearch) {
+            return $this->sForwardUrl = $this->sForwardUrl."/".strtolower(str_replace(" ", "-",$this->getKeywords()));
+        }
 
-
-		if ($this->haveCategory() && $this->haveCountry()) {
-			return $this->sForwardUrl = "/".$this->getCategory()->url_name."/".$this->getCountry()->url_name;;
-		}
-
-                if ($this->haveCategory() && $this->haveContinent()) {
-                        return $this->sForwardUrl = "/".$this->getCategory()->url_name."/".$this->getContinent()->url_name;;
-                }
-
-		if ($this->haveCountry() && $this->haveKeywords()) {
-			return $this->sForwardUrl = "/country/".$this->getCountry()->url_name."/".$this->getKeywords();
-		}
-		
-		if ($this->haveContinent() && $this->haveKeywords()) {
-			return $this->sForwardUrl = "/continent/".$this->getContinent()->url_name."/".$this->getKeywords();
-		}
-		
-		
-		return $this->sForwardUrl = "/search/".$sQuery;
-		
+		return $this->sForwardUrl;
 	}
 	
 	public function setFiltersByUri($sUri) {
