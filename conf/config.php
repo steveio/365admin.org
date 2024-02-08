@@ -61,6 +61,10 @@ define("PROFILE_VOLUNTEER_PROJECT",6); // company profile
 define("PROFILE_SEASONALJOBS",7); // company profile
 define("PROFILE_TEACHING",8); // company profile
 
+/* Fetch full or summary details only */
+define("FETCHMODE__FULL",0);
+define("FETCHMODE__SUMMARY",1);
+
 
 /* listing types */
 define("NEW_LISTING",-1);

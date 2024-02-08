@@ -25,11 +25,9 @@ function class_autoload($classname) {
             require_once $source;
             return;
         }
-    } 
-
-    throw new Exception("Unable to load class: ".$classname);
-
+    }
 }
+
 
 spl_autoload_register("class_autoload");
 
@@ -139,8 +137,20 @@ require_once(BASE_PATH."/classes/review.class.php");
 
 
 // SOLR API
+/* SOLR Search Engine */
+require_once '/www/vhosts/365admin.org/htdocs/vendor/autoload.php';
+
 require_once(BASE_PATH."/classes/SolrSearch.php");
+require_once(BASE_PATH."/classes/SolrPlacementSearch.php");
+require_once(BASE_PATH."/classes/SolrCompanySearch.php");
+require_once(BASE_PATH."/classes/SolrCombinedProfileSearch.php");
+require_once(BASE_PATH."/classes/SolrCombinedSearch.php");
+require_once(BASE_PATH."/classes/SolrQuery.php");
 require_once(BASE_PATH."/classes/SolrMoreLikeSearch.php");
+
+/* Placement Profile By Company */
+require_once("./classes/BalancedDistributor.php");
+
 
 
 // email classes

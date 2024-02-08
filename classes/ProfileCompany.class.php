@@ -1223,14 +1223,19 @@ class CompanyProfile extends AbstractProfile {
 	
 	
 
-	public static function Get($type,$id = null,$limit = 4) {
+	public static function Get($type,$id = null,$limit = 4, $fetchmode = FETCHMODE__FULL) {
 
 
 		if (DEBUG) Logger::Msg(get_class()."::".__FUNCTION__."()");
 		
 		global $db,$_CONFIG;
 
-		$select = "SELECT * ";
+		if ($fetchmode == FETCHMODE__FULL)
+		{
+		  $select = "SELECT * ";
+		} else {
+		    $select = "SELECT id,title,desc_short,url,logo_url,prod_type,location,url_name ";
+		}
 		switch(strtoupper($type)) {
 			case "ALL" :
 				$sql = "$select FROM ".$_CONFIG['company_table']." WHERE status = 1 order by title asc;";
@@ -1264,7 +1269,7 @@ class CompanyProfile extends AbstractProfile {
 				$sql = "SELECT id,title,desc_short,url,logo_url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).");";
 				break;
 			case "ID_SORTED" :
-				$sql = "SELECT id,title,desc_short,url,logo_url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") ORDER BY prod_type desc";
+				$sql = "$select FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") ORDER BY prod_type desc";
 				break;
 			case "RECENT" :
 				$sql = "SELECT id,title,desc_short,url_name,logo_url,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." ORDER BY last_updated desc LIMIT 20";
@@ -1283,21 +1288,23 @@ class CompanyProfile extends AbstractProfile {
 		$db->query($sql);
 
 		if ($db->getNumRows() < 1) return array();
-		
-		
+
 		$aRes = $db->getObjects();
 		$aProfile = array();
 				
 		foreach($aRes as $o) {
-			
-			
+
 			$oProfile = new CompanyProfile();
 			$oProfile->SetFromObject($o);
 			$oProfile->GetImages();
-			//$oProfile->GetCategoryInfo();
-			//$oProfile->GetCountryInfo();
-			//$oProfile->GetActivityInfo();
-			//$oProfile->SetProfileCount();
+			
+			if ($fetchmode == FETCHMODE__FULL)
+			{
+    			$oProfile->GetCategoryInfo();
+    			$oProfile->GetCountryInfo();
+    			$oProfile->GetActivityInfo();
+    			$oProfile->SetProfileCount();
+			}
 			$aProfile[$oProfile->GetId()] = $oProfile;			
 		}
 		

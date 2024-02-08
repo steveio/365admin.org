@@ -21,7 +21,8 @@ define("PROFILE_TEACHING",8); // company profile
 
 abstract class AbstractProfile implements TemplateInterface {
 
-	
+    public $fetch_mode; /* FETCHMODE__FULL || FETCHMODE__SUMMARY */
+
 	protected $profile_type; /* a constant integer indicating profile type */ 
 	protected $link_to; /* a string (eg PLACEMENT || COMPANY) used to associate related attributes */ 
 
@@ -65,7 +66,16 @@ abstract class AbstractProfile implements TemplateInterface {
 	public function __Construct() {
 	
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
+
+		$this->SetFetchMode(FETCHMODE__FULL);
+	}
+
+	public function SetFetchMode($mode) {
+	    $this->fetch_mode = $mode;
+	}
+	
+	public function GetFetchMode() {
+	    return $this->fetch_mode;
 	}
 
 	/*

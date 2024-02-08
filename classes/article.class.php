@@ -5,10 +5,6 @@
 define("CONTENT__ARTICLE",0);
 define("CONTENT__SECTION",1);
 
-/* allows fetching of full article or summary only */
-define("FETCHMODE__FULL",0);
-define("FETCHMODE__SUMMARY",1);
-
 define("CK_EDITOR_INTRO_DT","2012-07-06 10:00:00");
 
 // content type flags to signal what to display in template

@@ -39,10 +39,10 @@ class SolrCombinedProfileSearch extends SolrSearch {
 			$aCompany = array();
 
 			if (is_array($aProfileId) && count($aProfileId) >= 1)
-				$aPlacement = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$aProfileId);			
+			    $aPlacement = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$aProfileId, FETCHMODE__SUMMARY);			
 				
 			if (is_array($aCompanyId) && count($aCompanyId) >= 1)
-				$aCompany = CompanyProfile::Get("ID_SORTED",$aCompanyId);
+			    $aCompany = CompanyProfile::Get("ID_SORTED",$aCompanyId, FETCHMODE__SUMMARY);
 
 			$aCombinedProfile = $aPlacement + $aCompany;
 			$this->_aProfile = array();

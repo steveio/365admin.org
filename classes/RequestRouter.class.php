@@ -456,7 +456,7 @@ class RequestRouter {
     */
     protected function ProcessSearchResultPageRequest()
     {
-
+        
         $_REQUEST['page_title'] = $this->aRequestUri[2];
         $_REQUEST['cat_name'] = $this->aRequestUri[2];
         $_REQUEST['cat'] = "search";

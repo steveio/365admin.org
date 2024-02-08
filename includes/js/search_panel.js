@@ -86,18 +86,21 @@ $(document).ready(function(){
 	    return true;
 	};
 
+	/*
 	$('select[id^=search-panel-]').change(function(e) {
 		e.preventDefault();
 		var curval = $('#'+this.id).val();
 		var changed = this.id;
 		doSearchDispatch('update',changed,curval);		
-	});
+	})
+	*/
 
 	$('#search-panel-btn').click(function(e) {
-		e.preventDefault();
 		if (validateSearch()) {
-			doSearchDispatch('dispatch',null,null);
-		}	
+			//doSearchDispatch('dispatch',null,null);
+			document.getElementById("searchForm").submit();
+		}
+		return false;
 	});
 
 	$('#search-panel-destination').click(function(e) {

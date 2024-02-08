@@ -1002,33 +1002,49 @@ class PlacementProfile extends AbstractProfile {
 	    }
 	}
 	
-	public static function Get($key,$id) {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
+	public static function Get($key,$id, $fetchmode = FETCHMODE__FULL) {
 
 		global $_CONFIG, $db;
 		
-		$select = "p.id
-				   ,p.url_name
-				   ,p.title        
-				   ,p.desc_short   
-				   ,p.desc_long  
-				   ,p.company_id   
-				   ,c.logo_url
-				   ,c.title as company_name
-				   ,c.tel
-				   ,c.url as comp_url
-				   ,c.url_name as comp_url_name   
-				   ,p.location
-				   ,p.ad_active
-				   ,p.url
-				   ,p.email
-				   ,p.img_url1
-				   ,p.img_url2
-				   ,p.img_url3
-				   ,to_char(p.added,'DD/MM/YYYY') as added_date
-				   ,to_char(p.last_updated,'DD/MM/YYYY') as updated_date";
-		
+		if ($fetchmode = FETCHMODE__FULL)
+		{
+    		$select = "p.id
+                       ,p.type
+    				   ,p.url_name
+    				   ,p.title        
+    				   ,p.desc_short   
+    				   ,p.desc_long  
+    				   ,p.company_id
+                       ,c.id as company_id   
+    				   ,c.logo_url
+    				   ,c.title as company_name
+    				   ,c.tel
+    				   ,c.url as comp_url
+    				   ,c.url_name as comp_url_name   
+    				   ,p.location
+    				   ,p.ad_active
+    				   ,p.url
+    				   ,p.email
+    				   ,p.img_url1
+    				   ,p.img_url2
+    				   ,p.img_url3
+    				   ,to_char(p.added,'DD/MM/YYYY') as added_date
+    				   ,to_char(p.last_updated,'DD/MM/YYYY') as updated_date";
+		} else {
+
+		    $select = "p.id
+                       ,p.type
+    				   ,p.url_name
+    				   ,p.title
+    				   ,p.desc_short
+                       ,c.id as company_id
+    				   ,c.logo_url
+    				   ,c.title as company_name
+    				   ,c.url_name as comp_url_name
+    				   ,p.location
+    				   ,p.ad_active";
+		}
+
 		// build the where clause
 		switch($key) {
 			case  "PLACEMENT_ID" :
@@ -1064,7 +1080,7 @@ class PlacementProfile extends AbstractProfile {
 			    if ($filter_from_search == true)
 			        $where .= " and c.profile_filter_from_search != 't'";
 			        
-		        $select = "p.id, p.type";
+		        //$select = "p.id, p.type";
 		        break;
 			case "ID_LIST" :
 				$where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
@@ -1099,13 +1115,21 @@ class PlacementProfile extends AbstractProfile {
 		$aProfile = array();
 				
 		foreach($aRes as $o) {
-			
-			
+
 			$oProfile = new PlacementProfile();
 			$oProfile->SetFromObject($o);
+			
 			$oProfile->GetImages();
 			$oProfile->SetCompanyLogo();
-			$aProfile[$oProfile->GetId()] = $oProfile;			
+
+			if ($fetchmode == FETCHMODE__FULL)
+			{
+			    $oProfile->GetCategoryInfo();
+			    $oProfile->GetCountryInfo();
+			    $oProfile->GetActivityInfo();
+			}
+
+			$aProfile[$oProfile->GetId()] = $oProfile;
 		}
 		
 		return $aProfile;
