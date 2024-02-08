@@ -1,15 +1,37 @@
 <?
 
+/* user messages */
+define('MESSAGE_TYPE_SUCCESS','SUCCESS');
+define('MESSAGE_TYPE_NOTIFICATION','NOTIFICATION');
+define('MESSAGE_TYPE_ERROR','ERROR');
+define('MESSAGE_TYPE_WARNING','WARNING');
+define('MESSAGE_TYPE_FATAL_ERROR','FATAL_ERROR');
+define('MESSAGE_TYPE_VALIDATION_ERROR','VALIDATION_OR_SAVE_ERROR');
+define('MESSAGE_TYPE_404_NOTFOUND','404_NOTFOUND_ERROR');
 
+// @deprecated - pass message as text 
+define('MESSAGE_ID_ADD_COMPANY',0);
+define('MESSAGE_ID_ADD_PLACEMENT',1);
+define('MESSAGE_ID_EDIT_PROFILE',2);
+define('MESSAGE_ID_ADD_PROFILE_FAILED',3);
+define('MESSAGE_ID_DELETE_PLACEMENT',4);
+define('MESSAGE_ID_GENERAL_ERROR',5);
+
+
+define('MESSAGE_TEMPLATE','message_template_01.php');
+define('MESSAGE_ICON_SUCESS_URL','/images/icon_green_tick.png');
+define('MESSAGE_ICON_NOTIFICATION','/images/icon_notification.png');
+define('MESSAGE_ICON_ERROR_URL','/images/icon_red_warning.jpg');
+define('MESSAGE_ICON_FATAL_ERROR_URL','/images/red_cross.png');
 
 
 
 class Message {
 
-	private $id;
-	private $type;	
-	private $msg_array;	
-	private $icon_url;
+	private $id; // @deprecated - use message type / 
+	private $type;	// message (alert) type eg ERROR, SUCCESS, WARNING
+	private $msg_array;	// array of text strings
+	private $icon_url; // @deprecated
 	
 	private $oTemplate;
 	

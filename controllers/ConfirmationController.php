@@ -16,7 +16,7 @@ class ConfirmationController extends GenericController {
 
 		/* messages panel */
 		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('UI_MSG',$this->GetUserMessages());
+		$oMessagesPanel->Set('UI_MSG',$this->GetMessage());
 		$oMessagesPanel->LoadTemplate("messages_template.php");
 
 

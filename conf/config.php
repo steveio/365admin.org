@@ -12,7 +12,6 @@ date_default_timezone_set('Europe/London');
 $dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "","dbport" => "5432");
 
 
-
 $solr_config = array(
     'adapteroptions' => array(
         'host' => '127.0.0.1',
@@ -89,6 +88,7 @@ define('ROUTE_EDIT','edit');
 define('ROUTE_DELETE','delete');
 define('ROUTE_DASHBOARD','dashboard');
 define('ROUTE_ERROR','error');
+define('ROUTE_SEARCH','search');
 define('ROUTE_LOGIN','login');
 define('ROUTE_PASSWD','password');
 define('ROUTE_REGISTRATION','registration');
@@ -305,27 +305,6 @@ define('PROFILE_FIELD_PLACEMENT_JOB_BENEFITS','job_benefits');
 define('PROFILE_FIELD_PLACEMENT_JOB_EXPERIENCE','experience');
 define('PROFILE_FIELD_PLACEMENT_JOB_OPTIONS','job_options');
 
-
-
-/* user messages */
-define('MESSAGE_TYPE_SUCCESS','SUCCESS');
-define('MESSAGE_TYPE_NOTIFICATION','NOTIFICATION');
-define('MESSAGE_TYPE_ERROR','ERROR');
-define('MESSAGE_TYPE_FATAL_ERROR','FATAL_ERROR');
-define('MESSAGE_TYPE_VALIDATION_ERROR','VALIDATION_OR_SAVE_ERROR');
-define('MESSAGE_TEMPLATE','message_template_01.php');
-define('MESSAGE_ICON_SUCESS_URL','/images/icon_green_tick.png');
-define('MESSAGE_ICON_NOTIFICATION','/images/icon_notification.png');
-define('MESSAGE_ICON_ERROR_URL','/images/icon_red_warning.jpg');
-define('MESSAGE_ICON_FATAL_ERROR_URL','/images/red_cross.png');
-
-
-define('MESSAGE_ID_ADD_COMPANY',0);
-define('MESSAGE_ID_ADD_PLACEMENT',1);
-define('MESSAGE_ID_EDIT_PROFILE',2);
-define('MESSAGE_ID_ADD_PROFILE_FAILED',3);
-define('MESSAGE_ID_DELETE_PLACEMENT',4);
-define('MESSAGE_ID_GENERAL_ERROR',5);
 
 
 /* error messages */

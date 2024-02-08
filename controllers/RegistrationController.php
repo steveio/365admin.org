@@ -111,8 +111,8 @@ class RegistrationController extends GenericController {
 			$oMessage = new Message(MESSAGE_TYPE_SUCCESS, 'update_account_request', $message);
 			
 			$oConfirmationStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_CONFIRMATION);
-			$oConfirmationStep->UnsetUserMessages();
-			$oConfirmationStep->SetUserMessage($oMessage);
+			$oConfirmationStep->UnsetMessage();
+			$oConfirmationStep->SetMessage($oMessage);
 			
 			$oSession->Save();
 			

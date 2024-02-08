@@ -151,7 +151,7 @@ class ProfileController extends GenericController {
 				$plural = (count($aResult['FILENAME']) > 1) ? "s" : "";
 				$message = "SUCCESS : uploaded ".count($aResult['FILENAME']) ." file".$plural."<br/>".implode("<br />",$aResult['FILENAME']);
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, 'img_upload', $message);
-				$this->SetUserMessage($oMessage); 
+				$this->SetMessage($oMessage); 
 			}	
 		}
 		

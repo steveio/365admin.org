@@ -242,8 +242,8 @@ class PlacementController extends ProfileController {
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_DELETE_PLACEMENT, $message);			
 		}
 		
-		$oDashboardController->UnsetUserMessages();
-		$oDashboardController->SetUserMessage($oMessage);					
+		$oDashboardController->UnsetMessage();
+		$oDashboardController->SetMessage($oMessage);					
 		$oSession->Save();		
 
 		Http::Redirect("/".ROUTE_DASHBOARD);
@@ -273,7 +273,7 @@ class PlacementController extends ProfileController {
 				// setup user notification success msg				
 				$msg = "SUCCESS - Added Profile <br /><a href='/".ROUTE_DASHBOARD."' title='Return to Dashboard'>Click here</a> to return to dashboard";
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_ADD_PLACEMENT, $msg);
-				$oSession->GetMVCController()->GetCurrentRoute()->SetUserMessage($oMessage);
+				$oSession->GetMVCController()->GetCurrentRoute()->SetMessage($oMessage);
 				
 				// clear all attributes on this step instance, as we want to rebuild the form
 				$this->Clear();
@@ -327,7 +327,7 @@ class PlacementController extends ProfileController {
 				// setup user notification success msg				
 				$msg = "SUCCESS - Updated Profile <br /><a href='/".ROUTE_DASHBOARD."' title='Return to Dashboard'>Click here</a> to return to dashboard";
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_EDIT_PROFILE, $msg);
-				$this->SetUserMessage($oMessage);
+				$this->SetMessage($oMessage);
 				
 				if ($response['url_change'] == TRUE) {
 
@@ -965,7 +965,7 @@ EOT;
 
 		/* messages panel */
 		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('UI_MSG',$this->GetUserMsg());
+		$oMessagesPanel->Set('UI_MSG',$this->GetMessageFromSession());
 		$oMessagesPanel->Set('VALIDATION_ERRORS',$this->GetValidationErrors());		
 		$oMessagesPanel->LoadTemplate("messages_template.php");
 		$oTabbedPanel->SetContentFromObject($oMessagesPanel);

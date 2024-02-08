@@ -95,13 +95,13 @@ class DashboardController extends GenericController {
 		//$message = "<h1>New Admin System</h1>";
 		//$message .= "<p><b>11-02-2012</b> We've launched an improved version of our listing admin system.  This upgrade allows you to save more information on your profiles and includes a number of other changes.  Hopefully it will all run smoothly but if you do have any problems let us know via the contact link.  Thanks.";  
 		//$oMessage = new Message(MESSAGE_TYPE_NOTIFICATION, '365ADMIN_LAUNCH', $message);
-		//$this->SetUserMessage($oMessage);
+		//$this->SetMessage($oMessage);
 		
 		/* messages panel */
 		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('UI_MSG',$this->GetUserMessages());		
+		$oMessagesPanel->Set('UI_MSG',$this->GetMessage());		
 		$oMessagesPanel->LoadTemplate("messages_template.php");
-		$this->UnsetUserMessages();
+		$this->UnsetMessage();
 		
 				
 		print $oHeader->Render();

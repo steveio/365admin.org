@@ -27,36 +27,49 @@ class RequestRouter {
 
     public function Route($aRequestUri)
     {
+        global $oSession;
 
         try {            
 
             $this->SetRequestUri($aRequestUri);
             $this->RouteMapMVC();
             $this->RouteMapStatic();
-          
+
+        } catch (NotFoundException $e) {  // 404 not found error
+
+            if (is_object($oSession))
+            {
+                $oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR, $e->getMessage());
+                $oSession->SetMessage($oMessage);
+            }
+
+            $this->HttpRedirect(HEADER_HTTP_404, "/".ROUTE_ERROR);
+            die();
         } catch (Exception $e)
         {
             Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
-            
-            print_r("<pre>");
-            print_r($e);
-            print_r("</pre>");
-            die();
+
+            if ($this->strRequestUri == "/".ROUTE_ERROR)
+            {
+                $this->HttpRedirect(HEADER_HTTP_500, "/back_soon.php");
+                die();
+            } else {
+
+                if (is_object($oSession))
+                {
+                    $oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_ERROR, $e->getMessage());
+                    $oSession->SetMessage($oMessage);
+                }
+
+                $this->HttpRedirect(HEADER_HTTP_500, "/".ROUTE_ERROR);
+            }
             
         }
         /*    
         } catch (InvalidSessionException $e) {  // invalid session / session expired
             $this->HttpRedirect(HEADER_HTTP_500, "/".ROUTE_ERROR);
-        } catch (NotFoundException $e) {  // 404 not found error
-            $this->HttpRedirect(HEADER_HTTP_404, "/".ROUTE_ERROR);
         } catch (Exception $e) { // general exception
                         
-            if ($this->strRequestUri != "/".ROUTE_ERROR)
-            {
-                $this->HttpRedirect(HEADER_HTTP_500, "/".ROUTE_ERROR);
-            } else {
-                die("FATAL ERROR: an exception occured during request mapping for route /error");
-            }
         }
         */
     }
@@ -174,7 +187,6 @@ class RequestRouter {
             $this->GetPageTypeFromUri();
 
         } catch (Exception $e) {
-            die($e->getMessage());
             throw $e;
         }
     }
@@ -237,13 +249,17 @@ class RequestRouter {
                 $oSession->SetMVCController($oController);
             }
 
-            $oController->SetExceptionOnNotFound(false);
+            $oController->SetExceptionOnNotFound(false); // continue processing on no MVC route matached
 
             $oController->SetRequestUri($this->GetRequestUri());
             $oController->Process();
 
             $oSession->Save();
 
+            if ($this->GetRequestUri() == "/".ROUTE_ERROR)
+            {
+                die();
+            }
         } catch (Exception $e)
         {
             throw $e;
@@ -410,7 +426,8 @@ class RequestRouter {
                 
                 // 2.  Extract Article ID from $_REQUEST (UnPublished Articles)
                 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
-                if(!is_numeric($id)) throw new Exception("ERROR: Invalid Article ID");
+
+                if(!is_numeric($id)) throw new NotFoundException("Page not found : ".$this->GetRequestUri());
             
                 $oTemplateList = new TemplateList();
                 $oTemplateList->GetFromDB();
@@ -421,9 +438,10 @@ class RequestRouter {
                 
             }
 
+        } catch (NotFoundException $e) {
+            throw $e;
         } catch (Exception $e) {
-            $aResponse['msg'] = "ERROR: ".$e->getMessage();
-            $aResponse['status'] = "danger";
+            throw $e;
         }
 
     }

@@ -31,7 +31,7 @@ class PasswordController extends GenericController
 			{
 
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, 'password_reset', $message = "We have emailed you a password reminder");
-				$this->SetUserMessage($oMessage);
+				$this->SetMessage($oMessage);
 
 				$sent = true;
 
@@ -39,7 +39,7 @@ class PasswordController extends GenericController
 				foreach($aError as $key => $value)
 				{
 					$oMessage = new Message(MESSAGE_TYPE_ERROR, $key, $value);
-					$this->SetUserMessage($oMessage);
+					$this->SetMessage($oMessage);
 				}
 	    }
 		}
@@ -54,7 +54,7 @@ class PasswordController extends GenericController
 		}
 
 		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('UI_MSG',$this->GetUserMsg());
+		$oMessagesPanel->Set('UI_MSG',$this->GetMessageFromSession());
 		$oMessagesPanel->LoadTemplate("messages_template.php");
 
 		print $oHeader->Render();

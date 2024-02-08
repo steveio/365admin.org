@@ -988,8 +988,8 @@ EOT;
 
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_ADD_COMPANY, $message = "Sorry, an error has occured and it was not possible to retrieve this company profile.  We've logged the error and will look into it.  Contact us for assistance.");
 			$oErrorController = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_ERROR);
-			$oErrorController->UnsetUserMessages();
-			$oErrorController->SetUserMessage($oMessage);
+			$oErrorController->UnsetMessage();
+			$oErrorController->SetMessage($oMessage);
 
 			$oSession->Save();
 
@@ -1034,7 +1034,7 @@ EOT;
 		
 		$this->SetInValid();
 		$this->SetInComplete();
-		$this->UnsetUserMessages();
+		$this->UnsetMessage();
 
 		$this->GetNewCompanyProfile();
 
@@ -1058,8 +1058,8 @@ EOT;
 					$oMessage = new Message(MESSAGE_TYPE_SUCCESS, 'add_account_request', $message);
 
 					$oConfirmationStep = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_CONFIRMATION);
-					$oConfirmationStep->UnsetUserMessages();
-					$oConfirmationStep->SetUserMessage($oMessage);
+					$oConfirmationStep->UnsetMessage();
+					$oConfirmationStep->SetMessage($oMessage);
 
 					$oSession->Save();
 
@@ -1074,7 +1074,7 @@ EOT;
 				// setup user notification success msg
 				$msg = "SUCCESS - Added Profile <br /><a href='/".ROUTE_DASHBOARD."' title='Return to Dashboard'>Click here</a> to return to dashboard";
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_ADD_PLACEMENT, $msg);
-				$this->SetUserMessage($oMessage);
+				$this->SetMessage($oMessage);
 				$oSession->Save();
 
 				Http::Redirect("/".ROUTE_COMPANY."/".$this->GetCompanyUrlName()."/edit");
@@ -1177,7 +1177,7 @@ EOT;
 
 				// setup user notification success msg
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_ADD_COMPANY, "SUCCESS - updated profile");
-				$oSession->GetMVCController()->GetCurrentRoute()->SetUserMessage($oMessage);
+				$oSession->GetMVCController()->GetCurrentRoute()->SetMessage($oMessage);
 				$oSession->Save();
 
 				if ($response['url_change'] == TRUE) {
@@ -1566,7 +1566,7 @@ EOT;
 
 		/* messages panel */
 		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('UI_MSG',$this->GetUserMsg());
+		$oMessagesPanel->Set('UI_MSG',$this->GetMessageFromSession());
 		$oMessagesPanel->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
 		$oMessagesPanel->LoadTemplate("messages_template.php");
 		$oTabbedPanel->SetContentFromObject($oMessagesPanel);
@@ -1676,8 +1676,8 @@ EOT;
 		}
 
 		$oDashboardController = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
-		$oDashboardController->UnsetUserMessages();
-		$oDashboardController->SetUserMessage($oMessage);
+		$oDashboardController->UnsetMessage();
+		$oDashboardController->SetMessage($oMessage);
 		$oSession->Save();
 
 		Http::Redirect("/".ROUTE_DASHBOARD);

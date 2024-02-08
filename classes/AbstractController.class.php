@@ -20,7 +20,7 @@ abstract class AbstractController {
 	
 	protected $aFormValues; // submitted http get/post form vars	
 	protected $aValidationErrors; // array of form validation exceptions
-	protected $aUserMessages; // array of messages to display eg add company successful 
+	protected $aMessage; // array of Message() class 
 	
 	protected $bComplete; // is processing complete?
 	protected $bValid; // did any errors occur during processing?
@@ -33,7 +33,7 @@ abstract class AbstractController {
 		
 		$this->aFormValues = array();
 		$this->aValidationErrors = array();
-		$this->aUserMessages = array();
+		$this->aMessage = array();
 
 	}
 	
@@ -111,16 +111,16 @@ abstract class AbstractController {
 	
 	public function ProcessValidationErrors($errors, $clear_existing = FALSE) {
 		
-		if ($clear_existing) $this->UnsetUserMessages();
+		if ($clear_existing) $this->UnsetMessage();
 		
 		if (is_array($errors)) {
 			
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR);
 			$oMessage->SetMsgFromArray($errors);
-			$this->SetUserMessage($oMessage);		
+			$this->SetMessage($oMessage);		
 		} elseif (is_string($errors)) {
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR, $errors);
-			$this->SetUserMessage($oMessage);
+			$this->SetMessage($oMessage);
 		}
 	}
 	
@@ -137,42 +137,43 @@ abstract class AbstractController {
 		$this->aValidationErrors = array();
 	}
 
-	public function SetUserMessage($oMessage) {
-		$this->aUserMessages[] = $oMessage;
+	public function SetMessage($oMessage) {
+		$this->aMessage[] = $oMessage;
 	}
 
-	public function SetUserMessages($aMessage) {
-		$this->aUserMessages = $aMessage;
+	public function SetMessages($aMessage) {
+		$this->aMessage = $aMessage;
 	}
 
 	/*
 	 * Look in session for any User Message eg Add company success 
 	 * 
 	 */
-	protected function GetUserMsg() {
+	protected function GetMessageFromSession() {
 		global $oSession;
 
 		if (!is_object($oSession->GetMVCController())) return FALSE;
 		
-		$aMessages = $oSession->GetMVCController()->GetCurrentRoute()->GetUserMessages();		
-		$oSession->GetMVCController()->GetCurrentRoute()->UnsetUserMessages();
+		$aMessages = $oSession->GetMVCController()->GetCurrentRoute()->GetMessage();		
+		$oSession->GetMVCController()->GetCurrentRoute()->UnsetMessage();
 		$oSession->Save();
 		return $aMessages;
 	}
 	
 	
-	public function GetUserMessages() {
-		return $this->aUserMessages;
+	public function GetMessage() {
+		return $this->aMessage;
 	} 
 
 	public function GetUserMessageById($id) {
-		if (isset($this->aUserMessages[$id])) {
-			return $this->aUserMessages[$id];
+		if (isset($this->aMessage[$id])) {
+			return $this->aMessage[$id];
 		}
 	} 
 	
-	public function UnsetUserMessages() {
-		$this->aUserMessages = array();
+	public function UnsetMessage() {
+	    unset($this->aMessage);
+		$this->aMessage = array();
 	}
 	
 	

@@ -9,10 +9,17 @@ class Session {
 	
 	private $oMVCController;
 	
-	private $error_code;
+	private $error_code; // @deprecated - use $aMessage
 	private $error_data;
 	private $error_msg;
 
+	/*
+	 * UI Message can be stored directly in _SESSION
+	 * 
+	 * MVC routes can also persist messages in _SESSION via controller / MVC controller
+	 *
+	 */
+	private $aMessage;
 	
 	public function __Construct() {
 		/*
@@ -20,9 +27,11 @@ class Session {
 		 * unless new registration route has been followed
 		 * 
 		 */
-		$this->SetListingType(LISTING_REQUEST_UPDATE); 
+		$this->SetListingType(LISTING_REQUEST_UPDATE);
+		
+		$this->aMessage = array();
 	}
-	
+
 	public function GetCompanyId() {
 		return $this->company_id;
 	}
@@ -40,26 +49,56 @@ class Session {
 		return $this->listing_type;
 	}
 
-	public function GetErrorCode() {
-		return $this->error_code;
+	public function SetMessage($msg) 
+	{
+
+        if (is_array($msg))
+        {
+            $this->aMessage = $msg;
+        } elseif (is_object($msg))
+        {
+           $this->aMessage[] = $msg;
+        }
+	
+	    $this->Save();
+	}
+	
+	public function GetMessage() {
+	    return $this->aMessage;
 	}
 
+	public function UnsetMessage() {
+	    unset($this->aMessage);
+	    $this->aMessage = array();
+	    $this->Save();
+	}
+
+	// @deorecated - use $this->aMessage
+	public function GetErrorCode() {
+	    return $this->error_code;
+	}
+
+	// @deorecated - use $this->aMessage
 	public function SetErrorCode($error_code) {
 		$this->error_code = $error_code;
 	}
 
+	// @deorecated - use $this->aMessage
 	public function GetErrorData() {
 		return $this->error_data;
 	}
 
+	// @deorecated - use $this->aMessage
 	public function SetErrorData($error_data) {
 		$this->error_data = $error_data;
 	}
-	
+
+	// @deorecated - use $this->aMessage
 	public function GetErrorMsg() {
 		return $this->error_msg;
 	}
 
+	// @deorecated - use $this->aMessage
 	public function SetErrorMsg($error_msg) {
 		$this->error_msg = $error_msg;
 	}
