@@ -33,12 +33,12 @@ class ContactController extends GenericController {
 
 		if ($_POST['enq_submitted'] == "TRUE") {
 
-				global $oBrand, $_CONFIG, $oSession;
+		global $oBrand, $_CONFIG, $oSession;
 
-				// these are required to send emails in SalesEnquiry->Notify()
-				$_CONFIG['root_path'] = $oBrand->GetWebsitePath();
-				$_CONFIG['template_home'] = "/templates";
-				$_CONFIG['site_title'] = $oBrand->GetSiteTitle();
+		// these are required to send emails in SalesEnquiry->Notify()
+		$_CONFIG['root_path'] = $oBrand->GetWebsitePath();
+		$_CONFIG['template_home'] = "/templates";
+		$_CONFIG['site_title'] = $oBrand->GetSiteTitle();
 
 
         $oSalesEnquiry->SetWebsiteId($oBrand->GetSiteId());
@@ -54,20 +54,20 @@ class ContactController extends GenericController {
 				$aMsg = array();
 
         if ($oSalesEnquiry->Process()) {
-					$aMsg[] = "<img src='/images/icon_green_tick.png' />";
-      		$aMsg[] = "<h1>Thanks for your Enquiry</h1>";
-					$aMsg[] = "<p>One of our team will contact you shortly.</p>";
+            $aMsg[] = "<img src='/images/icon_green_tick.png' />";
+            $aMsg[] = "<h1>Thanks for your Enquiry</h1>";
+            $aMsg[] = "<p>One of our team will contact you shortly.</p>";
 
-					$oConfirmation = new Template();
-					$oConfirmation->Set('UI_MSG',$aMsg);
+            $oConfirmation = new Template();
+            $oConfirmation->Set('UI_MSG',$aMsg);
 
-					$oConfirmation->LoadTemplate("messages_template.php");
+            $oConfirmation->LoadTemplate("messages_template.php");
 
-					print $oHeader->Render();
-					print $oConfirmation->Render();
-					print $oFooter->Render();
-
-					die();
+            print $oHeader->Render();
+            print $oConfirmation->Render();
+            print $oFooter->Render();
+            
+            die();
 	      }
 
 		} else {

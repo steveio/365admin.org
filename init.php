@@ -55,6 +55,7 @@ require_once(BASE_PATH."/classes/user.class.php");
 require_once(BASE_PATH."/classes/AccountApplication.php");
 require_once(BASE_PATH."/classes/error.class.php");
 require_once(BASE_PATH."/classes/htmlUtils.class.php");
+require_once(BASE_PATH."/classes/MessageProcessor.class.php");
 require_once(BASE_PATH."/classes/Message.php");
 require_once(BASE_PATH."/classes/template.class.php");
 require_once(BASE_PATH."/classes/layout.class.php");
@@ -170,7 +171,6 @@ function my_session_start()
       }
       
       session_start();
-
       return true;
 }
 

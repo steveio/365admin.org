@@ -4,15 +4,32 @@ $oProfile = $this->Get("oProfile");
 
 ?>
 
+<?
+if($oProfile->GetListingType() < BASIC_LISTING) {
+?>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9874604497476880",
+        enable_page_level_ads: true
+    });
+    </script>
+        
+<?php 
+}
+?>
+
+
 
 <div class="container">
 <div class="align-items-center justify-content-center">
 
 
-<div class="pull-right" style="margin: 20px;">
-<div class="sharethis-inline-share-buttons"></div>
+<div class="row">
+<div class="col-12 my-3">
+<div class="col-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
 </div>
-
+</div>
 
 
 <div style="margin: 12px 0px 16px 0px;">
@@ -29,7 +46,7 @@ $oProfile = $this->Get("oProfile");
 
 <div id="review-overallrating" style="margin-bottom: 10px;"></div>
 
-<p class="lead"><strong><?= strip_tags(htmlUtils::stripLinks($oProfile->GetDescShort())); ?></strong></p>
+<p class="lead"><strong><?= $oProfile->GetDescShortPlaintext(); ?></strong></p>
 
 <?php
 if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1) { ?>
@@ -58,9 +75,9 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 
 
 <? if ($oProfile->GetListingType() <=  BASIC_LISTING) { ?>
-	<p><?= htmlUtils::stripLinks(html_entity_decode( Article::convertCkEditorFont2Html($oProfile->GetDescLong(),"h3") )); ?></p>
+	<p><?= htmlUtils::stripLinks(htmlUtils::convertToPlainText($oProfile->GetDescLong())); ?></p>
 <?php } else { ?>
-	<p><?= html_entity_decode( Article::convertCkEditorFont2Html($oProfile->GetDescLong(),"h3")); ?></p>
+	<p><?= htmlUtils::convertToPlainText($oProfile->GetDescLong()); ?></p>
 <?php } ?>
 
 
@@ -106,15 +123,16 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 
 
 
-<div id="buttons" class="buttons row-fluid">
+<div id="buttons" class="buttons row my-5">
 <div class="booking-enquiry">
 <h2>Contact / Enquiry</h2>
-<? for($i=0;$i<$iRows;$i++) { ?>
+<? 
+$aButtonHtml = $this->Get('aButtonHtml');
 
-	<? for($j=0;$j<2;$j++) {
-		print "<span style='padding-right: 7px;'>".array_shift($aButtonHtml)."</span>";
-	} ?>	 		 
-<? } ?>
+foreach($aButtonHtml as $k => $v) {
+    print $v;
+} ?>	 		 
+
 </div>
 </div>
 
@@ -232,20 +250,22 @@ if (!$oProfile->GetListingType() <= BASIC_LISTING) {
 $oRelatedArticle = $this->Get("oRelatedArticle");
 
     
-if (is_array($oRelatedArticle->GetArticleCollection()->Get())) {
+if (is_array($oRelatedArticle->GetArticleCollection()->Get()) && count($oRelatedArticle->GetArticleCollection()->Get()) >= 1) {
+
+$aArticle = $oRelatedArticle->GetArticleCollection()->Get();
+$limit = 4;
+    
 ?>
 
-    <div class="row-fluid " style="margin-top: 10px;">
+    <div class="row-fluid " style="my-3">
         <h3>Related Articles</h3>
-        <div class="span12"><?
+        <div class="col-12"><?
 
-            $aArticle = $oRelatedArticle->GetArticleCollection()->Get();
-            $limit = 4;
 
             for ($i=0;$i<$limit;$i++) {
                     if (is_object($aArticle[$i])) {
                             $aArticle[$i]->SetImgDisplay(FALSE);
-                            $aArticle[$i]->LoadTemplate("related_list.php");
+                            $aArticle[$i]->LoadTemplate("article_related.php");
                             print $aArticle[$i]->Render();
                     }
             } ?>

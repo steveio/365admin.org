@@ -16,6 +16,19 @@ class ProfileContentAssembler extends AbstractContentAssembler {
     public function __Construct() 
     {
         parent::__construct();
+
+        $this->LoadDependencies(); // include CSS / JS common to all view profile screens
+    }
+
+    public function SetPageHeader()
+    {
+        global $oHeader;
+
+        $aKeywords = $this->GetKeywords($this->oProfile->GetOid());
+        $oHeader->SetDesc($this->oProfile->GetDescShortPlaintext($trunc = 160));
+        $oHeader->SetKeywords(implode(",",$aKeywords));
+        
+        $oHeader->Reload();
     }
 
     public function GetByPath($path, $website_id = 0) {}
@@ -78,4 +91,23 @@ class ProfileContentAssembler extends AbstractContentAssembler {
         $this->profile_type = $iType;
     }
 
+    public function LoadDependencies()
+    {
+        global $oHeader;
+
+        $oCssInclude = new CssInclude();
+        $oCssInclude->SetHref('/css/jquery.rateyo.min.css');
+        $oCssInclude->SetMedia('screen');
+        $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+
+        $oJsInclude = new JsInclude();
+        $oJsInclude->SetSrc("/includes/js/jquery.rateyo.min.js");
+        $oHeader->SetJsInclude($oJsInclude);
+        
+        $oJsInclude = new JsInclude();
+        $oJsInclude->SetSrc("/includes/js/review.js");
+        $oHeader->SetJsInclude($oJsInclude);
+        
+        $oHeader->Reload();
+    }
 }

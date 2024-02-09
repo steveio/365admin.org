@@ -1006,7 +1006,7 @@ class PlacementProfile extends AbstractProfile {
 
 		global $_CONFIG, $db;
 		
-		if ($fetchmode = FETCHMODE__FULL)
+		if ($fetchmode == FETCHMODE__FULL)
 		{
     		$select = "p.id
                        ,p.type
@@ -1030,7 +1030,7 @@ class PlacementProfile extends AbstractProfile {
     				   ,p.img_url3
     				   ,to_char(p.added,'DD/MM/YYYY') as added_date
     				   ,to_char(p.last_updated,'DD/MM/YYYY') as updated_date";
-		} else {
+		} elseif ($fetchmode == FETCHMODE__SUMMARY) {
 
 		    $select = "p.id
                        ,p.type
@@ -1110,7 +1110,6 @@ class PlacementProfile extends AbstractProfile {
 		
 		
 		$aRes = $db->getObjects();
-		
 		
 		$aProfile = array();
 				

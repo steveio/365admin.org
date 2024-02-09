@@ -53,6 +53,15 @@ class ArticleCollection implements TemplateInterface  {
         }
     }
     
+    public function AddFromArray($aArticle)
+    {
+        if(!is_array($aArticle)) return false;
+        foreach($aArticle as $oArticle)
+        {
+            $this->Add($oArticle);
+        }
+    }
+    
     /*
      * Get all articles associated with a section uri
      * 	eg.  uri = "/news"

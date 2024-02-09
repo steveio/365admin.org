@@ -730,7 +730,6 @@ class SolrIndexer {
                 $str = strip_tags(preg_replace("/&#?[a-z0-9]+;/i"," ",$str));#
                 $str = str_replace(array("\n"), ' ', $str);
                 $str = str_replace(array("\t", "\r"), '', $str);
-                return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 
 	}
 

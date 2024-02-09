@@ -13,6 +13,7 @@
  */
 
 require_once("./conf/config.php");
+require_once("./classes/session.php");
 require_once("./classes/json.class.php");
 require_once("./classes/db_pgsql.class.php");
 require_once("./classes/logger.php");
@@ -21,6 +22,7 @@ require_once("./classes/link.class.php");
 require_once("./classes/article.class.php");
 require_once("./classes/ArticleCollection.class.php");
 require_once("./classes/ContentMapping.class.php");
+require_once("./classes/Message.php");
 
 
 
@@ -89,8 +91,13 @@ if ($mode == "search") { /* search for articles published to uri and return a re
 	$oArticleCollection->GetBySectionId($website_id,$uri,$getAttachedObj = false,$bUnpublished);
 	
 	if ($oArticleCollection->Count() < 1) {
-		$aResponse['msg'] = "No articles found matching uri: ".$uri."<br />Try again with a pattern match eg %".$uri;
-		sendResponse($aResponse);
+	    $oMessage = new Message(MESSAGE_TYPE_404_NOTFOUND, NULL, "No articles found matching uri: ".$uri."<br />Try again with a pattern match eg %".$uri);
+	    $oSession->SetMessage($oMessage);
+	    $aResponse['retVal'] = true;
+	    $aResponse['status'] = "error";
+	    $aResponse['msg'] = "No articles found";
+	    sendResponse($aResponse);
+
 	} 
 	
 	/* render articles as a browse/select list */

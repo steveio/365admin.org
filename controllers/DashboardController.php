@@ -90,25 +90,16 @@ class DashboardController extends GenericController {
 			$oDashboard->LoadTemplate("company_dashboard.php");
 		}
 
-		
-		/* new admin system notification message */
-		//$message = "<h1>New Admin System</h1>";
-		//$message .= "<p><b>11-02-2012</b> We've launched an improved version of our listing admin system.  This upgrade allows you to save more information on your profiles and includes a number of other changes.  Hopefully it will all run smoothly but if you do have any problems let us know via the contact link.  Thanks.";  
-		//$oMessage = new Message(MESSAGE_TYPE_NOTIFICATION, '365ADMIN_LAUNCH', $message);
-		//$this->SetMessage($oMessage);
-		
-		/* messages panel */
-		$oMessagesPanel = new Layout();
-		$oMessagesPanel->Set('UI_MSG',$this->GetMessage());		
-		$oMessagesPanel->LoadTemplate("messages_template.php");
-		$this->UnsetMessage();
-		
+		$oMessageProcessor = new MessageProcessor();
+		$oMessagePanel = $oMessageProcessor->GetMessagePanel();
 				
 		print $oHeader->Render();
-		print $oMessagesPanel->Render();
+		print $oMessagePanel->Render();
 		print $oDashboard->Render();
 		print $oFooter->Render();
 
+		
+		die();
 		
 	}
 

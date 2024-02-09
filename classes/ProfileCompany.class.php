@@ -286,7 +286,35 @@ class CompanyProfile extends AbstractProfile {
   		return $_CONFIG['url']."/".$_CONFIG['company_home']."/".$this->GetUrlName();
   	}
   	
+  	public function GetCompanyLogoUrl($size = "_sm")
+  	{
+  	    $aLogo = $this->GetImages(LOGO_IMAGE);
+  	    $this->aCompanyLogo = $aLogo;
+  	    
+  	    if (!is_object($this->GetCompanyLogo())) return '';
+  	    
+  	    if (file_exists($this->GetCompanyLogo()->GetPath($size) )) {
+  	        return $this->GetCompanyLogo()->GetHtml($size);
+  	    } elseif( file_exists($this->GetCompanyLogo()->GetPath("") )) {
+  	        return $this->GetCompanyLogo()->GetHtml("");
+  	    }
+  	}
   	
+  	public function GetCompanyLogo($version = 0) {
+  	    if (isset($this->aCompanyLogo[$version])) {
+  	        return $this->aCompanyLogo[$version];
+  	    } else {
+  	        $this->SetCompanyLogo();
+  	        return $this->aCompanyLogo[$version];
+  	    }
+  	}
+  	
+  	public function SetCompanyLogo()
+  	{
+  	    $aLogo = $this->GetImages(LOGO_IMAGE);
+  	    $this->aCompanyLogo = $aLogo;
+  	}
+
 	public function GetLogoUrlTxt() {
   		return $this->logo_url;
 	}

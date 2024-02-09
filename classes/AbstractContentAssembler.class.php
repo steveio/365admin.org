@@ -132,11 +132,6 @@ abstract class AbstractContentAssembler {
         
         $oSolrMoreLikeSearch = new SolrMoreLikeSearch($solr_config);
 
-        print_r("<pre>");
-        print_r($oSolrMoreLikeSearch);
-        print_r("</pre>");
-        die("here");
-        
         $oSolrMoreLikeSearch->getRelatedProfile($solr_id, $profile_type);
         
         $oSolrMoreLikeSearch->setRows($limit);
@@ -155,6 +150,17 @@ abstract class AbstractContentAssembler {
                 $this->aRelatedProfile = CompanyProfile::Get("ID", $aRelatedId, false);
             }
         }
+    }
+
+    public function GetKeywords($solr_id, $limit = 25)
+    {
+        global $solr_config;
+        
+        $oSolrMoreLikeSearch = new SolrMoreLikeSearch($solr_config);
+        $aFilterQuery = array();
+        $oSolrMoreLikeSearch->setRows(25);
+        
+        return $oSolrMoreLikeSearch->getKeywords($solr_id);
     }
 
     public function GetRelatedArticle($solr_id, $limit = 25)

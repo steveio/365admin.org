@@ -32,6 +32,29 @@ class Session {
 		$this->aMessage = array();
 	}
 
+	// Used by AJAX webservice endpoints and standalone scripts without common init routine
+	public static function initSession()
+	{
+	    /* start a new session */
+	    if (ini_get('session.use_cookies') && isset($_COOKIE['PHPSESSID'])) {
+	        $sessid = $_COOKIE['PHPSESSID'];
+	    } elseif (!ini_get('session.use_only_cookies') && isset($_GET['PHPSESSID'])) {
+	        $sessid = $_GET['PHPSESSID'];
+	    }
+	    
+	    session_start();
+	    
+	    $oSession = new Session();
+	    
+	    if ($oSession->Exists()) {
+	        $oSession = $oSession->Get();
+	    } else {
+	        $oSession = $oSession->Create();
+	    }
+
+	    return $oSession;
+	}
+
 	public function GetCompanyId() {
 		return $this->company_id;
 	}

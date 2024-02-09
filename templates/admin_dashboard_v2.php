@@ -45,14 +45,6 @@
 	</div>
 </div>
 
-<?
-global $aResponse;
-if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
-?>
-<div id="alert-msg" class="alert alert-<?= (isset($aResponse['status'])) ? $aResponse['status'] : "warning";  ?>" role="alert">
-    <?= $aResponse['msg'];  ?>
-</div>
-<? } ?>
 
 <div class="row">
 	<div id="search_msg"></div>

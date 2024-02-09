@@ -460,9 +460,10 @@ class RequestRouter {
         $_REQUEST['page_title'] = $this->aRequestUri[2];
         $_REQUEST['cat_name'] = $this->aRequestUri[2];
         $_REQUEST['cat'] = "search";
-
+        
+        
         $oContentAssembler = new SearchResultContentAssembler();
-        $oContentAssembler->SetRequestRouter($this);
+        $oContentAssembler->SetRequestRouter($this);        
         $oContentAssembler->GetByPath($this->GetRequestUri());
         
         die(__FILE__."::".__LINE__);

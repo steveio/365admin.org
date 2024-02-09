@@ -5,6 +5,7 @@ html, body {
 }
 
 body {
+	font-family: 'Open Sans', sans-serif;
     font: 100.01% "Trebuchet MS", Trebuchet, Tahoma, Verdana, Arial, sans-serif;
     color: #000000;
     padding: 0;
@@ -78,19 +79,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-	font-size: 1.4em;
+	font-size: 2.4em;
 	color: #DD6900;
+	line-height: 40px;
 }
 
 h2 {
-	font-size: 1.2em;
+	font-size: 1.8em;
 }
 
 h3 {
-	font-size: 1em;
+	font-size: 1.4em;
 }
 
 h4 {
+	font-size: 1.2em;
 }
 
 p {
@@ -121,6 +124,11 @@ p.profile_text {
 
 .bold {
 	font-weight: bold;
+}
+
+.booking-enquiry h2 {
+	font-size: 2em;
+	color: #DD6900;
 }
 
  ul, li {
@@ -276,3 +284,5 @@ a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-re
     font-size: 12px;
     font-weight: bold;
 }
+
+

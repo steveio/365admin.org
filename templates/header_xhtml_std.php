@@ -7,8 +7,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 <meta name="description" content="<?= $this->Get("DESCRIPTION"); ?>" />
 <meta name="keywords" content="<?= $this->Get("KEYWORDS"); ?>" />
+
+<meta property="og:title" content="<?= $this->Get("TITLE"); ?>" />
+<meta property="og:url" content="<?= $_REQUEST['page_url'] ?>" />
+<meta property="og:description" content="<?= $this->Get("DESCRIPTION"); ?>" />
 
 
 <link href="/bootstrap-5.3.2-dist/css/bootstrap.min.css" rel="stylesheet" integrity="" crossorigin="anonymous">
@@ -20,6 +25,8 @@
 
 
 <?= $this->Get("JS_INCLUDE"); ?>
+
+<script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bca02abddd6040011604f41&product=inline-share-buttons' async='async'></script>
 
 
 <script type="text/javascript">

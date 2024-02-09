@@ -11,6 +11,58 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 	}
 
+	function getKeywords($id) {
+	    
+	    
+	    // Solarium_Query_MoreLikeThis
+
+	    // get a select query instance
+	    $query = $this->client->createMoreLikeThis();
+	    
+	    
+	    // add a query and morelikethis settings (using fluent interface)
+	    $query->setQuery('id:'.$id)
+	    ->getMoreLikeThis()
+	    ->setFields('desc_short')
+	    ->setMinimumDocumentFrequency(1)
+	    ->setMinimumWordLength(3)
+	    ->setMinimumTermFrequency(1);
+	    
+	    $query->setFields(array('profile_id'));
+	    $query->setStart(0);
+	    $query->setRows($this->getRows());
+	    $query->createFilterQuery('profile_type')->setQuery('profile_type:0');
+	    //$query->createFilterQuery('active')->setQuery('active: 1');
+	    $query->setInterestingTerms("list");
+	    
+	    $aStopWords = array("i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now");
+	    
+	    // this executes the query and returns the result#
+	    $request = $this->client->createRequest($query);
+	    $requestInfo = (string)$request;
+	    
+	    try {
+	        // this executes the query and returns the result
+	        $resultset = $this->client->select($query);
+	        
+	        $aAllKeywords = $resultset->getInterestingTerms();
+
+	        return $aKeywords = array_diff($aAllKeywords, $aStopWords);
+	        
+	    } catch(Exception $e) {
+	        throw $e;
+	    }
+	    
+	    
+	    $aResult = array();
+	    
+	    if ($resultset->getNumFound() >= 1) {
+	        foreach ($resultset as $document) {
+	            $this->aId[] = $document->profile_id;
+	        }
+	    }
+	}
+
 	function getCompanyByArticle($id) {
 
 
@@ -33,16 +85,22 @@ class SolrMoreLikeSearch extends SolrSearch {
 		$query->setRows($this->getRows());
 		$query->createFilterQuery('profile_type')->setQuery('profile_type:0');
 		//$query->createFilterQuery('active')->setQuery('active: 1');
+		$query->setInterestingTerms("list");
+		
 
 		// this executes the query and returns the result#
 		$request = $this->client->createRequest($query);
 		$requestInfo = (string)$request;
 
-		Logger::DB(2,"API SOLR Query: ".$requestInfo);
-
 		try {
 			// this executes the query and returns the result
 			$resultset = $this->client->select($query);
+			
+			print_r("<pre>");
+			print_r($resultset);
+			print_r("</pre>");
+			die();
+
 		} catch(Exception $e) {
 			throw $e;
 		}

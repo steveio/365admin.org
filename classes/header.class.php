@@ -203,6 +203,11 @@ class CssInclude {
 
 	}
 
+	public function SetSrc($url)
+	{
+	    $this->hred = $url;
+	}
+
 	public function SetHref($href) {
 		$this->href = $href;
 	}

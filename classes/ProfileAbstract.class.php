@@ -78,6 +78,11 @@ abstract class AbstractProfile implements TemplateInterface {
 	    return $this->fetch_mode;
 	}
 
+	public function GetDescShortPlaintext($trunc = 160)
+	{
+	    return substr(htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short)), 0, $trunc);
+	}
+
 	/*
 	 * Return type of profile 0 = PROFILE_COMPANY, 1 = PROFILE_PLACEMENT
 	*
@@ -161,6 +166,69 @@ abstract class AbstractProfile implements TemplateInterface {
                     return $this->aImage[$iType];
             }
 
+    }
+
+    public function GetImageUrlArray() {
+        
+        $a = array(
+            "SMALL" => array("URL" => ''),
+            "MEDIUM" => array("URL" => ''),
+            "LARGE" => array("URL" => '')
+            
+        );
+        
+        if (is_object($this->GetImage(0))) {
+            $a['SMALL']['URL'] = $this->GetImage(0)->GetUrl("_sf","");
+            if ($this->GetImage(0)->GetHtml("_mf","")) {
+                $a['MEDIUM']['URL'] = $this->GetImage(0)->GetUrl("_mf","");
+            } elseif ($this->GetImage(0)->GetHtml("_m","")) {
+                $a['MEDIUM']['URL'] = $this->GetImage(0)->GetUrl("_m","");
+            }
+            if ($this->GetImage(0)->GetHtml("_lf","")) {
+                $a['LARGE']['URL'] = $this->GetImage(0)->GetUrl("_lf","");
+            }
+        }
+        
+        if (is_object($this->GetCompanyLogo())) {
+            if (strlen($a['SMALL']['URL']) < 1  && $this->GetCompanyLogo()->GetHtml("_sm","")) {
+                $a['SMALL']['URL'] =  $this->GetCompanyLogo()->GetUrl("_sm",$this->GetTitle(),'',FALSE);
+            }
+            if (strlen($a['MEDIUM']['URL']) < 1  && $this->GetCompanyLogo()->GetHtml("_sm","")) {
+                $a['MEDIUM']['URL'] =  $this->GetCompanyLogo()->GetUrl("_sm",$this->GetTitle(),'',FALSE);
+            }
+        }
+        
+        return $a;
+        
+    }
+
+    public function GetCompanyLogoUrl($size = "_sm")
+    {
+        $aLogo = $this->GetImages(LOGO_IMAGE);
+        $this->aCompanyLogo = $aLogo;
+        
+        if (!is_object($this->GetCompanyLogo())) return '';
+        
+        if (file_exists($this->GetCompanyLogo()->GetPath($size) )) {
+            return $this->GetCompanyLogo()->GetHtml($size);
+        } elseif( file_exists($this->GetCompanyLogo()->GetPath("") )) {
+            return $this->GetCompanyLogo()->GetHtml("");
+        }
+    }
+    
+    public function GetCompanyLogo($version = 0) {
+        if (isset($this->aCompanyLogo[$version])) {
+            return $this->aCompanyLogo[$version];
+        } else {
+            $this->SetCompanyLogo();
+            return $this->aCompanyLogo[$version];
+        }
+    }
+    
+    public function SetCompanyLogo()
+    {
+        $aLogo = $this->GetImages(LOGO_IMAGE);
+        $this->aCompanyLogo = $aLogo;
     }
 
 	public function SetFromArray($a) {

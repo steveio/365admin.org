@@ -15,11 +15,13 @@
 
 require_once("./conf/config.php");
 require_once("./conf/brand_config.php");
+require_once("./classes/session.php");
 require_once("./classes/logger.php");
 require_once("./classes/json.class.php");
 require_once("./classes/db_pgsql.class.php");
 require_once("./classes/file.class.php");
 require_once("./classes/logger.php");
+require_once("./classes/Message.php");
 require_once("./classes/template.class.php");
 require_once("./classes/link.class.php");
 require_once("./classes/article.class.php");
@@ -32,6 +34,7 @@ require_once("./classes/placement.class.php");
 $db = new db($dsn,$debug = false);
 
 
+$oSession = Session::initSession();
 
 $aResponse = array();
 $aResponse['retVal'] = false;
@@ -212,7 +215,7 @@ function searchPlacement($uri)
 
 function searchArticle($uri, $match = null, $filterDate = null, $fromDate = '', $toDate = '')
 {
-    global $fuzzy, $bUnpublished;
+    global $fuzzy, $bUnpublished, $oSession;
 
     $template = "article_search_result_list_03.php";
 
@@ -226,7 +229,15 @@ function searchArticle($uri, $match = null, $filterDate = null, $fromDate = '', 
     $oArticleCollection->GetBySectionId(0,$uri,$getAttachedObj = false,$bUnpublished, $filterDate, $fromDate, $toDate);
 
     if ($oArticleCollection->Count() < 1) {
-        $aResponse['msg'] = "No articles found matching uri: ".$uri."<br />Try again with a pattern match eg %".$uri;
+
+        $oMessagesPanel = new Template();
+        $oMessage = new Message(MESSAGE_TYPE_404_NOTFOUND, NULL, "No articles found matching uri: ".$uri);
+        $oMessagesPanel->Set('UI_MSG', array($oMessage));
+        $oMessagesPanel->LoadTemplate("messages_template.php");
+
+        $aResponse['retVal'] = true;
+        $aResponse['status'] = "error";
+        $aResponse['msg'] = $oMessagesPanel->Render();
         sendResponse($aResponse);
     }
     
