@@ -136,8 +136,7 @@ foreach($aButtonHtml as $k => $v) {
 </div>
 </div>
 
-<div class="row">
-<div class="col12">
+<div class="row my-3">
 	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
 <?php 
 
@@ -145,7 +144,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 print $oReviewTemplate->Render();
 
 ?>
-</div>
+
 </div>
 
 

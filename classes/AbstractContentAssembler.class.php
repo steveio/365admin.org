@@ -91,7 +91,24 @@ abstract class AbstractContentAssembler {
 
     public function GetReviews($link_id, $link_to, $link_label)
     {
+        global $oHeader;
         
+        $oCssInclude = new CssInclude();
+        $oCssInclude->SetHref('/css/jquery.rateyo.min.css');
+        $oCssInclude->SetMedia('screen');
+        $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+        
+        $oJsInclude = new JsInclude();
+        $oJsInclude->SetSrc("/includes/js/jquery.rateyo.min.js");
+        $oHeader->SetJsInclude($oJsInclude);
+        
+        $oJsInclude = new JsInclude();
+        $oJsInclude->SetSrc("/includes/js/review.js");
+        $oJsInclude->SetReferrerPolicy("origin");
+        $oHeader->SetJsInclude($oJsInclude);
+
+        $oHeader->Reload();
+
         $oReviews = new Review();
         $aReview = $oReviews->Get($link_id,$link_type,1);
         $bHasReviewRating = false;
@@ -117,7 +134,7 @@ abstract class AbstractContentAssembler {
         $oReviewTemplate->Set('HAS_REVIEW',true);
 
         $oReviewTemplate->LoadTemplate("review.php");
-
+        
         $this->oReviewTemplate = $oReviewTemplate;
     }
 

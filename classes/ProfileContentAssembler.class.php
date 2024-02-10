@@ -93,21 +93,5 @@ class ProfileContentAssembler extends AbstractContentAssembler {
 
     public function LoadDependencies()
     {
-        global $oHeader;
-
-        $oCssInclude = new CssInclude();
-        $oCssInclude->SetHref('/css/jquery.rateyo.min.css');
-        $oCssInclude->SetMedia('screen');
-        $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
-
-        $oJsInclude = new JsInclude();
-        $oJsInclude->SetSrc("/includes/js/jquery.rateyo.min.js");
-        $oHeader->SetJsInclude($oJsInclude);
-        
-        $oJsInclude = new JsInclude();
-        $oJsInclude->SetSrc("/includes/js/review.js");
-        $oHeader->SetJsInclude($oJsInclude);
-        
-        $oHeader->Reload();
     }
 }

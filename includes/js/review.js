@@ -12,10 +12,33 @@ $(document).ready(function(){
 		 fullStar: true
 	});
 
+	$('#review-viewall').click(function(e) {
+        e.preventDefault();
+        $('#review-add').hide();
+        $('#review-display').show();
+        $('#review-more').show();
+        return false;
+	}); 
+	$('#review-add-lnk').click(function(e) {
+		$('#review-display').hide();
+		$('#review-add').show();
+		$('#review-display').addClass('in');
+		$('#review-display').removeClass('fade');
+	});
+	$('#review-display-lnk').click(function(e) {
+		$('#review-add').hide();
+		$('#review-add').removeClass('fade');
+		$('#review-display').show();
+	});
+
 	$('#review-btn').click(function(e) {
 		e.preventDefault();
+
 		$('#review-msg').html('');
+		$('#review-msg').hide();
 		$('#review-error').html('');
+		$('#review-error').hide();
+
 		if (validateReview()) {
 			var rating = $("#rateYo").rateYo("rating");
 			var form = $('#review-form');
@@ -28,9 +51,11 @@ $(document).ready(function(){
 		    	if (response.status == 0)
 		    	{
 		    		$('#review-msg').html(response.msg);
+		    		$('#review-msg').show();
 		    		$('#review-add-form').hide();
 		    	} else {
 		    		$('#review-error').html(response.error);
+		    		$('#review-error').show();
 		    	}
 		      }
 		    });
@@ -71,7 +96,8 @@ function validateReview()
 	var errorMsg = '';
 	if (arrError.length >= 1)
 	{
-		errorMsg = "<ul>";
+		errorMsg += "<p>"+arrError.length+" errors occured: </p>";
+		errorMsg += "<ul>";
 		for(var i =0; i< arrError.length; i++)
 		{
 			errorMsg += "<li>"+arrError[i]+"</li>";
@@ -79,6 +105,7 @@ function validateReview()
 		errorMsg += "</ul>";
 
 		$('#review-error').html(errorMsg);
+		$('#review-error').show();
 		
 		return false;
 	}

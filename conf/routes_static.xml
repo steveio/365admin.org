@@ -21,6 +21,10 @@
 		<filename>activity_admin.php</filename>
 	</route>
 	<route>
+		<url>/review</url>
+		<filename>review_ajax.php</filename>
+	</route>	
+	<route>
 		<url>/review-report</url>
 		<filename>review_report.php</filename>
 	</route>
@@ -28,6 +32,10 @@
 		<url>/edit_review</url>
 		<filename>edit_review.php</filename>
 	</route>
+	<route>
+		<url>/enquiry</url>
+		<filename>enquiry_ajax.php</filename>
+	</route>	
 	<route>
 		<url>/enquiry-report</url>
 		<filename>enquiry_report.php</filename>
