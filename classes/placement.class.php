@@ -370,8 +370,6 @@ class Placement {
 				$aCompId[] = $oResult->company_id;
 				
 				$oProfile = new PlacementProfile();
-
-				
 				
 				$oProfile->SetId($oResult->id);
 				$oProfile->SetCompanyId($oResult->company_id);

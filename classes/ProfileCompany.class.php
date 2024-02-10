@@ -15,8 +15,6 @@ class CompanyProfile extends AbstractProfile {
 
 	protected $profile_type;
 	
-	protected $oid; // unique across all profile types
-	protected $id; // unique only within company profile scope
 	protected $title;
 	protected $url_name;
 	protected $desc_short;
@@ -139,21 +137,9 @@ class CompanyProfile extends AbstractProfile {
 		return $db->getFirstCell("SELECT url_name FROM ".$_CONFIG['company_table']." WHERE id = ".$iCompanyId);
 		
 	}
-	
-	public function GetOid() {
-		return $this->oid;
-	}
-	
-	public function GetId() { 
-		return $this->id;
-	}
 
 	public function GetCompanyId() { 
 		return $this->id;
-	}
-	
-	public function SetId($id) { 
-		$this->id = $id;
 	}
 	
   	public function GetTitle($trunc = 0) {

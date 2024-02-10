@@ -34,7 +34,7 @@
 	</route>
 	<route>
 		<url>/enquiry</url>
-		<filename>enquiry_ajax.php</filename>
+		<filename>enquiry.php</filename>
 	</route>	
 	<route>
 		<url>/enquiry-report</url>

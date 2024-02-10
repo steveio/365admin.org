@@ -110,20 +110,20 @@ class ProfileController extends GenericController {
 							$aError['msg']['img_upload'] = "Error: Invalid logo size.  Permitted sizes (in pixels) width: ".LOGO__DIMENSIONS_MINWIDTH."-".LOGO__DIMENSIONS_MAXWIDTH."px, height: ".LOGO__DIMENSIONS_MINHEIGHT."-".LOGO__DIMENSIONS_MAXHEIGHT."px.";
 											
 						} else {
-														
+			
 							/* process the new logo */
 							$oIP->Process($aResult['TMP_PATH'],$link_to,$link_id,$iImgType = LOGO_IMAGE);
 									
-							/* delete existing logo, but not the one we just uploaded */
+							/* delete existing (old) logo */
 							if (DEBUG) Logger::Msg("Checking for existing logo...");
 							if ($link_to == "COMPANY") {
-								$tmp = new CompanyProfile();
+								$aProfile = new CompanyProfile();
 							} elseif ($link_to == "PLACEMENT") {
-								$tmp = new PlacementProfile();
+							    $aProfile = new PlacementProfile();
 							}
-							$tmp->SetId($id);
-							$aExistingLogo = $tmp->GetImages(LOGO_IMAGE);
-							unset($tmp);
+							$aProfile->SetId($link_id);
+							$aExistingLogo = $aProfile->GetImages(LOGO_IMAGE);
+							unset($aProfile);
 							if (is_array($aExistingLogo) && count($aExistingLogo) >= 1) {
 								if (DEBUG) Logger::Msg("Delete ".count($aExistingLogo)." Existing Logo...");
 								

@@ -26,6 +26,9 @@ abstract class AbstractProfile implements TemplateInterface {
 	protected $profile_type; /* a constant integer indicating profile type */ 
 	protected $link_to; /* a string (eg PLACEMENT || COMPANY) used to associate related attributes */ 
 
+	protected $id;
+	protected $oid;
+
 	protected $added_by;
 	protected $added_date;
 	protected $last_updated;
@@ -125,7 +128,19 @@ abstract class AbstractProfile implements TemplateInterface {
 	public function SetType($iType) {
 		$this->profile_type = $iType;
 	}
-		
+
+	public function GetId() {
+	    return $this->id;
+	}
+	
+	public function SetId($id) {
+	    $this->id = $id;
+	}
+
+	public function GetOid() {
+	    return $this->oid;
+	}
+
 	public function GetAddedBy() {
 		return $this->added_by;
 	}
@@ -278,7 +293,15 @@ abstract class AbstractProfile implements TemplateInterface {
 	/*
 	 * Used as key to retrieve related attributes via mapping tables
 	 */
+
+	public function GetLinkId() {
+	    return $this->link_id;
+	}
 	
+	public function SetLinkId($sLinkId) {
+	    $this->link_id = $sLinkId;
+	}
+
 	public function GetLinkTo() {
 		return $this->link_to;
 	}
@@ -293,10 +316,8 @@ abstract class AbstractProfile implements TemplateInterface {
 	
 	public function GetImages($iType = PROFILE_IMAGE) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		global $db,$_CONFIG;
-	
+
 		$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$this->GetLinkTo()."' AND m.link_id = ".$this->GetId()." ORDER BY i.id ASC");
 
 		if ($db->getNumRows() >= 1) {

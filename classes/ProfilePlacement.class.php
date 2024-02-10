@@ -15,8 +15,6 @@ define("CK_EDITOR_PROFILE_INTRO_DT","2013-01-03");
 
 class PlacementProfile extends AbstractProfile {
 
-    protected $oid; // unique across all profile types
-	protected $id;
 	protected $type;
 	protected $company_id;
   	protected $logo_url;
@@ -222,19 +220,6 @@ class PlacementProfile extends AbstractProfile {
 				return $aProfile;
 			}
 	}
-
-	public function GetOid() {
-	    return $this->oid;
-	}
-
-	public function GetId() { 
-		return $this->id;
-	}
-
-	public function SetId($id) { 
-		$this->id = $id;
-	}
-	
 	
 	public function GetCompanyId() {
 		return $this->company_id;

@@ -297,15 +297,13 @@ class Country {
 		return  $ct_text;
 	}
 
-	function GetCountryDropDown($selected,$name = 'p_country_id') {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
+	function GetCountryDropDown($selected,$name = 'p_country_id', $class='form-select') {
 		
 		global $db;
 		
 		$db->query("SELECT id,name FROM country ORDER BY name asc");
 		$result = $db->getRows();
-		$s = "<select name='".$name."' class='ddlist'>";
+		$s = "<select name='".$name."' class='".$class."'>";
 		$s .= "<option value='NULL'>select</option>";
 		if (is_array($result)) {
 			foreach($result as $row) {
