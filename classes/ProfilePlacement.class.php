@@ -1133,8 +1133,8 @@ class PlacementProfile extends AbstractProfile {
         	    ,c.url_name as comp_url_name
         	    ,p.location
         	    ,p.ad_active
-        	    ,(SELECT count(*) from review r WHERE r.status = 1 AND r.link_to = 'PLACEMENT' and r.link_id = p.id) as num_review
-        	    ,(SELECT ROUND(sum(r2.rating) / (SELECT count(*) from review r1 WHERE r1.status = 1 AND r1.link_to = 'PLACEMENT' and r1.link_id = p.id)) from review r2 WHERE r2.status = 1 AND r2.link_to = 'PLACEMENT' and r2.link_id = p.id) as avg_rating
+        	    ,(SELECT count(*) from review r WHERE r.status = 1 AND r.link_to = 'PLACEMENT' and r.link_id = p.id) as review_count
+        	    ,(SELECT sum(r2.rating) / (SELECT count(*) from review r1 WHERE r1.status = 1 AND r1.link_to = 'PLACEMENT' and r1.link_id = p.id) from review r2 WHERE r2.status = 1 AND r2.link_to = 'PLACEMENT' and r2.link_id = p.id) as review_rating
                 ,CASE
                 	WHEN p.type = 2  THEN p1.price_from_id
                 	WHEN p.type = 3  THEN p2.price_from_id                  

@@ -13,7 +13,7 @@ die(__FILE__."::".__LINE__);
 */
 ?>
 
-<div class="col-6 featured-proj">
+<div class="col-6 featured-proj my-2">
 
     <div class="img-container">
     	<div class="float-end featured-proj-img"><?
@@ -27,7 +27,7 @@ die(__FILE__."::".__LINE__);
     	<?php 
     	if (strlen($strCompanyLogoHtml) > 1) {
     	?>
-    	<div class="overlay-brand">
+    	<div class="overlay-img">
     		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?= $oProfile->GetCompanyProfileUrl() ?>" target="_new" class="">
     		<?= $oProfile->GetCompanyLogo()->GetHtml("_sm") ?>
     		</a>
@@ -36,6 +36,14 @@ die(__FILE__."::".__LINE__);
 	</div>
     <div class="col-8 details">
     	<h3><a href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h3>
+
+        <?php if ($oProfile->GetReviewCount() >= 1) { ?>
+        <input type="hidden" id="rateYo-<?= $oProfile->GetId() ?>-rating" value="<?= $oProfile->GetRating(); ?>" />
+        <div class="row my-2">
+            <div id="rateYo-<?= $oProfile->GetId() ?>" class="rating col-4"></div>
+            <div class="col-4 small">( <?= $oProfile->GetReviewCount(). " Reviews ) "; ?></div>
+        </div><?
+        } ?>
     
     	<p><?= $oProfile->GetDescShortPlaintext(160); ?></p>
     
@@ -54,3 +62,17 @@ die(__FILE__."::".__LINE__);
     </div>
 
 </div>
+<?php if ($oProfile->GetReviewCount() >= 1) { ?>
+<script>
+
+$(document).ready(function(){
+    $("#rateYo-"+<?= $oProfile->GetId() ?>).rateYo({
+    	 rating: <?= $oProfile->GetRating(); ?>,
+    	 starWidth: "16px",
+    	 fullStar: true,
+    	 readOnly: true
+    });
+});
+
+</script>
+<?php } ?>

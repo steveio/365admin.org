@@ -162,7 +162,7 @@ $aPlacement = $this->Get("aPlacement");
 
 if ($oProfile->GetListingType() >= BASIC_LISTING)
 {
-    $strRelatedProfileTitle = $oProfile->GetCompanyName() ." Programs <a href=\"#\" id=\"related-viewall\">( View All )</a>";
+    $strRelatedProfileTitle = $oProfile->GetCompanyName() ." Programs";
 } else {
     $strRelatedProfileTitle = "Related Opportunities"; 
 }
@@ -182,16 +182,42 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
 	{
 	   $strCompanyLogoHtml = $oProfile->GetCompanyLogo()->GetHtml('_sm');
 	}
-
-	foreach($aPlacement as $oPlacementProfile)
+	$iLimit = 6;
+	for($i=0;$i<$iLimit;$i++) 
 	{
-       $oTemplate = new Template();
+	   $oPlacementProfile = array_shift($aPlacement);
+
+	   $oTemplate = new Template();
        $oTemplate->Set("oProfile", $oPlacementProfile);
        $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
        $oTemplate->LoadTemplate("profile_summary.php");
        print $oTemplate->Render();
     } ?>
 	</div>
+
+	<?php 
+	if (count($aPlacement) > $iLimit) 
+	{
+	?>
+	<div id="profile-list-btn" class="my-2">
+		<a href="#" class="btn btn-primary rounded-pill px-3" id="profile-list-viewall">View All Programs</a>
+	</div>
+
+	<div id="profile-list-more" class="row my-3" style="display: none;">
+	<?php 
+	for($i=$iLimit;$i<count($aPlacement);$i++) 
+	{
+	   $oPlacementProfile = array_shift($aPlacement);
+
+	   $oTemplate = new Template();
+       $oTemplate->Set("oProfile", $oPlacementProfile);
+       $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
+       $oTemplate->LoadTemplate("profile_summary.php");
+       print $oTemplate->Render();
+    } ?>
+	</div><?php 
+	}
+	?>
 
 </div>
 </div>
@@ -201,13 +227,14 @@ $(document).ready(function(){
     $('#profile-list-viewall').click(function(e) {
         e.preventDefault();
         $('#profile-list-more').show();
+        $('#profile-list-btn').hide();
         return false;
     });
 });
 </script>
 
 <? 
-}
+} // end programs
  
 
 
@@ -242,14 +269,5 @@ $limit = 4;
 }
 ?>
 
-
-<? if(($oAuth->oUser->isAdmin) || ($oAuth->oUser->company_id == $oProfile->GetId())) { ?>
-<div class="col-2 my-3">
-	<div class="row">
-        <h2>Admin</h2>
-        <a class="btn btn-primary rounded-pill px-3" href="<?= $_CONFIG['url'] ?>/company/<?= $oProfile->GetUrlName() ?>/edit">Edit Company</a>
-	</div>
-</div>
-<? } ?>
 
 </div>
