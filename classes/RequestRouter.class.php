@@ -258,7 +258,7 @@ class RequestRouter {
 
             if (is_numeric($oController->GetCurrentRouteId())) // route matched, nothing further to do
             {
-                die();
+                die("here");
             }
 
         } catch (Exception $e)

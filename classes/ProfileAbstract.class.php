@@ -222,7 +222,6 @@ abstract class AbstractProfile implements TemplateInterface {
         return $a;
         
     }
-
     
     public function GetCompanyLogo() 
     {
@@ -265,6 +264,11 @@ abstract class AbstractProfile implements TemplateInterface {
 
     }
 
+    public function GetLogoUrl()
+    {
+        return $this->GetCompanyLogoUrl();
+    }
+    
     
     public function GetCompanyLogoUrl($size = '') {
         
@@ -684,7 +688,7 @@ abstract class AbstractProfile implements TemplateInterface {
 	    return $this->review_count;
 	}
 
-	public function GetRating() 
+	public function GetRating()
 	{
 	    return $this->review_rating;
 	}

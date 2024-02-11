@@ -73,7 +73,12 @@ class MVCController{
 	public function MapRequest() {
 		
 		try {
-			$this->SetCurrentRouteId( $this->GetRouteByUriMapping($this->GetRequestUri())->GetId() );
+		    $this->SetCurrentRouteId(null);
+		    $oRoute = $this->GetRouteByUriMapping($this->GetRequestUri());		    
+		    if (is_object($oRoute))
+		    {
+		        $this->SetCurrentRouteId( $oRoute->GetId() );
+		    }
 			
 		} catch (NotFoundException $e) {
             throw $e;
