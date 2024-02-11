@@ -424,23 +424,6 @@ class PlacementProfile extends AbstractProfile {
 	}
 	
 
-	public function SetCompanyLogo() {
-		
-		if (DEBUG) Logger::Msg("SetCompanyLogo()");
-	
-		$oCProfile = new CompanyProfile();
-		$oCProfile->SetId($this->GetCompanyId());
-		$aLogo = $oCProfile->GetImages(LOGO_IMAGE);
-		$this->aCompanyLogo = $aLogo;
-				
-	}
-	
-	public function GetCompanyLogo($version = 0) {
-		return $this->aCompanyLogo[$version];
-	}
-	
-	
-
 	public function DoAddUpdate($p,&$aResponse) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -1017,17 +1000,21 @@ class PlacementProfile extends AbstractProfile {
     				   ,to_char(p.last_updated,'DD/MM/YYYY') as updated_date";
 		} elseif ($fetchmode == FETCHMODE__SUMMARY) {
 
-		    $select = "p.id
-                       ,p.type
-    				   ,p.url_name
-    				   ,p.title
-    				   ,p.desc_short
-                       ,c.id as company_id
-    				   ,c.logo_url
-    				   ,c.title as company_name
-    				   ,c.url_name as comp_url_name
-    				   ,p.location
-    				   ,p.ad_active";
+		    $select = "
+                    p.id
+                    ,p.type
+                    ,p.url_name
+                    ,p.title
+                    ,p.desc_short
+                    ,c.id as company_id
+                    ,c.logo_url
+                    ,c.title as company_name
+                    ,c.url_name as comp_url_name
+                    ,p.location
+                    ,p.ad_active
+                    ,(SELECT count(*) from review r WHERE r.status = 1 AND r.link_to = 'PLACEMENT' and r.link_id = p.id) as num_review
+                    ,(SELECT ROUND(sum(r2.rating) / (SELECT count(*) from review r1 WHERE r1.status = 1 AND r1.link_to = 'PLACEMENT' and r1.link_id = p.id)) from review r2 WHERE r2.status = 1 AND r2.link_to = 'PLACEMENT' and r2.link_id = p.id) as avg_rating 
+                    ";
 		}
 
 		// build the where clause
@@ -1064,8 +1051,6 @@ class PlacementProfile extends AbstractProfile {
 			    $where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
 			    if ($filter_from_search == true)
 			        $where .= " and c.profile_filter_from_search != 't'";
-			        
-		        //$select = "p.id, p.type";
 		        break;
 			case "ID_LIST" :
 				$where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
@@ -1087,9 +1072,8 @@ class PlacementProfile extends AbstractProfile {
 					$where
 					$order_by
 					;";
-					
+
 		$db->query($sql);
-					
 					
 		if ($db->getNumRows() < 1) return array();
 		
@@ -1100,25 +1084,123 @@ class PlacementProfile extends AbstractProfile {
 				
 		foreach($aRes as $o) {
 
-			$oProfile = new PlacementProfile();
+		    $oProfile = ProfileFactory::Get($o->type);
+
+			//$oProfile = new PlacementProfile();
 			$oProfile->SetFromObject($o);
 			
 			$oProfile->GetImages();
 			$oProfile->SetCompanyLogo();
 
-			if ($fetchmode == FETCHMODE__FULL)
-			{
-			    $oProfile->GetCategoryInfo();
-			    $oProfile->GetCountryInfo();
-			    $oProfile->GetActivityInfo();
+			if ($fetchmode == FETCHMODE__FULL) {
+    		    $oProfile->GetCategoryInfo();
+    		    $oProfile->GetActivityInfo();
 			}
+
+		    $oProfile->GetCountryInfo();
 
 			$aProfile[$oProfile->GetId()] = $oProfile;
 		}
+
+		/*
+		 * 
+		    $oProfile = ProfileFactory::Get($o->type);
+		    $oProfile->GetById($o->id);
+		    $oProfile->GetReviewRating();
+
+		    $aProfile[$oProfile->GetId()] = $oProfile;			
+
+		 */
 		
 		return $aProfile;
 	}	
-	
+
+	public static function GetByCompanyId($company_id)
+	{
+
+	    global $db; 
+
+	    $sql = "
+        	    SELECT
+        	    p.id
+        	    ,p.type
+        	    ,p.url_name
+        	    ,p.title
+        	    ,p.desc_short
+        	    ,c.id as company_id
+        	    ,c.logo_url
+        	    ,c.title as company_name
+        	    ,c.url_name as comp_url_name
+        	    ,p.location
+        	    ,p.ad_active
+        	    ,(SELECT count(*) from review r WHERE r.status = 1 AND r.link_to = 'PLACEMENT' and r.link_id = p.id) as num_review
+        	    ,(SELECT ROUND(sum(r2.rating) / (SELECT count(*) from review r1 WHERE r1.status = 1 AND r1.link_to = 'PLACEMENT' and r1.link_id = p.id)) from review r2 WHERE r2.status = 1 AND r2.link_to = 'PLACEMENT' and r2.link_id = p.id) as avg_rating
+                ,CASE
+                	WHEN p.type = 2  THEN p1.price_from_id
+                	WHEN p.type = 3  THEN p2.price_from_id                  
+                	WHEN p.type = 4  THEN NULL
+                END as price_from_id
+                ,CASE
+                	WHEN p.type = 2  THEN p1.price_to_id
+                	WHEN p.type = 3  THEN p2.price_to_id                  
+                	WHEN p.type = 4  THEN NULL
+                END as price_to_id
+                ,CASE
+                	WHEN p.type = 2  THEN p1.duration_from_id
+                	WHEN p.type = 3  THEN p2.duration_from_id                  
+                	WHEN p.type = 4  THEN p3.duration_from_id
+                END as duration_from_id
+                ,CASE
+                	WHEN p.type = 2  THEN p1.duration_to_id
+                	WHEN p.type = 3  THEN p2.duration_to_id                  
+                	WHEN p.type = 4  THEN p3.duration_to_id
+                END as duration_to_id
+                ,CASE
+                	WHEN p.type = 2  THEN p1.currency_id
+                	WHEN p.type = 3  THEN p2.currency_id                  
+                	WHEN p.type = 4  THEN NULL
+                END as currency_id
+        	    FROM
+        	    profile_hdr p
+        	    LEFT JOIN company c on p.company_id = c.id
+        	    LEFT OUTER JOIN profile_general p1 on p.id = p1.p_hdr_id
+        	    LEFT OUTER JOIN profile_tour p2 on p.id = p2.p_hdr_id
+        	    LEFT OUTER JOIN profile_tour p3 on p.id = p3.p_hdr_id
+        	    WHERE
+        	    p.company_id = ".$company_id."
+        	    ORDER BY p.title asc";
+	        
+	    $db->query($sql);
+	    
+	    if ($db->getNumRows() < 1) return array();
+
+	    $aRes = $db->getObjects();
+	    
+	    $aProfile = array();
+	    
+	    foreach($aRes as $o) {
+	        
+	        $oProfile = ProfileFactory::Get($o->type);
+	        $oProfile->SetFromObject($o);
+
+	        $oProfile->GetImages();
+	        $oProfile->SetCompanyLogo();	        
+            $oProfile->GetCategoryInfo();
+            $oProfile->GetActivityInfo();	        
+	        $oProfile->GetCountryInfo();
+	        
+	        /*
+	        print_r("<pre>");
+	        print_r($o);
+	        print_r($oProfile);
+	        print_r("</pre>");
+	        */
+
+	        $aProfile[$oProfile->GetId()] = $oProfile;
+	    }
+
+	    return $aProfile;
+	}
 	
 	public function GetRelatedPlacementsByCountry($country_id, $limit = 6) {
 	

@@ -1,6 +1,8 @@
 <?php 
 
 $oProfile = $this->Get("oProfile");
+$oReviewTemplate = $this->Get("oReviewTemplate");
+
 
 ?>
 
@@ -42,10 +44,16 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 
 <h1><?= $oProfile->GetTitle(); ?></h1>
 
+
+<div class="row my-2">
+    <div id="review-overallrating" class="col-3"></div>
+    <div class="col-2"><?php if (is_object($oReviewTemplate) &  $oReviewTemplate->Get('HASREVIEWRATING') == true) {
+        print "( ".$oReviewTemplate->Get('COUNT'). " Reviews ) ";
+    } ?>
+    </div>
+</div>
+
 <div class='lead'>
-
-<div id="review-overallrating" style="margin-bottom: 10px;"></div>
-
 <p class="lead"><strong><?= $oProfile->GetDescShortPlaintext(); ?></strong></p>
 
 <?php
@@ -128,9 +136,11 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 <h2>Contact / Enquiry</h2>
 <? 
 $aButtonHtml = $this->Get('aButtonHtml');
-
-foreach($aButtonHtml as $k => $v) {
-    print $v;
+if (is_array($aButtonHtml))
+{
+    foreach($aButtonHtml as $k => $v) {
+        print $v;
+    } 
 } ?>	 		 
 
 </div>
@@ -139,10 +149,7 @@ foreach($aButtonHtml as $k => $v) {
 <div class="row my-3">
 	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
 <?php 
-
-$oReviewTemplate = $this->Get("oReviewTemplate");
 print $oReviewTemplate->Render();
-
 ?>
 
 </div>
@@ -156,95 +163,56 @@ $aPlacement = $this->Get("aPlacement");
 if ($oProfile->GetListingType() >= BASIC_LISTING)
 {
     $strRelatedProfileTitle = $oProfile->GetCompanyName() ." Programs <a href=\"#\" id=\"related-viewall\">( View All )</a>";
-
 } else {
     $strRelatedProfileTitle = "Related Opportunities"; 
-    if (is_array($aPlacement) && count($aPlacement) > 6) $aPlacement = array_slice($aPlacement, 0, 6);
 }
 
 if (is_array($aPlacement) && count($aPlacement) >= 1)
 {
 ?>
-<div class="row-fluid">
-<div class="search-result span12 pull-left">
-	<h3><?= $strRelatedProfileTitle ?></h3>
-	<div id="related-visible"><?
+<div class="row">
+<div class="featured-proj-list">
+	<h2><?= $strRelatedProfileTitle ?></h2>
 	
-	if ((is_array($aPlacement)) && (count($aPlacement) >= 1)) {
-		$i = 0;
-		foreach ($aPlacement as $p) {
+	<div class="row my-3">
+	<?php 
 	
-				if ($i==6) { ?>
-				</div>
-				<div id="related-more" style="display: none;"><?
-				}
-				$i++;
-				$oRelatedProfile = new PlacementProfile();
-				$oRelatedProfile->SetFromArray($p);
-				$oRelatedProfile->GetCountryInfo();
-				$oRelatedProfile->GetImages();
-				$aImageDetails = $oRelatedProfile->GetImageUrlArray();	
-
-				?>
-        <div class="span4 featured-proj" style="height: 160px;">
-
-
-		<div class="img-container" style="width: 40%;  float: left;">
-			<div class="featured-proj-img span12">
-			<? if (strlen($aImageDetails['MEDIUM']['URL']) > 1) { ?>
-
-      			<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oRelatedProfile->GetCompUrlName()."/".$oRelatedProfile->GetUrlName() ?>" class=""> 
-    			<img class="img-responsive img-rounded" src="<?= $aImageDetails['MEDIUM']['URL']  ?>" alt="<?= $oRelatedProfile->GetTitle() ?>" /> 		
-      			</a>
-				<span class="frame-overlay"></span>
-			<? } ?>
-			</div>
-			<div class="overlay-brand">
-				<a title="<?= $oRelatedProfile->GetCompanyName() ?>" href="<?= $oRelatedProfile->GetCompanyProfileUrl() ?>" target="_new" class="">
-				<?= $oRelatedProfile->GetCompanyLogoUrl() ?></div>
-				</a>
-		</div>
-		<div class="span6 details" style="float: right; width: 56%;">
-            		<h3><a href="<?= "/company/".$oRelatedProfile->GetCompUrlName()."/".$oRelatedProfile->GetUrlName() ?>" title="" target="_new"><?= $oRelatedProfile->GetTitle(); ?></a></h3>
-
-
- 	      		<ul class="details span12" style="width: 100%; margin-bottom: 4px;">
-      			 <? if (strlen($oRelatedProfile->GetLocationLabel()) > 1) { ?> 
-         		<?= $oRelatedProfile->GetLocationLabel(); ?><br/> 
-       			<? } ?>
-       			<? if (is_numeric($oRelatedProfile->GetDurationFromId())) { ?>
-         		<?= $oRelatedProfile->GetDurationFromLabel(); ?> to <?= $oRelatedProfile->GetDurationToLabel(); ?><br />
-       			<? } ?>
-       			<?php if (is_numeric($oRelatedProfile->GetPriceFromId())) { ?>
-         		<?= $oRelatedProfile->GetPriceFromLabel(); ?> to <?= $oRelatedProfile->GetPriceToLabel(); ?>
-         		<?= $oRelatedProfile->GetCurrencyLabel(); ?><br />
-       			<?php } ?>
-       			</ul>
-       		</div>
-
-
-    	</div><?
+	$strCompanyLogoHtml = '';
+	if (is_object($oProfile->GetCompanyLogo()))
+	{
+	   $strCompanyLogoHtml = $oProfile->GetCompanyLogo()->GetHtml('_sm');
 	}
-	?>
-	</div>
-</div>
-</div>
-<script>
 
+	foreach($aPlacement as $oPlacementProfile)
+	{
+       $oTemplate = new Template();
+       $oTemplate->Set("oProfile", $oPlacementProfile);
+       $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
+       $oTemplate->LoadTemplate("profile_summary.php");
+       print $oTemplate->Render();
+    } ?>
+	</div>
+
+</div>
+</div>
+
+<script>
 $(document).ready(function(){
-	$('#related-viewall').click(function(e) {
-	   e.preventDefault();
-           $('#related-more').show();
-           return false;
-       });       	
+    $('#profile-list-viewall').click(function(e) {
+        e.preventDefault();
+        $('#profile-list-more').show();
+        return false;
+    });
 });
 </script>
+
 <? 
 }
-} 
+ 
+
+
 
 if (!$oProfile->GetListingType() <= BASIC_LISTING) {
-
     
 $oRelatedArticle = $this->Get("oRelatedArticle");
 
@@ -276,9 +244,11 @@ $limit = 4;
 
 
 <? if(($oAuth->oUser->isAdmin) || ($oAuth->oUser->company_id == $oProfile->GetId())) { ?>
-<div class="pull-left span12">
-<h2>Admin</h2>
-<p><a href="<?= $_CONFIG['url'] ?>/company/<?= $oProfile->GetUrlName() ?>/edit">Edit Company</a></p>
+<div class="col-2 my-3">
+	<div class="row">
+        <h2>Admin</h2>
+        <a class="btn btn-primary rounded-pill px-3" href="<?= $_CONFIG['url'] ?>/company/<?= $oProfile->GetUrlName() ?>/edit">Edit Company</a>
+	</div>
 </div>
 <? } ?>
 

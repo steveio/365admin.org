@@ -128,7 +128,14 @@ class CompanyProfile extends AbstractProfile {
 	        throw new NotFoundException("404 Company Profile ".$url_name." not found");
 	    }
 	}
-	
+
+	public static function GetIdByUrlName($url_name) {
+	    global $db, $_CONFIG;
+	    
+	    return $db->getFirstCell("SELECT id FROM ".$_CONFIG['company_table']." WHERE url_name = '".$url_name."'");
+	    
+	}
+
 	public function GetUrlNameById($iCompanyId) {
 		global $db, $_CONFIG;
 		
@@ -271,35 +278,6 @@ class CompanyProfile extends AbstractProfile {
   		global $_CONFIG;  		
   		return $_CONFIG['url']."/".$_CONFIG['company_home']."/".$this->GetUrlName();
   	}
-  	
-  	public function GetCompanyLogoUrl($size = "_sm")
-  	{
-  	    $aLogo = $this->GetImages(LOGO_IMAGE);
-  	    $this->aCompanyLogo = $aLogo;
-  	    
-  	    if (!is_object($this->GetCompanyLogo())) return '';
-  	    
-  	    if (file_exists($this->GetCompanyLogo()->GetPath($size) )) {
-  	        return $this->GetCompanyLogo()->GetHtml($size);
-  	    } elseif( file_exists($this->GetCompanyLogo()->GetPath("") )) {
-  	        return $this->GetCompanyLogo()->GetHtml("");
-  	    }
-  	}
-  	
-  	public function GetCompanyLogo($version = 0) {
-  	    if (isset($this->aCompanyLogo[$version])) {
-  	        return $this->aCompanyLogo[$version];
-  	    } else {
-  	        $this->SetCompanyLogo();
-  	        return $this->aCompanyLogo[$version];
-  	    }
-  	}
-  	
-  	public function SetCompanyLogo()
-  	{
-  	    $aLogo = $this->GetImages(LOGO_IMAGE);
-  	    $this->aCompanyLogo = $aLogo;
-  	}
 
 	public function GetLogoUrlTxt() {
   		return $this->logo_url;
@@ -324,7 +302,11 @@ class CompanyProfile extends AbstractProfile {
 	public function GetListingType() {
 		return $this->prod_type;
 	}
-	
+
+	public function SetListingLevel($listing_level) {
+	    $this->prod_type = $listing_level;
+	}
+
 	public function GetProdType() {
 		return $this->GetListingType();
 	}
@@ -583,6 +565,7 @@ class CompanyProfile extends AbstractProfile {
 						,c.homepage
 						,c.prod_type
 						,c.job_credits as profile_quota
+                        ,(select count(*) from profile_hdr p where p.company_id = c.id) as profile_count
 						,c.profile_filter_from_search
 						,c.enq_opt
 						,c.prof_opt
@@ -1382,7 +1365,7 @@ class CompanyProfile extends AbstractProfile {
 	        'profile_url' => $this->GetProfileUrl(),
 	        'profile_uri' => "/company/".$this->GetUrlName(),
 	        "company_name" => $this->GetCompanyName(),
-	        "company_logo_url" => $this->GetCompanyLogoUrl(),
+	        "company_logo_url" => $aImageDetails['LOGO']['URL'],
 	        "company_profile_url" => $this->GetCompanyProfileUrl(),
 	        "logo_url" => $aImageDetails['LOGO']['URL'],
 	        "image_url_small" => $aImageDetails['SMALL']['URL'],

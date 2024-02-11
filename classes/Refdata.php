@@ -2,8 +2,8 @@
 
 /*
  * Refdata system is a key => value store for abitrary lists
- *
- *
+ * 
+ * 
  */
 
 
@@ -35,58 +35,80 @@ define('REFDATA_OPTION_CHECKBOXES_DISABLED','CHECKBOXES_DISABLED');
 
 
 class Refdata {
-
+	
 	private $type_id;
-
+	
 	private $id;
 	private $name;
 	private $css_class;
-
+	
 	private $aValues;
 	private $aOptions; // a key/value set of options caller can set to affect output behaviour eg disabled checkboxes
-
+	
 	private $order_by_sql;
 	private $limit_sql;
-
+	
 	public function __Construct($type_id) {
-
+		
 		$this->aValues = array();
 		$this->aOptions = array();
-
+		
 		$this->type_id = $type_id;
-
+		
 		$this->order_by_sql = " value ASC";
 		$this->limit_sql = '';
+	}
+
+	/**
+	 * Singleton pattern, only a single instance of each refdata type object should be instantiated in memory
+	 * 
+	 * @param constant integer $cRefdataType
+	 * @return object (Refdata) Refdata
+	 */
+	public static function GetInstance($cRefdataType)
+	{
+
+	    global $aRefdata;
+	    
+	    if (isset($aRefdata[$cRefdataType])) return $aRefdata[$cRefdataType];
+
+	    $oRefdata = new Refdata($cRefdataType);
+
+	    if (!isset($aRefdata)) $aRefdata = array();
+
+	    $aRefdata[$cRefdataType] = $oRefdata;
+
+	    return $oRefdata;
 	}
 
 	public function GetValues() {
 		return $this->aValues;
 	}
-
+	
 	public function SetElementId($id) {
 		$this->id = $id;
 	}
-
+	
 	public function SetElementName($name) {
 		$this->name = $name;
 	}
-
+	
 	public function SetElementCssClass($css_class) {
 		$this->css_class = $css_class;
 	}
-
+	
 	public function SetOrderBySql($sql) {
 		$this->order_by_sql = $sql;
 	}
-
-	public function SetLimitSQL($iLimit) { // only fetch $iLimit rows
+	
+	public function SetLimitSQL($iLimit) { // only fetch $iLimit rows 
 		$this->limit_sql = " LIMIT ".$iLimit;
 	}
-
+	
 	public function SetOption($key,$value) {
 		$this->aOptions[$key] = $value;
-	}
-
+	}  
+	
 	public function GetOption($key) {
 		if (array_key_exists($key, $this->aOptions)) {
 			return $this->aOptions[$key];
@@ -95,46 +117,46 @@ class Refdata {
 
 	/* return all refdata values of a specific type */
 	public function GetByType() {
-
+		
 		global $db;
-
+		
 		$sql = "SELECT id,value FROM refdata WHERE type = ".$this->type_id." ORDER BY ".$this->order_by_sql . $this->limit_sql;
 
 		$db->query($sql);
 
 		$result = array();
-
+		
 		if ($db->getNumRows() >= 1) {
 
 			foreach($db->getRows() as $row) {
-				$result[$row['id']] = $row['value'];
+				$result[$row['id']] = $row['value'];	
 			}
 		}
-
+		
 		$this->aValues = $result;
-
+		
 		return $this->aValues;
-
+				
 	}
-
+	
 	public function GetValueById($key) {
 		if (isset($this->aValues[$key])) {
 			return $this->aValues[$key];
 		}
 	}
 
-	/* return refdata id's mapped to an object */
+	/* return refdata id's mapped to an object */ 
 	public static function Get($refdata_type, $link_to, $link_id, $labels = FALSE) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."->".__FUNCTION__."() refdata_type: ".$refdata_type.", link_to: ".$link_to.", link_id: ".$link_id );
-
+		
 		global $db;
-
-		if (!is_numeric($link_to) ||
-			!is_numeric($link_id) ||
-			!is_numeric($refdata_type))
+		
+		if (!is_numeric($link_to) || 
+			!is_numeric($link_id) || 
+			!is_numeric($refdata_type)) 
 		{
-			return array();
+			return array();		
 		}
 
 		if ($labels) {
@@ -144,7 +166,7 @@ class Refdata {
 		}
 
 		$db->query($sql);
-
+		
 		if ($db->getNumRows() >= 1) {
 			if ($labels) {
 				$result = array();
@@ -158,55 +180,55 @@ class Refdata {
 		} else {
 			return array();
 		}
-
-
+		
+		
 	}
-
-
+	
+	
 	public function GetDDlist($selected_id, $no_default = FALSE) {
 
 		$aValues = $this->GetByType();
-
-		$oSelect = new Select($this->id,$this->name,'form-select',$aValues,$bKeysSameAsValues = false,$selected_id);
-
+		
+		$oSelect = new Select($this->id,$this->name,$this->css_class,$aValues,$bKeysSameAsValues = false,$selected_id);
+		
 		if ($no_default) {
 			$oSelect->SetNoDefault();
 		}
-
+		
 		return $oSelect->GetHtml();
 	}
 
-
-	public function GetCheckboxList($prefix, $aSelected, $input_css = "select_list", $ul_css = "form-check", $li_css = "select_list_element", $label_css = "form-check-label") {
-
+	
+	public function GetCheckboxList($prefix, $aSelected, $input_css = "select_list", $ul_css = "select_list", $li_css = "select_list_element", $label_css = "select_list") {
+		
 		$aValues = $this->GetByType();
-
+		
 		$aElements = array();
-
+		
 		foreach($aValues as $id => $value) {
 			if (is_array($aSelected)) {
 				$checked = (in_array($id,$aSelected)) ? "checked" : "";
 			} else {
 				$checked = '';
 			}
-
+			
 			$disabled = ($this->GetOption(REFDATA_OPTION_CHECKBOXES_DISABLED) == TRUE) ? "disabled" : "" ;
-
+			
 			$aElements[] = "<li class='".$li_css."'><input class='".$input_css."' type='checkbox' name='".$prefix . $id."' $checked  $disabled /> <label class='".$label_css."'>".$value ."</label></li>\n";
 		}
 
 		return $aElements;
 	}
-
+	
 	public function GetLabelsFromSelectedIds($aSelected, $li_css = "select_list_element") {
-
+		
 		$aValues = $this->GetByType();
-
+		
 		//Logger::Msg($aSelected);
 		//Logger::Msg($aValues);
-
+		
 		$aElements = array();
-
+		
 		foreach($aValues as $id => $value) {
 			if (in_array($id,$aSelected)) {
 				$aElements[] = "<li>".$value."</li>";
@@ -214,5 +236,5 @@ class Refdata {
 		}
 		return $aElements;
 	}
-
+	
 }

@@ -83,7 +83,13 @@ abstract class AbstractProfile implements TemplateInterface {
 
 	public function GetDescShortPlaintext($trunc = 160)
 	{
-	    return substr(htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short)), 0, $trunc);
+	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short));
+	    if (strlen($str) > $trunc)
+	    {
+	        return substr($str, 0, $trunc)."...";
+	    } else {
+	        return $str;
+	    }
 	}
 
 	/*
@@ -217,33 +223,63 @@ abstract class AbstractProfile implements TemplateInterface {
         
     }
 
-    public function GetCompanyLogoUrl($size = "_sm")
-    {
-        $aLogo = $this->GetImages(LOGO_IMAGE);
-        $this->aCompanyLogo = $aLogo;
-        
-        if (!is_object($this->GetCompanyLogo())) return '';
-        
-        if (file_exists($this->GetCompanyLogo()->GetPath($size) )) {
-            return $this->GetCompanyLogo()->GetHtml($size);
-        } elseif( file_exists($this->GetCompanyLogo()->GetPath("") )) {
-            return $this->GetCompanyLogo()->GetHtml("");
-        }
-    }
     
-    public function GetCompanyLogo($version = 0) {
-        if (isset($this->aCompanyLogo[$version])) {
-            return $this->aCompanyLogo[$version];
-        } else {
+    public function GetCompanyLogo() 
+    {
+        
+        global $db;
+        
+        if (is_object($this->aImage[LOGO_IMAGE][0]))
+        {
+            return $this->aImage[LOGO_IMAGE][0];
+        } elseif (is_numeric($this->GetCompanyid())) {
             $this->SetCompanyLogo();
-            return $this->aCompanyLogo[$version];
+            if (is_object($this->aImage[LOGO_IMAGE][0]))
+            {
+                return $this->aImage[LOGO_IMAGE][0];
+            }
         }
     }
     
     public function SetCompanyLogo()
     {
-        $aLogo = $this->GetImages(LOGO_IMAGE);
-        $this->aCompanyLogo = $aLogo;
+        global $db;
+        
+        if (!is_numeric($this->GetCompanyId())) return false;
+        
+        $sql = "SELECT i.* FROM image i, image_map m WHERE m.link_id = ".$this->GetCompanyId()." AND m.link_to = '".CONTENT_TYPE_COMPANY."' AND m.type = ".LOGO_IMAGE." AND m.img_id = i.id ORDER BY i.id ASC";
+
+        $db->query($sql);
+        
+        $aRow = $db->getRow();
+        
+        if (!is_array($aRow)) {
+            return false;
+        }
+        
+        $oImage = new Image($aRow['id'],$aRow['type'],$aRow['ext']);
+        
+        $this->SetImage($oImage,$iType = LOGO_IMAGE);
+        
+        return $oImage;
+
+    }
+
+    
+    public function GetCompanyLogoUrl($size = '') {
+        
+        global $db;
+        
+        if (is_object($this->aImage[LOGO_IMAGE][0]))
+        {
+            return $this->aImage[LOGO_IMAGE][0]->GetUrl($size);
+        } elseif (is_numeric($this->GetCompanyid())) {
+            $this->SetCompanyLogo();
+            if (is_object($this->aImage[LOGO_IMAGE][0]))
+            {
+                return $this->aImage[LOGO_IMAGE][0]->GetUrl($size);
+            }
+        }
     }
 
 	public function SetFromArray($a) {
@@ -317,8 +353,12 @@ abstract class AbstractProfile implements TemplateInterface {
 	public function GetImages($iType = PROFILE_IMAGE) {
 
 		global $db,$_CONFIG;
+		
+		if (is_array($this->aImage) && count($this->aImage) >= 1) return;
 
 		$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$this->GetLinkTo()."' AND m.link_id = ".$this->GetId()." ORDER BY i.id ASC");
+		
+		//$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$link_to."' AND m.link_id = ".$link_id." AND i.type = '".$iType."' ORDER BY i.id ASC");
 
 		if ($db->getNumRows() >= 1) {
 
@@ -342,37 +382,10 @@ abstract class AbstractProfile implements TemplateInterface {
 
 	public function GetImage($idx = 0,$iType = PROFILE_IMAGE) {
 		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."() img_id=".$idx);
-		
 		if (is_object($this->aImage[$iType][$idx])) {
 			return $this->aImage[$iType][$idx];
 		}
-	}
-
-
-	
-	
-  	public function GetLogoUrl() {
-  		
-  		global $db;
-  		
-  		if(!is_numeric($this->GetCompanyid())) return false;
-  		
-  		$sql = "SELECT i.* FROM image i, image_map m WHERE m.link_id = ".$this->GetCompanyId()." AND m.link_to = 'COMPANY' AND m.type = ".LOGO_IMAGE . " AND m.img_id = i.id ORDER BY i.id ASC";
-  		
-  		$db->query($sql);
-  		
-  		$aRow = $db->getRow();
-  		  		
-  		if (!is_array($aRow)) {
-  			return false;
-  		}
-
-  		$oImage = new Image($aRow['id'],$aRow['type'],$aRow['ext']);
-  		
-  		return $oImage->GetUrl();
-  	}
-	
+	}	
   	
   	public function GetMetaKeywords() {
 

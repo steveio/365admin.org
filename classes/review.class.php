@@ -186,10 +186,30 @@ class Review {
 	    
 	    return true;
 	}
+	
+	public function GetSummary($link_id,$link_to, $status = 1)
+	{
+
+	    global $db;
+	    
+        $sql = "SELECT 
+                  (SELECT count(*) from review r WHERE r.status = ".$status." AND r.link_to = '".$link_to."' and r.link_id = ".$link_id.") as num_review,
+                  round(sum(rating) / (SELECT count(*) from review r WHERE r.status = 1 AND r.link_to = '".$link_to."' and r.link_id = ".$link_id.")) as avg_rating 
+                FROM  
+                  review r 
+                WHERE 
+                  r.status = 1 AND r.link_to = '".$link_to."' and r.link_id = ".$link_id;
+
+        $db->query($sql);
+        
+        if ($db->getNumRows() == 1) 
+        {
+            return $aRow = $db->getRow(PGSQL_ASSOC);
+        }
+            
+	}
 
 	public function Get($link_id,$link_to, $status = 1) {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
 		global $db;
 		

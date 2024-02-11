@@ -8,7 +8,7 @@
 	<p>Upload your organisation's logo to be displayed on your profiles.</p>
 </div>
 
-<div class="row">	
+<div class="row my-3">	
 	<h2>Current Logo: </h2>
 	<? 
 	$oImage = $oProfile->GetImage(0,LOGO_IMAGE);
@@ -41,7 +41,7 @@
 </div>
 
 
-<div class="row">
+<div class="row my-3">
 
 	<div class="">
 		<?

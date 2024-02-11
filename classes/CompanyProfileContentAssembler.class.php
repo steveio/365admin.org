@@ -46,25 +46,37 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
         global $db, $oHeader, $oFooter;
 
         try {
-
             parent::GetByUrlName($path);
             parent::SetPageHeader();
-
-            $this->oProfile->SetProfileCount();
             
             // set Logo & Banner images
-            if (is_object($this->oProfile->GetImage(0,LOGO_IMAGE))) $this->oTemplate->Set('logo_img',$this->oProfile->GetImage(0,LOGO_IMAGE)->GetHtml("",$this->oProfile->GetTitle()));
-            if (is_object($this->oProfile->GetImage(1,LOGO_IMAGE))) $this->oTemplate->Set('banner_img',$this->oProfile->GetImage(1,LOGO_IMAGE)->GetHtml("",$this->oProfile->GetTitle()));
-            
+            if (is_object($this->oProfile->GetImage(0,LOGO_IMAGE)))
+            {
+                $this->oTemplate->Set('logo_img',$this->oProfile->GetImage(0,LOGO_IMAGE)->GetHtml("",$this->oProfile->GetTitle()));
+                $this->oTemplate->Set('logo_url_sm',$this->oProfile->GetImage(0,LOGO_IMAGE)->GetUrl("_sm"));
+            }
+            if (is_object($this->oProfile->GetImage(1,LOGO_IMAGE))) 
+            {
+                $this->oTemplate->Set('banner_img',$this->oProfile->GetImage(1,LOGO_IMAGE)->GetHtml("",$this->oProfile->GetTitle()));
+            }
+
             $this->GetEnquiryButtonHtml();
 
             if ($this->oProfile->GetListingType() >= BASIC_LISTING) 
             {
                 $this->GetPlacements();
             } else {
-                $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT);
-                $this->GetRelatedArticle($this->oProfile->GetOid(), $limit = 15);
+                $iLimit = 8;
+                $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT, $iLimit);
+                $this->GetRelatedArticle($this->oProfile->GetOid(), $limit);
             }
+
+            /*
+            print_r("<pre>");
+            var_dump($this->aPlacement);
+            print_r("</pre>");
+            die();
+            */
 
             $this->oTemplate->Set("aButtonHtml", $this->aButtonHtml);
             $this->oTemplate->Set("aPlacement",$this->aPlacement);
@@ -77,14 +89,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
             print $this->oTemplate->Render();
             print $oFooter->Render();
 
-
             die();
-            /*
-            print_r("<pre>");
-            var_dump($this->oProfile);
-            print_r("</pre>");            
-            die(__FILE__."::".__LINE__);
-            */
 
         } catch (Exception $e) {
             throw $e;
@@ -94,7 +99,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
     /* get placements associated with this company */
     public function GetPlacements()
     {
-        $this->aPlacement = PlacementProfile::Get("COMPANY_ID",$this->oProfile->GetId(), $filter_from_search = false);
+        $this->aPlacement = PlacementProfile::GetByCompanyId($this->oProfile->GetCompanyId());
     }
 
     public function GetEnquiryButtonHtml()

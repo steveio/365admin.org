@@ -408,4 +408,3 @@ function doProjectSearchRequest(host) {
 }
 
 
-

@@ -54,6 +54,11 @@ $oCssInclude->SetHref('/css/fonts.css');
 $oCssInclude->SetMedia('screen');
 $oHeader->SetCssInclude("CSS_FONTS", $oCssInclude);
 
+$oCssInclude = new CssInclude();
+$oCssInclude->SetHref('/css/style.css');
+$oCssInclude->SetMedia('screen');
+$oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+
 
 
 $oHeader->LoadTemplate("header_xhtml_std.php");
