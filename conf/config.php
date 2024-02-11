@@ -331,7 +331,7 @@ define('ERROR_ADD_ACCOUNT_FAILED','Add account failed :');
 /* config params required to make classes work */
 $_CONFIG = array( 
         'site_id' => 0,
-        'url' => 'https://www.oneworld365.org',
+        'url' => 'http://admin.oneworld365.org',
         'company_table' => 'company',
         'placement_table' => 'profile_hdr',
         'profile_hdr_table' => 'profile_hdr', /* placement table is a view in some sites, these must use profile_hdr for add/update */

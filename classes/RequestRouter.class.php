@@ -256,10 +256,11 @@ class RequestRouter {
 
             $oSession->Save();
 
-            if ($this->GetRequestUri() == "/".ROUTE_ERROR)
+            if (is_numeric($oController->GetCurrentRouteId())) // route matched, nothing further to do
             {
                 die();
             }
+
         } catch (Exception $e)
         {
             throw $e;

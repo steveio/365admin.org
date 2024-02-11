@@ -1,6 +1,7 @@
 <?php
 $oSalesEnquiry = $this->Get('oSalesEnquiry');
 
+$strUrl = $this->Get('URL');
 ?>
 
 <form enctype="multipart/form-data" name="enquir_form" id="enquiry_form" action="#" method="POST">
@@ -21,6 +22,9 @@ $oSalesEnquiry = $this->Get('oSalesEnquiry');
           		<?= AppError::GetErrorHtml($oSalesEnquiry->GetValidationError());  ?>
           		</div>
           		<? } ?>
+				
+				<p>To add your organisation to our site or to update an existing listing please <a href="<?= $strUrl; ?>">click here</a>.</p>
+				<p>For all other enquiries please contact us via the enquiry form below.</p>
 
                 <div class="formgroup row my-2">
                         <?php $sErrorCss = (strlen($oSalesEnquiry->GetValidationErrorById('enq_name')) > 1) ? "red" : ""; ?>

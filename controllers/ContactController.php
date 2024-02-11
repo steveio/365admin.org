@@ -82,6 +82,7 @@ class ContactController extends GenericController {
 		}
 
 		$oContactForm = new Template();
+		$oContactForm->Set('URL',$_CONFIG['url']);
 		$oContactForm->Set('oSalesEnquiry',$oSalesEnquiry);
 		$oContactForm->LoadTemplate("sales_enquiry_form_template.php");
 
