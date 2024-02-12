@@ -71,13 +71,6 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
                 $this->GetRelatedArticle($this->oProfile->GetOid(), $limit);
             }
 
-            /*
-            print_r("<pre>");
-            var_dump($this->aPlacement);
-            print_r("</pre>");
-            die();
-            */
-
             $this->oTemplate->Set("aButtonHtml", $this->aButtonHtml);
             $this->oTemplate->Set("aPlacement",$this->aPlacement);
             $this->oTemplate->Set("oProfile",$this->oProfile);

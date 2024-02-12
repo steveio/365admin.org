@@ -105,54 +105,65 @@ class PlacementProfile extends AbstractProfile {
 	protected function SetSubTypeTable($sSubTypeTable) {
 		$this->sSubTypeTable = $sSubTypeTable;
 	}
-	
-	
+
 	/*
-	 * called directly (ie by instantiating an instance of this object) and from a derived class
-	 * 
+	 * called directly (ie by instantiating this object) and by a derived class
+	 *
 	 */
-	public function GetProfileById($id,$key = "PLACEMENT_ID",$return = "OBJECT", $limit = NULL) {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
-		global $db,$_CONFIG;
-		
-		$limit_sql = (is_numeric($limit)) ? " LIMIT ".$limit : "";
-		
-		// build the where clause
-		switch($key) {
-			case  "PLACEMENT_ID" :
-				if (!is_numeric($id)) return false;
-				$where = "p.id = $id AND p.company_id = c.id ";
-				$order_by = " ORDER BY p.title asc ";
-				break;
-			case "COMPANY_ID" :
-				if (!is_numeric($id)) return false;
-				$where = "p.company_id = $id AND p.company_id = c.id ";
-				$order_by = " ORDER BY p.title asc ";
-				break;
-			case "ALL" :
-				$where = "p.company_id = c.id ";
-				$order_by = " ORDER BY p.title asc ";
-				break;
-			case "INDEXER" :
-				$where = "p.last_updated > p.last_indexed AND p.company_id = c.id ";
-				$order_by = " ORDER BY p.title asc ";
-				break;
-			case "ID_LIST" :
-				if (!is_numeric($id)) return false;
-				$where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
-				$order_by = "ORDER BY RANDOM() ";
-				break;
-			case "RECENT" :
-				$where = " p.company_id = c.id ";
-				$order_by = " ORDER BY p.last_updated DESC LIMIT 20";
-				break;
-		}
-		
-		$sSql = "SELECT	
-                        p.oid
-                        ,p.id
+	public function GetProfileById($id,$key = "PLACEMENT_ID",$return = "OBJECT", $limit = NULL, $order_by_sql = "") {
+
+	    global $db,$_CONFIG;
+	    
+	    $limit_sql = (is_numeric($limit)) ? " LIMIT ".$limit : "";
+
+	    // build the where clause
+	    switch($key) {
+	        case  "PLACEMENT_ID" :
+	            if (!is_numeric($id)) return false;
+	            $where = "p.id = $id AND p.company_id = c.id ";
+	            $order_by = " ORDER BY p.title asc ";
+	            break;
+	        case "COMPANY_ID" :
+	            if (!is_numeric($id)) return false;
+	            $where = "p.company_id = $id AND p.company_id = c.id ";
+	            $order_by = " ORDER BY p.title asc ";
+	            break;
+	        case "ALL" :
+	            $where = "p.company_id = c.id ";
+	            $order_by = " ORDER BY p.title asc ";
+	            break;
+	        case "INDEXER" :
+	            $where = "p.last_updated > p.last_indexed AND p.company_id = c.id ";
+	            $order_by = " ORDER BY p.title asc ";
+	            break;
+	        case "INDEXER_SOLR" :
+	            $where = "p.last_updated > p.last_indexed_solr AND p.company_id = c.id ";
+	            $order_by = " ORDER BY p.title asc ";
+	            break;	            
+	        case "ID_LIST" :
+	            if (!is_array($id) || count($id) < 1) return false;
+	            $where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
+	            $order_by = "ORDER BY RANDOM() ";
+	            break;
+	        case "RECENT" :
+	            $where = " p.company_id = c.id ";
+	            $order_by = " ORDER BY p.last_updated DESC LIMIT 20";
+	            break;
+	    }
+
+	    if (strlen($order_by_sql) > 1) {
+	        $order_by = $order_by_sql;
+	    }
+
+	    if ($_CONFIG['placement_table'] == "profile_hdr") {
+	        $with_oid = "p.oid 
+                         ,p.id";
+	    } else {
+	        $with_oid = "p.id";
+	    }
+
+	    $sSql = "SELECT
+						".$with_oid."
 						,p.type as profile_type
 						,p.company_id
 						,c.logo_url
@@ -185,42 +196,64 @@ class PlacementProfile extends AbstractProfile {
 						,p.last_indexed
 						,p.last_indexed_solr
 						$this->sSubTypeFields
-					FROM 
-						".$_CONFIG['profile_hdr_table']." p
-						LEFT JOIN ".$_CONFIG['company_table']." c ON p.company_id = c.id 
+					FROM
+						".$_CONFIG['placement_table']." p
+						LEFT JOIN ".$_CONFIG['company_table']." c ON p.company_id = c.id
 						$this->sSubTypeTable
 					WHERE
 					$where
 					$order_by
 					$limit_sql
 				";
-				
+
 			$db->query($sSql);
 			
 			if ($return == "OBJECT") {
-				if ($db->getNumRows() == 1) return $oResult = $db->getObject();	
-			} 
-
+			    if ($db->getNumRows() == 1) return $oResult = $db->getObject();
+			}
+			
 			if ($return == "ARRAY") {
-				if ($db->getNumRows() >= 1) return $db->getObjects();
+			    if ($db->getNumRows() >= 1) return $db->getObjects();
 			}
 			
 			if ($return == "PROFILE") {
-				if ($db->getNumRows() < 1) return array();
-				
-				$aRes = $db->getObjects();
-				$aProfile = array();
-				foreach($aRes as $o) {
-					$oProfile = new PlacementProfile();
-					$oProfile->SetFromObject($o);
-					$oProfile->GetImages();
-					$oProfile->SetCompanyLogo();
-					$aProfile[$oProfile->GetId()] = $oProfile;			
-				}				
-				return $aProfile;
+			    if ($db->getNumRows() < 1) return array();
+			    
+			    $aRes = $db->getObjects();
+			    $aProfile = array();
+			    foreach($aRes as $o) {
+			        $oProfile = new PlacementProfile();
+			        $oProfile->SetFromObject($o);
+			        $oProfile->GetImages();
+			        $oProfile->SetCompanyLogo();
+			        $oProfile->GetCategoryInfo();
+			        $oProfile->GetActivityInfo();
+			        $oProfile->GetCountryInfo();
+			        $oProfile->GetReviewRating();
+			        
+			        $aProfile[$oProfile->GetId()] = $oProfile;
+			    }
+			    return $aProfile;
 			}
 	}
-	
+
+	public function GetOid() {
+	    global $db;
+	    if (!is_numeric($this->oid)) {
+	        return $this->oid = $db->getFirstCell("SELECT oid FROM profile_hdr WHERE id = ".$this->GetId());
+	    } else {
+	        return $this->oid;
+	    }
+	}
+
+	public function GetId() {
+	    return $this->id;
+	}
+
+	public function SetId($id) {
+	    $this->id = $id;
+	}
+
 	public function GetCompanyId() {
 		return $this->company_id;
 	}
@@ -951,7 +984,8 @@ class PlacementProfile extends AbstractProfile {
 	    $sql = "SELECT 
                     p.id,
                     p.title, 
-                    p.desc_short, 
+                    p.desc_short,
+                    p.type,
                     c.id as company_id, 
                     c.title as company_title,
                     c.url_name as company_url_name
@@ -1189,13 +1223,6 @@ class PlacementProfile extends AbstractProfile {
             $oProfile->GetActivityInfo();	        
 	        $oProfile->GetCountryInfo();
 	        
-	        /*
-	        print_r("<pre>");
-	        print_r($o);
-	        print_r($oProfile);
-	        print_r("</pre>");
-	        */
-
 	        $aProfile[$oProfile->GetId()] = $oProfile;
 	    }
 

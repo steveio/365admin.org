@@ -24,14 +24,13 @@ class ErrorController extends GenericController {
 		} elseif (count($oSession->GetMessage()) >= 1) {
 
 		    $oMessagesPanel->Set('UI_MSG', $oSession->GetMessage());
+		    $oSession->UnsetMessage();
+		    $oSession->Save();
 
 		} else { // valid session but no message passed in, display a default error message
-			if (count($this->aMessage) == 0) {
-				$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_GENERAL_ERROR, $message = "Sorry, an error has occured and it was not possible to fulfil your request.  We've logged the error and will look into it.  Contact us for assistance.");
-				$this->SetMessage($oMessage);
-				$oMessagesPanel->Set('UI_MSG',$this->GetMessage());
-				// GetUserMsg
-			}
+
+			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_GENERAL_ERROR, "Sorry, an error has occured and it was not possible to fulfil your request.  We've logged the error and will look into it.  Contact us for assistance.");
+			$oMessagesPanel->Set('UI_MSG',array($oMessage));
 		}
 
 		$oMessagesPanel->LoadTemplate("messages_template.php");

@@ -65,19 +65,40 @@ class ProfileContentAssembler extends AbstractContentAssembler {
         $_REQUEST['page_title'] = $title;
         $_REQUEST['page_meta_description'] = $desc_short;
         $_REQUEST['page_keywords'] = "";
+
+
+        unset($this->oProfile);
+        $this->oProfile = $oProfile = ProfileFactory::Get($aRes['type']);
+        $this->oProfile->SetType($aRes['type']);
+
+  
+        /*
+        print_r("<pre>");
+        print_r($this->oProfile);
+        print_r("</pre>");
+        die();
+        */
         
-        // fetch full company profile
-        $this->oProfile->SetFromArray($this->oProfile->GetProfileById($aRes['id']));
-        if ($this->oProfile->GetId() != $aRes['id']) {
-            throw new Exception("Profile notfound  id:".$aRes['id'].", title: ".$aRes['title']." url_name: ".$path);
+        
+        // fetch full profile
+        if ($this->oProfile->GetGeneralType() == PROFILE_PLACEMENT)
+        {
+            $this->oProfile->GetById($aRes['id']);
+        } else {
+            $this->oProfile->SetFromArray($this->oProfile->GetProfileById($aRes['id']));
+            //$this->oProfile->GetImages();
+            //$this->oProfile->GetCategoryInfo();
+            //$this->oProfile->GetCountryInfo();
+            //$this->oProfile->GetActivityInfo();
         }
-        
+
+        if ($this->oProfile->GetId() != $aRes['id']) {
+            throw new Exception("Profile not found  id:".$aRes['id'].", title: ".$aRes['title']." url_name: ".$path);
+        }
+
+
         $this->SetLinkId($aRes['id']); // put profile id in scope of parent class for fetching associated content
         
-        $this->oProfile->GetImages();
-        $this->oProfile->GetCategoryInfo();
-        $this->oProfile->GetCountryInfo();
-        $this->oProfile->GetActivityInfo();
 
         $this->GetReviews($this->oProfile->GetId(), $this->oProfile->GetTypeLabel(), $this->oProfile->GetTitle());
 

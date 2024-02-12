@@ -119,7 +119,7 @@ class CompanyProfile extends AbstractProfile {
 	{
 	    global $db ,$_CONFIG;
 	    
-	    $sql = "SELECT id,title, desc_short FROM ".$_CONFIG['company_table']." WHERE url_name = '".$url_name."'";
+	    $sql = "SELECT id,title, desc_short, profile_type as type FROM ".$_CONFIG['company_table']." WHERE url_name = '".$url_name."'";
 	    
 	    $db->query($sql);
 	    if ($db->getNumRows() == 1) {
@@ -527,7 +527,6 @@ class CompanyProfile extends AbstractProfile {
         }
 	}
   	
-	
 	public function GetProfileById($id,$return = "ARRAY") {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");

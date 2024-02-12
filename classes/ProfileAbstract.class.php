@@ -117,6 +117,10 @@ abstract class AbstractProfile implements TemplateInterface {
 		return $this->profile_type;
 	}
 
+	public function SetType($iType) {
+	    $this->profile_type = $iType;
+	}
+
 	public function GetTypeLabel() 
 	{
 	    switch($this->GetGeneralType())
@@ -129,10 +133,6 @@ abstract class AbstractProfile implements TemplateInterface {
 	            break;
 	    }
 
-	}
-
-	public function SetType($iType) {
-		$this->profile_type = $iType;
 	}
 
 	public function GetId() {

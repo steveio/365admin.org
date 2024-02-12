@@ -177,14 +177,12 @@ function my_session_start()
 /* Global (Uncaught / Unhandled) Exception Handler */
 function exception_handler($e) {
     
-    print_r("<pre>");
-    print_r($e);
-    print_r("</pre>");
     Logger::DB(1,__FUNCTION__."()",$e->getMessage(). " ".$e->getFile(). " " . $e->getLine());
     Logger::DB(1,__FUNCTION__."()",$e->getTraceAsString());
     
-    die();
     Http::Redirect(PATH_UNDER_MAINTENANCE);
+    
+    die();
 }
 
 

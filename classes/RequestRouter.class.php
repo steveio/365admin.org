@@ -242,6 +242,7 @@ class RequestRouter {
              * Now attept to match MVC routes
              */
             $oController = $oSession->GetMVCController();
+            $oController->Reset();
             
             if (!$oController) {
                 $oController = new MVCController();
@@ -249,11 +250,15 @@ class RequestRouter {
                 $oSession->SetMVCController($oController);
             }
 
-            $oController->SetExceptionOnNotFound(false); // continue processing on no MVC route matached
             $oController->SetRequestUri($this->GetRequestUri());
             $oController->Process();
 
             $oSession->Save();
+
+            if ($oController->GetPassThrough())
+            {
+                $oController->GetPassThrough();
+            }
 
             if ($oController->GetPassThrough())
             {
@@ -262,7 +267,7 @@ class RequestRouter {
 
             if (is_numeric($oController->GetCurrentRouteId())) // route matched, nothing further to do
             {
-                die("here");
+                die();
             }
 
         } catch (Exception $e)

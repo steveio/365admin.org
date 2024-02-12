@@ -49,18 +49,35 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
         try {
             
             parent::GetByUrlName($path);            
+            parent::SetPageHeader();
+
+            if (is_object($this->oProfile->GetCompanyLogo()))
+            {
+                $this->oTemplate->Set('logo_img',$this->oProfile->GetCompanyLogo()->GetHtml(""));
+                $this->oTemplate->Set('logo_url_sm',$this->oProfile->GetCompanyLogo()->GetUrl("_sm"));
+            }
+
+            $this->oTemplate->Set('profile_type', $this->oProfile->GetProfileType());
+
+            /*
+            print_r("<pre>");
+            print_r($this);
+            print_r("</pre>");
+            die();
+            */
 
             $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT);
 
             $this->oTemplate->Set("oProfile",$this->oProfile);
             $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
-            $this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);// placement list - view all placement for company /company/<comp-name>/placements
             $this->oTemplate->LoadTemplate("profile_placement_view.php");
 
+            
             print $oHeader->Render();
             print $this->oTemplate->Render();
             print $oFooter->Render();
 
+            die();
         } catch (Exception $e) {
             throw $e;
         }

@@ -47,6 +47,13 @@ class MVCController{
 	    $this->bExceptionOnNotFound = $bExceptionOnNotFound;
 	}
 
+	public function Reset()
+	{
+	    $this->bPassThrough = false;
+	    $this->sRequestUri = null;  
+	    $this->nCurrentRouteId = null;
+	}
+
 	public function Process() {
 		
 		try {
