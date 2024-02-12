@@ -250,11 +250,15 @@ class RequestRouter {
             }
 
             $oController->SetExceptionOnNotFound(false); // continue processing on no MVC route matached
-
             $oController->SetRequestUri($this->GetRequestUri());
             $oController->Process();
 
             $oSession->Save();
+
+            if ($oController->GetPassThrough())
+            {
+                return true;
+            }
 
             if (is_numeric($oController->GetCurrentRouteId())) // route matched, nothing further to do
             {

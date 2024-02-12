@@ -30,14 +30,16 @@ class MVCController{
 	protected $sRequestUri;  // string request uri eg /route1, maps to $oRoute->uri-mapping if matched 
 	protected $nCurrentRouteId;  // int id of route to process, a pointer into $aRoutes
 	protected $aRoutes; // array of route objects
-
+	
+	protected $bPassThrough; // forward request downstream in routing path
 	protected $bExceptionOnNotFound = true;
 	
 	public function __construct(){
 
 		$this->aRoutes = array();
 		$this->aRoutesProcessed = array();
-		
+
+		$this->bPassThrough = FALSE;
 	}
 
 	public function SetExceptionOnNotFound($bExceptionOnNotFound)
@@ -50,9 +52,14 @@ class MVCController{
 		try {
 
 		    $this->MapRequest();
-
 			$oRoute = $this->GetRouteById($this->GetCurrentRouteId());
 			$oRoute->Process();
+			
+			if ($oRoute->GetPassThrough())
+			{
+			    $this->bPassThrough = true;
+			    return true;
+			}
 
 		} catch (NotFoundException $e) {
 
@@ -87,8 +94,12 @@ class MVCController{
 		}
 		
 	}
-	
-	
+
+	public function GetPassThrough()
+	{
+	    return $this->bPassThrough;
+	}
+
 	public function SetRequestUri($sRequestUri) {
 		$this->sRequestUri = $sRequestUri;
 	}

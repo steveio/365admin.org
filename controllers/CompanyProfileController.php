@@ -52,7 +52,11 @@ class CompanyProfileController extends ProfileController {
 
 		global $oSession;
 
-		$this->SetMode(); // determine request type ( VIEW || ADD || EDIT )
+		if (!$this->SetMode()) // determine request type ( VIEW || ADD || EDIT )
+		{
+		    $this->bPassThrough = true;
+		    return false; 
+		}
 
 		$this->SetInValid();
 
@@ -101,18 +105,30 @@ class CompanyProfileController extends ProfileController {
 		$this->aRequestArray = Request::GetUri("ARRAY");
 
 		if ($this->aRequestArray[1] != ROUTE_COMPANY) throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$$this->aRequestArray));
-		
+
+		// Non MVC handled request URL - view/edit placement, company A-Z... return to RequestRouter
+		if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
+		    (strlen($this->aRequestArray[2]) > 2) &&
+		    (strlen($this->aRequestArray[3]) > 1))
+		{
+		    return false;
+		}
+
 		$this->SetCompanyUrlName($this->aRequestArray[2]);
 
 		switch(TRUE) {
 			case $this->RequestAdd() :
-				return $this->mode = self::MODE_ADD;
+				$this->mode = self::MODE_ADD;
+				return true;
 			case $this->RequestView() :
-			    return $this->mode = self::MODE_VIEW;
+			    $this->mode = self::MODE_VIEW;
+			    return true;
 			case $this->RequestDelete() :
-				return $this->mode = self::MODE_DELETE;
+				$this->mode = self::MODE_DELETE;
+				return true;
 			case $this->RequestEdit() :
-				return $this->mode = self::MODE_EDIT;
+				$this->mode = self::MODE_EDIT;
+				return true;
 			default :
 			    throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$this->aRequestArray));
 		}

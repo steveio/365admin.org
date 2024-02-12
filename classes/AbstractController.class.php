@@ -23,6 +23,7 @@ abstract class AbstractController {
 	protected $aMessage; // array of Message() class 
 	
 	protected $bComplete; // is processing complete?
+	protected $bPassThrough; // forward request downstream in routing path
 	protected $bValid; // did any errors occur during processing?
 	
 		
@@ -30,6 +31,7 @@ abstract class AbstractController {
 
 		$this->bComplete = FALSE;
 		$this->bValid = FALSE;
+		$this->bPassThrough = FALSE;
 		
 		$this->aFormValues = array();
 		$this->aValidationErrors = array();
@@ -87,6 +89,10 @@ abstract class AbstractController {
 		return $this->sLabel;
 	}	
 	
+	public function GetPassThrough()
+	{
+	   return $this->bPassThrough;
+	}
 	
 	public function SetFormValues($aFormValues) {
 		$this->aFormValues = $aFormValues;
