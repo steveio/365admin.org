@@ -266,8 +266,7 @@ class JobProfile extends PlacementProfile {
 	        $this->SetContractTypeRefdataObject($oRefdata);
 	    }
 	    
-	    return $this->GetContractTypeRefdataObject()->GetValueById($this->contract_type);
-	    
+	    return $this->GetContractTypeRefdataObject()->GetValueById($this->contract_type);	    
 	}
 	
 	public function GetExperience() { 
@@ -277,15 +276,30 @@ class JobProfile extends PlacementProfile {
 	public function GetClosingDate() { 
 		return $this->closing_dt;	
 	}
+
+	public function SetJobOptionsRefdataObject($oRefdata) {
+	    $this->oJobOptionsRefdataObject = $oRefdata;
+	}
 	
+	public function GetJobOptionsRefdataObject() {
+	    return $this->oJobOptionsRefdataObject;
+	}
+
 	public function SetJobOptions() {
-		$this->job_options = Refdata::Get(REFDATA_JOB_OPTIONS, PROFILE_PLACEMENT, $this->GetId());
+		$result = Refdata::Get(REFDATA_JOB_OPTIONS, PROFILE_PLACEMENT, $this->GetId(), $labels = TRUE);
+		$this->job_options  = array_keys($result);
+		$this->job_options_labels  = array_values($result);
+		
 	}
 
 	public function GetJobOptions() {
 		return $this->job_options;
 	}
 
+	public function GetJobOptionsLabels() {
+        return implode(" / ", $this->job_options_labels);	    
+	}
+	
 }
 
 

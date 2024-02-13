@@ -12,7 +12,11 @@ function go(url) {
         //window.location = url;
 	var w = window.open(url,'','');
 }
-    
+
+function goExternal(url) {
+    var load = window.open(url,'','');
+}
+
 function hitandgo(url,gid) {
         pageTracker._trackPageview(gid);
         var load = window.open(url,'','');

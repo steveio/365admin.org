@@ -14,8 +14,6 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
     protected $oReviewTemplate;  // instance of reviews / comments template
 
     protected $aPlacement = array(); // array of placements offered by company
-    
-    protected $aEnquiryButtonHtml = array();
 
     public function __Construct() 
     {
@@ -71,7 +69,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
                 $this->GetRelatedArticle($this->oProfile->GetOid(), $limit);
             }
 
-            $this->oTemplate->Set("aButtonHtml", $this->aButtonHtml);
+            $this->oTemplate->Set("aEnquiryButtonHtml", $this->aEnquiryButtonHtml);
             $this->oTemplate->Set("aPlacement",$this->aPlacement);
             $this->oTemplate->Set("oProfile",$this->oProfile);
             $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
@@ -100,28 +98,28 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
         $cssClass = "btn btn-primary rounded-pill px-3";
 
         if (strlen($this->oProfile->GetUrl()) > 1 && $this->oProfile->GetUrl() != "http://") {
-            $this->aButtonHtml['WEBSITE'] = "<a class=\"".$cssClass."\" href=\"".$this->oProfile->GetUrl()."\" target=\"_new\" onclick=\"javascript: hit('/outgoing/".$this->oProfile->GetUrlName()."/www');\" title=\"Visit Website\" target=\"_blank\">Visit Website</a>";
+            $this->aEnquiryButtonHtml['WEBSITE'] = "<a class=\"".$cssClass."\" href=\"".$this->oProfile->GetUrl()."\" target=\"_new\" onclick=\"javascript: hit('/outgoing/".$this->oProfile->GetUrlName()."/www');\" title=\"Visit Website\" target=\"_blank\">Visit Website</a>";
         }
         
         if (strlen($this->oProfile->GetApplyUrl()) > 1) {
-            $this->aButtonHtml['APPLY'] = "<a class=\"".$cssClass."\"  href=\"".$this->oProfile->GetApplyUrl()."\" onclick=\"javascript: hit('/outgoing/".$this->oProfile->GetUrlName()."/www');\" title=\"Apply Online\" target=\"_blank\">Apply Online</a>";
+            $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\"  href=\"".$this->oProfile->GetApplyUrl()."\" onclick=\"javascript: hit('/outgoing/".$this->oProfile->GetUrlName()."/www');\" title=\"Apply Online\" target=\"_blank\">Apply Online</a>";
         }
         if (strlen(trim($this->oProfile->GetEmail())) > 1) {
             if ($this->oProfile->HasEnquiryOption(ENQUIRY_BOOKING) && (strlen($this->oProfile->GetApplyUrl()) < 1)) {
                 
-                $this->aButtonHtml['BOOKING'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('BOOKING',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Booking Enquiry\">Booking Enquiry</a>";
+                $this->aEnquiryButtonHtml['BOOKING'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('BOOKING',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Booking Enquiry\">Booking Enquiry</a>";
                 
             }
             if ($this->oProfile->HasEnquiryOption(ENQUIRY_GENERAL) && !$this->oProfile->HasEnquiryOption(ENQUIRY_BOOKING)) {
-                $this->aButtonHtml['ENQUIRY'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('GENERAL',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Make an Enquiry\">Enquiry</a>";
+                $this->aEnquiryButtonHtml['ENQUIRY'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('GENERAL',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Make an Enquiry\">Enquiry</a>";
             }
             if ($this->oProfile->HasEnquiryOption(ENQUIRY_JOB_APP)) {
-                $this->aButtonHtml['JOB_APP'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('JOB_APP',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Apply Online\" target=\"_blank\">Apply</a>";
+                $this->aEnquiryButtonHtml['JOB_APP'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('JOB_APP',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Apply Online\" target=\"_blank\">Apply</a>";
             }
         }
         if($this->oProfile->GetListingType() < BASIC_LISTING) {
-            $this->aButtonHtml = array();
-            $this->aButtonHtml['ENQUIRY'] = $this->aButtonHtml['ENQUIRY'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('GENERAL',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Make an Enquiry\">Enquiry</a>";;
+            $this->aEnquiryButtonHtml = array();
+            $this->aEnquiryButtonHtml['ENQUIRY'] = $this->aEnquiryButtonHtml['ENQUIRY'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('GENERAL',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Make an Enquiry\">Enquiry</a>";
         }
     }
     

@@ -60,6 +60,10 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 			<?= $oProfile->GetCurrencyLabel(); ?><br />
 		<?php } ?>
 
+		<?php if (method_exists($oProfile,'GetGroupSizeLabel') && strlen($oProfile->GetGroupSizeLabel()) >1) { ?>
+			<b>Group Size</b> <?= $oProfile->GetGroupSizeLabel() ?><br />
+		<?php } ?>
+
 		<? if (method_exists($oProfile, "GetCode") && strlen($oProfile->GetCode()) > 1) { ?>
 			<b>Tour Code :</b> <?= $oProfile->GetCode(); ?>
 		<? } ?>
@@ -96,6 +100,9 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 	<? if (strlen($oProfile->GetClosingDate()) > 1) { ?>
 		<b>Apply By :</b> <?= $oProfile->GetClosingDate(); ?><br/>
 	<? } ?>
+	<? if (strlen($oProfile->GetJobOptionsLabels()) > 1) { ?>
+		<b>Benefits :</b> <?= $oProfile->GetJobOptionsLabels(); ?><br/>
+	<? } ?>
 
 	</div>
 </div>
@@ -126,25 +133,31 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
                 } ?>
 			   </div> <?
             } ?>
-
+			</div>
+			<div class="row">
             <?php
             if (count($arrImage) > $iDisplay +1) { ?>
-				<div id="image-viewall-lnk" class="pull-right"><h5><a href="#" id="image-viewall">View All >></a></h5></div> 
-                <div id="image-all" class="hide">
-                <ul class="unstyled"><?php
-                for($i=$iDisplay; $i<count($arrImage); $i++) 
+            
+				<div id="image-viewall-lnk" class="float-end">
+					<a href="#" id="image-viewall" class="btn btn-primary rounded-pill px-3" id="profile-list-viewall">View All Images</a>
+				</div>
+
+                <div id="image-all" class="col-12 hide"><?php
+                for($i=$iDisplay+1; $i<count($arrImage); $i++) 
                 {
                     $oImage = isset($arrImage[$i]) ? $arrImage[$i] : null;
-                    if (is_null($oImage)) continue;
+                    if (is_null($oImage)) continue; ?>
+                   <div class="col-lg-6 col-md-6 mb-4 mb-lg-0" style="float: left;"><?
                     if (strlen($oImage->GetHtml("_lf","")) > 1) { ?>
-                        <li style="margin-bottom: 10px;"><?= $oImage->GetHtml("_lf",""); ?></li><?php
+                        <?= $oImage->GetHtml("_lf",""); ?><?php
                     } else { ?>
-                        <li style="margin-bottom: 10px;"><?= $oImage->GetHtml("_mf",""); ?></li><?php
-                    }
+                        <?= $oImage->GetHtml("_mf",""); ?><?php
+                    } ?>
+				   </div> <?
                 } ?>
-                </ul>
                 </div><?php 
-            }
+            } ?>
+            </div><?
         } ?>
         <script>
     	$(document).ready(function(){ 
@@ -167,6 +180,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 		</div>
 	<? } ?>		
 
+	<div class="row">
 	<? if ($oProfile->GetProfileType() == PROFILE_VOLUNTEER) { /* VOLUNTEER */ ?>
 					
 		<? if (strlen($oProfile->GetDurationText()) >= 1) { ?>
@@ -193,21 +207,118 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 	<? } ?>
 
 	<? if ($oProfile->GetProfileType() == PROFILE_JOB) { /* JOB */ ?>
-			<h3>Salary / Pay</h3>
-			<p><?= $oProfile->GetSalary(); ?></p>
+		<h3>Salary / Pay</h3>
+		<p><?= $oProfile->GetSalary(); ?></p>
 
-			<? if (strlen($oProfile->GetBenefits()) > 1) { ?>
-				<h3>Benefits</h3>
-				<p><?= $oProfile->GetBenefits() ?></p>
-			<? } ?>
+		<? if (strlen($oProfile->GetBenefits()) > 1) { ?>
+			<h3>Benefits</h3>
+			<p><?= $oProfile->GetBenefits() ?></p>
+		<? } ?>
 
-			<? if (strlen($oProfile->GetExperience()) > 1) { ?>
-				<h3>Experience Required</h3>
-				<p><?= $oProfile->GetExperience(); ?></p>
-			<? } ?>
-			
+		<? if (strlen($oProfile->GetExperience()) > 1) { ?>
+			<h3>Experience Required</h3>
+			<p><?= $oProfile->GetExperience(); ?></p>
+		<? } ?>
+		
 	<? } ?>
 
+	<? if ($oProfile->GetProfileType() == PROFILE_TOUR) { /* TOUR */ ?>
+
+		<? if (strlen($oProfile->GetItinery()) >= 1) { ?>					
+			<h3>Itinerary</h3>
+			<p><?= $oProfile->GetItinery(); ?></p>
+		<? } ?>	
+		
+		<div class="row">
+		<?php if (is_array($oProfile->GetTravelOptions()) && count($oProfile->GetTravelOptions()) >= 1) { ?>
+			<div class="col-4">
+			<h3>Travel</h3>
+			<ul class='select_list'>
+			<?php 
+			foreach($oProfile->GetTravelOptions() as $li) {
+				print $li;
+			}
+			?>
+			</ul>
+			</div>
+		<?php } ?>
+
+		<?php if (is_array($oProfile->GetAccomOptions()) && count($oProfile->GetAccomOptions()) >= 1) { ?>
+			<div class="col-4">
+			<h3>Accomodation</h3>
+			<ul class='select_list'>
+			<?php 
+			foreach($oProfile->GetAccomOptions() as $li) {
+				print $li;
+			}
+			?>
+			</ul>
+			</div>
+		<?php } ?>
+
+		<?php if (is_array($oProfile->GetMealOptions()) && count($oProfile->GetMealOptions()) >= 1) { ?>				
+			<div class="col-4">
+			<h3>Meals</h3>
+			<ul class='select_list'>
+			<?php 
+			foreach($oProfile->GetMealOptions() as $li) {
+				print $li;
+			}
+			?>
+			</ul>
+			</div>
+		<?php } ?>
+		</div>
+
+		<div>
+		<?  if (strlen($oProfile->GetPrice()) > 1) { ?>
+			<h3>Tour Price</h3>
+			<p><?= $oProfile->GetPrice(); ?></p>
+		<? } ?>
+			
+		<?php if (strlen($oProfile->GetDates()) > 1) { ?>
+			<h3>Start Dates</h3>
+			<p><?= nl2br($oProfile->GetDates()) ?></p>
+		<?php } ?>
+
+		<?php if (strlen($oProfile->GetRequirements()) >1) { ?>
+			<h3>Requirements</h3>
+			<p><?= $oProfile->GetRequirements() ?></p>
+		<?php } ?>
+
+			
+	<? } // end profile tour ?>
+
+
+	<?php 
+	$aButtonHtml = $this->Get('aEnquiryButtonHtml');
+	if (is_array($aButtonHtml) && count($aButtonHtml) >= 1)
+	{ ?>
+        <div id="buttons" class="buttons row my-5">
+        <div class="booking-enquiry">
+    	<? if ($oProfile->GetProfileType() == PROFILE_JOB) { ?>
+    		<h3>Apply / More Info</h3>
+    	<? } else { ?>
+    		<h2>Booking / Enquiry</h2>
+    	<? } ?>
+        <? 
+        if (is_array($aButtonHtml))
+        {
+            foreach($aButtonHtml as $k => $v) {
+                print $v;
+            }
+        } ?>    
+        </div>
+        </div>
+    <? } ?>
+    
+    
+    <div class="row my-3">
+    	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
+    <?php 
+    print $oReviewTemplate->Render();
+    ?>
+    </div>
 
 </div>
 

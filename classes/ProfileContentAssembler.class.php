@@ -12,7 +12,9 @@
 class ProfileContentAssembler extends AbstractContentAssembler {
 
     protected $profile_type; /* constant integer indicating profile type */
-    
+
+    protected $aEnquiryButtonHtml = array();
+
     public function __Construct() 
     {
         parent::__construct();
@@ -70,14 +72,6 @@ class ProfileContentAssembler extends AbstractContentAssembler {
         unset($this->oProfile);
         $this->oProfile = $oProfile = ProfileFactory::Get($aRes['type']);
         $this->oProfile->SetType($aRes['type']);
-
-  
-        /*
-        print_r("<pre>");
-        print_r($this->oProfile);
-        print_r("</pre>");
-        die();
-        */
         
         
         // fetch full profile
@@ -86,10 +80,6 @@ class ProfileContentAssembler extends AbstractContentAssembler {
             $this->oProfile->GetById($aRes['id']);
         } else {
             $this->oProfile->SetFromArray($this->oProfile->GetProfileById($aRes['id']));
-            //$this->oProfile->GetImages();
-            //$this->oProfile->GetCategoryInfo();
-            //$this->oProfile->GetCountryInfo();
-            //$this->oProfile->GetActivityInfo();
         }
 
         if ($this->oProfile->GetId() != $aRes['id']) {
@@ -99,7 +89,6 @@ class ProfileContentAssembler extends AbstractContentAssembler {
 
         $this->SetLinkId($aRes['id']); // put profile id in scope of parent class for fetching associated content
         
-
         $this->GetReviews($this->oProfile->GetId(), $this->oProfile->GetTypeLabel(), $this->oProfile->GetTitle());
 
     }

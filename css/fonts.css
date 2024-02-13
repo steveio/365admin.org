@@ -213,27 +213,6 @@ a.p_small:hover {
     text-decoration: underline;
 }
 
-
-a.profile_title:link,a.profile_title:visited {
-	color: #F62217;
-	text-decoration: none;
-}
-
-a.profile_title:hover {
-    text-decoration: underline;
-}
-
-a.profile_subtitle:link,a.profile_subtitle:visited {
-	font-size: .9em;
-	color: #069;
-	text-decoration: none;
-}
-
-a.profile_subtitle:hover {
-    text-decoration: underline;
-}
-
-
 a.article_title:link,a.article_title:visited {
 	font-size: 1.2em;
 	color: #F62217;
@@ -242,25 +221,6 @@ a.article_title:link,a.article_title:visited {
 
 a.article_title:hover {
     text-decoration: underline;
-}
-
-
-.rpanel_info {
-	font-size: .7em;
-}
-
-.error {
-	font-size: 12px;
-	line-height:1.45em;
-}
-
-input.textbox250	{
-	width:250px;
-}
-
-textarea.textarea250 {
-	width:250px;
-	height: 120px;
 }
 
 a.more-link:link { background:url(/images/chevron-grey.gif) 0 4px no-repeat !important; font-size:1em; color: #006699; font-weight:bold; padding-left:10px !important;}
@@ -277,6 +237,13 @@ a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-re
     line-height: 14px;
     font-size: 12px;
     font-weight: bold;
+}
+
+.hide {
+  display: none;
+}
+.show {
+  display: block;
 }
 
 

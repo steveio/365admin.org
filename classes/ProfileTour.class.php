@@ -237,58 +237,31 @@ class TourProfile extends PlacementProfile {
 	public function GetRequirements() {
 		return $this->tour_requirements;
 	}
-
-	public function GetDurationFromId() {
-		return $this->duration_from_id;
-	}
-
-	public function GetDurationToId() {
-		return $this->duration_to_id;
-	}
-
-	public function GetDurationFromLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_from_id);
-	}
-
-	public function GetDurationToLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_to_id);
-	}
-	
-	public function GetPriceFromId() {
-		return $this->price_from_id;
-	}
-
-	public function GetPriceToId() {
-		return $this->price_to_id;
-	}
-	
-	public function GetCurrencyId() {
-		return $this->currency_id;
-	}
-
-	public function GetCurrencyLabel() {
-		return $this->GetCurrencyRefdataObject()->GetValueById($this->currency_id);
-	}
-
-	public function GetPriceFromLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_from_id);
-	}
-
-	public function GetPriceToLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_to_id);
-	}
 	
 	
 	public function GetGroupSizeId() {
 		return $this->group_size_id;
 	}
-	
+
+	public function GetGroupSizeLabel()
+	{
+	    if (!is_object($this->oGroupSize))
+	    {
+	        $this->oGroupSize = new Refdata(REFDATA_INT_SMALL_RANGE);
+	        $this->oGroupSize->GetByType();
+	        $this->oGroupSize->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+	        
+	        return $this->group_size_label = $this->oGroupSize->GetValueById($this->GetGroupSizeId());
+	    } else {
+	        return $this->group_size_label;
+	    }
+	}
+
 	private function SetTransportIdList() {
 		
 		$result = Refdata::Get(REFDATA_TRAVEL_TRANSPORT, PROFILE_PLACEMENT, $this->GetId(), $labels = TRUE);
-		
 		$this->transport_id_list = array_keys($result);
-		$this->transport_labels = array_values($result); 
+		$this->transport_labels = array_values($result);
 	}
 	
 	public function GetTransportLabels() {
@@ -328,7 +301,50 @@ class TourProfile extends PlacementProfile {
 	public function GetAccomodationLabels() {
 		return $this->accomodation_labels;	
 	}
-	
+
+	public function GetTravelOptions()
+	{
+	    if (!is_object($this->oTravelOptions))
+	    {
+	        $this->oTravelOptions = new Refdata(REFDATA_TRAVEL_TRANSPORT);
+	        $aSelected = array();
+	        $aSelected = $this->GetTransportIdList();
+	        $this->oTravelOptions->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+	        return $this->travel_options_array = $this->oTravelOptions->GetLabelsFromSelectedIds($aSelected);
+	    } else {
+	        return $this->travel_options_array;
+	    }
+	}
+
+	public function GetAccomOptions()
+	{
+	    if (!is_object($this->oAccomOptions))
+	    {
+	        $this->oAccomOptions = new Refdata(REFDATA_ACCOMODATION);
+	        $aSelected = array();
+	        $aSelected = $this->GetAccomodationIdList();
+	        $this->oAccomOptions->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+	        return $this->accom_options_array = $this->oAccomOptions->GetLabelsFromSelectedIds($aSelected);
+	    } else {
+	        return $this->accom_options_array;
+	    }
+	}
+
+	public function GetMealOptions()
+	{
+	    if (!is_object($this->oMealOptions))
+	    {
+	        $this->oMealOptions = new Refdata(REFDATA_MEALS);
+	        $aSelected = array();
+	        $aSelected = $this->GetMealsIdList();
+	        $this->oMealOptions->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+	        return $this->meal_options_array = $this->oMealOptions->GetLabelsFromSelectedIds($aSelected);
+	    } else {
+	        return $this->meal_options_array;
+	    }
+	}
+
+        
 }
 
 

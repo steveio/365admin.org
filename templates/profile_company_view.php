@@ -126,28 +126,26 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 
 
 
-
 <div id="buttons" class="buttons row my-5">
 <div class="booking-enquiry">
 <h2>Contact / Enquiry</h2>
 <? 
-$aButtonHtml = $this->Get('aButtonHtml');
-if (is_array($aButtonHtml))
+$aEnquiryButtonHtml = $this->Get('aEnquiryButtonHtml');
+if (is_array($aEnquiryButtonHtml))
 {
-    foreach($aButtonHtml as $k => $v) {
+    foreach($aEnquiryButtonHtml as $k => $v) {
         print $v;
     } 
-} ?>	 		 
+} ?>
+</div>
+</div>
 
-</div>
-</div>
 
 <div class="row my-3">
 	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
 <?php 
 print $oReviewTemplate->Render();
 ?>
-
 </div>
 
 

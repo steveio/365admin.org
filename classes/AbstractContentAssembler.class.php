@@ -110,13 +110,13 @@ abstract class AbstractContentAssembler {
         $oHeader->Reload();
 
         $oReviews = new Review();
-        $aReview = $oReviews->Get($link_id,$link_type,1);
-        
+        $aReview = $oReviews->Get($link_id,$link_to,1);
+
         if (!$aReview)
         {
+            $aReview = array();
             $oReviewTemplate = new Template();
             $this->oReviewTemplate = $oReviewTemplate;
-            return;
         }
         
         $bHasReviewRating = false;
