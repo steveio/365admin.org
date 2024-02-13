@@ -91,10 +91,6 @@ class CompanyProfile extends AbstractProfile {
 		$this->SetListingRecordFl(false);
 		
 	}
-	
-	public function GetProfileType() {
-		return $this->profile_type;
-	}
 
 	/*
 	 * Get Company Profile Type (eg PROFILE_COMPANY, PROFILE_SUMMERCAMP etc )

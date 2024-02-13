@@ -89,7 +89,7 @@ h2 {
 }
 
 h3 {
-	font-size: 1.4em;
+	font-size: 1.5em;
 }
 
 h4 {
@@ -97,7 +97,7 @@ h4 {
 }
 
 p {
-	font-size: 1em;
+	font-size: 1.1em;
 	line-height: 1.4em;
 }
 
@@ -110,12 +110,8 @@ p3 {
 }
 
 p.lead {
-	font-size: 1em;
+	font-size: 1.3em;
 	font-weight: bold;
-}
-
-p.profile_text {
-	font-size: .7em;
 }
 
 .smalltext {
@@ -132,8 +128,7 @@ p.profile_text {
 }
 
  ul, li {
-
- 	font-size: .9em;
+ 	font-size: 1.1em;
 }
 
 ul, ol {
@@ -177,17 +172,16 @@ a.navlink:hover {
     color: #F62217;
 }
 
-a.navlink_profile:link,a.navlink_profile:visited {
-	font-size: .9em;
-	color: #4088b8;
+.nav-item a, .nav-item a:visited
+ {
+	font-size: .8em;
+	color: rgba(33, 37, 41, 0.75);
 	text-decoration: none;
 }
 
-a.navlink_profile:hover {
+.nav-item a:hover {
     color: #F62217;
 }
-
-
 
 .small-text, span.p_small {
 	font-size: 1em;

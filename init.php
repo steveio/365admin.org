@@ -180,9 +180,13 @@ function exception_handler($e) {
     Logger::DB(1,__FUNCTION__."()",$e->getMessage(). " ".$e->getFile(). " " . $e->getLine());
     Logger::DB(1,__FUNCTION__."()",$e->getTraceAsString());
     
-    Http::Redirect(PATH_UNDER_MAINTENANCE);
-    
-    die();
+    //Http::Redirect(PATH_UNDER_MAINTENANCE);
+
+    print_r("<pre>");
+    print_r($e);
+    print_r("</pre>");
+    die(__FILE__."::".__LINE__);
+
 }
 
 

@@ -69,7 +69,7 @@ class Validation {
 
 	public static function ValidatePlacement($p,&$aResponse) {
 
-		global $db,$oAuth;
+		global $db,$oAuth, $oSession;
 
 		$aResponse['msg'] = array();
 
@@ -117,9 +117,9 @@ class Validation {
 			if ((preg_match("/cty_/",$k)) && ($v == "on")) $iCty++;
 		}
 
-		if ($iCat == 0) $aResponse['msg']['category'] = "ERROR: Select at least one category.";
-		if ($iAct == 0) $aResponse['msg']['activity'] = "ERROR: Select at least one activity.";
-		if ($iCty == 0) $aResponse['msg']['country'] = "ERROR: Select at least one country.";
+		if ($iCat == 0) $aResponse['msg']['category'] = "Select at least one category.";
+		if ($iAct == 0) $aResponse['msg']['activity'] = "Select at least one activity.";
+		if ($iCty == 0) $aResponse['msg']['country'] = "Select at least one country.";
 
 		//if (strlen($p['email']) < 1) $aResponse['msg']['email'] = "Please enter an enquiry / sales email.</b>.";
 		//if (strlen($p['url']) < 1) $aResponse['msg']['url'] = "Please enter a more info / apply / bookings url.</b>.";
@@ -213,10 +213,6 @@ class Validation {
 
 			if (strlen($p[PROFILE_FIELD_PLACEMENT_JOB_EXPERIENCE]) > 2000) {
 				$aResponse['msg'][PROFILE_FIELD_PLACEMENT_JOB_EXPERIENCE] = "Experience must be less than 2000 chars.";
-			}
-
-			if (strlen($p[PROFILE_FIELD_PLACEMENT_JOB_REQUIREMENTS]) > 2000) {
-				$aResponse['msg'][PROFILE_FIELD_PLACEMENT_JOB_REQUIREMENTS] = "Job requirements must be less than 2000 chars.";
 			}
 
 			/*

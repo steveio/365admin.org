@@ -302,12 +302,7 @@ class PlacementProfile extends AbstractProfile {
   	public function SetCompUrlName($sCompUrlName) {
   		$this->comp_url_name = $sCompUrlName;
   	}
-  	
-  	
-  	public function GetProfileType(){
-  		return $this->type;
-  	}
-  	
+
   	public function GetTitle($trunc = 0) {
   		
   		if ($trunc >= 1) {
@@ -459,10 +454,8 @@ class PlacementProfile extends AbstractProfile {
 
 	public function DoAddUpdate($p,&$aResponse) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-				
 		global $db, $oAuth,$_CONFIG;
-				
+		
 		/* validate the submitted params */
 		if (!Validation::ValidatePlacement($p,$aResponse)) return false;
 	
@@ -510,8 +503,8 @@ class PlacementProfile extends AbstractProfile {
 				return false;
 			}
 
-		} else { /* UPDATE placement */
-
+		} else { /* UPDATE placement */		    
+		    
 			$bUrlChanged = FALSE;
 			
 			// non admin can only edit their own placements
@@ -760,8 +753,6 @@ class PlacementProfile extends AbstractProfile {
 
 	private function Update($p) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-
 		global $db,$_CONFIG;
 		
 		if (!is_numeric($p['id'])) return false;
@@ -798,7 +789,7 @@ class PlacementProfile extends AbstractProfile {
 				WHERE
 					id= ".$p['id'].";
 				";
-		
+
 		$db->query($sql);
 		
 		if ($db->getAffectedRows() != 1) {
@@ -1222,7 +1213,7 @@ class PlacementProfile extends AbstractProfile {
             $oProfile->GetCategoryInfo();
             $oProfile->GetActivityInfo();	        
 	        $oProfile->GetCountryInfo();
-	        
+
 	        $aProfile[$oProfile->GetId()] = $oProfile;
 	    }
 

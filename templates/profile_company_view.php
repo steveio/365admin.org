@@ -82,11 +82,7 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 ?>
 
 
-<? if ($oProfile->GetListingType() <=  BASIC_LISTING) { ?>
-	<p><?= htmlUtils::stripLinks(htmlUtils::convertToPlainText($oProfile->GetDescLong())); ?></p>
-<?php } else { ?>
-	<p><?= htmlUtils::convertToPlainText($oProfile->GetDescLong()); ?></p>
-<?php } ?>
+<p><?= htmlUtils::stripLinks($oProfile->GetDescLong()); ?></p>
 
 
 <? if ($oProfile->GetListingType() >= BASIC_LISTING) { ?>

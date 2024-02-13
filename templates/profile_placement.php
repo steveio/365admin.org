@@ -338,27 +338,35 @@ require_once("profile_metadata_select.php");
 		
 		<div class="row formgroup my-2">
 			<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_JOB_REFERENCE; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_JOB_REFERENCE]) > 1 ? "red" : ""; ?>">Reference</label></span>
-			<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_PLACEMENT_JOB_REFERENCE; ?>" maxlength="30" class="form-control"  name="<?= PROFILE_FIELD_PLACEMENT_JOB_REFERENCE; ?>" value="<?= $_POST[PROFILE_FIELD_PLACEMENT_JOB_REFERENCE]; ?>"  style="width: 130px;" /></span>
+			<span class="input_col"><input type="text" id="<?= PROFILE_FIELD_PLACEMENT_JOB_REFERENCE; ?>" maxlength="30" class="form-control"  name="<?= PROFILE_FIELD_PLACEMENT_JOB_REFERENCE; ?>" value="<?= $_POST[PROFILE_FIELD_PLACEMENT_JOB_REFERENCE]; ?>" /></span>
 		</div>	
 	
 		<div class="row formgroup my-2">
+			<div class="col-6">
 			<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_JOB_START_DT; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_JOB_START_DT]) > 1 ? "color:red;" : ""; ?>">Job Start Date</label><span class="red"> *</span></span>
 			<span class="input_col">
 			<?= $this->Get('JOB_START_DATE'); ?>
 			</span>
-		</div>
+			</div>
 	
-		<div class="row formgroup my-2">
+			<div class="col-6">
 			<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE]) > 1 ? "color:red;" : ""; ?>">Or start dates (if multiple)</label></span>
 			<span class="input_col"><textarea id="<?= PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE; ?>" name="<?= PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE; ?>" class="form-control" /><?= stripslashes($_POST[PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE]); ?></textarea>
 			</span>	
+			</div>
 		</div>
 	
 		<div class="row formgroup my-2">
 			<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_JOB_DURATION_LABEL; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_JOB_DURATION_LABEL]) > 1 ? "color:red;" : ""; ?>">Approx Duration / Length</label><span class="red"> *</span></span>
 			<span class="input_col">
+			<div class="row">
+			<div class="col-6">
 			from: <?= $this->Get('JOB_DURATION_FROM'); ?>
+			</div>
+			<div class="col-6">
 			to: <?= $this->Get('JOB_DURATION_TO'); ?>
+			</div>
+			</div>
 			</span>
 		</div>
 	
@@ -400,10 +408,12 @@ require_once("profile_metadata_select.php");
 		</div>
 		
 		<div class="row formgroup my-2">
+			<div class="col-6">
 			<span class="label_col"><label for="<?= PROFILE_FIELD_PLACEMENT_JOB_CLOSING_DATE; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_PLACEMENT_JOB_CLOSING_DATE]) > 1 ? "color:red;" : ""; ?>">Application Closing Date</label></span>
 			<span class="input_col">
 			<?= $this->Get('JOB_CLOSING_DATE'); ?>
 			</span>
+			</div>
 		</div>
 
 

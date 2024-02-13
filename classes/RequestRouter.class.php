@@ -16,6 +16,7 @@ define("HEADER_HTTP_500", "HTTP/1.0 500 Internal Server Error");
 
 class RequestRouter {
     
+    protected $oMVCController; // instance of MVC controller
     protected $aRequestUri; // array URI from $_REQUEST
     protected $strRequestUri; // string URL path eg /blog/article01
     protected $strContentType; // content general type: CONTENT_COMPANY, CONTENT_PLACEMENT, CONTENT_ARTICLE
@@ -30,7 +31,7 @@ class RequestRouter {
         global $oSession;
 
         try {            
-
+            
             $this->SetRequestUri($aRequestUri);
             $this->RouteMapMVC();
             $this->RouteMapStatic();
@@ -48,7 +49,12 @@ class RequestRouter {
         } catch (Exception $e)
         {
             Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
-
+            Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getTraceAsString());
+            
+            
+            print_r($e->getMessage());
+            die(__FILE__."::".__LINE__);
+            
             if ($this->strRequestUri == "/".ROUTE_ERROR)
             {
                 $this->HttpRedirect(HEADER_HTTP_500, "/back_soon.php");
@@ -241,31 +247,29 @@ class RequestRouter {
             /**
              * Now attept to match MVC routes
              */
-            $oController = $oSession->GetMVCController();
-            $oController->Reset();
-            
-            if (!$oController) {
-                $oController = new MVCController();
-                $oController->SetRouteFromXmlFile(PATH_TO_MVC_ROUTE_MAP,$oBrand->GetSiteId());                
-                $oSession->SetMVCController($oController);
+            $this->oMVCController = $oSession->GetMVCController();
+
+            if (is_object($this->oMVCController))            
+                $this->oMVCController->Reset();
+
+                if (!$this->oMVCController) {
+                    $this->oMVCController = new MVCController();
+                    $this->oMVCController->SetRouteFromXmlFile(PATH_TO_MVC_ROUTE_MAP,$oBrand->GetSiteId());                
+                    $oSession->SetMVCController($this->oMVCController);
             }
 
-            $oController->SetRequestUri($this->GetRequestUri());
-            $oController->Process();
-
+            $this->oMVCController->SetRequestUri($this->GetRequestUri());
+            
+            $this->oMVCController->Process();
+            
             $oSession->Save();
 
-            if ($oController->GetPassThrough())
-            {
-                $oController->GetPassThrough();
-            }
-
-            if ($oController->GetPassThrough())
+            if ($this->oMVCController->GetPassThrough())
             {
                 return true;
             }
-
-            if (is_numeric($oController->GetCurrentRouteId())) // route matched, nothing further to do
+            
+            if (is_numeric($this->oMVCController->GetCurrentRouteId())) // route matched, nothing further to do
             {
                 die();
             }
@@ -368,10 +372,12 @@ class RequestRouter {
             $oContentAssembler->ProcessPlacementList();
         }
 
+        $this->oMVCController->SetCurrentRouteId(10);
+        $oProfileController = $this->oMVCController->GetRouteById(10);
+        
         // view/add/edit/delete placement
-        $oProfileController = new PlacementController();
         $oProfileController->Process();
-
+        
         die();
     }
 

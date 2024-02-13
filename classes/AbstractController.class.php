@@ -123,7 +123,7 @@ abstract class AbstractController {
 			
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR);
 			$oMessage->SetMsgFromArray($errors);
-			$this->SetMessage($oMessage);		
+			$this->SetMessage($oMessage);	
 		} elseif (is_string($errors)) {
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR, $errors);
 			$this->SetMessage($oMessage);

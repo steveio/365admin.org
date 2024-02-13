@@ -81,10 +81,10 @@ abstract class AbstractProfile implements TemplateInterface {
 	    return $this->fetch_mode;
 	}
 
-	public function GetDescShortPlaintext($trunc = 160)
+	public function GetDescShortPlaintext($trunc = null)
 	{
 	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short));
-	    if (strlen($str) > $trunc)
+	    if (is_numeric($trunc) && strlen($str) > $trunc)
 	    {
 	        return substr($str, 0, $trunc)."...";
 	    } else {
@@ -111,6 +111,10 @@ abstract class AbstractProfile implements TemplateInterface {
 			return PROFILE_PLACEMENT;
 		}
 	
+	}
+
+	public function GetProfileType() {
+	    return $this->profile_type;
 	}
 
 	public function GetType() {

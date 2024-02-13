@@ -10,7 +10,7 @@ class MessageProcessor
     public function GetMessagePanel()
     {
         global $oSession;
-        
+    
         $oMessagesPanel = new Template();
         
         // no session or session expired (note this only works in contexts/domains where session is mandatory
@@ -21,7 +21,7 @@ class MessageProcessor
 
         // message(s) in _SESSION
         } elseif (count($oSession->GetMessage()) >= 1) { 
-            
+    
             $oMessagesPanel->Set('UI_MSG', $oSession->GetMessage());
             $oSession->UnsetMessage();
         

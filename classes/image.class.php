@@ -173,7 +173,7 @@ class Image {
 	    $this->aspect = $aRow['aspect'];
 	}
 
-	public function GetHtml($size,$alt = '', $class = '', $noOutputSize = FALSE) {
+	public function GetHtml($size,$alt = '', $class = 'img-fluid rounded mb-4 thumbnail', $noOutputSize = FALSE) {
 
 		$width = ($size != "") ? ImageSize::Get($size,$this->GetAspect(),"WIDTH") : $this->GetWidth();
 		$height = ($size != "") ? ImageSize::Get($size,$this->GetAspect(),"HEIGHT") : $this->GetHeight();

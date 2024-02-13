@@ -54,10 +54,10 @@ class CompanyProfileController extends ProfileController {
 
 		if (!$this->SetMode()) // determine request type ( VIEW || ADD || EDIT )
 		{
-		    $this->bPassThrough = true;
+		    $this->bPassThrough = true;		    
 		    return false; 
 		}
-
+		
 		$this->SetInValid();
 
 		switch($this->GetMode()) {
@@ -108,8 +108,9 @@ class CompanyProfileController extends ProfileController {
 
 		// Non MVC handled request URL - view/edit placement, company A-Z... return to RequestRouter
 		if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
-		    (strlen($this->aRequestArray[2]) > 2) &&
-		    (strlen($this->aRequestArray[3]) > 1))
+		    (strlen($this->aRequestArray[2]) > 1) &&
+		    (strlen($this->aRequestArray[3]) > 1) &&
+		    ($this->aRequestArray[3] != "edit"))
 		{
 		    return false;
 		}
@@ -323,7 +324,7 @@ EOT;
 
 		// set profile type to existing id if this is a previously saved profile
 		if ($this->GetMode() == self::MODE_EDIT) {
-			$profile_type = $this->GetCompanyProfile()->GetProfileType();
+			$profile_type = $this->GetProfile()->GetProfileType();
 		} else { // this is a new profile, set default id
 			$profile_type = $brand_default_profile_type;
 		}
@@ -348,12 +349,12 @@ EOT;
 		}
 
 		/* whether to display category, activity, country options */
-		$this->GetCompanyForm()->Set('DISPLAY_CAT_ACT_CTY_OPTIONS',$oBrand->GetDisplayCatActCtyOptions());
+		$this->GetForm()->Set('DISPLAY_CAT_ACT_CTY_OPTIONS',$oBrand->GetDisplayCatActCtyOptions());
 
-		$this->GetCompanyForm()->Set('COMPANY_TITLE',$oBrand->GetCompanyTitle());
+		$this->GetForm()->Set('COMPANY_TITLE',$oBrand->GetCompanyTitle());
 
 		if (strlen($oBrand->GetFullDescLabel()) > 1) {
-			$this->GetCompanyForm()->Set('FULL_DESC_LABEL',$oBrand->GetFullDescLabel());
+			$this->GetForm()->Set('FULL_DESC_LABEL',$oBrand->GetFullDescLabel());
 		}
 
 		// an object containing an array of all available profile types for this brand
@@ -361,14 +362,14 @@ EOT;
 
 		/* company profile type HTML select list */
 		$selected_profile_type = isset($_POST[PROFILE_FIELD_COMP_PROFILE_TYPE_ID]) ? $_POST[PROFILE_FIELD_COMP_PROFILE_TYPE_ID] : $profile_type;
-		$this->GetCompanyForm()->Set('PROFILE_TYPE_LIST',$oProfileType->GetDDlist($selected_profile_type,PROFILE_FIELD_COMP_PROFILE_TYPE_ID,PROFILE_FIELD_COMP_PROFILE_TYPE_ID));
-		$this->GetCompanyForm()->Set('PROFILE_TYPE_COUNT',$oProfileType->Count());
+		$this->GetForm()->Set('PROFILE_TYPE_LIST',$oProfileType->GetDDlist($selected_profile_type,PROFILE_FIELD_COMP_PROFILE_TYPE_ID,PROFILE_FIELD_COMP_PROFILE_TYPE_ID));
+		$this->GetForm()->Set('PROFILE_TYPE_COUNT',$oProfileType->Count());
 		if ($oProfileType->Count() == 1) {
-			$this->GetCompanyForm()->Set('PROFILE_TYPE_SELECTED_ID',$profile_type);
+			$this->GetForm()->Set('PROFILE_TYPE_SELECTED_ID',$profile_type);
 		}
 
 		/* set active set of extended profile elements */
-		$this->GetCompanyForm()->Set('PROFILE_ACTIVE_PANEL','profile_type_'.$selected_profile_type);
+		$this->GetForm()->Set('PROFILE_ACTIVE_PANEL','profile_type_'.$selected_profile_type);
 
 		/* set type specific form elements/labels */
 		$this->SetProfileTypeSpecificFormValues();
@@ -378,10 +379,10 @@ EOT;
 		if (isset($_POST[PROFILE_FIELD_COMP_COUNTRY_ID])) {
 			$selected = $_POST[PROFILE_FIELD_COMP_COUNTRY_ID];
 		} else {
-			$selected = $this->GetCompanyProfile()->GetCountryId();
+			$selected = $this->GetProfile()->GetCountryId();
 		}
-		$this->GetCompanyForm()->Set('COUNTRY_ID_SELECTED',$selected);
-		$this->GetCompanyForm()->Set('COUNTRY_ID_LIST',$oCountry->GetCountryDropDown($selected,PROFILE_FIELD_COMP_COUNTRY_ID,PROFILE_FIELD_COMP_COUNTRY_ID));
+		$this->GetForm()->Set('COUNTRY_ID_SELECTED',$selected);
+		$this->GetForm()->Set('COUNTRY_ID_LIST',$oCountry->GetCountryDropDown($selected,PROFILE_FIELD_COMP_COUNTRY_ID,PROFILE_FIELD_COMP_COUNTRY_ID));
 
 		/* set state select list */
 		$oState = new Refdata(REFDATA_US_STATE);
@@ -391,14 +392,14 @@ EOT;
 		if (isset($_POST[PROFILE_FIELD_COMP_STATE_ID])) {
 			$selected = $_POST[PROFILE_FIELD_COMP_STATE_ID];
 		} else {
-			$selected = $this->GetCompanyProfile()->GetStateId();
+			$selected = $this->GetProfile()->GetStateId();
 		}
-		$this->GetCompanyForm()->Set('US_STATE_LIST',$oState->GetDDlist($selected));
+		$this->GetForm()->Set('US_STATE_LIST',$oState->GetDDlist($selected));
 
 		/* category, activity, country lists */
-		$this->GetCompanyForm()->Set('ACTIVITY_LIST',$this->GetActivityList());
-		$this->GetCompanyForm()->Set('CATEGORY_LIST',$this->GetCategoryList());
-		$this->GetCompanyForm()->Set('COUNTRY_LIST',$this->GetCountryList());
+		$this->GetForm()->Set('ACTIVITY_LIST',$this->GetActivityList());
+		$this->GetForm()->Set('CATEGORY_LIST',$this->GetCategoryList());
+		$this->GetForm()->Set('COUNTRY_LIST',$this->GetCountryList());
 
 
 		/* setup admin listing options (or defaults for a new listing request) */
@@ -412,20 +413,20 @@ EOT;
 		$this->SetVolunteerProjectFormElements();
 
 		// inject profile type specific form elements into overall page template
-		$this->GetCompanyForm()->Set('EXTENDED_FIELDSET_GENERAL_PROFILE', $this->GetGeneralProfileForm()->Render());
-		$this->GetCompanyForm()->Set('EXTENDED_FIELDSET_SUMMERCAMP', $this->GetSummerCampForm()->Render());
-		$this->GetCompanyForm()->Set('EXTENDED_FIELDSET_SEASONALJOBS', $this->GetSeasonalJobsForm()->Render());
-		$this->GetCompanyForm()->Set('EXTENDED_FIELDSET_VOLUNTEER_PROJECT', $this->GetVolunteerProjectForm()->Render());
-		$this->GetCompanyForm()->Set('EXTENDED_FIELDSET_TEACHING_PROJECT', $this->GetTeachingProjectForm()->Render());
+		$this->GetForm()->Set('EXTENDED_FIELDSET_GENERAL_PROFILE', $this->GetGeneralProfileForm()->Render());
+		$this->GetForm()->Set('EXTENDED_FIELDSET_SUMMERCAMP', $this->GetSummerCampForm()->Render());
+		$this->GetForm()->Set('EXTENDED_FIELDSET_SEASONALJOBS', $this->GetSeasonalJobsForm()->Render());
+		$this->GetForm()->Set('EXTENDED_FIELDSET_VOLUNTEER_PROJECT', $this->GetVolunteerProjectForm()->Render());
+		$this->GetForm()->Set('EXTENDED_FIELDSET_TEACHING_PROJECT', $this->GetTeachingProjectForm()->Render());
 
 		// general template parameters
-		$this->GetCompanyForm()->Set('STEP_TITLE',$step_title = '');
-		$this->GetCompanyForm()->Set('VALID',$this->Valid());
-		$this->GetCompanyForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
-		$this->GetCompanyForm()->Set('COMPANY_PROFILE',$this->GetCompanyProfile());
+		$this->GetForm()->Set('STEP_TITLE',$step_title = '');
+		$this->GetForm()->Set('VALID',$this->Valid());
+		$this->GetForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
+		$this->GetForm()->Set('COMPANY_PROFILE',$this->GetProfile());
 
 
-		$this->GetCompanyForm()->LoadTemplate("profile_company.php");
+		$this->GetForm()->LoadTemplate("profile_company.php");
 
 		/*
 		 * add company profile edit form to tabbed panel,
@@ -437,6 +438,7 @@ EOT;
 		print $this->GetTabbedPanel()->Render();
 		print $oFooter->Render();
 
+		die();
 	}
 
 
@@ -448,17 +450,17 @@ EOT;
 		if ($oAuth->oUser->isAdmin) {
 			// listing options
 			$aListingOption = ListingOption::GetAll($_CONFIG['site_id'],$currency = 'GBP',$from = 0, $to = 3);
-			$this->GetCompanyForm()->Set('ADMIN_LISTING_OPTIONS',$aListingOption);
+			$this->GetForm()->Set('ADMIN_LISTING_OPTIONS',$aListingOption);
 
 			// listing type (eg FREE, BASIC, ENHANCED...)
 			$oListing = new Listing();
-			if ((!is_numeric($this->GetCompanyProfile()->GetId())) ||
-				(!$oListing->GetCurrentByCompanyId($this->GetCompanyProfile()->GetId()))
+			if ((!is_numeric($this->GetProfile()->GetId())) ||
+				(!$oListing->GetCurrentByCompanyId($this->GetProfile()->GetId()))
 			) {
-				$this->GetCompanyProfile()->SetListingRecordFl(FALSE);
-				$this->GetCompanyForm()->Set('ADMIN_CURRENT_LISTING_OBJECT',NULL);
+				$this->GetProfile()->SetListingRecordFl(FALSE);
+				$this->GetForm()->Set('ADMIN_CURRENT_LISTING_OBJECT',NULL);
 			} else {
-				$this->GetCompanyForm()->Set('ADMIN_CURRENT_LISTING_OBJECT',$oListing);
+				$this->GetForm()->Set('ADMIN_CURRENT_LISTING_OBJECT',$oListing);
 			}
 
 
@@ -467,11 +469,11 @@ EOT;
 			$aSelected = array();
 			if (isset($_POST['submit'])) {
 				$aSelected = Mapping::GetIdByKey($_REQUEST,"web_");
-			} elseif($this->GetCompanyProfile()->GetId()) {
-				$aSelected = $oWebsite->GetCompanyWebsiteList($this->GetCompanyProfile()->GetId());
+			} elseif($this->GetProfile()->GetId()) {
+				$aSelected = $oWebsite->GetCompanyWebsiteList($this->GetProfile()->GetId());
 			}
 
-			$this->GetCompanyForm()->Set('ADMIN_WEBSITE_HOMEPAGE_OPTIONS',$oWebsite->GetSiteSelectList($aSelected));
+			$this->GetForm()->Set('ADMIN_WEBSITE_HOMEPAGE_OPTIONS',$oWebsite->GetSiteSelectList($aSelected));
 
 
 		}
@@ -485,7 +487,7 @@ EOT;
 		if ($this->GetMode() == self::MODE_ADD) {
 			$step_title = "Company Profile - Step 3 of 4";
 		} else {
-			$step_title = "Edit Company Profile - ".$this->GetCompanyProfile()->GetTitle();
+			$step_title = "Edit Company Profile - ".$this->GetProfile()->GetTitle();
 		}
 
 	}
@@ -495,7 +497,7 @@ EOT;
 	protected function SetGeneralProfileFormElements() {
 
 		$this->GetGeneralProfileForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
-		$this->GetGeneralProfileForm()->Set('COMPANY_PROFILE',$this->GetCompanyProfile());
+		$this->GetGeneralProfileForm()->Set('COMPANY_PROFILE',$this->GetProfile());
 
 		$this->GetGeneralProfileForm()->LoadTemplate("general_company_profile.php");
 	}
@@ -512,8 +514,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SEASONALJOBS_DURATION_FROM];
-		} elseif ($this->GetCompanyProfile() instanceof SeasonalJobEmployerProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationFromId();
+		} elseif ($this->GetProfile() instanceof SeasonalJobEmployerProfile) {
+			$selected = $this->GetProfile()->GetDurationFromId();
 		}
 		$this->GetSeasonalJobsForm()->Set('DURATION_FROM',$oDuration->GetDDlist($selected));
 
@@ -523,8 +525,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SEASONALJOBS_DURATION_TO];
-		} elseif ($this->GetCompanyProfile() instanceof SeasonalJobEmployerProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationToId();
+		} elseif ($this->GetProfile() instanceof SeasonalJobEmployerProfile) {
+			$selected = $this->GetProfile()->GetDurationToId();
 		}
 		$this->GetSeasonalJobsForm()->Set('DURATION_TO',$oDuration->GetDDlist($selected));
 
@@ -535,14 +537,14 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SEASONALJOBS_NO_STAFF];
-		} elseif ($this->GetCompanyProfile() instanceof SeasonalJobEmployerProfile) {
-			$selected = $this->GetCompanyProfile()->GetNoStaff();
+		} elseif ($this->GetProfile() instanceof SeasonalJobEmployerProfile) {
+			$selected = $this->GetProfile()->GetNoStaff();
 		}
 		$this->GetSeasonalJobsForm()->Set('NO_STAFF',$oNoStaff->GetDDlist($selected));
 
 
 		$this->GetSeasonalJobsForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
-		$this->GetSeasonalJobsForm()->Set('COMPANY_PROFILE',$this->GetCompanyProfile());
+		$this->GetSeasonalJobsForm()->Set('COMPANY_PROFILE',$this->GetProfile());
 
 		$this->GetSeasonalJobsForm()->LoadTemplate("profile_seasonaljobs.php");
 
@@ -560,8 +562,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_VOLUNTEER_NO_PLACEMENTS];
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetNoPlacements();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$selected = $this->GetProfile()->GetNoPlacements();
 		}
 		$this->GetVolunteerProjectForm()->Set('NO_PLACEMENTS',$oNoStaff->GetDDlist($selected));
 
@@ -573,8 +575,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_VOLUNTEER_ORG_TYPE];
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetOrgType();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$selected = $this->GetProfile()->GetOrgType();
 		}
 		$this->GetVolunteerProjectForm()->Set('ORG_TYPE',$oOrgType->GetDDlist($selected));
 
@@ -586,8 +588,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_VOLUNTEER_DURATION_FROM];
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationFromId();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$selected = $this->GetProfile()->GetDurationFromId();
 		}
 		$this->GetVolunteerProjectForm()->Set('DURATION_FROM',$oDuration->GetDDlist($selected));
 
@@ -597,8 +599,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_VOLUNTEER_DURATION_TO];
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationToId();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$selected = $this->GetProfile()->GetDurationToId();
 		}
 		$this->GetVolunteerProjectForm()->Set('DURATION_TO',$oDuration->GetDDlist($selected));
 
@@ -610,8 +612,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_VOLUNTEER_PRICE_FROM];
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetPriceFromId();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$selected = $this->GetProfile()->GetPriceFromId();
 		}
 		$this->GetVolunteerProjectForm()->Set('PRICE_FROM',$oPriceFrom->GetDDlist($selected));
 
@@ -621,8 +623,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_VOLUNTEER_PRICE_TO];
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetPriceToId();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$selected = $this->GetProfile()->GetPriceToId();
 		}
 		$this->GetVolunteerProjectForm()->Set('PRICE_TO',$oPriceTo->GetDDlist($selected));
 
@@ -633,8 +635,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_VOLUNTEER_CURRENCY];
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetCurrencyId();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$selected = $this->GetProfile()->GetCurrencyId();
 		}
 		$this->GetVolunteerProjectForm()->Set('CURRENCY',$oCurrency->GetDDlist($selected, $no_default = TRUE));
 
@@ -644,8 +646,8 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_SPECIES_PREFIX);
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$aSelected = $this->GetCompanyProfile()->GetSpeciesList();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$aSelected = $this->GetProfile()->GetSpeciesList();
 		}
 		$this->GetVolunteerProjectForm()->Set('SPECIES_LIST_SELECTED_COUNT',count($aSelected));
 		$this->GetVolunteerProjectForm()->Set('SPECIES_LIST',$oSpecies->GetCheckboxList(REFDATA_SPECIES_PREFIX,$aSelected));
@@ -655,8 +657,8 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_HABITATS_PREFIX);
-		} elseif ($this->GetCompanyProfile() instanceof VolunteerTravelProjectProfile) {
-			$aSelected = $this->GetCompanyProfile()->GetHabitatsList();
+		} elseif ($this->GetProfile() instanceof VolunteerTravelProjectProfile) {
+			$aSelected = $this->GetProfile()->GetHabitatsList();
 		}
 		$this->GetVolunteerProjectForm()->Set('HABITATS_LIST_SELECTED_COUNT',count($aSelected));
 		$this->GetVolunteerProjectForm()->Set('HABITATS_LIST',$oHabitats->GetCheckboxList(REFDATA_HABITATS_PREFIX,$aSelected));
@@ -664,7 +666,7 @@ EOT;
 
 
 		$this->GetVolunteerProjectForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
-		$this->GetVolunteerProjectForm()->Set('COMPANY_PROFILE',$this->GetCompanyProfile());
+		$this->GetVolunteerProjectForm()->Set('COMPANY_PROFILE',$this->GetProfile());
 
 		$this->GetVolunteerProjectForm()->LoadTemplate("profile_volunteer.php");
 
@@ -681,8 +683,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_TEACHING_DURATION_FROM];
-		} elseif ($this->GetCompanyProfile() instanceof TeachingProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationFromId();
+		} elseif ($this->GetProfile() instanceof TeachingProjectProfile) {
+			$selected = $this->GetProfile()->GetDurationFromId();
 		}
 		$this->GetTeachingProjectForm()->Set('DURATION_FROM',$oDuration->GetDDlist($selected));
 
@@ -692,8 +694,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_TEACHING_DURATION_TO];
-		} elseif ($this->GetCompanyProfile() instanceof TeachingProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationToId();
+		} elseif ($this->GetProfile() instanceof TeachingProjectProfile) {
+			$selected = $this->GetProfile()->GetDurationToId();
 		}
 		$this->GetTeachingProjectForm()->Set('DURATION_TO',$oDuration->GetDDlist($selected));
 
@@ -704,8 +706,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_TEACHING_NO_TEACHERS];
-		} elseif ($this->GetCompanyProfile() instanceof TeachingProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetNoTeachers();
+		} elseif ($this->GetProfile() instanceof TeachingProjectProfile) {
+			$selected = $this->GetProfile()->GetNoTeachers();
 		}
 		$this->GetTeachingProjectForm()->Set('NUMBER_OF_TEACHERS',$oNoStaff->GetDDlist($selected));
 
@@ -716,8 +718,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_TEACHING_CLASS_SIZE];
-		} elseif ($this->GetCompanyProfile() instanceof TeachingProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetClassSize();
+		} elseif ($this->GetProfile() instanceof TeachingProjectProfile) {
+			$selected = $this->GetProfile()->GetClassSize();
 		}
 		$this->GetTeachingProjectForm()->Set('CLASS_SIZE',$oClassSize->GetDDlist($selected));
 
@@ -728,14 +730,14 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_TEACHING_DURATION];
-		} elseif ($this->GetCompanyProfile() instanceof TeachingProjectProfile) {
-			$selected = $this->GetCompanyProfile()->GetDuration();
+		} elseif ($this->GetProfile() instanceof TeachingProjectProfile) {
+			$selected = $this->GetProfile()->GetDuration();
 		}
 		$this->GetTeachingProjectForm()->Set('DURATION_LENGTH',$oDuration->GetDDlist($selected));
 
 
 		$this->GetTeachingProjectForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
-		$this->GetTeachingProjectForm()->Set('COMPANY_PROFILE',$this->GetCompanyProfile());
+		$this->GetTeachingProjectForm()->Set('COMPANY_PROFILE',$this->GetProfile());
 
 		$this->GetTeachingProjectForm()->LoadTemplate("profile_teaching.php");
 
@@ -754,8 +756,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_DURATION_FROM];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationFromId();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetDurationFromId();
 		}
 		$this->GetSummerCampForm()->Set('DURATION_FROM',$oDuration->GetDDlist($selected));
 
@@ -765,8 +767,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_DURATION_TO];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetDurationToId();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetDurationToId();
 		}
 		$this->GetSummerCampForm()->Set('DURATION_TO',$oDuration->GetDDlist($selected));
 
@@ -778,8 +780,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetPriceFromId();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetPriceFromId();
 		}
 		$this->GetSummerCampForm()->Set('PRICE_FROM',$oPriceFrom->GetDDlist($selected));
 
@@ -789,8 +791,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_PRICE_TO];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetPriceToId();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetPriceToId();
 		}
 		$this->GetSummerCampForm()->Set('PRICE_TO',$oPriceTo->GetDDlist($selected));
 
@@ -801,8 +803,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_CURRENCY];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetCurrencyId();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetCurrencyId();
 		}
 		if (!is_numeric($selected)) {
 			$selected = 292; // USD
@@ -813,8 +815,8 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_ACTIVITY_PREFIX);
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$aSelected = $this->GetCompanyProfile()->GetCampActivityList();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$aSelected = $this->GetProfile()->GetCampActivityList();
 		}
 		$this->GetSummerCampForm()->Set('CAMP_ACTIVITY_LIST',$oCampActivity->GetCheckboxList(REFDATA_ACTIVITY_PREFIX,$aSelected));
 
@@ -823,8 +825,8 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_CAMP_TYPE_PREFIX);
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$aSelected = $this->GetCompanyProfile()->GetCampTypeList();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$aSelected = $this->GetProfile()->GetCampTypeList();
 		}
 		$this->GetSummerCampForm()->Set('CAMP_TYPE_LIST',$oCampType->GetCheckboxList(REFDATA_CAMP_TYPE_PREFIX,$aSelected));
 
@@ -833,8 +835,8 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_CAMP_JOB_TYPE_PREFIX);
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$aSelected = $this->GetCompanyProfile()->GetCampJobTypeList();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$aSelected = $this->GetProfile()->GetCampJobTypeList();
 		}
 		$this->GetSummerCampForm()->Set('CAMP_JOB_TYPE_LIST',$oCampJobType->GetCheckboxList(REFDATA_CAMP_JOB_TYPE_PREFIX,$aSelected));
 
@@ -845,8 +847,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_NO_STAFF];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetNoStaff();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetNoStaff();
 		}
 		$this->GetSummerCampForm()->Set('NUMBER_OF_STAFF_LIST',$oNoStaff->GetDDlist($selected));
 
@@ -857,8 +859,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetCampGender();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetCampGender();
 		}
 		$this->GetSummerCampForm()->Set('CAMP_GENDER_LIST',$oCampGender->GetDDlist($selected));
 
@@ -869,8 +871,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetStaffGender();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetStaffGender();
 		}
 		$this->GetSummerCampForm()->Set('STAFF_GENDER_LIST',$oStaffGender->GetDDlist($selected));
 
@@ -881,8 +883,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_CAMP_RELIGION];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetCampReligion();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetCampReligion();
 		}
 		$this->GetSummerCampForm()->Set('CAMP_RELIGION_LIST',$oCampReligion->GetDDlist($selected));
 
@@ -894,8 +896,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetStaffOrigin();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetStaffOrigin();
 		}
 		$this->GetSummerCampForm()->Set('STAFF_ORIGIN_LIST',$oStaffOrigin->GetDDlist($selected));
 
@@ -906,8 +908,8 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_FROM];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetCamperAgeFromId();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetCamperAgeFromId();
 		}
 		$this->GetSummerCampForm()->Set('CAMPER_AGE_FROM',$oCamperAge->GetDDlist($selected));
 
@@ -917,14 +919,14 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_TO];
-		} elseif ($this->GetCompanyProfile() instanceof SummerCampProfile) {
-			$selected = $this->GetCompanyProfile()->GetCamperAgeToId();
+		} elseif ($this->GetProfile() instanceof SummerCampProfile) {
+			$selected = $this->GetProfile()->GetCamperAgeToId();
 		}
 		$this->GetSummerCampForm()->Set('CAMPER_AGE_TO',$oCamperAge->GetDDlist($selected));
 
 
 		$this->GetSummerCampForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
-		$this->GetSummerCampForm()->Set('COMPANY_PROFILE',$this->GetCompanyProfile());
+		$this->GetSummerCampForm()->Set('COMPANY_PROFILE',$this->GetProfile());
 
 		$this->GetSummerCampForm()->LoadTemplate("profile_summercamp.php");
 
@@ -936,36 +938,36 @@ EOT;
 
 		global $_CONFIG;
 
-		$_POST[PROFILE_FIELD_COMP_TITLE] = $this->GetCompanyProfile()->GetTitle();
-		$_POST[PROFILE_FIELD_COMP_DESC_SHORT] = $this->GetCompanyProfile()->GetDescShort();
-		$_POST[PROFILE_FIELD_COMP_DESC_LONG] = $this->GetCompanyProfile()->GetDescLong();
+		$_POST[PROFILE_FIELD_COMP_TITLE] = $this->GetProfile()->GetTitle();
+		$_POST[PROFILE_FIELD_COMP_DESC_SHORT] = $this->GetProfile()->GetDescShort();
+		$_POST[PROFILE_FIELD_COMP_DESC_LONG] = $this->GetProfile()->GetDescLong();
 
 		foreach($_CONFIG['aProfileVersion'] as $version_id => $version_name) {
 
-			$this->GetCompanyProfile()->SetProfileVersionIdToFetch($version_id);
-			$this->GetCompanyProfile()->SetProfileVersionNoDefault(TRUE);
+			$this->GetProfile()->SetProfileVersionIdToFetch($version_id);
+			$this->GetProfile()->SetProfileVersionNoDefault(TRUE);
 
 			$pv_prefix = "PV::".$version_id."::";
 
-			$_POST[$pv_prefix.PROFILE_FIELD_COMP_TITLE] = $this->GetCompanyProfile()->GetTitle();
-			$_POST[$pv_prefix.PROFILE_FIELD_COMP_DESC_SHORT] = $this->GetCompanyProfile()->GetDescShort();
-			$_POST[$pv_prefix.PROFILE_FIELD_COMP_DESC_LONG] = $this->GetCompanyProfile()->GetDescLong();
+			$_POST[$pv_prefix.PROFILE_FIELD_COMP_TITLE] = $this->GetProfile()->GetTitle();
+			$_POST[$pv_prefix.PROFILE_FIELD_COMP_DESC_SHORT] = $this->GetProfile()->GetDescShort();
+			$_POST[$pv_prefix.PROFILE_FIELD_COMP_DESC_LONG] = $this->GetProfile()->GetDescLong();
 
 		}
 
-		$_POST[PROFILE_FIELD_COMP_URL] = $this->GetCompanyProfile()->GetUrl();
-		$_POST[PROFILE_FIELD_COMP_EMAIL] = $this->GetCompanyProfile()->GetEmail();
-		$_POST[PROFILE_FIELD_COMP_APPLY_URL] = $this->GetCompanyProfile()->GetApplyUrl();
-		$_POST[PROFILE_FIELD_COMP_ADDRESS] = $this->GetCompanyProfile()->GetAddress();
-		$_POST[PROFILE_FIELD_COMP_LOCATION] = $this->GetCompanyProfile()->GetLocation();
-		$_POST[PROFILE_FIELD_COMP_TELEPHONE] = $this->GetCompanyProfile()->GetTel();
+		$_POST[PROFILE_FIELD_COMP_URL] = $this->GetProfile()->GetUrl();
+		$_POST[PROFILE_FIELD_COMP_EMAIL] = $this->GetProfile()->GetEmail();
+		$_POST[PROFILE_FIELD_COMP_APPLY_URL] = $this->GetProfile()->GetApplyUrl();
+		$_POST[PROFILE_FIELD_COMP_ADDRESS] = $this->GetProfile()->GetAddress();
+		$_POST[PROFILE_FIELD_COMP_LOCATION] = $this->GetProfile()->GetLocation();
+		$_POST[PROFILE_FIELD_COMP_TELEPHONE] = $this->GetProfile()->GetTel();
 
-		$_POST[PROFILE_FIELD_COMP_GENERAL_DURATION] = $this->GetCompanyProfile()->GetDuration();
-		$_POST[PROFILE_FIELD_COMP_GENERAL_PLACEMENT_INFO] = $this->GetCompanyProfile()->GetPlacementInfo();
-		$_POST[PROFILE_FIELD_COMP_GENERAL_COSTS] = $this->GetCompanyProfile()->GetCosts();
+		$_POST[PROFILE_FIELD_COMP_GENERAL_DURATION] = $this->GetProfile()->GetDuration();
+		$_POST[PROFILE_FIELD_COMP_GENERAL_PLACEMENT_INFO] = $this->GetProfile()->GetPlacementInfo();
+		$_POST[PROFILE_FIELD_COMP_GENERAL_COSTS] = $this->GetProfile()->GetCosts();
 
 		/* set extended type specific form element values */
-		$this->GetCompanyProfile()->SetTypeSpecificFormValues();
+		$this->GetProfile()->SetTypeSpecificFormValues();
 
 	}
 
@@ -986,7 +988,7 @@ EOT;
 
 
 	/* get a company profile in preparation for editting */
-	protected function GetCompanyProfileFromDb( $id ) {
+	protected function GetProfileFromDb( $id ) {
 
 		try {
 			$profile_type = CompanyProfile::GetTypeById( $id );
@@ -1021,7 +1023,7 @@ EOT;
 	/* process a request to edit a company profile */
 	protected function EditProfile() {
 
-        $this->GetCompanyProfileFromDb( $this->GetCompanyId() );
+        $this->GetProfileFromDb( $this->GetCompanyId() );
 
 		// handle update if form submitted
 		if (isset($_POST['submit'])) {
@@ -1031,7 +1033,7 @@ EOT;
 		}
 
 		// refresh company profile
-		$this->GetCompanyProfileFromDb( $this->GetCompanyId() );
+		$this->GetProfileFromDb( $this->GetCompanyId() );
 
 		$this->SetFormValuesFromCompanyProfile(); // set _POST form values from $this->oCompanyProfile
 
@@ -1151,15 +1153,15 @@ EOT;
 			if (isset($c['status']) && $c['status'] == true) { // admin has set approved field to TRUE
 				$bApproved = TRUE;
 			} else { // set approved field to current state
-				$bApproved = $this->GetCompanyProfile()->GetStatus();
+				$bApproved = $this->GetProfile()->GetStatus();
 			}
 
 			// set other admin only options (eg listing type / level), these cannot be changed by company user
 			if (!$oAuth->oUser->isAdmin) {
-				$c[PROFILE_FIELD_COMP_PROD_TYPE] = $this->GetCompanyProfile()->GetProdType();
-				$c[PROFILE_FIELD_COMP_PROFILE_QUOTA] = $this->GetCompanyProfile()->GetProfileQuota();
-				$c[PROFILE_FIELD_COMP_PROFILE_OPTIONS] = $this->GetCompanyProfile()->GetProfileOptionBitmap();
-				$c[PROFILE_FIELD_COMP_ENQUIRY_OPTIONS] = $this->GetCompanyProfile()->GetEnquiryOptionBitmap();
+				$c[PROFILE_FIELD_COMP_PROD_TYPE] = $this->GetProfile()->GetProdType();
+				$c[PROFILE_FIELD_COMP_PROFILE_QUOTA] = $this->GetProfile()->GetProfileQuota();
+				$c[PROFILE_FIELD_COMP_PROFILE_OPTIONS] = $this->GetProfile()->GetProfileOptionBitmap();
+				$c[PROFILE_FIELD_COMP_ENQUIRY_OPTIONS] = $this->GetProfile()->GetEnquiryOptionBitmap();
 			}
 		}
 
@@ -1177,7 +1179,7 @@ EOT;
 		}
 
 		/* try to add / update company profile */
-		$result = $this->GetCompanyProfile()->DoAddUpdate($c,$response,$bRedirect = false,$bApproved,$bTX = TRUE);
+		$result = $this->GetProfile()->DoAddUpdate($c,$response,$bRedirect = false,$bApproved,$bTX = TRUE);
 		if($result) {
 
 			Logger::DB(2,get_class($this)."::".__FUNCTION__."()","OK id: ".$response['id']);
@@ -1302,8 +1304,8 @@ EOT;
 
 		$aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
 
-		if (is_array($this->GetCompanyProfile()->category_array)) {
-			$aSelected = $this->GetCompanyProfile()->category_array;
+		if (is_array($this->GetProfile()->category_array)) {
+			$aSelected = $this->GetProfile()->category_array;
 			if (!$oAuth->oUser->isAdmin) {
 				// reduce number selected based on categories displayed on this site only
 				$aCatVisible = $oCategory->GetCategoriesByWebsite($_CONFIG['site_id']);
@@ -1316,54 +1318,11 @@ EOT;
 			$aSelected = $this->SetDefaultCategoryId();
 		}
 
-		$this->GetCompanyForm()->Set('CATEGORY_LIST_SELECTED_COUNT',count($aSelected));
+		$this->GetForm()->Set('CATEGORY_LIST_SELECTED_COUNT',count($aSelected));
 		$all = ($oAuth->oUser->isAdmin) ? TRUE : FALSE;
 		return $oCategory->GetCategoryLinkList("input",$aSelected,$delimiter = FALSE,$all);
 
 	}
-
-	protected function GetActivityList() {
-
-		global $db;
-
-		$oActivity = new Activity($db);
-
-		$aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
-
-		if (is_array($this->GetCompanyProfile()->activity_array)) {
-			$aSelected = $this->GetCompanyProfile()->activity_array;
-		} elseif (count($aResult['act']) >= 1) {
-			$aSelected = $aResult['act'];
-		} else {
-			$aSelected = $this->SetDefaultActivityId();
-		}
-		$this->GetCompanyForm()->Set('ACTIVITY_LIST_SELECTED_COUNT',count($aSelected));
-		return $oActivity->GetActivityLinkList("input",$aSelected,$delimiter = FALSE,$all = FALSE, $return = "ARRAY");
-
-	}
-
-
-	protected function GetCountryList() {
-
-		global $db;
-
-		$oCountry = new Country($db);
-
-		$aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
-
-		if (is_array($this->GetCompanyProfile()->country_array)) {
-			$aSelected = $this->GetCompanyProfile()->country_array;
-		} elseif (count($aResult['cty']) >= 1) {
-			$aSelected = $aResult['cty'];
-		} else {
-			$aSelected = $this->SetDefaultCountryId();
-		}
-
-		$this->GetCompanyForm()->Set('COUNTRY_LIST_SELECTED_COUNT',count($aSelected));
-		return $oCountry->GetCountryLinkList("input",$aSelected,$delimiter = FALSE, $return = "ARRAY");
-
-	}
-
 
 	/* set default selected categories according to brand / selected profile type */
 	protected function SetDefaultCategoryId() {
@@ -1405,7 +1364,7 @@ EOT;
 
 		$aSelected = array();
 
-		switch($this->GetCompanyProfile()->GetProfileType()) {
+		switch($this->GetProfile()->GetProfileType()) {
 			case PROFILE_SUMMERCAMP :
 				foreach($_CONFIG['profile_category_defaults'][PROFILE_SUMMERCAMP] as $id) {
 					$aSelected[] = $id;
@@ -1423,7 +1382,7 @@ EOT;
 
 		$aSelected = array();
 
-		switch($this->GetCompanyProfile()->GetProfileType()) {
+		switch($this->GetProfile()->GetProfileType()) {
 			case PROFILE_SUMMERCAMP :
 				foreach($_CONFIG['profile_activity_defaults'][PROFILE_SUMMERCAMP] as $id) {
 					$aSelected[] = $id;
@@ -1442,7 +1401,7 @@ EOT;
 
 		$aSelected = array();
 
-		switch($this->GetCompanyProfile()->GetProfileType()) {
+		switch($this->GetProfile()->GetProfileType()) {
 			case PROFILE_SUMMERCAMP :
 				foreach($_CONFIG['profile_country_defaults'][PROFILE_SUMMERCAMP] as $id) {
 					$aSelected[] = $id;
@@ -1476,11 +1435,11 @@ EOT;
 		$this->oCompanyProfile = $oProfile;
 	}
 
-	protected function GetCompanyProfile() {
+	protected function GetProfile() {
 		return $this->oCompanyProfile;
 	}
 
-	protected function GetCompanyForm() {
+	protected function GetForm() {
 		return $this->oCompanyForm;
 	}
 
@@ -1536,13 +1495,13 @@ EOT;
 		global $oHeader, $oAuth;
 
 		// some of the templates below require company profile object to be in scope
-		$oProfile = $this->GetCompanyProfile();
+		$oProfile = $this->GetProfile();
 
 
 		ob_start();
-			$contents_edit = $this->GetCompanyForm()->Render();
+			$contents_edit = $this->GetForm()->Render();
 	    ob_end_clean();
-	    if (($this->GetMode() == self::MODE_EDIT) && ($this->GetCompanyProfile()->GetListingType() >= BASIC_LISTING)) {
+	    if (($this->GetMode() == self::MODE_EDIT) && ($this->GetProfile()->GetListingType() >= BASIC_LISTING)) {
 			ob_start();
 		       require_once("./templates/profile_logo.php");
 		   	   $contents_logo = ob_get_contents();
@@ -1574,7 +1533,7 @@ EOT;
 				$oTabbedPanel->SetTitle("New Listing - Step 2 of 3");
 			}
 		} else {
-			$oTabbedPanel->SetTitle($this->GetCompanyProfile()->GetTitle()." : Edit Profile");
+			$oTabbedPanel->SetTitle($this->GetProfile()->GetTitle()." : Edit Profile");
 		}
 
 		$sFormOpenTag = "<form enctype=\"multipart/form-data\" name=\"AddEditPlacementForm\" id=\"AddEditPlacementForm\" action=\"".Request::GetUri()."\" method=\"POST\">";
@@ -1599,7 +1558,7 @@ EOT;
 
 	    //if (($this->GetMode() == self::MODE_EDIT) && (($oProfile->GetListingType() >= BASIC_LISTING) || $oAuth->oUser->isAdmin)) {
 
-	    if (($this->GetMode() == self::MODE_EDIT) && ($this->GetCompanyProfile()->GetListingType() >= BASIC_LISTING)) {
+	    if (($this->GetMode() == self::MODE_EDIT) && ($this->GetProfile()->GetListingType() >= BASIC_LISTING)) {
 
 			/* edit logo */
 			$oLayout = new Layout();
@@ -1657,10 +1616,10 @@ EOT;
 		global $oSession, $db;
 
 		// get company profile
-		$this->GetCompanyProfileFromDb( $this->GetCompanyId() );
+		$this->GetProfileFromDb( $this->GetCompanyId() );
 
 		$oPlacementProfile = new PlacementProfile();
-		$aPlacements = $oPlacementProfile->GetProfileById($this->GetCompanyProfile()->GetId(),"COMPANY_ID",$return = "ARRAY");
+		$aPlacements = $oPlacementProfile->GetProfileById($this->GetProfile()->GetId(),"COMPANY_ID",$return = "ARRAY");
 
 		$aId = array();
 
@@ -1680,14 +1639,14 @@ EOT;
 		}
 
 		// delete company profile
-		$result = $oArchiveManager->ArchiveCompany($this->GetCompanyProfile()->GetId());
+		$result = $oArchiveManager->ArchiveCompany($this->GetProfile()->GetId());
 
 
 		if ($result) {
-			$message .= "<p>SUCCESS: deleted company ".$this->GetCompanyProfile()->GetTitle()."</p>";
+			$message .= "<p>SUCCESS: deleted company ".$this->GetProfile()->GetTitle()."</p>";
 			$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_DELETE_PLACEMENT, $message);
 		} else {
-			$message .= "<p>ERROR: it was not possible to delete company ".$this->GetPlacementProfile()->GetTitle()."</p>";
+			$message .= "<p>ERROR: it was not possible to delete company ".$this->GetProfile()->GetTitle()."</p>";
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_DELETE_PLACEMENT, $message);
 		}
 

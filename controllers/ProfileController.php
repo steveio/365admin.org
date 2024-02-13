@@ -158,7 +158,75 @@ class ProfileController extends GenericController {
 	}
 	
 	
+	protected function GetCategoryList() {
+	    
+	    global $db;
+	    
+	    $oCategory = new Category($db);
+	    
+	    $aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
+	    
+	    $aSelected = array();
+	    
+	    if (is_array($this->GetProfile()->category_array)) {
+	        $aSelected = $this->GetProfile()->category_array;
+	    } elseif (count($aResult['cat']) >= 1) {
+	        $aSelected = $aResult['cat'];
+	    } else {
+	        //$aSelected = $this->SetDefaultCategoryId();
+	    }
+	    
+	    $this->GetForm()->Set('CATEGORY_LIST_SELECTED_COUNT',count($aSelected));
+	    return $oCategory->GetCategoryLinkList("input",$aSelected,$delimiter = FALSE);
+	    
+	}
 	
+	protected function GetActivityList() {
+	    
+	    global $db;
+	    
+	    $oActivity = new Activity($db);
+	    
+	    $aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
+	    
+	    $aSelected = array();
+	    
+	    if (is_array($this->GetProfile()->activity_array)) {
+	        $aSelected = $this->GetProfile()->activity_array;
+	    } elseif (count($aResult['act']) >= 1) {
+	        $aSelected = $aResult['act'];
+	    } else {
+	        //$aSelected = $this->SetDefaultActivityId();
+	    }
+	    $this->GetForm()->Set('ACTIVITY_LIST_SELECTED_COUNT',count($aSelected));
+	    return $oActivity->GetActivityLinkList("input",$aSelected,$delimiter = FALSE,$all = FALSE, $return = "ARRAY");
+	    
+	}
+	
+	
+	protected function GetCountryList() {
+	    
+	    global $db;
+	    
+	    $oCountry = new Country($db);
+	    
+	    $aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
+	    
+	    $aSelected = array();
+	    
+	    if (is_array($this->GetProfile()->country_array)) {
+	        $aSelected = $this->GetProfile()->country_array;
+	    } elseif (count($aResult['cty']) >= 1) {
+	        $aSelected = $aResult['cty'];
+	    } else {
+	        //$aSelected = $this->SetDefaultCountryId();
+	    }
+	    
+	    $this->GetForm()->Set('COUNTRY_LIST_SELECTED_COUNT',count($aSelected));
+	    return $oCountry->GetCountryLinkList("input",$aSelected,$delimiter = FALSE, $return = "ARRAY");
+	    
+	}
+
 } 
 
 

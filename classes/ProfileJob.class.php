@@ -10,8 +10,6 @@
 
 class JobProfile extends PlacementProfile {
 
-	protected $duration_from_id;	
-	protected $duration_to_id;
 	protected $reference; 
 	protected $start_dt_exact;
 	protected $start_dt_multiple;
@@ -223,6 +221,7 @@ class JobProfile extends PlacementProfile {
 				
 		// job options checkboxes 
 		$aId = Mapping::GetIdByKey($p,REFDATA_JOB_OPTIONS_PREFIX);
+		
 		Mapping::UpdateRefData("refdata_map",PROFILE_PLACEMENT,$p['id'],REFDATA_JOB_OPTIONS, $aId);
 
 	}
@@ -250,6 +249,26 @@ class JobProfile extends PlacementProfile {
 	public function GetContractType () { 
 		return $this->contract_type;
 	}
+
+	public function SetContractTypeRefdataObject($oRefdata) {
+	    $this->oContractTypeRefdataObject = $oRefdata;
+	}
+	
+	public function GetContractTypeRefdataObject() {
+	    return $this->oContractTypeRefdataObject;
+	}
+	
+	public function GetContractTypeLabel() {
+	    if (!is_object($this->GetContractTypeRefdataObject())) {
+	        $oRefdata = Refdata::GetInstance(REFDATA_JOB_CONTRACT_TYPE);
+	        $oRefdata->SetOrderBySql(' id ASC');
+	        $oRefdata->GetByType();
+	        $this->SetContractTypeRefdataObject($oRefdata);
+	    }
+	    
+	    return $this->GetContractTypeRefdataObject()->GetValueById($this->contract_type);
+	    
+	}
 	
 	public function GetExperience() { 
 		return $this->experience;
@@ -266,23 +285,7 @@ class JobProfile extends PlacementProfile {
 	public function GetJobOptions() {
 		return $this->job_options;
 	}
-	
-	public function GetDurationFromId() {
-		return $this->duration_from_id;
-	}
 
-	public function GetDurationToId() {
-		return $this->duration_from_id;
-	}	
-	
-	public function GetDurationFromLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_from_id);
-	}
-
-	public function GetDurationToLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_to_id);
-	}
-	
 }
 
 

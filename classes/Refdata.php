@@ -185,11 +185,11 @@ class Refdata {
 	}
 	
 	
-	public function GetDDlist($selected_id, $no_default = FALSE) {
+	public function GetDDlist($selected_id, $no_default = FALSE, $css_class = 'form-select') {
 
 		$aValues = $this->GetByType();
 		
-		$oSelect = new Select($this->id,$this->name,$this->css_class,$aValues,$bKeysSameAsValues = false,$selected_id);
+		$oSelect = new Select($this->id,$this->name,$css_class,$aValues,$bKeysSameAsValues = false,$selected_id);
 		
 		if ($no_default) {
 			$oSelect->SetNoDefault();

@@ -216,7 +216,7 @@ class PlacementController extends ProfileController {
 	        $oContentAssembler = new PlacementProfileContentAssembler();
 	        $oContentAssembler->GetByPath($this->GetPlacementUrlName());
 
-	        die(__FILE__."::".__LINE__);
+	        die();
 
 	    } catch (Exception $e) {
 	        throw $e;
@@ -232,13 +232,13 @@ class PlacementController extends ProfileController {
 		$oDashboardController = $oSession->GetMVCController()->GetRouteByUriMapping("/".ROUTE_DASHBOARD);
 		
 		$oArchiveManager = new ArchiveManager;
-		$result = $oArchiveManager->ArchivePlacement($this->GetPlacementProfile()->GetId());
+		$result = $oArchiveManager->ArchivePlacement($this->GetProfile()->GetId());
 				
 		if ($result) {
-			$message .= "<p>SUCCESS: deleted placement ".$this->GetPlacementProfile()->GetTitle()."</p>"; 
+			$message .= "<p>SUCCESS: deleted placement ".$this->GetProfile()->GetTitle()."</p>"; 
 			$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_DELETE_PLACEMENT, $message);
 		} else {
-			$message .= "<p>ERROR: it was not possible to delete placement ".$this->GetPlacementProfile()->GetTitle()."</p>"; 
+			$message .= "<p>ERROR: it was not possible to delete placement ".$this->GetProfile()->GetTitle()."</p>"; 
 			$oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_ID_DELETE_PLACEMENT, $message);			
 		}
 		
@@ -250,8 +250,6 @@ class PlacementController extends ProfileController {
 	}
 	 
 	private function AddProfile() {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
 		global $oSession;
 		
@@ -312,6 +310,7 @@ class PlacementController extends ProfileController {
 	
         $this->GetProfileFromDb();
 
+        $response = array();
 
 		// handle update if form submitted
 		if (isset($_POST['submit'])) {
@@ -379,7 +378,7 @@ class PlacementController extends ProfileController {
 			$aFormValues[$k] = $v;
 		}
 		
-		if ($this->GetPlacementProfile()->DoAddUpdate($aFormValues,$aResponse)) {			
+		if ($this->GetProfile()->DoAddUpdate($aFormValues,$aResponse)) {			
 			return TRUE;
 		} else {
 			return FALSE;
@@ -417,58 +416,58 @@ class PlacementController extends ProfileController {
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
 		// Common placement fields
-		$_POST[PROFILE_FIELD_PLACEMENT_TITLE] = $this->GetPlacementProfile()->GetTitle();
-		$_POST[PROFILE_FIELD_PLACEMENT_COMP_ID] = $this->GetPlacementProfile()->GetCompanyId();
-		$_POST[PROFILE_FIELD_PLACEMENT_DESC_SHORT] = $this->GetPlacementProfile()->GetDescShort();
-		//$_POST[PROFILE_FIELD_PLACEMENT_PROFILE_TYPE_ID] = $this->GetPlacementProfile()->;
-		$_POST[PROFILE_FIELD_PLACEMENT_LOCATION] = $this->GetPlacementProfile()->GetLocation();
-		$_POST[PROFILE_FIELD_PLACEMENT_DESC_LONG] = $this->GetPlacementProfile()->GetDescLong();
-		$_POST[PROFILE_FIELD_PLACEMENT_URL] = $this->GetPlacementProfile()->GetUrl();
-		$_POST[PROFILE_FIELD_PLACEMENT_EMAIL] = $this->GetPlacementProfile()->GetEmail();
-		$_POST[PROFILE_FIELD_PLACEMENT_APPLY_URL] = $this->GetPlacementProfile()->GetApplyUrl();
-		$_POST[PROFILE_FIELD_PLACEMENT_KEYWORD_EXCLUDE] = $this->GetPlacementProfile()->GetKeywordExclude();
-		//$_POST[PROFILE_FIELD_PLACEMENT_ACTIVE] = $this->GetPlacementProfile()->;
+		$_POST[PROFILE_FIELD_PLACEMENT_TITLE] = $this->GetProfile()->GetTitle();
+		$_POST[PROFILE_FIELD_PLACEMENT_COMP_ID] = $this->GetProfile()->GetCompanyId();
+		$_POST[PROFILE_FIELD_PLACEMENT_DESC_SHORT] = $this->GetProfile()->GetDescShort();
+		//$_POST[PROFILE_FIELD_PLACEMENT_PROFILE_TYPE_ID] = $this->GetProfile()->;
+		$_POST[PROFILE_FIELD_PLACEMENT_LOCATION] = $this->GetProfile()->GetLocation();
+		$_POST[PROFILE_FIELD_PLACEMENT_DESC_LONG] = $this->GetProfile()->GetDescLong();
+		$_POST[PROFILE_FIELD_PLACEMENT_URL] = $this->GetProfile()->GetUrl();
+		$_POST[PROFILE_FIELD_PLACEMENT_EMAIL] = $this->GetProfile()->GetEmail();
+		$_POST[PROFILE_FIELD_PLACEMENT_APPLY_URL] = $this->GetProfile()->GetApplyUrl();
+		$_POST[PROFILE_FIELD_PLACEMENT_KEYWORD_EXCLUDE] = $this->GetProfile()->GetKeywordExclude();
+		//$_POST[PROFILE_FIELD_PLACEMENT_ACTIVE] = $this->GetProfile()->;
 				
 		// general placement fields
-		if ($this->GetPlacementProfile() instanceof GeneralProfile) {
+		if ($this->GetProfile() instanceof GeneralProfile) {
 
-			$_POST[PROFILE_FIELD_PLACEMENT_DURATION_FROM] = $this->GetPlacementProfile()->GetDurationFromId();
-			$_POST[PROFILE_FIELD_PLACEMENT_DURATION_TO] = $this->GetPlacementProfile()->GetDurationToId();
-			$_POST[PROFILE_FIELD_PLACEMENT_PRICE_FROM] = $this->GetPlacementProfile()->GetPriceFromId();
-			$_POST[PROFILE_FIELD_PLACEMENT_PRICE_TO] = $this->GetPlacementProfile()->GetPriceToId();
-			$_POST[PROFILE_FIELD_PLACEMENT_CURRENCY] = $this->GetPlacementProfile()->GetCurrencyId();
-			$_POST[PROFILE_FIELD_PLACEMENT_START_DATES_TXT] = $this->GetPlacementProfile()->GetStartDates();
-			$_POST[PROFILE_FIELD_PLACEMENT_BENEFITS] = $this->GetPlacementProfile()->GetBenefits();
-			$_POST[PROFILE_FIELD_PLACEMENT_REQUIREMENTS] = $this->GetPlacementProfile()->GetRequirements();
+			$_POST[PROFILE_FIELD_PLACEMENT_DURATION_FROM] = $this->GetProfile()->GetDurationFromId();
+			$_POST[PROFILE_FIELD_PLACEMENT_DURATION_TO] = $this->GetProfile()->GetDurationToId();
+			$_POST[PROFILE_FIELD_PLACEMENT_PRICE_FROM] = $this->GetProfile()->GetPriceFromId();
+			$_POST[PROFILE_FIELD_PLACEMENT_PRICE_TO] = $this->GetProfile()->GetPriceToId();
+			$_POST[PROFILE_FIELD_PLACEMENT_CURRENCY] = $this->GetProfile()->GetCurrencyId();
+			$_POST[PROFILE_FIELD_PLACEMENT_START_DATES_TXT] = $this->GetProfile()->GetStartDates();
+			$_POST[PROFILE_FIELD_PLACEMENT_BENEFITS] = $this->GetProfile()->GetBenefits();
+			$_POST[PROFILE_FIELD_PLACEMENT_REQUIREMENTS] = $this->GetProfile()->GetRequirements();
 
 		}
 		
-		if ($this->GetPlacementProfile() instanceof TourProfile) {
+		if ($this->GetProfile() instanceof TourProfile) {
 			
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_DURATION_FROM] = $this->GetPlacementProfile()->GetDurationFromId();
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_DURATION_TO] = $this->GetPlacementProfile()->GetDurationToId();
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE_FROM] = $this->GetPlacementProfile()->GetPriceFromId();
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE_TO] = $this->GetPlacementProfile()->GetPriceToId();
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_CURRENCY] = $this->GetPlacementProfile()->GetCurrencyId();
-			$_POST[PROFILE_FIELD_PLACEMENT_GROUP_SIZE] = $this->GetPlacementProfile()->GetGroupSizeId();
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_CODE] = $this->GetPlacementProfile()->GetCode();
-			$_POST[PROFILE_FIELD_PLACEMENT_START_DATES] = $this->GetPlacementProfile()->GetDates();
-			$_POST[PROFILE_FIELD_PLACEMENT_ITINERY] = $this->GetPlacementProfile()->GetItinery();
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE] = $this->GetPlacementProfile()->GetPrice();
-			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_REQUIREMENTS] = $this->GetPlacementProfile()->GetRequirements();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_DURATION_FROM] = $this->GetProfile()->GetDurationFromId();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_DURATION_TO] = $this->GetProfile()->GetDurationToId();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE_FROM] = $this->GetProfile()->GetPriceFromId();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE_TO] = $this->GetProfile()->GetPriceToId();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_CURRENCY] = $this->GetProfile()->GetCurrencyId();
+			$_POST[PROFILE_FIELD_PLACEMENT_GROUP_SIZE] = $this->GetProfile()->GetGroupSizeId();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_CODE] = $this->GetProfile()->GetCode();
+			$_POST[PROFILE_FIELD_PLACEMENT_START_DATES] = $this->GetProfile()->GetDates();
+			$_POST[PROFILE_FIELD_PLACEMENT_ITINERY] = $this->GetProfile()->GetItinery();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE] = $this->GetProfile()->GetPrice();
+			$_POST[PROFILE_FIELD_PLACEMENT_TOUR_REQUIREMENTS] = $this->GetProfile()->GetRequirements();
 			
 		}
 		
-		if  ($this->GetPlacementProfile() instanceof JobProfile) {
+		if  ($this->GetProfile() instanceof JobProfile) {
 			
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_REFERENCE] = $this->GetPlacementProfile()->GetReference();
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_DURATION_FROM] = $this->GetPlacementProfile()->GetDurationFromId();
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_DURATION_TO] = $this->GetPlacementProfile()->GetDurationToId();
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE] = $this->GetPlacementProfile()->GetStartDateMultiple();
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_CONTRACT_TYPE] = $this->GetPlacementProfile()->GetContractType();
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_SALARY] = $this->GetPlacementProfile()->GetSalary();
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_BENEFITS] = $this->GetPlacementProfile()->GetBenefits();
-			$_POST[PROFILE_FIELD_PLACEMENT_JOB_EXPERIENCE] = $this->GetPlacementProfile()->GetExperience();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_REFERENCE] = $this->GetProfile()->GetReference();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_DURATION_FROM] = $this->GetProfile()->GetDurationFromId();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_DURATION_TO] = $this->GetProfile()->GetDurationToId();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE] = $this->GetProfile()->GetStartDateMultiple();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_CONTRACT_TYPE] = $this->GetProfile()->GetContractType();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_SALARY] = $this->GetProfile()->GetSalary();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_BENEFITS] = $this->GetProfile()->GetBenefits();
+			$_POST[PROFILE_FIELD_PLACEMENT_JOB_EXPERIENCE] = $this->GetProfile()->GetExperience();
 			
 			/*
 			 * @todo - preset dates
@@ -553,15 +552,15 @@ EOT;
 		// company name select list
 		$oCompany = new Company($db);
 		if ($oAuth->oUser->isAdmin) {
-			$this->GetPlacementForm()->Set("COMPANY_NAME_LIST",$oCompany->getCompanyNameDropDown($this->GetPlacementProfile()->GetCompanyId(),null,PROFILE_FIELD_PLACEMENT_COMP_ID));
+			$this->GetForm()->Set("COMPANY_NAME_LIST",$oCompany->getCompanyNameDropDown($this->GetProfile()->GetCompanyId(),null,PROFILE_FIELD_PLACEMENT_COMP_ID));
 		} else {
-			$this->GetPlacementForm()->Set("COMPANY_NAME_LIST",$oCompany->getCompanyNameDropDown($oAuth->oUser->company_id,$oAuth->oUser->company_id,PROFILE_FIELD_PLACEMENT_COMP_ID,FALSE));
+			$this->GetForm()->Set("COMPANY_NAME_LIST",$oCompany->getCompanyNameDropDown($oAuth->oUser->company_id,$oAuth->oUser->company_id,PROFILE_FIELD_PLACEMENT_COMP_ID,FALSE));
 		}
 		
 		/* category, activity, country lists */
-		$this->GetPlacementForm()->Set('ACTIVITY_LIST',$this->GetActivityList());
-		$this->GetPlacementForm()->Set('CATEGORY_LIST',$this->GetCategoryList());
-		$this->GetPlacementForm()->Set('COUNTRY_LIST',$this->GetCountryList());
+		$this->GetForm()->Set('ACTIVITY_LIST',$this->GetActivityList());
+		$this->GetForm()->Set('CATEGORY_LIST',$this->GetCategoryList());
+		$this->GetForm()->Set('COUNTRY_LIST',$this->GetCountryList());
 				
 		/* set profile type and enquiry options */
 		$this->SetProfileOptions();
@@ -575,26 +574,22 @@ EOT;
 		
 		$prefix = ($this->GetMode() == self::MODE_ADD) ? "Add " : "Edit ";
 		$title = $prefix . $oBrand->GetPlacementTitle();
-		$this->GetPlacementForm()->Set('STEP_TITLE',$title);
-		$this->GetPlacementForm()->Set('PLACEMENT_TITLE',$title);
-		$this->GetPlacementForm()->Set('VALID',$this->Valid());
-		$this->GetPlacementForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());		
-		$this->GetPlacementForm()->Set('COMPANY_PROFILE',$this->GetPlacementProfile());
+		$this->GetForm()->Set('STEP_TITLE',$title);
+		$this->GetForm()->Set('PLACEMENT_TITLE',$title);
+		$this->GetForm()->Set('VALID',$this->Valid());
+		$this->GetForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());		
+		$this->GetForm()->Set('COMPANY_PROFILE',$this->GetProfile());
 		
 		
-		$this->GetPlacementForm()->LoadTemplate("profile_placement.php");
+		$this->GetForm()->LoadTemplate("profile_placement.php");
 				
 		$this->SetTabbedPanel();
 		
-		$oLinksTemplate = new Template;
-		if ($this->GetMode() == self::MODE_EDIT) {
-			$oLinksTemplate->Set('VIEW_URL',$oBrand->GetWebsiteUrl()."/".$this->GetPlacementProfile()->GetProfileUrl());
-		}
-		
-		//$oLinksTemplate->LoadTemplate("edit_profile_links.php");
+		$oMessageProcessor = new MessageProcessor();
+		$oMessagePanel = $oMessageProcessor->GetMessagePanel();
 		
 		print $oHeader->Render();
-		print $oLinksTemplate->Render();
+		print $oMessagePanel->Render();
 		print $this->GetTabbedPanel()->Render();
 		print $oFooter->Render();
 		
@@ -609,12 +604,12 @@ EOT;
 		// set placement active status
 		if (isset($_POST['submit'])) {
 			$checked = ($_POST[PROFILE_FIELD_PLACEMENT_ACTIVE] == "true") ? "checked" : "";
-			$this->GetPlacementForm()->Set('PLACEMENT_ACTIVE_CHECKED',$checked);
+			$this->GetForm()->Set('PLACEMENT_ACTIVE_CHECKED',$checked);
 		} elseif ($this->GetMode() == self::MODE_ADD) { // new placements always active by default
-			$this->GetPlacementForm()->Set('PLACEMENT_ACTIVE_CHECKED',"checked");	
+			$this->GetForm()->Set('PLACEMENT_ACTIVE_CHECKED',"checked");	
 		} elseif ($this->GetMode() == self::MODE_EDIT) { 			
-			$checked = ($this->GetPlacementProfile()->GetActive() == "t") ? "checked" : "";
-			$this->GetPlacementForm()->Set('PLACEMENT_ACTIVE_CHECKED',$checked);
+			$checked = ($this->GetProfile()->GetActive() == "t") ? "checked" : "";
+			$this->GetForm()->Set('PLACEMENT_ACTIVE_CHECKED',$checked);
 		}
 		
 		// duration_from / duration_to
@@ -624,10 +619,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_DURATION_FROM];
-		} elseif ($this->GetPlacementProfile() instanceof GeneralProfile) {
-			$selected = $this->GetPlacementProfile()->GetDurationFromId();
+		} elseif ($this->GetProfile() instanceof GeneralProfile) {
+			$selected = $this->GetProfile()->GetDurationFromId();
 		}
-		$this->GetPlacementForm()->Set('DURATION_FROM',$oDuration->GetDDlist($selected));
+		$this->GetForm()->Set('DURATION_FROM',$oDuration->GetDDlist($selected));
 
 		$oDuration = new Refdata(REFDATA_DURATION);
 		$oDuration->SetOrderBySql(' id ASC');
@@ -635,10 +630,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_DURATION_TO];
-		} elseif ($this->GetPlacementProfile() instanceof GeneralProfile) {
-			$selected = $this->GetPlacementProfile()->GetDurationToId();
+		} elseif ($this->GetProfile() instanceof GeneralProfile) {
+			$selected = $this->GetProfile()->GetDurationToId();
 		}
-		$this->GetPlacementForm()->Set('DURATION_TO',$oDuration->GetDDlist($selected));
+		$this->GetForm()->Set('DURATION_TO',$oDuration->GetDDlist($selected));
 		
 		
 		// price_from, price_to
@@ -648,10 +643,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_PRICE_FROM];
-		} elseif ($this->GetPlacementProfile() instanceof GeneralProfile) {
-			$selected = $this->GetPlacementProfile()->GetPriceFromId();
+		} elseif ($this->GetProfile() instanceof GeneralProfile) {
+			$selected = $this->GetProfile()->GetPriceFromId();
 		}
-		$this->GetPlacementForm()->Set('PRICE_FROM',$oPriceFrom->GetDDlist($selected));
+		$this->GetForm()->Set('PRICE_FROM',$oPriceFrom->GetDDlist($selected));
 
 		$oPriceTo = new Refdata(REFDATA_APPROX_COST);
 		$oPriceTo->SetOrderBySql(' sort_order ASC');
@@ -659,10 +654,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_PRICE_TO];
-		} elseif ($this->GetPlacementProfile() instanceof GeneralProfile) {
-			$selected = $this->GetPlacementProfile()->GetPriceToId();
+		} elseif ($this->GetProfile() instanceof GeneralProfile) {
+			$selected = $this->GetProfile()->GetPriceToId();
 		}
-		$this->GetPlacementForm()->Set('PRICE_TO',$oPriceTo->GetDDlist($selected));
+		$this->GetForm()->Set('PRICE_TO',$oPriceTo->GetDDlist($selected));
 		
 		// currency
 		$oCurrency = new Refdata(REFDATA_CURRENCY);
@@ -671,10 +666,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_CURRENCY];
-		} elseif ($this->GetPlacementProfile() instanceof GeneralProfile) {
-			$selected = $this->GetPlacementProfile()->GetCurrencyId();
+		} elseif ($this->GetProfile() instanceof GeneralProfile) {
+			$selected = $this->GetProfile()->GetCurrencyId();
 		}
-		$this->GetPlacementForm()->Set('CURRENCY',$oCurrency->GetDDlist($selected, $no_default = TRUE));
+		$this->GetForm()->Set('CURRENCY',$oCurrency->GetDDlist($selected, $no_default = TRUE));
 		
 	}
 
@@ -689,10 +684,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_TOUR_DURATION_FROM];
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$selected = $this->GetPlacementProfile()->GetDurationFromId();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$selected = $this->GetProfile()->GetDurationFromId();
 		}
-		$this->GetPlacementForm()->Set('TOUR_DURATION_FROM',$oDuration->GetDDlist($selected));
+		$this->GetForm()->Set('TOUR_DURATION_FROM',$oDuration->GetDDlist($selected));
 
 		$oDuration = new Refdata(REFDATA_DURATION);
 		$oDuration->SetOrderBySql(' id ASC');
@@ -700,10 +695,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_TOUR_DURATION_TO];
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$selected = $this->GetPlacementProfile()->GetDurationToId();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$selected = $this->GetProfile()->GetDurationToId();
 		}
-		$this->GetPlacementForm()->Set('TOUR_DURATION_TO',$oDuration->GetDDlist($selected));
+		$this->GetForm()->Set('TOUR_DURATION_TO',$oDuration->GetDDlist($selected));
 		
 		
 		// price_from, price_to
@@ -713,10 +708,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE_FROM];
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$selected = $this->GetPlacementProfile()->GetPriceFromId();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$selected = $this->GetProfile()->GetPriceFromId();
 		}
-		$this->GetPlacementForm()->Set('TOUR_PRICE_FROM',$oPriceFrom->GetDDlist($selected));
+		$this->GetForm()->Set('TOUR_PRICE_FROM',$oPriceFrom->GetDDlist($selected));
 
 		$oPriceTo = new Refdata(REFDATA_APPROX_COST);
 		$oPriceTo->SetOrderBySql(' sort_order ASC');
@@ -724,10 +719,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_TOUR_PRICE_TO];
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$selected = $this->GetPlacementProfile()->GetPriceToId();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$selected = $this->GetProfile()->GetPriceToId();
 		}
-		$this->GetPlacementForm()->Set('TOUR_PRICE_TO',$oPriceTo->GetDDlist($selected));
+		$this->GetForm()->Set('TOUR_PRICE_TO',$oPriceTo->GetDDlist($selected));
 		
 		
 		// currency
@@ -737,10 +732,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_TOUR_CURRENCY];
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$selected = $this->GetPlacementProfile()->GetCurrencyId();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$selected = $this->GetProfile()->GetCurrencyId();
 		}
-		$this->GetPlacementForm()->Set('TOUR_CURRENCY',$oCurrency->GetDDlist($selected, $no_default = TRUE));
+		$this->GetForm()->Set('TOUR_CURRENCY',$oCurrency->GetDDlist($selected, $no_default = TRUE));
 		
 		// group size 
 		$oGrpSize = new Refdata(REFDATA_INT_SMALL_RANGE);
@@ -749,10 +744,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_GROUP_SIZE];
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$selected = $this->GetPlacementProfile()->GetGroupSizeId();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$selected = $this->GetProfile()->GetGroupSizeId();
 		}
-		$this->GetPlacementForm()->Set('GROUP_SIZE',$oGrpSize->GetDDlist($selected, $no_default = FALSE));
+		$this->GetForm()->Set('GROUP_SIZE',$oGrpSize->GetDDlist($selected, $no_default = FALSE));
 		
 		
 		// travel / transport
@@ -760,11 +755,11 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_TRAVEL_TRANSPORT_PREFIX);
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$aSelected = $this->GetPlacementProfile()->GetTransportIdList();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$aSelected = $this->GetProfile()->GetTransportIdList();
 		}
-		$this->GetPlacementForm()->Set('TRAVEL_TOUR_LIST_SELECTED_COUNT',count($aSelected));
-		$this->GetPlacementForm()->Set('TRAVEL_TOUR_LIST',$oTravel->GetCheckboxList(REFDATA_TRAVEL_TRANSPORT_PREFIX,$aSelected));
+		$this->GetForm()->Set('TRAVEL_TOUR_LIST_SELECTED_COUNT',count($aSelected));
+		$this->GetForm()->Set('TRAVEL_TOUR_LIST',$oTravel->GetCheckboxList(REFDATA_TRAVEL_TRANSPORT_PREFIX,$aSelected));
 		
 		
 		// accomodation 
@@ -772,11 +767,11 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_ACCOMODATION_PREFIX);
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$aSelected = $this->GetPlacementProfile()->GetAccomodationIdList();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$aSelected = $this->GetProfile()->GetAccomodationIdList();
 		}
-		$this->GetPlacementForm()->Set('ACCOMODATION_LIST_SELECTED_COUNT',count($aSelected));
-		$this->GetPlacementForm()->Set('ACCOMODATION_LIST',$oAccom->GetCheckboxList(REFDATA_ACCOMODATION_PREFIX,$aSelected));
+		$this->GetForm()->Set('ACCOMODATION_LIST_SELECTED_COUNT',count($aSelected));
+		$this->GetForm()->Set('ACCOMODATION_LIST',$oAccom->GetCheckboxList(REFDATA_ACCOMODATION_PREFIX,$aSelected));
 		
 		
 		// meals
@@ -784,11 +779,11 @@ EOT;
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_MEALS_PREFIX);
-		} elseif ($this->GetPlacementProfile() instanceof TourProfile) {
-			$aSelected = $this->GetPlacementProfile()->GetMealsIdList();
+		} elseif ($this->GetProfile() instanceof TourProfile) {
+			$aSelected = $this->GetProfile()->GetMealsIdList();
 		}
-		$this->GetPlacementForm()->Set('MEALS_LIST_SELECTED_COUNT',count($aSelected));
-		$this->GetPlacementForm()->Set('MEALS_LIST',$oMeals->GetCheckboxList(REFDATA_MEALS_PREFIX,$aSelected));
+		$this->GetForm()->Set('MEALS_LIST_SELECTED_COUNT',count($aSelected));
+		$this->GetForm()->Set('MEALS_LIST',$oMeals->GetCheckboxList(REFDATA_MEALS_PREFIX,$aSelected));
 
 	}
 	
@@ -797,7 +792,7 @@ EOT;
 	private function SetJobProfileFormElements() {
 
 		
-		$this->GetPlacementForm()->Set('JOB_START_DATE',Date::GetDateInput('StartDate',true,true,true));
+		$this->GetForm()->Set('JOB_START_DATE',Date::GetDateInput('StartDate',true,true,true));
 
 		// duration_from / duration_to
 		$oDuration = new Refdata(REFDATA_DURATION);
@@ -806,10 +801,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_JOB_DURATION_FROM];
-		} elseif ($this->GetPlacementProfile() instanceof JobProfile) {
-			$selected = $this->GetPlacementProfile()->GetDurationFromId();
+		} elseif ($this->GetProfile() instanceof JobProfile) {
+			$selected = $this->GetProfile()->GetDurationFromId();
 		}
-		$this->GetPlacementForm()->Set('JOB_DURATION_FROM',$oDuration->GetDDlist($selected));
+		$this->GetForm()->Set('JOB_DURATION_FROM',$oDuration->GetDDlist($selected));
 
 		$oDuration = new Refdata(REFDATA_DURATION);
 		$oDuration->SetOrderBySql(' id ASC');
@@ -817,10 +812,10 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_JOB_DURATION_TO];
-		} elseif ($this->GetPlacementProfile() instanceof JobProfile) {
-			$selected = $this->GetPlacementProfile()->GetDurationToId();
+		} elseif ($this->GetProfile() instanceof JobProfile) {
+			$selected = $this->GetProfile()->GetDurationToId();
 		}
-		$this->GetPlacementForm()->Set('JOB_DURATION_TO',$oDuration->GetDDlist($selected));
+		$this->GetForm()->Set('JOB_DURATION_TO',$oDuration->GetDDlist($selected));
 		
 		// contract type
 		$oContractType = new Refdata(REFDATA_JOB_CONTRACT_TYPE);
@@ -829,26 +824,25 @@ EOT;
 		$selected = '';
 		if (isset($_POST['submit'])) {
 			$selected = $_POST[PROFILE_FIELD_PLACEMENT_JOB_CONTRACT_TYPE];
-		} elseif ($this->GetPlacementProfile() instanceof JobProfile) {
-			$selected = $this->GetPlacementProfile()->GetContractType();
+		} elseif ($this->GetProfile() instanceof JobProfile) {
+			$selected = $this->GetProfile()->GetContractType();
 		}
-		$this->GetPlacementForm()->Set('JOB_CONTRACT_TYPE',$oContractType->GetDDlist($selected));
+		$this->GetForm()->Set('JOB_CONTRACT_TYPE',$oContractType->GetDDlist($selected));
 		
-		
-		
+
 		// job option checkboxes (accom, meals, ski passes etc)
 		$oJobOptions = new Refdata(REFDATA_JOB_OPTIONS);
 		$aSelected = array();
 		if (isset($_POST['submit'])) {
 			$aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_JOB_OPTIONS_PREFIX);
-		} elseif ($this->GetPlacementProfile() instanceof JobProfile) {
-			$aSelected = $this->GetPlacementProfile()->GetJobOptions();
+		} elseif ($this->GetProfile() instanceof JobProfile) {
+			$aSelected = $this->GetProfile()->GetJobOptions();
 		}
-		$this->GetPlacementForm()->Set('JOB_OPTIONS',$oJobOptions->GetCheckboxList(REFDATA_JOB_OPTIONS_PREFIX,$aSelected));
+		$this->GetForm()->Set('JOB_OPTIONS',$oJobOptions->GetCheckboxList(REFDATA_JOB_OPTIONS_PREFIX,$aSelected));
 		
 
 		// closing / application date
-		$this->GetPlacementForm()->Set('JOB_CLOSING_DATE',Date::GetDateInput('CloseDate',true,true,true));
+		$this->GetForm()->Set('JOB_CLOSING_DATE',Date::GetDateInput('CloseDate',true,true,true));
 		
 			
 		
@@ -867,14 +861,14 @@ EOT;
 			
 			if ($this->GetMode() == self::MODE_EDIT) {
 				/* the company defaults */
-				$oCProfile->SetProfileOptionBitmap($this->GetPlacementProfile()->GetCompProfOpt());
-				$oCProfile->SetEnquiryOptionBitmap($this->GetPlacementProfile()->GetCompEnqOpt());
+				$oCProfile->SetProfileOptionBitmap($this->GetProfile()->GetCompProfOpt());
+				$oCProfile->SetEnquiryOptionBitmap($this->GetProfile()->GetCompEnqOpt());
 			} elseif ($this->GetMode() == self::MODE_ADD) {
 				/* the website defaults */
 				$oCProfile->SetProfileOptionBitmap(DEFAULT_PROFILE_OPT);
 				$oCProfile->SetEnquiryOptionBitmap(DEFAULT_ENQUIRY_OPT);
 			} else { /* we are viewing the profile */
-				$oCProfile->SetEnquiryOptionBitmap($this->GetPlacementProfile()->GetCompEnqOpt());
+				$oCProfile->SetEnquiryOptionBitmap($this->GetProfile()->GetCompEnqOpt());
 			}
 		} elseif ($oAuth->oUser->isValidUser) { 
 			/* get comp users prof/enq options from session (setup on user object) 
@@ -884,12 +878,12 @@ EOT;
 			$oCProfile->SetEnquiryOptionBitmap($oAuth->oUser->enq_opt);		
 		} else {
 			/* setup enquiry types based on defaults for the placement's company */
-			$oCProfile->SetEnquiryOptionBitmap($this->GetPlacementProfile()->GetCompEnqOpt());
+			$oCProfile->SetEnquiryOptionBitmap($this->GetProfile()->GetCompEnqOpt());
 		}
 		
 		$this->SetCompanyProfile($oCProfile);
 		
-		$this->GetPlacementForm()->Set('oCProfile',$oCProfile);
+		$this->GetForm()->Set('oCProfile',$oCProfile);
 	}
 	
 	/* Set profile type : Volunteer, Tour, Job etc */
@@ -912,11 +906,11 @@ EOT;
 			if (isset($_POST['submit'])) {
 				$sView = $_REQUEST[PROFILE_FIELD_PLACEMENT_PROFILE_TYPE_ID];
 			} else {
-				$sView = $this->GetPlacementProfile()->GetType();
+				$sView = $this->GetProfile()->GetType();
 			}
 		}
 			
-		$this->GetPlacementForm()->Set('PROFILE_TYPE_ID',$sView);
+		$this->GetForm()->Set('PROFILE_TYPE_ID',$sView);
 	}
 	
 		
@@ -928,10 +922,10 @@ EOT;
 
 		global $oHeader;
 
-		$oProfile = $this->GetPlacementProfile();
+		$oProfile = $this->GetProfile();
 
 		ob_start();
-			$contents_edit = $this->GetPlacementForm()->Render();
+			$contents_edit = $this->GetForm()->Render();
 	    ob_end_clean();
 				
 		if (($this->GetMode() == self::MODE_EDIT)) {
@@ -957,7 +951,7 @@ EOT;
 		
 	
 		if ($this->GetMode() == self::MODE_ADD) {
-			$oTabbedPanel->SetTitle($this->GetPlacementForm()->Get('STEP_TITLE'));
+			$oTabbedPanel->SetTitle($this->GetForm()->Get('STEP_TITLE'));
 		} else {
 			$oTabbedPanel->SetTitle($oProfile->GetTitle()." : Edit Profile");	
 		}
@@ -975,7 +969,7 @@ EOT;
 		$oLayout = new Layout();
 		$oLayout->SetId("TC01");
 		$oLayout->SetCols(5);
-		$oLayout->SetContent($this->GetPlacementForm()->Render());
+		$oLayout->SetContent($this->GetForm()->Render());
 		$oLayout->LoadTemplate("column.php");	
 		$oTabbedPanel->SetContentFromObject($oLayout);
 	
@@ -1016,7 +1010,7 @@ EOT;
 		
 	}
 	
-	protected function GetPlacementForm() {
+	protected function GetForm() {
 		return $this->oPlacementForm;
 	}
 	
@@ -1030,78 +1024,8 @@ EOT;
 		$this->oPlacementProfile = $oProfile;
 	}
 	
-	protected function GetPlacementProfile() {
+	protected function GetProfile() {
 		return $this->oPlacementProfile;
-	}
-	
-	
-	protected function GetCategoryList() {
-		
-		global $db;
-		
-		$oCategory = new Category($db);
-				
-		$aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
-		
-		$aSelected = array();
-		
-		if (is_array($this->GetPlacementProfile()->category_array)) {
-			$aSelected = $this->GetPlacementProfile()->category_array;
-		} elseif (count($aResult['cat']) >= 1) {
-			$aSelected = $aResult['cat'];
-		} else {
-			//$aSelected = $this->SetDefaultCategoryId();
-		}
-				
-		$this->GetPlacementForm()->Set('CATEGORY_LIST_SELECTED_COUNT',count($aSelected));
-		return $oCategory->GetCategoryLinkList("input",$aSelected,$delimiter = FALSE);
-				
-	}
-
-	protected function GetActivityList() {
-
-		global $db;
-		
-		$oActivity = new Activity($db);
-		
-		$aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
-		
-		$aSelected = array();
-		
-		if (is_array($this->GetPlacementProfile()->activity_array)) {
-			$aSelected = $this->GetPlacementProfile()->activity_array;
-		} elseif (count($aResult['act']) >= 1) {
-			$aSelected = $aResult['act'];
-		} else {
-			//$aSelected = $this->SetDefaultActivityId();
-		}
-		$this->GetPlacementForm()->Set('ACTIVITY_LIST_SELECTED_COUNT',count($aSelected));
-		return $oActivity->GetActivityLinkList("input",$aSelected,$delimiter = FALSE,$all = FALSE, $return = "ARRAY");
-		
-	}
-
-	
-	protected function GetCountryList() {
-
-		global $db;
-		
-		$oCountry = new Country($db);
-		
-		$aResult = Mapping::GetFromRequest($_REQUEST); /* extract selected cat/act/cty mappings from $_REQUEST */
-
-		$aSelected = array();
-		
-		if (is_array($this->GetPlacementProfile()->country_array)) {
-			$aSelected = $this->GetPlacementProfile()->country_array;
-		} elseif (count($aResult['cty']) >= 1) {
-			$aSelected = $aResult['cty'];
-		} else {
-			//$aSelected = $this->SetDefaultCountryId();
-		}
-		
-		$this->GetPlacementForm()->Set('COUNTRY_LIST_SELECTED_COUNT',count($aSelected));
-		return $oCountry->GetCountryLinkList("input",$aSelected,$delimiter = FALSE, $return = "ARRAY");
-		
 	}
 	
 	protected function GetNewPlacementProfile() {

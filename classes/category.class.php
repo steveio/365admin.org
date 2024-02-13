@@ -97,7 +97,7 @@ class Category {
 			}
 			if ($mode == "input") {
 				$checked = (in_array($c['id'],$aSelected)) ? "checked" : "";
-				$ct_text .= $c['name'] . " <input class='inputCheckBox' type='checkbox' name='cat_".$c['id']."' $checked />  $delimeter  ";
+				$ct_text .= $c['name'] . " <input class='select_list' type='checkbox' name='cat_".$c['id']."' $checked />  $delimeter  ";
 			} else {
 				$checked = ($_POST['cat_'.$c['id']] == "on") ? "checked" : "";
 				$ct_text .= $c['name'];

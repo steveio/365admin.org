@@ -57,8 +57,6 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
                 $this->oTemplate->Set('logo_url_sm',$this->oProfile->GetCompanyLogo()->GetUrl("_sm"));
             }
 
-            $this->oTemplate->Set('profile_type', $this->oProfile->GetProfileType());
-
             /*
             print_r("<pre>");
             print_r($this);
