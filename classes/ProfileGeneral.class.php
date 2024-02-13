@@ -44,7 +44,7 @@ class GeneralProfile extends PlacementProfile implements ProfileInterface {
 		parent::SetSubTypeTable($this->GetSubTypeTable());
 		parent::SetSubTypeFields($this->GetSubTypeFields());
 		
-		$oResult = parent::GetProfileById($id);
+		$oResult = parent::GetById($id);
 
 		if (!$oResult) return FALSE;
 		

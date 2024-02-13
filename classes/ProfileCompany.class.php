@@ -522,15 +522,18 @@ class CompanyProfile extends AbstractProfile {
             return $row['id'];
         }
 	}
-  	
+	
+	public function GetById($id,$return = "ARRAY")
+	{
+	    return $this->GetProfileById($id, $return);
+	}
+
 	public function GetProfileById($id,$return = "ARRAY") {
 		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
 		global $db,$_CONFIG;
-		
+
 		if (!is_numeric($id)) return false;
-		
+
 		$sSql = "SELECT	
 						c.oid
 						,c.id
@@ -584,14 +587,17 @@ class CompanyProfile extends AbstractProfile {
 					WHERE
 						c.id = $id 
 				";
-		
+
+
 			$db->query($sSql);
 			
 			if ($db->getNumRows() == 1) {
 				if ($return == "ARRAY") {
-					return $oResult = $db->getObject();
-				} elseif ($return = "PROFILE") {
-					
+					return $aResult = $db->getRow();
+				} elseif ($return == "OBJECT") {
+    			    return $oResult = $db->getObject();
+				} elseif ($return == "PROFILE") {
+
 					$this->SetFromObject($db->getObject());
 					if ($this->GetId() != $id) throw new Exception(ERROR_COMPANY_PROFILE_NOT_FOUND.$id);
 					$this->GetImages();

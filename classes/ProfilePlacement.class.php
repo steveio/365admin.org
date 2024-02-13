@@ -106,6 +106,11 @@ class PlacementProfile extends AbstractProfile {
 		$this->sSubTypeTable = $sSubTypeTable;
 	}
 
+	public function GetById($id)
+	{
+	    return $this->GetProfileById($id);
+	}
+
 	/*
 	 * called directly (ie by instantiating this object) and by a derived class
 	 *

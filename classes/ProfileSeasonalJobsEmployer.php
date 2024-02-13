@@ -31,7 +31,7 @@ class SeasonalJobEmployerProfile extends CompanyProfile {
 	
 
 	
-	public function GetProfileById($id,$return = "ARRAY") {
+	public function GetById($id,$return = "ARRAY") {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
@@ -44,7 +44,7 @@ class SeasonalJobEmployerProfile extends CompanyProfile {
 		parent::SetSubTypeFields($this->GetSubTypeFields());
 
 		
-		$oResult = parent::GetProfileById($id, $return = "PROFILE");
+		$oResult = parent::GetById($id, $return = "PROFILE");
 
 		if (!$oResult) return FALSE;
 		

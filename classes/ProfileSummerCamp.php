@@ -60,9 +60,7 @@ class SummerCampProfile extends CompanyProfile {
 	}
 	
 
-	public function GetProfileById($id,$return = "ARRAY") {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
+	public function GetById($id,$return = "ARRAY") {
 
 		if (!is_numeric($id)) return false;
 
@@ -73,17 +71,15 @@ class SummerCampProfile extends CompanyProfile {
 		parent::SetSubTypeFields($this->GetSubTypeFields());
 
 		
-		$oResult = parent::GetProfileById($id, $return = "PROFILE");
+		$oResult = parent::GetById($id, $return = "PROFILE");
 
 		if (!$oResult) return FALSE;
 		
 		$this->SetCampActivityList();
 		$this->SetCampTypeList();
 		$this->SetCampJobTypeList();
-
 		
-		return TRUE;
-
+		return $this;
 	}
 	
 

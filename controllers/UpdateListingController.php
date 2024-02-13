@@ -114,7 +114,7 @@ class UpdateListingController extends GenericController {
 	protected function GetCompanyProfileFromDb() {
 		
 		$oCompanyProfile = ProfileFactory::Get(PROFILE_COMPANY);
-		$oCompanyProfile->GetProfileById($this->GetCompanyId(),$return = "PROFILE");
+		$oCompanyProfile->GetById($this->GetCompanyId(),$return = "PROFILE");
 
 		$this->SetCompanyProfile($oCompanyProfile);
 			

@@ -228,15 +228,23 @@ class CompanyProfileController extends ProfileController {
 	    
 	}
 
+	/*
+	 * Get Company id and setup profile object according to type
+	 * 
+	 */
 	private function GetCompanyIdFromUrl() {
 
 		global $db;
 
 		$oCompanyProfile = new CompanyProfile();
-		$company_id = $oCompanyProfile->GetIdByUri($this->GetCompanyUrlName());
-		if (!is_numeric($company_id)) throw new Exception(ERROR_COMPANY_PROFILE_NOT_FOUND.$this->GetCompanyUrlName());
+		
+		$aRes = $oCompanyProfile->GetByUrlName($this->GetCompanyUrlName());
 
-		$this->SetCompanyId($company_id);
+		if (!is_numeric($aRes['id'])) throw new Exception(ERROR_COMPANY_PROFILE_NOT_FOUND.$this->GetCompanyUrlName());
+		
+		$this->oProfile = ProfileFactory::Get($aRes['type']);
+
+		$this->SetCompanyId($aRes['id']);
 
 	}
 
@@ -675,7 +683,7 @@ EOT;
 	protected function SetTeachingProjectFormElements() {
 
 		global $oSession;
-
+		
 		// duration_from / duration_to
 		$oDuration = new Refdata(REFDATA_DURATION);
 		$oDuration->SetOrderBySql(' id ASC');
@@ -996,7 +1004,7 @@ EOT;
 			if (!is_numeric($profile_type)) throw new Exception(ERROR_INVALID_PROFILE_TYPE.__FUNCTION__.$id);
 
 			$oCompanyProfile = ProfileFactory::Get($profile_type);
-			$oCompanyProfile->GetProfileById($id,$return = "PROFILE");
+			$oCompanyProfile->GetById($id,$return = "PROFILE");
 
 			$this->SetCompanyProfile($oCompanyProfile);
 

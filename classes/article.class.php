@@ -953,7 +953,7 @@ class Content  implements TemplateInterface {
 		foreach($aRes as $aRow) {
 			$oProfile = ProfileFactory::Get($aRow['profile_type']);
 			try {
-				$aProfile = $oProfile->GetProfileById($aRow['profile_id']);
+				$aProfile = $oProfile->GetById($aRow['profile_id']);
 			} catch (Exception $e) {
 				// @todo comp profile deleted, remove this profile mapping
 				continue;

@@ -126,7 +126,7 @@ class SolrIndexer {
 					if (LOG) Logger::DB(1,JOBNAME,"ERROR: FAILED TO RESOLVE COMPANY TYPE id : ".$a['id']." type: ".$profile_type);
 					continue;
 				}
-				$oCProfile->GetProfileById($a['id'],"PROFILE");
+				$oCProfile->GetById($a['id'],"PROFILE");
 					
 				if (!is_numeric($oCProfile->GetId())) {
 					if (LOG) Logger::DB(1,JOBNAME,"ERROR: FAILED TO FETCH COMPANY  id : ".$a['id']);

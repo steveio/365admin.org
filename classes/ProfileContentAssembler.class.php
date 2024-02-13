@@ -62,30 +62,17 @@ class ProfileContentAssembler extends AbstractContentAssembler {
         $oHeader->SetTitle($title);
         $oHeader->SetDesc($desc_short);
         $oHeader->SetKeywords("");
-        
-        // @deprecated
-        $_REQUEST['page_title'] = $title;
-        $_REQUEST['page_meta_description'] = $desc_short;
-        $_REQUEST['page_keywords'] = "";
-
 
         unset($this->oProfile);
         $this->oProfile = $oProfile = ProfileFactory::Get($aRes['type']);
         $this->oProfile->SetType($aRes['type']);
-        
-        
-        // fetch full profile
-        if ($this->oProfile->GetGeneralType() == PROFILE_PLACEMENT)
-        {
-            $this->oProfile->GetById($aRes['id']);
-        } else {
-            $this->oProfile->SetFromArray($this->oProfile->GetProfileById($aRes['id']));
-        }
 
+        // fetch full profile
+        $this->oProfile->GetById($aRes['id']);
+        
         if ($this->oProfile->GetId() != $aRes['id']) {
             throw new Exception("Profile not found  id:".$aRes['id'].", title: ".$aRes['title']." url_name: ".$path);
         }
-
 
         $this->SetLinkId($aRes['id']); // put profile id in scope of parent class for fetching associated content
         

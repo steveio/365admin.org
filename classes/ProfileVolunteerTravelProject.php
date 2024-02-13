@@ -41,7 +41,7 @@ class VolunteerTravelProjectProfile extends CompanyProfile {
 	
 	
 	
-	public function GetProfileById($id, $return = array()) {
+	public function GetById($id, $return = array()) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
@@ -52,7 +52,7 @@ class VolunteerTravelProjectProfile extends CompanyProfile {
 		parent::SetSubTypeTable($this->GetSubTypeTable());
 		parent::SetSubTypeFields($this->GetSubTypeFields());
 		
-		$oResult = parent::GetProfileById($id, $return = "PROFILE");
+		$oResult = parent::GetById($id, $return = "PROFILE");
 
 		if (!$oResult) return FALSE;
 

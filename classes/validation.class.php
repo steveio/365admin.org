@@ -501,19 +501,19 @@ class Validation {
 
 			$aCampType = Mapping::GetIdByKey($p,REFDATA_CAMP_TYPE_PREFIX);
 			if (count($aCampType) < 1) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_TYPE] = "Please select one or more labels describing your camp type.";
+				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_TYPE] = "Please specify camp type.";
 			}
 
 			if (!is_numeric($p['sc_camp_gender'])) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER] = "Please select your camp gender - boys, girls or co-ed.";
+				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER] = "Please select camp gender.";
 			}
 
 			if (!is_numeric($p['sc_camper_age_from']) || !is_numeric($p['sc_camper_age_to'])) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL] = "Please select the age range of your campers.";
+				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL] = "Please select camp age range.";
 			}
 
 			if (($p['sc_duration_from_id'] == 'null') || ($p['sc_duration_to_id'] == 'null')) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL] = "Please enter the duration of your program(s).";
+				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL] = "Please enter program duration.";
 			}
 
 
