@@ -264,9 +264,18 @@ $(document).ready(function(){
 	<span class="input_col"> <?= $this->Get("COUNTRY_ID_LIST"); ?> </span>
 </div>
 
-<? $css = ($this->Get('COUNTRY_ID_SELECTED') != 71) ? "display: none;" : ""; ?>
+
+
+<? 
+$css_mandatory = "";
+if ($oProfile->GetProfileType() == PROFILE_SUMMERCAMP)
+{
+    $css_mandatory = "<span class=\"red\">*</span>";
+}
+$css = ($this->Get('COUNTRY_ID_SELECTED') != 71) ? "display: none;" : ""; 
+?>
 <div id="state_panel" class="row formgroup my-2" style="<?= $css; ?>">
-	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_STATE_ID; ?>" class="<?= strlen($response['msg'][PROFILE_FIELD_COMP_STATE_ID]) > 1 ? "red" : ""; ?>">State</label></span>
+	<span class="label_col"><label for="<?= PROFILE_FIELD_COMP_STATE_ID; ?>" class="<?= (strlen($response['msg'][PROFILE_FIELD_COMP_STATE_ID]) > 1) ? "red" : ""; ?>">State <?= $css_mandatory; ?></label></span>
 	<span class="input_col"> <?= $this->Get("US_STATE_LIST"); ?> </span>
 </div>
 

@@ -29,7 +29,7 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 
 <div class="row my-2">
     <div class="col-6">
-    	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL]) > 1 ? "color:red;" : ""; ?>">Camper Age<span class="red"> *</span></label></span>
+    	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL]) > 1 ? "color:red;" : ""; ?>">Age Range</label></span>
     	<span class="input_col">
     	<div class="row">
     	<div class="col-4">from <?= $this->Get('CAMPER_AGE_FROM'); ?></div>
@@ -39,7 +39,7 @@ $oProfile = $this->Get('COMPANY_PROFILE');
     </div>
 
     <div class="col-4">
-    	<span class="label_col"><label for="state" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER]) > 1 ? "color:red;" : ""; ?>">Camp Gender <span class="red"> *</span></label></span>
+    	<span class="label_col"><label for="state" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER]) > 1 ? "color:red;" : ""; ?>">Camp Gender</label></span>
     	<span class="input_col">
     	<div class="row">
     	<div class="col-4">&nbsp;<?= $this->Get("CAMP_GENDER_LIST"); ?></div>
@@ -60,7 +60,7 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 </div>
 
 <div class="row formgroup my-2">
-	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL]) > 1 ? "color:red;" : ""; ?>">Program Fees<span class="red"> *</span></label></span>
+	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL; ?>" style="<?= (strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL]) > 1) ? "" : ""; ?>">Program Fees</label></span>
 	<span class="input_col">
 	<div class="row">
 	<div class="col-4">from: <?= $this->Get('PRICE_FROM'); ?></div>
@@ -179,25 +179,23 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 </div>
 
 
-<!--
-<div class="row">
+<div class="row formgroup my-2">
 	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_SEASON_DATES; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_SEASON_DATES]) > 1 ? "color:red;" : ""; ?>">Season Dates</label></span>
-	<span class="input_col"><textarea id="<?= PROFILE_FIELD_SUMMERCAMP_SEASON_DATES; ?>" name="<?= PROFILE_FIELD_SUMMERCAMP_SEASON_DATES; ?>" style="width: 360px; height: 90px;" /><?= stripslashes($_POST[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES]); ?></textarea>
-	<br /><span class="p_small grey">How long is your season?  When do you require staff?  When do you start recruiting?</span>
+	<span class="input_col"><textarea id="<?= PROFILE_FIELD_SUMMERCAMP_SEASON_DATES; ?>" name="<?= PROFILE_FIELD_SUMMERCAMP_SEASON_DATES; ?>" class="form-select" cols="3" /><?= stripslashes($_POST[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES]); ?></textarea>
+	<br /><span class="p_small grey">When does program run?  When do you require staff?  When do you start recruiting?</span>
 	</span>
 </div>
 
-<div class="row">
+<div class="row formgroup my-2">
 	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS]) > 1 ? "color:red;" : ""; ?>">Requirements</label></span>
-	<span class="input_col"><textarea id="<?= PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS; ?>" name="<?= PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS; ?>" style="width: 360px; height: 90px;" /><?= stripslashes($_POST[PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS]); ?></textarea>
-	<br /><span class="p_small grey">Staff requirements age, qualifications, visas etc</span>
+	<span class="input_col"><textarea id="<?= PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS; ?>" name="<?= PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS; ?>" class="form-select" cols="3" /><?= stripslashes($_POST[PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS]); ?></textarea>
+	<br /><span class="p_small grey">Staff/Camp requirements age, qualifications, visas etc</span>
 	</span>
 </div>
- -->
 
  <div class="row formgroup my-2">
 	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY]) > 1 ? "color:red;" : ""; ?>">How to Apply</label></span>
-	<span class="input_col"><textarea id="<?= PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY; ?>" name="<?= PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY; ?>" class="form-select" /><?= stripslashes($_POST[PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY]); ?></textarea></span>
+	<span class="input_col"><textarea id="<?= PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY; ?>" name="<?= PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY; ?>" class="form-select" cols="3" /><?= stripslashes($_POST[PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY]); ?></textarea></span>
 </div>
 
 </div>

@@ -499,11 +499,16 @@ class Validation {
 
 		if ($p['profile_type'] == PROFILE_SUMMERCAMP) {
 
+		    if (!is_numeric($p[PROFILE_FIELD_COMP_STATE_ID])) {
+		        $aResponse['msg'][PROFILE_FIELD_COMP_STATE_ID] = "Please specify camp US state.";
+		    }
+
 			$aCampType = Mapping::GetIdByKey($p,REFDATA_CAMP_TYPE_PREFIX);
 			if (count($aCampType) < 1) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_TYPE] = "Please specify camp type.";
 			}
 
+			/*
 			if (!is_numeric($p['sc_camp_gender'])) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER] = "Please select camp gender.";
 			}
@@ -511,19 +516,21 @@ class Validation {
 			if (!is_numeric($p['sc_camper_age_from']) || !is_numeric($p['sc_camper_age_to'])) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL] = "Please select camp age range.";
 			}
+			*/
 
 			if (($p['sc_duration_from_id'] == 'null') || ($p['sc_duration_to_id'] == 'null')) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL] = "Please enter program duration.";
 			}
 
 
-
+		    /*
 			if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM]) ||
 				!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_PRICE_TO]) ||
 				!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_CURRENCY])
 			) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL] = "Please enter approx program / tuition fees.";
 			}
+			*/
 
 			if (strlen($p[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES]) > 512) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_SEASON_DATES] = "Season dates must be less than 512 characters";
@@ -537,7 +544,7 @@ class Validation {
 
 			$aCampActivities = Mapping::GetIdByKey($p,REFDATA_ACTIVITY_PREFIX);
 			if (count($aCampActivities) < 1) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_ACTIVITY] = "Please select one or more activity types available at your camp.";
+				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_ACTIVITY] = "Please select one or more activity types available at camp.";
 			}
 
 		}

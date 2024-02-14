@@ -33,8 +33,8 @@ class SummerCampProfile extends CompanyProfile {
 	protected $staff_origin;
 	protected $staff_origin_label;
 
-	protected $season_dates; // @depreciated
-	protected $requirements; // @depreciated
+	protected $season_dates;
+	protected $requirements;
 	protected $how_to_apply;
 
 	protected $camp_activity_list;
@@ -93,16 +93,18 @@ class SummerCampProfile extends CompanyProfile {
 	private function GetSubTypeFields() {
 
 		return $sSubTypeFields = "
-							,c2.camp_gender
-							,c2.camp_religion
-							,c2.camper_age_from_id
-							,c2.camper_age_to_id
-							,c2.how_to_apply
 							,c2.duration_from_id
 							,c2.duration_to_id
 							,c2.price_from_id
 							,c2.price_to_id
 							,c2.currency_id
+							,c2.season_dates
+							,c2.requirements
+							,c2.how_to_apply
+							,c2.camp_gender
+							,c2.camp_religion
+							,c2.camper_age_from_id
+							,c2.camper_age_to_id
 							";
 	}
 	
@@ -168,10 +170,14 @@ class SummerCampProfile extends CompanyProfile {
 
 		if (!is_numeric($p['id'])) return false;
 		if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF])) $p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF] = 'NULL';
-               if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF])) $p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF] = 'NULL';
-               if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER] = 'NULL';
-               if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN] = 'NULL';
-
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF])) $p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER])) $p[PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_CAMP_RELIGION])) $p[PROFILE_FIELD_SUMMERCAMP_CAMP_RELIGION] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_FROM])) $p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_FROM] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_TO])) $p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_TO] = 'NULL';
+        
 
 		$sql = "INSERT INTO ".self::PROFILE_TABLE_NAME ." (
 					company_id
@@ -183,6 +189,13 @@ class SummerCampProfile extends CompanyProfile {
 					,how_to_apply
 					,duration_from_id
 					,duration_to_id
+            		,price_to_id 
+            		,price_from_id 
+            		,currency_id 
+            		,camp_gender 
+            		,camp_religion 
+            		,camper_age_from_id 
+            		,camper_age_to_id
 				) VALUES (
 					".$p['id']."
 					,".$p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF]."
@@ -193,8 +206,16 @@ class SummerCampProfile extends CompanyProfile {
 					,'".$p[PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY]."'
 					,".$p[PROFILE_FIELD_SUMMERCAMP_DURATION_FROM]."
 					,".$p[PROFILE_FIELD_SUMMERCAMP_DURATION_TO]."
+            		,".$p[PROFILE_FIELD_SUMMERCAMP_PRICE_TO]."
+            		,".$p[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM]."
+            		,".$p[PROFILE_FIELD_SUMMERCAMP_CURRENCY]."
+            		,".$p[PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER]."
+            		,".$p[PROFILE_FIELD_SUMMERCAMP_CAMP_RELIGION]."
+            		,".$p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_FROM]."
+            		,".$p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_TO]."
 				);";		
-		
+
+			
 		$db->query($sql);
 	
 		if ($db->getAffectedRows() == 1) {
@@ -221,18 +242,25 @@ class SummerCampProfile extends CompanyProfile {
 			return $this->AddSubTypeRecord($p);
 		}
 		
-		
 		$sql = "UPDATE ".self::PROFILE_TABLE_NAME ." SET 
 					 no_staff = ".$p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF]."
 					,staff_gender = ".$p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER]." 
 					,staff_origin = ".$p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN]."
-					,season_dates = '".$p[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES]."'
-					,requirements = '".$p[PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS]."'
-					,how_to_apply = '".$p[PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY]."'
+					,season_dates = '".addslashes($p[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES])."'
+					,requirements = '".addslashes($p[PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS])."'
+					,how_to_apply = '".addslashes($p[PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY])."'
 					,duration_from_id = ".$p[PROFILE_FIELD_SUMMERCAMP_DURATION_FROM]."
 					,duration_to_id = ".$p[PROFILE_FIELD_SUMMERCAMP_DURATION_TO]."
+                    ,price_to_id = ".$p[PROFILE_FIELD_SUMMERCAMP_PRICE_TO]."
+                    ,price_from_id = ".$p[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM]."
+                    ,currency_id = ".$p[PROFILE_FIELD_SUMMERCAMP_CURRENCY]."
+                    ,camp_gender = ".$p[PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER]."
+                    ,camp_religion = ".$p[PROFILE_FIELD_SUMMERCAMP_CAMP_RELIGION]."
+                    ,camper_age_from_id = ".$p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_FROM]."
+                    ,camper_age_to_id = ".$p[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_TO]."
+
 				WHERE company_id = ".$p['id']." ;";
-	
+
 		$db->query($sql);
 	
 		if ($db->getAffectedRows() == 1) {
@@ -254,7 +282,15 @@ class SummerCampProfile extends CompanyProfile {
 		$_POST[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES] = $this->GetSeasonDates();
 		$_POST[PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS] = $this->GetRequirements();
 		$_POST[PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY] = $this->GetHowToApply();
-		
+
+		$_POST[PROFILE_FIELD_SUMMERCAMP_PRICE_TO] = $this->GetPriceToId();
+		$_POST[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM] = $this->GetPriceFromId();
+		$_POST[PROFILE_FIELD_SUMMERCAMP_CURRENCY] = $this->GetCurrencyId();
+		$_POST[PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER] = $this->GetCampGender();
+		$_POST[PROFILE_FIELD_SUMMERCAMP_CAMP_RELIGION] = $this->GetCampReligion();
+		$_POST[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_FROM] = $this->GetCamperAgeFromId();
+		$_POST[PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_TO] = $this->GetCamperAgeToId();
+
 	}
 
 	public function GetCampGender() {
@@ -293,7 +329,7 @@ class SummerCampProfile extends CompanyProfile {
 	
 	public function GetCamperAgeFromLabel($type = "STRING") {
 		
-		if (!is_object($oCamperAgeFrom)) {
+		if (!is_object($this->oCamperAgeFrom)) {
 			$this->oCamperAgeFrom = new Refdata(REFDATA_AGE_RANGE);
 			$this->oCamperAgeFrom->GetByType();
 			$this->camper_age_from_label = $this->oCamperAgeFrom->GetValueById($this->camper_age_from_id);
@@ -317,59 +353,8 @@ class SummerCampProfile extends CompanyProfile {
 				if (!is_numeric($label)) $label = preg_replace("/[^0-9]/", "", $label);
 			}
 		}
-		
 		return $this->camper_age_to_label;
-	}
-	
-	
-	public function GetDurationFromId() {
-		return $this->duration_from_id;
-	}
-	
-	public function GetDurationFromLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_from_id);
-	}
-
-	public function GetDurationToId() {
-		return $this->duration_to_id;
-	}
-
-	public function GetDurationToLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_to_id);
-	}
-	
-	public function GetPriceFromId() {
-		return $this->price_from_id;
-	}
-	
-	public function GetPriceToId() {
-		return $this->price_to_id;
-	}
-	
-	public function GetCurrencyId() {
-		return $this->currency_id;
-	}
-	
-	public function GetCurrencyLabel() {
-		return $this->GetCurrencyRefdataObject()->GetValueById($this->currency_id);
-	}
-	
-	public function GetPriceFromLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_from_id);
-	}
-	
-	public function GetPriceToLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_to_id);
-	}
-	
-	public function GetCostsFromLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_from_id);
-	}
-	
-	public function GetCostsToLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_to_id);
-	}
-	
+	}	
 	
 	public function GetStateId() {
 		return $this->state_id;

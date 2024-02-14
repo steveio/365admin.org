@@ -64,6 +64,7 @@ class CompanyProfileController extends ProfileController {
 			case self::MODE_ADD :
 				$this->CheckPermissions();
 				$this->AddProfile();
+				$this->SetPageMeta(self::MODE_ADD);
 				$this->SetFormElements();
 				break;
 			case self::MODE_DELETE :
@@ -79,6 +80,7 @@ class CompanyProfileController extends ProfileController {
 				}
 				$this->DoImageUpload("COMPANY", $this->GetCompanyId());
 				$this->EditProfile();
+				$this->SetPageMeta(self::MODE_EDIT);
 				$this->SetFormElements();
 				break;
 			case self::MODE_VIEW :
@@ -248,6 +250,20 @@ class CompanyProfileController extends ProfileController {
 
 	}
 
+	public function SetPageMeta($mode)
+	{
+	    global $oHeader;
+	    
+	    if ($mode == self::MODE_EDIT)
+	    {
+	       $oHeader->SetTitle("Edit : ".$this->GetProfile()->GetTitle());
+	    } elseif ($mode == self::MODE_ADD) 
+	    {
+	        $oHeader->SetTitle("Add Profile");
+	    }
+	    
+	    $oHeader->Reload();
+	}
 
 	/*
 	 * Set form elements/values according to the type of profile being viewed
@@ -1119,11 +1135,10 @@ EOT;
 	 */
 	protected function AddUpdateCompanyDB($aFormValues) {
 
-		if (DEBUG)  Logger::Msg(__CLASS__."->".__FUNCTION__."()");
-
 		global $oAuth, $db, $oSession, $oBrand;
 
 		$response = array();
+		$this->UnsetValidationErrors();
 
 		/* basic sanitization */
 		foreach($aFormValues as $k => $v) {
@@ -1188,6 +1203,7 @@ EOT;
 
 		/* try to add / update company profile */
 		$result = $this->GetProfile()->DoAddUpdate($c,$response,$bRedirect = false,$bApproved,$bTX = TRUE);
+
 		if($result) {
 
 			Logger::DB(2,get_class($this)."::".__FUNCTION__."()","OK id: ".$response['id']);

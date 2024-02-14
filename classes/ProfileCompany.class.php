@@ -147,7 +147,7 @@ class CompanyProfile extends AbstractProfile {
 	
   	public function GetTitle($trunc = 0) {
   		
-  		$title = (is_numeric($this->GetProfileVersionIdToFetch())) ? $this->GetFieldByProfileVersion('title') : $this->title;
+  		$title = $this->title;
   		
   		if ($trunc >= 1) {
   			$s = $title;
@@ -264,6 +264,15 @@ class CompanyProfile extends AbstractProfile {
   	
   	public function GetStateId() {
   		return $this->state_id;
+  	}
+
+  	public function GetStateLabel() {
+  	    if (is_numeric($this->state_id) && !is_object($this->oState)) {
+  	        $this->oState = new Refdata(REFDATA_US_STATE);
+  	        $this->oState->GetByType();
+  	        $this->state_label = $this->oState->GetValueById($this->state_id);
+  	    }
+  	    return $this->state_label;
   	}
 
   	public function GetCountryId() {

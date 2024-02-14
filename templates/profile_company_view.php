@@ -53,8 +53,56 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
     </div>
 </div>
 
+
+<?php 
+
+/*
+print_r("<pre>");
+print_r($oProfile->GetCamperAgeFromLabel());
+print_r($oProfile);
+print_r("</pre>");
+die();
+*/
+
+?>
+
+<div class="row my-2">
+	<div class="col-12">
+		<?php 
+		if (count($oProfile->GetActivityArray()) > 1 && count($oProfile->GetActivityArray()) < 3) {
+			$label = "Activities: "; ?>
+			<b><?= $label; ?></b> <?= $oProfile->GetActivityTxt(); ?><br/><?
+		}
+		?>
+		<?php 
+		if (count($oProfile->GetCountryArray()) >= 1) {
+		    $strCountryLabel = (count($oProfile->GetCountryArray()) == 1) ? "Country: " : "Countries: ";
+		    if (count($oProfile->GetCountryArray()) > 3) { ?>
+		    <b>Location: </b> Multiple Destinations<br/><?
+		    } else { ?>
+			<b><?= $strCountryLabel; ?></b> <?= $oProfile->GetCountryTxt(); ?><br/><?
+		    }
+		}  
+		?>
+		<? if (strlen($oProfile->GetLocation()) > 1) { ?>
+			<b>Location: </b> <?= $oProfile->GetLocation(); ?><br/>
+		<? } ?>
+
+		<? if ($oProfile->GetProfileType() == PROFILE_SUMMERCAMP) { ?>
+
+    		<? if (count($oProfile->GetCampTypeLabels()) > 1) { ?>
+    			<b>Camp Type: </b> <?= implode(" / ", $oProfile->GetCampTypeLabels()); ?><br/>
+    		<? } ?>
+		
+		<? } // end summer camp ?>
+	</div>
+</div>
+
+
+
 <div class='lead'>
 <p class="lead"><strong><?= $oProfile->GetDescShortPlaintext(); ?></strong></p>
+</div>
 
 <?php
 if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1) { ?>
@@ -85,6 +133,8 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 <p><?= $oProfile->GetDescLongClean();?></p>
 
 
+<div class="row">
+
 <? if ($oProfile->GetListingType() >= BASIC_LISTING) { ?>
 	<? if (strlen(trim($oProfile->GetVideo())) > 1) { ?>
 		<div class="span12">
@@ -96,18 +146,21 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 <? } ?>
 
 <? if ($oProfile->GetDuration() != "") { ?>
-<h3>Duration / Dates</h3>
-<p><?= nl2br($oProfile->GetDuration()) ?></p>
-<? } ?> <? if ($oProfile->GetCosts() != "") { ?>
-<h3>Costs / Pay</h3>
-<p><?= nl2br($oProfile->GetCosts()) ?></p>
-<? } ?> <? if ($oProfile->GetListingType() >= ENHANCED_LISTING) { ?>
-<? if (strlen($oProfile->GetPlacementInfo()) > 1) { ?>
-<h3>Placement Info</h3>
-<p><?= nl2br(stripslashes($oProfile->GetPlacementInfo())); ?></p>
-<? } ?>
+    <h3>Duration / Dates</h3>
+    <p><?= nl2br($oProfile->GetDuration()) ?></p>
+    <? } ?> <? if ($oProfile->GetCosts() != "") { ?>
+    <h3>Costs / Pay</h3>
+    <p><?= nl2br($oProfile->GetCosts()) ?></p>
 <? } ?> 
-<? if ($oProfile->GetListingType() >  BASIC_LISTING) { ?>
+
+<? if ($oProfile->GetListingType() >= ENHANCED_LISTING) { ?>
+    <? if (strlen($oProfile->GetPlacementInfo()) > 1) { ?>
+    <h3>Placement Info</h3>
+    <p><?= nl2br(stripslashes($oProfile->GetPlacementInfo())); ?></p>
+    <? } ?>
+<? } ?> 
+
+<? if ($oProfile->GetListingType() >=  BASIC_LISTING) { ?>
 	<h3>Contact Info</h3>
 	<? if ($oProfile->GetListingType() >= ENHANCED_LISTING) { ?>
 		<? if ($oProfile->GetTel() != "") { ?> 
@@ -124,6 +177,146 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 
 </div>
 
+
+
+<? if ($oProfile->GetProfileType() == PROFILE_SUMMERCAMP) { ?>
+<div class="row">
+
+	<h2>Summer Camp Info</h2>
+
+	<div class="row my-3">
+    	<div class="col">
+    	<? if ($oProfile->GetStateLabel() != "") { ?>
+    		<b>State :</b> <?= $oProfile->GetStateLabel() ?>
+    	<? } ?>
+    	</div>
+    
+    	<div class="col">
+        <? if (strlen($oProfile->GetCamperAgeFromLabel()) >= 1) { ?>
+        	<b>Camp Age Range: </b> <?= $oProfile->GetCamperAgeFromLabel() ?> - <?= $oProfile->GetCamperAgeToLabel() ?> 
+        <? } ?>
+        </div>
+        
+    	<div class="col">
+        <? if (strlen($oProfile->GetCampGenderLabel()) >= 1) { ?>
+        	<b>Camp Gender: </b> <?= $oProfile->GetCampGenderLabel(); ?> 
+        <? } ?>
+    	</div>
+    
+    	<div class="col">
+        <? if (strlen($oProfile->GetCampReligionLabel()) >= 1) { ?>
+        	<b>Camp Affiliation: </b> <?= $oProfile->GetCampReligionLabel(); ?> 
+        <? } ?>
+    	</div>
+    
+    	<div class="col">
+    	<? if ($oProfile->GetDurationFromLabel() != "") { ?>
+    		<b>Program Duration: </b> <?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?> 
+    	<? } ?>
+    	</div>
+    
+    	<div class="col">
+    	<? if ($oProfile->GetPriceFromLabel() != "") { ?>
+    		<b>Program Costs: </b> <?= $oProfile->GetPriceFromLabel(); ?> - <?= $oProfile->GetPriceToLabel(); ?> <?= $oProfile->GetCurrencyLabel(); ?> 
+    	<? } ?>
+    	</div>
+	</div>
+	
+    <div class="row my-3">
+    	<b>Summer Camp Activities</b>
+    	<div class="row">
+    		<?
+        		$oCampActivity = new Refdata(REFDATA_ACTIVITY);
+        		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+    			$oColumnSort = new ColumnSort;
+    			$oColumnSort->SetElements($oCampActivity->GetCheckboxList(REFDATA_ACTIVITY_PREFIX,$oProfile->GetCampActivityList(),''));
+    			$oColumnSort->SetCols(3);
+    			$aElements = $oColumnSort->Sort();
+    		?>
+    
+    		<div class="row">
+    			<div class="col-3">
+    				<ul class='select_list'>
+    				<?php
+    				foreach($aElements[1] as $idx => $val) {
+    					print $val;
+    				}
+    				?>
+    				</ul>
+    			</div>
+    			<div class="col-3">
+    				<ul class='select_list'>
+    				<?php
+    				foreach($aElements[2] as $idx => $val) {
+    					print $val;
+    				}
+    				?>
+    				</ul>
+    			</div>
+    			<div class="col-3">
+    				<ul class='select_list'>
+    				<?php
+    				foreach($aElements[3] as $idx => $val) {
+    					print $val;
+    				}
+    				?>
+    				</ul>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+    <div class="row my-3">
+    	<b>Summer Camp Job/Roles</b>
+    	<div class="row">
+    		<?
+    		    $oCampJobType = new Refdata(REFDATA_CAMP_JOB_TYPE);
+        		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+    			$aRoles = $oCampJobType->GetCheckboxList(REFDATA_ACTIVITY_PREFIX,$oProfile->GetCampJobTypeList(),'');
+    		?>
+    
+    		<div class="row">
+    			<div class="col-3">
+    				<ul class='select_list'>
+    				<?php
+    				foreach($aRoles as $idx => $val) {
+    					print $val;
+    				}
+    				?>
+    				</ul>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    
+    
+   	<div class="row my-3">
+   	
+    	<div class="col">
+    	<? if ($oProfile->GetSeasonDates() != "") { ?>
+    		<h3>Season Dates: </h3>
+    		<?= $oProfile->GetSeasonDates() ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetRequirements() != "") { ?>
+    		<h3>Requirements: </h3>
+    		<?= $oProfile->GetRequirements() ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetHowToApply() != "") { ?>
+    		<h3>How to Apply: </h3>
+    		<?= $oProfile->GetHowToApply() ?>
+    	<? } ?>
+    	</div>
+   	
+   	</div>
+
+</div>
+<? } ?>
 
 
 <div id="buttons" class="buttons row my-5">
