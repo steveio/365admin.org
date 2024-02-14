@@ -171,7 +171,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
         </script>
     </div>
 
-	<p><?= htmlUtils::stripLinks($oProfile->GetDescLong()); ?></p>
+	<p><?= $oProfile->GetDescLongClean();?></p>
 
 	<? if (strlen(trim($oProfile->GetVideo())) > 1) { ?>
 		<div class='col-12'>

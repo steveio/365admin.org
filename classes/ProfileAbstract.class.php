@@ -81,6 +81,13 @@ abstract class AbstractProfile implements TemplateInterface {
 	    return $this->fetch_mode;
 	}
 
+	/**
+	 * Return plaintext version of short description 
+	 * truncated to n chars
+	 * 
+	 * @param int $trunc number of chars
+	 * @return string
+	 */
 	public function GetDescShortPlaintext($trunc = null)
 	{
 	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short));
@@ -90,6 +97,17 @@ abstract class AbstractProfile implements TemplateInterface {
 	    } else {
 	        return $str;
 	    }
+	}
+
+	/**
+	 * Return body text (desc_long) with CKEditor markup cleaned 
+	 * and all HTML links <a> tags removed 
+	 *
+	 * @return string
+	 */
+	public function GetDescLongClean()
+	{
+	    return htmlUtils::stripLinks(htmlUtils::convertCkEditorFont2Html($this->GetDescLong(),"<p>"));
 	}
 
 	/*

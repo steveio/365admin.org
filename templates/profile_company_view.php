@@ -82,7 +82,7 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 ?>
 
 
-<p><?= htmlUtils::stripLinks($oProfile->GetDescLong()); ?></p>
+<p><?= $oProfile->GetDescLongClean();?></p>
 
 
 <? if ($oProfile->GetListingType() >= BASIC_LISTING) { ?>
@@ -127,7 +127,7 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 
 
 <div id="buttons" class="buttons row my-5">
-<div class="booking-enquiry">
+<div class="booking-enquiry my-3">
 <h2>Contact / Enquiry</h2>
 <? 
 $aEnquiryButtonHtml = $this->Get('aEnquiryButtonHtml');

@@ -25,7 +25,9 @@
 					</div><?php 
 				}
 				if (count($aReview) == 0) { ?>
+					<div class="row my-3">
 					<p>There are no reviews, click 'Add a review' to submit one </p>
+					</div>
 				<?php 
 				} ?>
 			</div><?php
@@ -90,8 +92,7 @@
     			<input type="hidden" id="review-link-id" name="review-link_id" value="<?= $this->Get('LINK_ID'); ?>" class="form-control" />
     			<input type="hidden" id="review-link-to" name="review-link_to" value="<?= $this->Get('LINK_TO'); ?>" class="form-control" />
 
-    		  	<div class="row form-group my-2">
-    		
+    		  	<div class="row form-group my-2">    		
         		  	<div class="col-6">
         				<label for="review-name">Name:</label>
         				<input type="text" id="review-name" name="review-name"  maxlength="45" class="form-control" />
@@ -101,7 +102,6 @@
         				<label for="review-email">Email:</label>
         				<input type="text" id="review-email" name="review-email"  maxlength="50" class="form-control" />
         			</div>
-
 				</div>
 
     		  	<div class="row form-group my-2">
