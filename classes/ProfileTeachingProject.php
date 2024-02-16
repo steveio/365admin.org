@@ -209,10 +209,22 @@ class TeachingProjectProfile extends CompanyProfile {
 		return $this->no_teachers;
 	}
 
+	public function GetNoTeachersLabel() {
+	    $oRange = new Refdata(REFDATA_INT_RANGE);
+	    $oRange->GetByType();
+	    return $this->no_teachers_label = $oRange->GetValueById($this->no_teachers);
+	}	
+	
 	public function GetClassSize() {
 		return $this->class_size;
 	}
-	
+
+	public function GetClassSizeLabel() {
+	    $oRange = new Refdata(REFDATA_INT_RANGE);
+	    $oRange->GetByType();
+	    return $this->class_size_label = $oRange->GetValueById($this->class_size);
+	}
+
 	public function GetDurationFromId() {
 		return $this->duration_from_id;
 	}

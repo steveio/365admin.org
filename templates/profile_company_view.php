@@ -11,10 +11,10 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 ?>
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
-    (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-9874604497476880",
-        enable_page_level_ads: true
-    });
+    //(adsbygoogle = window.adsbygoogle || []).push({
+    //    google_ad_client: "ca-pub-9874604497476880",
+    //    enable_page_level_ads: true
+    //});
     </script>
         
 <?php 
@@ -69,7 +69,7 @@ die();
 <div class="row my-2">
 	<div class="col-12">
 		<?php 
-		if (count($oProfile->GetActivityArray()) > 1 && count($oProfile->GetActivityArray()) < 3) {
+		if (count($oProfile->GetActivityArray()) >= 1 && count($oProfile->GetActivityArray()) < 3) {
 			$label = "Activities: "; ?>
 			<b><?= $label; ?></b> <?= $oProfile->GetActivityTxt(); ?><br/><?
 		}
@@ -94,7 +94,24 @@ die();
     			<b>Camp Type: </b> <?= implode(" / ", $oProfile->GetCampTypeLabels()); ?><br/>
     		<? } ?>
 		
-		<? } // end summer camp ?>
+		<? } ?>
+
+		<? if ($oProfile->GetProfileType() == PROFILE_TEACHING) { ?>
+
+        	<? if ($oProfile->GetDurationFromLabel() != "") { ?>
+        		<b>Program Duration: </b> <?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?> 
+        	<? } ?>
+
+    		<? if (strlen($oProfile->GetNoTeachersLabel()) > 1) { ?>
+    			<b>Number of Teachers: </b> <?= $oProfile->GetNoTeachersLabel(); ?><br/>
+    		<? } ?>
+
+    		<? if (strlen($oProfile->GetClassSizeLabel()) > 1) { ?>
+    			<b>Class Size: </b> <?= $oProfile->GetClassSizeLabel(); ?><br/>
+    		<? } ?>
+
+		<? } ?>
+
 	</div>
 </div>
 
@@ -314,6 +331,105 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
     	</div>
    	
    	</div>
+
+</div>
+<? } ?>
+
+
+<? if ($oProfile->GetProfileType() == PROFILE_TEACHING) { ?>
+<div class="row">
+	<h2>Teaching Info</h2>
+	<div class="row my-3">
+
+    	<div class="col">
+    	<? if ($oProfile->GetSalary() != "") { ?>
+    		<h3>Salary / Costs: </h3>
+    		<?= $oProfile->GetSalary(); ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetBenefits() != "") { ?>
+    		<h3>Benefits: </h3>
+    		<?= $oProfile->GetBenefits(); ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetQualifications() != "") { ?>
+    		<h3>Qualifications: </h3>
+    		<?= $oProfile->GetQualifications() ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetRequirements() != "") { ?>
+    		<h3>Requirements: </h3>
+    		<?= $oProfile->GetRequirements() ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetHowToApply() != "") { ?>
+    		<h3>How to Apply: </h3>
+    		<?= $oProfile->GetHowToApply() ?>
+    	<? } ?>
+    	</div>
+
+	</div>
+
+</div>
+<? } ?>
+
+
+<? if ($oProfile->GetProfileType() == PROFILE_SEASONALJOBS) { ?>
+<div class="row">
+	<h2>Job Info</h2>
+	<div class="row my-3">
+
+    	<? if ($oProfile->GetJobTypes() != "") { ?>
+    	<div class="col">
+    		<h3>Job Types: </h3>
+    		<?= $oProfile->GetJobTypes(); ?>
+    	</div>
+    	<? } ?>
+
+    	<? if ($oProfile->GetDurationFromLabel() != "") { ?>
+    	<div class="col">
+    		<h3>Job Duration(s): </h3> 
+    		<?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?> 
+    	</div>
+    	<? } ?>
+
+    	<? if ($oProfile->GetPay() != "") { ?>
+    	<div class="col">
+    		<h3>Salary / Pay: </h3>
+    		<?= $oProfile->GetPay(); ?>
+    	</div>
+    	<? } ?>
+
+    	<? if ($oProfile->GetBenefits() != "") { ?>
+    	<div class="col">
+    		<h3>Benefits: </h3>
+    		<?= $oProfile->GetBenefits(); ?>
+    	</div>
+    	<? } ?>
+
+    	<? if ($oProfile->GetRequirements() != "") { ?>
+    	<div class="col">
+    		<h3>Requirements: </h3>
+    		<?= $oProfile->GetRequirements() ?>
+    	</div>
+		<? } ?>
+
+    	<? if ($oProfile->GetHowToApply() != "") { ?>
+    	<div class="col">
+    		<h3>How to Apply: </h3>
+    		<?= $oProfile->GetHowToApply() ?>
+    	</div>
+    	<? } ?>
+
+	</div>
 
 </div>
 <? } ?>

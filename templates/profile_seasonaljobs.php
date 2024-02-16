@@ -23,13 +23,15 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 	</span>
 </div>
 
+<!-- 
 <div class="row formgroup my-2">
-	<span class="label_col"><label for="<?= PROFILE_FIELD_SEASONALJOBS_NO_STAFF; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SEASONALJOBS_NO_STAFF]) > 1 ? "color:red;" : ""; ?>">No Staff</label></span>
+	<span class="label_col"><label for="<?= PROFILE_FIELD_SEASONALJOBS_NO_STAFF; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SEASONALJOBS_NO_STAFF]) > 1 ? "color:red;" : ""; ?>">Number Jobs</label></span>
 	<span class="input_col">
 	<?= $this->Get('NO_STAFF'); ?>
-	<br /><span class="p_small grey">Approx size of your organisation / number of staff</span>
+	<br /><span class="p_small grey">Number of Jobs Available</span>
 	</span>
 </div>
+ -->
 
 <div class="row formgroup my-2">
 	<span class="label_col"><label for="<?= PROFILE_FIELD_SEASONALJOBS_PAY; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SEASONALJOBS_PAY]) > 1 ? "color:red;" : ""; ?>">Salary / Pay</label></span>

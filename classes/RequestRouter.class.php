@@ -43,7 +43,6 @@ class RequestRouter {
             print_r("</pre>");
             die();
 
-            die("here");
             if (is_object($oSession))
             {
                 $oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR, $e->getMessage());

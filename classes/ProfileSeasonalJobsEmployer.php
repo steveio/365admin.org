@@ -14,7 +14,7 @@ class SeasonalJobEmployerProfile extends CompanyProfile {
 	
 	protected $pay; // varchar(512)
 	protected $benefits; // varchar(512),
-	protected $no_staff; // smallint refdata.int_range 
+	protected $no_staff; // @deprecated 
 	protected $job_types; // varchar(512), 
 	protected $how_to_apply; // varchar(512)
 	protected $requirements; // varchar(512)
