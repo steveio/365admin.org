@@ -44,6 +44,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
         global $db, $oHeader, $oFooter;
 
         try {
+            
             parent::GetByUrlName($path);
             parent::SetPageHeader();
             

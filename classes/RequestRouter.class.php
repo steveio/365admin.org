@@ -38,6 +38,12 @@ class RequestRouter {
 
         } catch (NotFoundException $e) {  // 404 not found error
 
+            print_r("<pre>");
+            print_r($e);
+            print_r("</pre>");
+            die();
+
+            die("here");
             if (is_object($oSession))
             {
                 $oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR, $e->getMessage());
@@ -257,9 +263,10 @@ class RequestRouter {
                     $this->oMVCController->SetRouteFromXmlFile(PATH_TO_MVC_ROUTE_MAP,$oBrand->GetSiteId());                
                     $oSession->SetMVCController($this->oMVCController);
             }
+            
+            $this->oMVCController->SetExceptionOnNotFound(FALSE);
 
             $this->oMVCController->SetRequestUri($this->GetRequestUri());
-            
             $this->oMVCController->Process();
             
             $oSession->Save();
@@ -267,11 +274,13 @@ class RequestRouter {
             if ($this->oMVCController->GetPassThrough())
             {
                 return true;
-            }
+            } else {
             
-            if (is_numeric($this->oMVCController->GetCurrentRouteId())) // route matched, nothing further to do
-            {
-                die();
+                if (is_numeric($this->oMVCController->GetCurrentRouteId())) // route matched, nothing further to do
+                {
+                    die();
+                }
+
             }
 
         } catch (Exception $e)

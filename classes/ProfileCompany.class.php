@@ -532,7 +532,7 @@ class CompanyProfile extends AbstractProfile {
         }
 	}
 	
-	public function GetById($id,$return = "ARRAY")
+	public function GetById($id,$return = "PROFILE")
 	{
 	    return $this->GetProfileById($id, $return);
 	}

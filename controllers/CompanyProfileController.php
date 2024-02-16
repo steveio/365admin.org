@@ -240,8 +240,10 @@ class CompanyProfileController extends ProfileController {
 
 		$oCompanyProfile = new CompanyProfile();
 		
+		die("here");
+		
 		$aRes = $oCompanyProfile->GetByUrlName($this->GetCompanyUrlName());
-
+		
 		if (!is_numeric($aRes['id'])) throw new Exception(ERROR_COMPANY_PROFILE_NOT_FOUND.$this->GetCompanyUrlName());
 		
 		$this->oProfile = ProfileFactory::Get($aRes['type']);

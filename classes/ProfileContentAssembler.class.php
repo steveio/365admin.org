@@ -69,6 +69,15 @@ class ProfileContentAssembler extends AbstractContentAssembler {
 
         // fetch full profile
         $this->oProfile->GetById($aRes['id']);
+
+        /*
+        print_r("<pre>");
+        print_r($aRes);
+        print_r($path);
+        print_r($this->oProfile);
+        print_r("</pre>");
+        die("here");
+        */
         
         if ($this->oProfile->GetId() != $aRes['id']) {
             throw new Exception("Profile not found  id:".$aRes['id'].", title: ".$aRes['title']." url_name: ".$path);

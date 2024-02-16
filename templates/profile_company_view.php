@@ -224,14 +224,14 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 	
     <div class="row my-3">
     	<b>Summer Camp Activities</b>
-    	<div class="row">
+    	<div class="row my-3">
     		<?
-        		$oCampActivity = new Refdata(REFDATA_ACTIVITY);
-        		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
-    			$oColumnSort = new ColumnSort;
-    			$oColumnSort->SetElements($oCampActivity->GetCheckboxList(REFDATA_ACTIVITY_PREFIX,$oProfile->GetCampActivityList(),''));
-    			$oColumnSort->SetCols(3);
-    			$aElements = $oColumnSort->Sort();
+    		$oCampActivity = new Refdata(REFDATA_ACTIVITY);
+    		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+			$oColumnSort = new ColumnSort;
+			$oColumnSort->SetElements($oCampActivity->GetCheckboxList(REFDATA_ACTIVITY_PREFIX,$oProfile->GetCampActivityList(),''));
+			$oColumnSort->SetCols(3);
+			$aElements = $oColumnSort->Sort();
     		?>
     
     		<div class="row">
@@ -267,8 +267,8 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
     </div>
 
     <div class="row my-3">
-    	<b>Summer Camp Job/Roles</b>
-    	<div class="row">
+    	<b>Summer Camp Roles</b>
+    	<div class="row my-3">
     		<?
     		    $oCampJobType = new Refdata(REFDATA_CAMP_JOB_TYPE);
         		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);

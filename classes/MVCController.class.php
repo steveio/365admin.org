@@ -42,6 +42,11 @@ class MVCController{
 		$this->bPassThrough = FALSE;
 	}
 
+	public function GetExceptionOnNotFound()
+	{
+	    return $this->bExceptionOnNotFound;
+	}
+
 	public function SetExceptionOnNotFound($bExceptionOnNotFound)
 	{
 	    $this->bExceptionOnNotFound = $bExceptionOnNotFound;
@@ -58,8 +63,12 @@ class MVCController{
 		
 		try {
 
-		    $this->MapRequest();
-			$oRoute = $this->GetRouteById($this->GetCurrentRouteId());
+		    if (!$this->MapRequest())
+		    {
+		        return false;
+		    }
+
+			$oRoute = $this->GetRouteById($this->GetCurrentRouteId());			
 			$oRoute->Process();
 			
 			if ($oRoute->GetPassThrough())
@@ -88,14 +97,15 @@ class MVCController{
 		
 		try {
 		    $this->SetCurrentRouteId(null);
-		    $oRoute = $this->GetRouteByUriMapping($this->GetRequestUri());		    
+
+		    $oRoute = $this->GetRouteByUriMapping($this->GetRequestUri());
+
 		    if (is_object($oRoute))
 		    {
 		        $this->SetCurrentRouteId( $oRoute->GetId() );
+		        return true;
 		    }
-			
-		} catch (NotFoundException $e) {
-            throw $e;
+		
 		} catch (Exception $e) { // general exception
             throw $e;
 		}
@@ -183,23 +193,18 @@ class MVCController{
 			if ($oRoute->GetId() == $route_id) return $oRoute;
 		}
 
-		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." id: ".$route_id);
 	}
 	
 	public function GetRouteByName($route_name) {
 		foreach($this->GetRoutes() as $oRoute) {
 			if ($oRoute->GetName() == $route_name) return $oRoute;
 		}
-		
-		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." ".$route_name);
 	}
 
 	public function GetRouteByUriMapping($uri) {
 		foreach($this->GetRoutes() as $oRoute) {
 			if ($oRoute->GetUriMapping() == $uri) return $oRoute;
 		}
-		
-		throw new NotFoundException(ERROR_404_ROUTE_NOT_FOUND." ".$uri);
 	}
 	
 		
