@@ -363,14 +363,14 @@ class Content  implements TemplateInterface {
 		
 		global $oBrand;
 
-		if (!is_object($oBrand)) return "";
-
 		/*
 		 * if the article is unpublished
 		 * or not published to the site being viewed
 		 * return a default URL for viewing
 		*/
 		$defaultUrl = "/article?&id=".$this->GetId();
+
+		if (!is_object($oBrand)) return $defaultUrl;
 		
 		$aMapping = $this->GetMappingBySiteId($oBrand->GetSiteId());
 	

@@ -15,6 +15,7 @@
 
 require_once("./conf/config.php");
 require_once("./conf/brand_config.php");
+require_once("./classes/Brand.php");
 require_once("./classes/session.php");
 require_once("./classes/logger.php");
 require_once("./classes/json.class.php");
@@ -32,6 +33,11 @@ require_once("./classes/placement.class.php");
 
 
 $db = new db($dsn,$debug = false);
+
+if (!is_object($oBrand))
+{
+    $oBrand = new Brand($aBrandConfig[HOSTNAME]);
+}
 
 
 $oSession = Session::initSession();

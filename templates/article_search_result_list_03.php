@@ -5,10 +5,9 @@
 <tr>
 	<th scope="col">&nbsp;</th>
 	<th scope="col">Title</th>
-	<th scope="col">Published To</th>
-	<th scope="col">Created</th>
+	<th scope="col">Url</th>
+	<th scope="col">Created Date</th>
 	<th scope="col">Last Updated</th>
-	<th scope="col">&nbsp;</th>
 	<th scope="col">&nbsp;</th>
 	<th scope="col">&nbsp;</th>
 	<th scope="col">&nbsp;</th>
@@ -28,12 +27,9 @@ if ((is_array($aArticle)) && (count($aArticle) >= 1)) {
 	<tr class='<?= $class ?>'>
 		<td valign="top"><?= $i++ ?></td>
 		<td valign="top"><?= $oArticle->GetTitle() ?></td>
-		<td valign="top"><a href="<?= $oArticle->GetUrl() ?>"><?= $oArticle->GetRelativeUrl() ?></td>
+		<td valign="top"><a href="<?= $oArticle->GetUrl() ?>" target="_new"><?= $oArticle->GetRelativeUrl() ?></a></td>
 		<td valign="top"><?= $oArticle->GetCreatedDate() ?></td>
 		<td valign="top"><?= $oArticle->GetLastUpdated() ?></td>
-		<td>
-			<a class="btn btn-primary rounded-pill px-3" role="button" href="<?= $oArticle->GetUrl() ?>" title="View">View</a>
-		</td>		
 		<td>
 			<a class="btn btn-primary rounded-pill px-3" role="button"  href="./article-editor?&id=<?= $oArticle->GetId() ?>" title="Edit">Edit</a>
 		</td>

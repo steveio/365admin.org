@@ -214,7 +214,6 @@ if (count($oArticle->GetMapping()) >= 1) {
 	<tr>
 		<td colspan="2">
 	    	<button class="btn btn-primary rounded-pill px-3" type="submit" name="opt_<?= $oArticleMapping->GetId() ?>" onclick="javascript: return ArticleMapOptions(<?= $oArticleMapping->GetId(); ?>);" value="update" >Update</button>
-	    	<button class="btn btn-primary rounded-pill px-3" type="submit" name="" onclick="javascript: window.open('/article<?=  $oArticleMapping->GetSectionUri(); ?>');" value="Preview" >Preview</button>
 		</td>
 	</tr>
 
