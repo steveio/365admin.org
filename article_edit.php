@@ -276,7 +276,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 			<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: go('./article-publisher?&id=<?= $oArticle->GetId() ?>'); return false;" name="new">Publish</button>
 		<? } ?>
 
-		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: window.open('<?=  $oArticle->GetUrl(); ?>');" name="new">Preview</button>
+		<button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: window.open('<?=  $oArticle->GetUrl(); ?>');" name="new">View</button>
 
 	</span>
 </div>

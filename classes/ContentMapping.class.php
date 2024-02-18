@@ -140,16 +140,15 @@ class ContentMapping {
      *
      */
     public function GetLabel() {
-        
-        global $_CONFIG;
-        return $_CONFIG['sites'][$this->GetWebsiteId()] . $this->GetSectionUri();
+
+        return $this->GetSectionUri();
         
         
     }
     
     public function GetUrl() {
-        global $_CONFIG;
-        return $_CONFIG['url'].$this->GetLabel();
+        global $oBrand;
+        return $oBrand->GetWebsiteUrl().$this->GetLabel();
     }
     
     

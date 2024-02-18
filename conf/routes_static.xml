@@ -42,7 +42,9 @@
 	</route>
 	<route>
 		<url>/article</url>
-		<filename>article.php</filename>
+
+		<callback>$this->ProcessArticlePageRequest()</callback>
+
 	</route>
 	<route>
 		<url>/article-manager</url>

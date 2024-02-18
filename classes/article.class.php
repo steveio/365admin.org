@@ -361,10 +361,10 @@ class Content  implements TemplateInterface {
 	
 	public function SetUrl() {
 		
-		global $_CONFIG;
+		global $oBrand;
 
-		if (!is_numeric($_CONFIG['site_id'])) return "";
-		
+		if (!is_object($oBrand)) return "";
+
 		/*
 		 * if the article is unpublished
 		 * or not published to the site being viewed
@@ -372,19 +372,20 @@ class Content  implements TemplateInterface {
 		*/
 		$defaultUrl = "/article?&id=".$this->GetId();
 		
-		$aMapping = $this->GetMappingBySiteId($_CONFIG['site_id']);
+		$aMapping = $this->GetMappingBySiteId($oBrand->GetSiteId());
 	
 		if (count($aMapping) < 1) {
 		    return $this->url = $defaultUrl;
 		}
-		
+
 		$oMapping = $aMapping[0]; /* pick the first publish mapping associated with the site being viewed */ 
 		
 		if (!is_object($oMapping)) {
-		    $this->url = $defaultUrl;
+		    return $this->url = $defaultUrl;
+		} else {
+		  $this->url = $oMapping->GetUrl();
 		}
 		
-		$this->url = $oMapping->GetUrl();
 		$this->section_uri = $oMapping->GetSectionUri();
 		
 		return $this->url;

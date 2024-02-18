@@ -82,8 +82,10 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 
 
 <div class="row my-3">
-	<h2>Article: <?= $oArticle->GetTitle(); ?> ( <a href="<?= $oArticle->GetUrl(); ?>" target="_new"><?= $oArticle->GetUrl(); ?></a> )</h2>
+	<h2>Article: <?= $oArticle->GetTitle(); ?> <span class="small">( <a href="<?= $oArticle->GetUrl(); ?>" target="_new"><?= $oArticle->GetUrl(); ?></a> )</span></h2>
+</div>
 
+<div class="row my-3">
 	<h2>Publish to Url :</h2>
 	
 

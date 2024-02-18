@@ -61,7 +61,7 @@ class DashboardController extends GenericController {
                     $this->DeleteArticle(); // handle recent content delete request
                 }
 			    $oTemplate = new Template();
-			    $oTemplate->Set('WEBSITE_URL', $_CONFIG['url']);
+			    $oTemplate->Set('WEBSITE_URL', $oBrand->GetWebsiteUrl());
 			    if (isset($_POST) && count($_POST) < 1) 
 			    {
                     $oTemplate->Set('RECENT_ACTIVITY_ARRAY', $this->getRecentActivity());

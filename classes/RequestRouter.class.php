@@ -441,9 +441,9 @@ class RequestRouter {
             
             $oContentAssembler = new ArticleContentAssembler();
             $oContentAssembler->SetRequestRouter($this);
-            
+
             // 1.  Extract Article Path from URI (Published Articles)
-            if (count($this->GetRequestArray()) >= 2) // Array ( [0] => [1] => url-path
+            if (count($this->GetRequestArray()) >= 2 && $this->GetRequestUri(1) != "/article") // Array ( [0] => [1] => url-path
             {
                 $oContentAssembler->GetByPath($this->GetRequestUri(), $oBrand->GetSiteId());
                 
@@ -454,7 +454,7 @@ class RequestRouter {
 
                 if(!is_numeric($id)) throw new NotFoundException("Page not found : ".$this->GetRequestUri(1));
 
-                $oContentAssembler->GetArticleById($id);
+                $oContentAssembler->GetById($id);
 
             }
 
