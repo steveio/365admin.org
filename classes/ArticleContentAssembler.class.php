@@ -11,22 +11,37 @@
 
 class ArticleContentAssembler extends AbstractContentAssembler {
 
+    protected $oArticle;
+    protected $oContentMapping;
+    protected $strTemplatePath;
+    protected $oTemplate;
+
     public function __Construct() 
     {
         parent::__construct();
 
         $this->SetLinkTo(CONTENT_TYPE_ARTICLE);
 
+        $this->oTemplateList = new TemplateList();
+        $this->oTemplateList->GetFromDB();
+
+        $this->oContentMapping = new ContentMapping(null, null, null);
+
     }
 
     public function GetById($id)
     {
+
+        $oTemplateCfg = $this->oTemplateList->GetById(CONTENT_DEFAULT_RESULT_TEMPLATE);
+
         /* retrieve an unpublished article */
-        $oArticle = new Article();
-        $oArticle->GetById($id);
-        $oArticle->LoadTemplate($this->strTemplatePath,$aOptions = array());
+        $this->oArticle = new Article();
+        $this->oArticle->GetById($id);
         
-        return $oArticle;
+        $this->strTemplatePath = $oTemplateCfg->filename;
+
+        $this->Render();
+
     }
     
     
@@ -34,44 +49,45 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     {
 
         try {
-            $oContentMapping = new ContentMapping(null, null, null);
             
-            if ($oContentMapping->GetByPath($path))
+            if ($this->oContentMapping->GetByPath($path))
             {
-                $oTemplate = $this->oTemplateList->GetById($oContentMapping->GetTemplateId());
+                $oTemplateCfg = $this->oTemplateList->GetById($this->oContentMapping->GetTemplateId());
             } else {
-                $oTemplate = $this->oTemplateList->GetById(CONTENT_DEFAULT_RESULT_TEMPLATE);
+                $oTemplateCfg = $this->oTemplateList->GetById(CONTENT_DEFAULT_RESULT_TEMPLATE);
             }
+            
+            $this->strTemplatePath = $oTemplateCfg->filename;
 
-            $oArticle = new Article;
+            $this->oArticle = new Article;
 
-            if ($oTemplate->fetch_mode == FETCHMODE__SUMMARY)
+            if ($this->oTemplate->fetch_mode == FETCHMODE__SUMMARY)
             {
-                $oArticle->SetFetchMode(FETCHMODE__SUMMARY);
+                $this->oArticle->SetFetchMode(FETCHMODE__SUMMARY);
             }
             
             $exact = true; // exact or fuzzy path match
             $limit = 100;
 
-            if ($oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_PATH))
+            if ($this->oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_PATH))
             {
                 $exact = false;
             }
             
             // fetch article and attached content                
-            if (!$oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_ATTACHED))
+            if (!$this->oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_ATTACHED))
             {
-                $oArticle->SetFetchAttachedArticle(FALSE);
-                $oArticle->SetFetchAttachedProfile(FALSE);
+                $this->oArticle->SetFetchAttachedArticle(FALSE);
+                $this->oArticle->SetFetchAttachedProfile(FALSE);
             }
 
             if (is_numeric($limit))
             {
-                $oArticle->SetAttachedArticleFetchLimit($limit);
+                $this->oArticle->SetAttachedArticleFetchLimit($limit);
             }
 
             // fetch article mapped directly to URL path eg /blog, /country/brazil
-            if (!$oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, true))
+            if (!$this->oArticle->Get($website_id, $this->oContentMapping->GetSectionUri(), $limit, true))
             {
                 // no mapped article content, treat namespaced URL as search request
                 if ($this->GetRequestRouter()->isNamespaceMatchedURL()) 
@@ -81,24 +97,47 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             }
             
             // put content id in scope of parent class for fetching associated content
-            $this->SetLinkId($oArticle->GetId()); 
+            $this->SetLinkId($this->oArticle->GetId()); 
 
             if (!$exact)
             {
                 // fetch content as articles published to main article sub-path eg /blog/post1, /blog/post2
-                $oArticle->Get($website_id, $oContentMapping->GetSectionUri(), $limit, false);
+                $this->oArticle->Get($website_id, $this->oContentMapping->GetSectionUri(), $limit, false);
             }
+            
+            $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
 
-            $this->GetReviews($oArticle->GetId(), CONTENT_TYPE_ARTICLE, $oArticle->GetTitle());
-
-
-            $oArticle->LoadTemplate($oTemplate->filename,$aOptions = array());
-
-            return $oArticle;
+            $this->Render();
 
         } catch (Exception $e) {
             throw $e;
         }
     }
 
+
+    protected function Render()
+    {
+        global $oHeader, $oFooter;
+
+        $this->oTemplate = new Template();
+
+        $this->oTemplate->Set("oArticle",$this->oArticle);
+        $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
+
+        $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
+
+        //$this->oTemplate->Set("oSearchResult", $this->);
+        //$this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);
+        //$this->oTemplate->LoadTemplate("profile_company_view.php");
+
+        $this->oTemplate->LoadTemplate($this->strTemplatePath);
+
+        
+        print $oHeader->Render();
+        print $this->oTemplate->Render();
+        print $oFooter->Render();
+        
+        die();
+        
+    }
 }

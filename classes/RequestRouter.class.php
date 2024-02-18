@@ -58,6 +58,7 @@ class RequestRouter {
             
             
             print_r($e->getMessage());
+            print_r($e->getTraceAsString());
             die(__FILE__."::".__LINE__);
             
             if ($this->strRequestUri == "/".ROUTE_ERROR)
@@ -85,8 +86,10 @@ class RequestRouter {
         */
     }
     
-    public function GetRequestUri()
+    public function GetRequestUri($index = null)
     {
+        if (is_numeric($index) && isset($this->aRequestUri[$index])) return "/".$this->aRequestUri[$index];
+        
         return $this->strRequestUri;
     }
 
@@ -100,7 +103,7 @@ class RequestRouter {
         if (is_array($aRequestUri) && count($aRequestUri) >= 1 && isset($aRequestUri[1])) {
             
             $this->aRequestUri = $aRequestUri;
-            $this->strRequestUri = "/".$aRequestUri[1]; // @note - static routes map only consider 1st URL segment eg /blog
+            $this->strRequestUri = implode("/", $aRequestUri);
 
             if (!$this->validateUri($this->strRequestUri))
             {
@@ -161,18 +164,17 @@ class RequestRouter {
 
             // load static routes from configuration 
             $this->LoadStaticRoutes(PATH_TO_STATIC_ROUTE_MAP);
-
             
             // url -> php script mappings
-            if (array_key_exists($this->GetRequestUri(), $this->aStaticRoute))
+            if (array_key_exists($this->GetRequestUri(1), $this->aStaticRoute))
             {
-                $script = $this->aStaticRoute[$this->GetRequestUri()];
+                $script = $this->aStaticRoute[$this->GetRequestUri(1)];
             }
 
             // url -> $class->method() mappings
-            if (array_key_exists($this->GetRequestUri(), $this->aStaticCallback))
+            if (array_key_exists($this->GetRequestUri(1), $this->aStaticCallback))
             {
-                $callback = $this->aStaticCallback[$this->GetRequestUri()];
+                $callback = $this->aStaticCallback[$this->GetRequestUri(1)];
             }
 
             /*
@@ -213,7 +215,7 @@ class RequestRouter {
             require_once($script);
             die();
         } else {
-            throw new Exception("Static Route Map: php script ".$script." does not exist (Request URI: ".$this->GetRequestUri().")");
+            throw new Exception("Static Route Map: php script ".$script." does not exist (Request URI: ".$this->GetRequestUri(1).")");
         }
     }
 
@@ -265,7 +267,7 @@ class RequestRouter {
             
             $this->oMVCController->SetExceptionOnNotFound(FALSE);
 
-            $this->oMVCController->SetRequestUri($this->GetRequestUri());
+            $this->oMVCController->SetRequestUri($this->GetRequestUri(1));
             $this->oMVCController->Process();
             
             $oSession->Save();
@@ -293,9 +295,9 @@ class RequestRouter {
         
         switch(true)
         {
-            case $this->isCategory($this->GetRequestUri()) :
+            case $this->isCategory($this->GetRequestUri(1)) :
                 break;
-            case $this->isActivity($this->GetRequestUri()) :
+            case $this->isActivity($this->GetRequestUri(1)) :
                 break;
             default:
                 $this->ProcessArticlePageRequest();
@@ -306,7 +308,7 @@ class RequestRouter {
     {
         global $db, $_CONFIG;
         
-        $sql = "SELECT id,name FROM category WHERE url_name = '".$this->GetRequestUri()."'";
+        $sql = "SELECT id,name FROM category WHERE url_name = '".$this->GetRequestUri(1)."'";
         $db->query($sql);
         if ($db->getNumRows() == 1) {
             $this->strContentType = CONTENT_TYPE_CATEGORY;
@@ -326,7 +328,7 @@ class RequestRouter {
     {
         global $db, $_CONFIG;
         
-        $sql = "SELECT id,name FROM activity WHERE url_name = '".$this->GetRequestUri()."'";
+        $sql = "SELECT id,name FROM activity WHERE url_name = '".$this->GetRequestUri(1)."'";
         $db->query($sql);
         if ($db->getNumRows() == 1) {
             $this->strContentType = CONTENT_TYPE_ACTIVITY;
@@ -441,25 +443,19 @@ class RequestRouter {
             $oContentAssembler->SetRequestRouter($this);
             
             // 1.  Extract Article Path from URI (Published Articles)
-            if (count($this->GetRequestArray()) > 2)
+            if (count($this->GetRequestArray()) >= 2) // Array ( [0] => [1] => url-path
             {
-
-                $oArticle = $oContentAssembler->GetByPath($this->GetRequestUri(), $oBrand->GetSiteId());
-
+                $oContentAssembler->GetByPath($this->GetRequestUri(), $oBrand->GetSiteId());
+                
             } else {
                 
                 // 2.  Extract Article ID from $_REQUEST (UnPublished Articles)
                 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 
-                if(!is_numeric($id)) throw new NotFoundException("Page not found : ".$this->GetRequestUri());
-            
-                $oTemplateList = new TemplateList();
-                $oTemplateList->GetFromDB();
-                $templatePath = $oTemplateList->GetFilenameById(ARTICLE_TEMPLATE_ARTICLE_DEFAULT);
+                if(!is_numeric($id)) throw new NotFoundException("Page not found : ".$this->GetRequestUri(1));
 
-                $oContentAssembler->SetTemplatePath($templatePath);
-                $oArticle = $oContentAssembler->GetArticleById($id);
-                
+                $oContentAssembler->GetArticleById($id);
+
             }
 
         } catch (NotFoundException $e) {
@@ -488,7 +484,7 @@ class RequestRouter {
         
         $oContentAssembler = new SearchResultContentAssembler();
         $oContentAssembler->SetRequestRouter($this);        
-        $oContentAssembler->GetByPath($this->GetRequestUri());
+        $oContentAssembler->GetByPath($this->GetRequestUri(1));
         
         die(__FILE__."::".__LINE__);
     }
