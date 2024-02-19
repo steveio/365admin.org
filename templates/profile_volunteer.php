@@ -62,9 +62,9 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 </div>
 
 <div class="row formgroup my-2">
-	<span class="label_col"><label for="<?= PROFILE_FIELD_VOLUNTEER_AWARDS; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_VOLUNTEER_AWARDS]) > 1 ? "color:red;" : ""; ?>">Awards</label></span>
+	<span class="label_col"><label for="<?= PROFILE_FIELD_VOLUNTEER_AWARDS; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_VOLUNTEER_AWARDS]) > 1 ? "color:red;" : ""; ?>">Awards / Certification</label></span>
 	<span class="input_col"><textarea id="<?= PROFILE_FIELD_VOLUNTEER_AWARDS; ?>" name="<?= PROFILE_FIELD_VOLUNTEER_AWARDS; ?>" class="form-control" /><?= stripslashes($_POST[PROFILE_FIELD_VOLUNTEER_AWARDS]); ?></textarea>
-	<br /><span class="p_small grey">Any awards or recognition your project / organisation has won</span>
+	<br /><span class="p_small grey">Any awards / Certification your project / organisation has received</span>
 	</span>
 </div>
 
@@ -131,7 +131,7 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 	</div>
 	<div class="row">
 		<span class="input_col" style="">
-<			a id="expand_habitats_select">+ Expand</a> <a id="collapse_habitats_select">- Collapse</a> (<span id="habitats_selected"><?= $this->Get('HABITATS_LIST_SELECTED_COUNT'); ?></span> Selected)
+			<a id="expand_habitats_select">+ Expand</a> <a id="collapse_habitats_select">- Collapse</a> (<span id="habitats_selected"><?= $this->Get('HABITATS_LIST_SELECTED_COUNT'); ?></span> Selected)
 		</span>
 	</div>
 	<span id="habitats_select" class="input_col" style="display: none;">

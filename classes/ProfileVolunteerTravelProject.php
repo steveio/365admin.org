@@ -235,47 +235,6 @@ class VolunteerTravelProjectProfile extends CompanyProfile {
 					
 	}
 	
-	public function GetDurationFromId() {
-		return $this->duration_from_id;
-	}
-
-	public function GetDurationToId() {
-		return $this->duration_to_id;
-	}
-
-	public function GetDurationFromLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_from_id);
-	}
-
-	public function GetDurationToLabel() {
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_to_id);
-	}
-	
-	public function GetPriceFromId() {
-		return $this->price_from_id;
-	}
-
-	public function GetPriceToId() {
-		return $this->price_to_id;
-	}
-
-	public function GetCurrencyId() {
-		return $this->currency_id;
-	}
-	
-	public function GetCurrencyLabel() {
-		return $this->GetCurrencyRefdataObject()->GetValueById($this->currency_id);
-	}
-
-	public function GetCostsFromLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_from_id);
-	}
-
-	public function GetCostsToLabel() {
-		return $this->GetCostsRefdataObject()->GetValueById($this->price_to_id);
-	}
-
-	
 	public function GetFounded() {
 		return $this->founded;
 	}
@@ -293,7 +252,11 @@ class VolunteerTravelProjectProfile extends CompanyProfile {
 	}
 	
 	public function GetNoPlacementsLabel() {
-		return $this->GetNumberOfRefdataObject()->GetValueById($this->no_placements);
+	    if (!is_object($this->oNoPlacementRefdata))
+	    {
+	        $this->oNoPlacementRefdata = new Refdata(REFDATA_INT_RANGE);
+	    }
+	    return $this->oNoPlacementRefdata->GetValueById($this->no_placements);
 	}
 
 	public function GetOrgType() {
@@ -379,7 +342,14 @@ class VolunteerTravelProjectProfile extends CompanyProfile {
 	public function GetHabitatsLabels() {
 		return $this->habitats_labels;
 	}
+
+	public function GetSpeciesLabelsTxt() {
+	    return implode("/", $this->species_labels);
+	}
 	
+	public function GetHabitatsLabelsTxt() {
+	    return implode("/", $this->habitats_labels);
+	}
 	
 }
 

@@ -11,10 +11,10 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 ?>
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
-    //(adsbygoogle = window.adsbygoogle || []).push({
-    //    google_ad_client: "ca-pub-9874604497476880",
-    //    enable_page_level_ads: true
-    //});
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9874604497476880",
+        enable_page_level_ads: true
+    });
     </script>
         
 <?php 
@@ -54,22 +54,11 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 </div>
 
 
-<?php 
-
-/*
-print_r("<pre>");
-print_r($oProfile->GetCamperAgeFromLabel());
-print_r($oProfile);
-print_r("</pre>");
-die();
-*/
-
-?>
-
 <div class="row my-2">
-	<div class="col-12">
-		<?php 
-		if (count($oProfile->GetActivityArray()) >= 1 && count($oProfile->GetActivityArray()) < 3) {
+	<div class="col-6">
+		<?php
+		
+		if (count($oProfile->GetActivityArray()) >= 1) {
 			$label = "Activities: "; ?>
 			<b><?= $label; ?></b> <?= $oProfile->GetActivityTxt(); ?><br/><?
 		}
@@ -88,6 +77,14 @@ die();
 			<b>Location: </b> <?= $oProfile->GetLocation(); ?><br/>
 		<? } ?>
 
+    	<? if (method_exists($oProfile, 'GetDurationFromLabel') && $oProfile->GetDurationFromLabel() != "") { ?>
+    		<b>Program Duration: </b> <?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?><br /> 
+    	<? } ?>
+
+    	<? if (method_exists($oProfile, 'GetPriceFromLabel') && $oProfile->GetPriceFromLabel() != "") { ?>
+    		<b>Program Costs: </b> <?= $oProfile->GetPriceFromLabel(); ?> - <?= $oProfile->GetPriceToLabel(); ?> <?= $oProfile->GetCurrencyLabel(); ?><br /> 
+    	<? } ?>
+
 		<? if ($oProfile->GetProfileType() == PROFILE_SUMMERCAMP) { ?>
 
     		<? if (count($oProfile->GetCampTypeLabels()) > 1) { ?>
@@ -97,10 +94,6 @@ die();
 		<? } ?>
 
 		<? if ($oProfile->GetProfileType() == PROFILE_TEACHING) { ?>
-
-        	<? if ($oProfile->GetDurationFromLabel() != "") { ?>
-        		<b>Program Duration: </b> <?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?> 
-        	<? } ?>
 
     		<? if (strlen($oProfile->GetNoTeachersLabel()) > 1) { ?>
     			<b>Number of Teachers: </b> <?= $oProfile->GetNoTeachersLabel(); ?><br/>
@@ -196,47 +189,113 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 
 
 
+<? if ($oProfile->GetProfileType() == PROFILE_VOLUNTEER_PROJECT) { ?>
+<div class="row">
+	<h2>Project Info</h2>
+
+
+	<div class="row my-3">
+    	<div class="col-6">
+    	<? if ($oProfile->GetFounded() != "") { ?>
+    		<h3>Founded / Established: </h3>
+    		<?= $oProfile->GetFounded(); ?>
+    	<? } ?>
+    	</div>
+
+    	<? if ($oProfile->GetOrgTypeLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Org Type: </h3>
+    		<?= $oProfile->GetOrgTypeLabel() ?>
+    	</div>
+    	<? } ?>
+    </div>
+    <div class="row my-3">
+    	<? if ($oProfile->GetNoPlacementsLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Team Size / Num Volunteers: </h3>
+    		<?= $oProfile->GetNoPlacementsLabel() ?>
+    	</div>
+    	<? } ?>
+
+    	<? if ($oProfile->GetAwards() != "") { ?>
+    	<div class="col-6">
+    		<h3>Awards / Certification: </h3>
+    		<?= $oProfile->GetHowToApply() ?>
+    	</div>
+    	<? } ?>
+    </div>
+
+	<div class="row my-3">
+
+    	<? if ($oProfile->GetSpeciesLabelsTxt() != "") { ?>
+    	<div class="col-6">
+        	<h3>Species: </h3>
+    		<?= $oProfile->GetSpeciesLabelsTxt(); ?>    	
+		</div>
+		<? } ?>
+
+    	<? if ($oProfile->GetHabitatsLabelsTxt() != "") { ?>
+    	<div class="col-6">
+        	<h3>Habitats: </h3>
+    		<?= $oProfile->GetHabitatsLabelsTxt(); ?>    	
+		</div>
+		<? } ?>
+
+	</div>
+
+	<div class="row my-3">
+
+		<? if ($oProfile->GetSupport() != "") { ?>
+    	<div class="col-6">
+    		<h3>Volunteer Support: </h3>
+    		<?= $oProfile->GetSupport() ?>
+    	</div>
+    	<? } ?>
+
+    	<? if ($oProfile->GetSafety() != "") { ?>
+    	<div class="col-6">
+    		<h3>Volunteer Safety: </h3>
+    		<?= $oProfile->GetSafety() ?>
+    	</div>
+    	<? } ?>
+
+	</div>
+
+</div>
+<? } ?>
+
+
+
 <? if ($oProfile->GetProfileType() == PROFILE_SUMMERCAMP) { ?>
 <div class="row">
 
 	<h2>Summer Camp Info</h2>
 
 	<div class="row my-3">
-    	<div class="col">
     	<? if ($oProfile->GetStateLabel() != "") { ?>
+    	<div class="col">
     		<b>State :</b> <?= $oProfile->GetStateLabel() ?>
-    	<? } ?>
     	</div>
-    
+    	<? } ?>
+
+        <? if (strlen($oProfile->GetCamperAgeFromLabel()) >= 1) { ?>    
     	<div class="col">
-        <? if (strlen($oProfile->GetCamperAgeFromLabel()) >= 1) { ?>
         	<b>Camp Age Range: </b> <?= $oProfile->GetCamperAgeFromLabel() ?> - <?= $oProfile->GetCamperAgeToLabel() ?> 
-        <? } ?>
         </div>
-        
+        <? } ?>
+
+        <? if (strlen($oProfile->GetCampGenderLabel()) >= 1) { ?>        
     	<div class="col">
-        <? if (strlen($oProfile->GetCampGenderLabel()) >= 1) { ?>
         	<b>Camp Gender: </b> <?= $oProfile->GetCampGenderLabel(); ?> 
-        <? } ?>
     	</div>
-    
-    	<div class="col">
+        <? } ?>
+
         <? if (strlen($oProfile->GetCampReligionLabel()) >= 1) { ?>
+    	<div class="col">
         	<b>Camp Affiliation: </b> <?= $oProfile->GetCampReligionLabel(); ?> 
-        <? } ?>
     	</div>
+		<? } ?>
     
-    	<div class="col">
-    	<? if ($oProfile->GetDurationFromLabel() != "") { ?>
-    		<b>Program Duration: </b> <?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?> 
-    	<? } ?>
-    	</div>
-    
-    	<div class="col">
-    	<? if ($oProfile->GetPriceFromLabel() != "") { ?>
-    		<b>Program Costs: </b> <?= $oProfile->GetPriceFromLabel(); ?> - <?= $oProfile->GetPriceToLabel(); ?> <?= $oProfile->GetCurrencyLabel(); ?> 
-    	<? } ?>
-    	</div>
 	</div>
 	
     <div class="row my-3">
@@ -334,7 +393,6 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 
 </div>
 <? } ?>
-
 
 <? if ($oProfile->GetProfileType() == PROFILE_TEACHING) { ?>
 <div class="row">

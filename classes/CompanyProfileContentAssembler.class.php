@@ -47,7 +47,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
             
             parent::GetByUrlName($path);
             parent::SetPageHeader();
-            
+
             // set Logo & Banner images
             if (is_object($this->oProfile->GetImage(0,LOGO_IMAGE)))
             {
