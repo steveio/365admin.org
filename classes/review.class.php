@@ -302,7 +302,7 @@ class Review {
 	    }
 
 	    if ($aOptions['report_date_to'] != null) {
-	        $strEndDateSQL = " and r.date < '".$aOptions['report_date_to']."'";
+	        $strEndDateSQL = " and r.date <= '".$aOptions['report_date_to']."'";
 	    }
 	    
 	    if (isset($aOptions['report_status'])) {

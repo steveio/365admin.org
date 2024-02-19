@@ -24,18 +24,18 @@ $aPageOptions = $this->Get('aPageOptions');
 
 <?php if ($aPageOptions[ARTICLE_DISPLAY_OPT_SOCIAL] != "f") { ?>
 <div class="row">
-<div class="col-12 my-3">
-<div class="col-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
+    <div class="col-12 my-3">
+    <div class="col-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
+    </div>
 </div>
-</div>
-
 <?php } ?>
 
 
-<div class="span12 article-body">
+<div class="row my-3">
+<div class="col-12">
 
     <? if ($aPageOptions[ARTICLE_DISPLAY_OPT_IMG] != "f") { ?>
-	<div class="pull-right span6" style="padding: 6px;">
+	<div class="float-end col-6 my-3">
 	<?
 	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("",'')) {
 		print $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle());
@@ -44,12 +44,13 @@ $aPageOptions = $this->Get('aPageOptions');
 	}
 	?>
 	</div>
+
 	<?php } ?>
 
 	<h1><?= $oArticle->GetTitle(); ?></h1>
 
-    	<div class="row-fluid">
-    		<p class="lead"><strong><?= strip_tags($oArticle->GetDescShort()); ?></strong></p>
+	<div class="row-fluid">
+		<p class="lead"><strong><?= strip_tags($oArticle->GetDescShort()); ?></strong></p>
 
         <?
     	if ($aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT] != "f") {
@@ -116,22 +117,19 @@ $aPageOptions = $this->Get('aPageOptions');
     </div>
 	</div>
 </div>
+</div>
 
 <?
 if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
-{
-    $oReviewTemplate = $this->Get('oReview');
-    if (is_object($oReviewTemplate)) { ?>
-    <div class="row-fluid">
-    <div class="span12">
-
-    	<h3>Comments</h3>
-    	<?php
-    	print $oReviewTemplate->Render();
-    	?>
-    </div>
+{ 
+    $oReviewTemplate = $this->Get('oReviewTemplate');
+    ?>
+    <div class="row my-3">
+    <h2>Comments</h2>
+    <?php 
+    print $oReviewTemplate->Render();
+    ?>
     </div><?
-    }
 }
 ?>
 

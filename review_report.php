@@ -193,7 +193,7 @@ $(document).ready(function() {
 
     $('#report').DataTable({
     	"pageLength": 100,
-    	"bSort" : true
+    	"bSort" : false
     });
 
 });

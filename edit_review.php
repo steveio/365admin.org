@@ -1,15 +1,8 @@
 <?php
 
-require_once("./conf/config.php");
-require_once("./init.php");
-require_once("./conf/brand_config.php");
 
 include_once("./includes/header.php");
 include_once("./includes/footer.php");
-
-
-include_once("/www/vhosts/oneworld365.org/htdocs/classes/review.class.php");
-
 
 
 if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");

@@ -107,9 +107,6 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             // setup HTML header meta tags
             $this->SetPageHeader();
 
-            // put content id in scope of parent class for fetching common associated content (reviews etc)
-            $this->SetLinkId($this->oArticle->GetId()); 
-
 
             //$this->oArticle->SetAttachedArticleFetchLimit(null);
 
@@ -146,6 +143,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
             if (!$oTemplateCfg->is_collection && $this->oContentMapping->GetDisplayOptReview())
             {
+                $this->SetReviewTemplate("comment.php");
                 $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
             }
 

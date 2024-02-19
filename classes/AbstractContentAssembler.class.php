@@ -39,6 +39,7 @@ abstract class AbstractContentAssembler {
     protected $strTemplatePath;
 
     protected $oReviewTemplate;
+    protected $sReviewTemplate;
 
     protected $aRelatedArticle;
     protected $aRelatedProfile;
@@ -53,6 +54,7 @@ abstract class AbstractContentAssembler {
         $this->aRelatedArticle = array();
         $this->aRelatedProfile = array();
 
+        $this->sReviewTemplate = "review.php";
     }
 
     public function SetRequestRouter($oRequestRouter)
@@ -89,6 +91,16 @@ abstract class AbstractContentAssembler {
     
     public function SetLinkId($sLinkId) {
         $this->link_id = $sLinkId;
+    }
+
+    protected function SetReviewTemplate($template)
+    {
+        $this->sReviewTemplate = $template;
+    }
+    
+    protected function GetReviewTemplate()
+    {
+        return $this->sReviewTemplate;
     }
 
     public function GetReviews($link_id, $link_to, $link_label)
@@ -143,7 +155,7 @@ abstract class AbstractContentAssembler {
         $oReviewTemplate->Set('HASREVIEWRATING',$bHasReviewRating);
         $oReviewTemplate->Set('HAS_REVIEW',true);
 
-        $oReviewTemplate->LoadTemplate("review.php");
+        $oReviewTemplate->LoadTemplate($this->GetReviewTemplate());
         
         $this->oReviewTemplate = $oReviewTemplate;
     }
