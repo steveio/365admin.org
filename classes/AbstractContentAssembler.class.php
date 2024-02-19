@@ -9,21 +9,6 @@
  *
  */
 
-// general content type id - used to fetch related content and by  SOLR for indexing
-define("CONTENT_COMPANY", 0);
-define("CONTENT_PLACEMENT", 1);
-define("CONTENT_ARTICLE", 2);
-
-// specific page content types
-define("CONTENT_TYPE_COMPANY", "COMPANY");
-define("CONTENT_TYPE_PLACEMENT", "PLACEMENT");
-define("CONTENT_TYPE_ARTICLE", "ARTICLE");
-define("CONTENT_TYPE_CATEGORY", "CATEGORY");
-define("CONTENT_TYPE_ACTVITY", "ACTIVITY");
-define("CONTENT_TYPE_COUNTRY", "COUNTRY");
-define("CONTENT_TYPE_CONTINENT", "CONTINENT");
-define("CONTENT_TYPE_RESULTS", "RESULTS");
-define("CONTENT_TYPE_DESTINATION", "DESTINATION");
 
 // default results template for an unpublished URL 
 define("CONTENT_DEFAULT_RESULT_TEMPLATE", "0");
@@ -191,7 +176,7 @@ abstract class AbstractContentAssembler {
         }
     }
 
-    public function GetKeywords($solr_id, $limit = 25)
+    public function GetKeywords($solr_id, $profile_type, $limit = 25)
     {
         global $solr_config;
         
@@ -199,7 +184,7 @@ abstract class AbstractContentAssembler {
         $aFilterQuery = array();
         $oSolrMoreLikeSearch->setRows(25);
         
-        return $oSolrMoreLikeSearch->getKeywords($solr_id);
+        return $oSolrMoreLikeSearch->getKeywords($solr_id,$profile_type);
     }
 
     public function GetRelatedArticle($solr_id, $limit = 25)

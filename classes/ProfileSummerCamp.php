@@ -335,9 +335,7 @@ class SummerCampProfile extends CompanyProfile {
 			$this->camper_age_from_label = $this->oCamperAgeFrom->GetValueById($this->camper_age_from_id);
 		}
 		if ($type == "INT") { // strip + < symbols to allow index range lookups
-			foreach($this->camper_age_from_label as &$label) {
-				if (!is_numeric($label)) $label = preg_replace("/[^0-9]/", "", $label);
-			}
+		    $this->camper_age_from_label = preg_replace("/[^0-9]/", "", $this->camper_age_from_label);
 		}
 		return $this->camper_age_from_label;
 	}
@@ -349,9 +347,7 @@ class SummerCampProfile extends CompanyProfile {
 			$this->camper_age_to_label = $this->oCamperAgeTo->GetValueById($this->camper_age_to_id);
 		}
 		if ($type == "INT") { // strip + < symbols to allow index range lookups
-			foreach($this->camper_age_to_label as &$label) {
-				if (!is_numeric($label)) $label = preg_replace("/[^0-9]/", "", $label);
-			}
+		    $this->camper_age_to_label = preg_replace("/[^0-9]/", "", $this->camper_age_to_label);
 		}
 		return $this->camper_age_to_label;
 	}	

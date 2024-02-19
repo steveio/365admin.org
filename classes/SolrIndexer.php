@@ -193,8 +193,8 @@ class SolrIndexer {
 					$ratetousd = $this->aCurrencyTypeMapping[$oCProfile->GetCurrencyId()][1];
 		
 					// index price in USD only, strip + < symbols to allow range lookups
-					$fromPrice = preg_replace("/[^0-9]/", "", $oCProfile->GetCostsFromLabel());
-					$toPrice = preg_replace("/[^0-9]/", "", $oCProfile->GetCostsToLabel());
+					$fromPrice = preg_replace("/[^0-9]/", "", $oCProfile->GetPriceFromLabel());
+					$toPrice = preg_replace("/[^0-9]/", "", $oCProfile->GetPriceToLabel());
 
 					if (is_numeric($fromPrice) && is_numeric($toPrice))
 					{
@@ -226,8 +226,6 @@ class SolrIndexer {
 		
 					$oSolrDocument->camp_type = $oCProfile->GetCampTypeLabels();
 					$oSolrDocument->camp_gender = $oCProfile->GetCampGenderLabel();
-					$oSolrDocument->camper_age_from = $oCProfile->GetCamperAgeFromLabel("INT");
-					$oSolrDocument->camper_age_to = $oCProfile->GetCamperAgeToLabel("INT");
 					$oSolrDocument->camp_religion = $oCProfile->GetCampReligionLabel();
 					$oSolrDocument->camp_activities = $oCProfile->GetCampActivityLabels();
 					$oSolrDocument->camp_job_types = $oCProfile->GetCampJobTypeLabels();
@@ -542,6 +540,9 @@ class SolrIndexer {
 	
 				$oArticle = new Article();
 				$oArticle->GetFetchMode() == FETCHMODE__FULL;
+				$oArticle->SetFetchAttachedProfile(false);
+				$oArticle->SetFetchAttachedArticle(false);
+				$oArticle->SetFetchAttachedTo(false);
 				$oArticle->GetById($a['id']);
 							
 				if (!is_numeric($oArticle->GetId())) {

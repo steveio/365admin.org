@@ -442,7 +442,29 @@ class PlacementProfile extends AbstractProfile {
 	public function GetAdDuration() {
 		return $this->ad_duration;
 	}
-	
+
+	public function IsAdActiveDisplayInSearch()
+	{
+	    global $db;
+	    
+	    // is profile inactive / filtered from search?
+	    $sql = "select
+                1
+                from
+                profile_hdr p
+                , company c
+                where
+                p.id = ".$this->GetId()."
+                and p.company_id = c.id
+                and (p.ad_active = 'f'
+                or c.profile_filter_from_search = 't')
+                ";
+	    
+	    $db->query($sql);
+	    
+	    return ($db->getNumRows() == 1) ? false : true;
+	}
+
 
 	public function SetImageProcessStatus($iStatus = 0) {
 		

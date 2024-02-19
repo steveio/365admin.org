@@ -61,6 +61,24 @@ define("PROFILE_VOLUNTEER_PROJECT",6); // company profile
 define("PROFILE_SEASONALJOBS",7); // company profile
 define("PROFILE_TEACHING",8); // company profile
 
+
+// general content type id - used to fetch related content and by  SOLR for indexing
+define("CONTENT_COMPANY", 0);
+define("CONTENT_PLACEMENT", 1);
+define("CONTENT_ARTICLE", 2);
+
+// specific page content types
+define("CONTENT_TYPE_COMPANY", "COMPANY");
+define("CONTENT_TYPE_PLACEMENT", "PLACEMENT");
+define("CONTENT_TYPE_ARTICLE", "ARTICLE");
+define("CONTENT_TYPE_CATEGORY", "CATEGORY");
+define("CONTENT_TYPE_ACTVITY", "ACTIVITY");
+define("CONTENT_TYPE_COUNTRY", "COUNTRY");
+define("CONTENT_TYPE_CONTINENT", "CONTINENT");
+define("CONTENT_TYPE_RESULTS", "RESULTS");
+define("CONTENT_TYPE_DESTINATION", "DESTINATION");
+
+
 /* Fetch full or summary details only */
 define("FETCHMODE__FULL",0);
 define("FETCHMODE__SUMMARY",1);
@@ -332,6 +350,7 @@ define('ERROR_ADD_ACCOUNT_FAILED','Add account failed :');
 $_CONFIG = array( 
         'site_id' => 0,
         'url' => 'http://admin.oneworld365.org',
+        'root_path' => ROOT_PATH,
         'company_table' => 'company',
         'placement_table' => 'profile_hdr',
         'profile_hdr_table' => 'profile_hdr', /* placement table is a view in some sites, these must use profile_hdr for add/update */

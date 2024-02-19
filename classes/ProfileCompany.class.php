@@ -266,6 +266,10 @@ class CompanyProfile extends AbstractProfile {
   		return $this->state_id;
   	}
 
+  	public function GetStateName() {
+  	    return $this->state_name;
+  	}
+
   	public function GetStateLabel() {
   	    if (is_numeric($this->state_id) && !is_object($this->oState)) {
   	        $this->oState = new Refdata(REFDATA_US_STATE);
@@ -543,7 +547,7 @@ class CompanyProfile extends AbstractProfile {
 
 		if (!is_numeric($id)) return false;
 
-		$sSql = "SELECT	
+		$sSql = "SELECT
 						c.oid
 						,c.id
 						,c.profile_type
@@ -559,7 +563,9 @@ class CompanyProfile extends AbstractProfile {
 						,c.address
 						,c.location
 						,c.state_id
+						,s.name as state_name
 						,c.country_id
+						,cty.name as country_name
 						,c.logo_url
 						,c.logo_banner_url
 						,c.img_url1
@@ -572,32 +578,31 @@ class CompanyProfile extends AbstractProfile {
 						,c.homepage
 						,c.prod_type
 						,c.job_credits as profile_quota
-                        ,(select count(*) from profile_hdr p where p.company_id = c.id) as profile_count
-						,c.profile_filter_from_search
 						,c.enq_opt
 						,c.prof_opt
 						,c.status
 						,c.duration
 						,c.costs
 						,c.job_info
-						,c.keyword_exclude
+						--,c.keyword_exclude
 						,CASE
 							WHEN (select 1 from euser u where u.company_id = c.id limit 1)=1 THEN 1
 							ELSE 0
-						END as user_act_exists						
+						END as user_act_exists
 						,to_char(c.added,'DD/MM/YYYY') as added_date
 						,to_char(c.last_updated,'DD/MM/YYYY') as last_updated
 						,to_char(c.last_indexed,'DD/MM/YYYY') as last_indexed
 						,to_char(c.last_indexed_solr,'DD/MM/YYYY') as last_indexed_solr
 						$this->sSubTypeFields
-					FROM 
-						company c
+					FROM
+						".$_CONFIG['company_table']." c
+						LEFT OUTER JOIN country cty ON c.country_id = cty.id
+						LEFT OUTER JOIN state s ON c.state_id = s.id
 						$this->sSubTypeTable
 					WHERE
-						c.id = $id 
+						c.id = $id
 				";
-
-
+						
 			$db->query($sSql);
 			
 			if ($db->getNumRows() == 1) {

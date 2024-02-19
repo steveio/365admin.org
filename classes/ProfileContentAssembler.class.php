@@ -26,7 +26,7 @@ class ProfileContentAssembler extends AbstractContentAssembler {
     {
         global $oHeader;
 
-        $aKeywords = $this->GetKeywords($this->oProfile->GetOid());
+        $aKeywords = $this->GetKeywords($this->oProfile->GetOid(),$this->profile_type);
         $oHeader->SetDesc($this->oProfile->GetDescShortPlaintext($trunc = 160));
         $oHeader->SetKeywords(implode(",",$aKeywords));
         

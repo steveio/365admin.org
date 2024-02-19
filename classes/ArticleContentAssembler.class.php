@@ -188,7 +188,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     {
         global $oHeader, $oBrand;
         
-        $aKeywords = $this->GetKeywords($this->oArticle->GetId());
+        $aKeywords = $this->GetKeywords($this->oArticle->GetId(),2);
         $oHeader->SetTitle($this->oArticle->GetTitle());
         $oHeader->SetDesc($this->oArticle->GetDescShortPlaintext($trunc = 160));
         $oHeader->SetKeywords(implode(",",$aKeywords));

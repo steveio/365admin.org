@@ -11,11 +11,11 @@
 				for($i=0;$i<5;$i++) { 
 				    $oReview = isset($aReview[$i]) ? $aReview[$i] : null; 
 				    if (!is_object($oReview)) continue; ?> 
-					<div class="col span12" style="margin-bottom: 20px;">
-						<div class="span12">
+					<div class="row my-3">
+						<div class="col-12">
 							<p><?= nl2br(html_entity_decode($oReview->GetReview())); ?></p>
 						</div>
-						<div class="span12" style="font-size: 0.8em;">
+						<div class="col-12">
 							By: <?= $oReview->GetName(); ?><br /> 
 							Nationality: <?= html_entity_decode($oReview->GetNationality()); ?>
 						</div>

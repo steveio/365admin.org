@@ -35,24 +35,27 @@ header('Content-Type: text/html; charset=utf-8');
 
 $debug = false;
 
-$path = "/www/vhosts/oneworld365.org/htdocs";
 
-include($path."/conf/config.php");
-include($path."/classes/db_pgsql.class.php");
-include($path."/classes/template.class.php");
-include($path."/classes/activity.class.php");
-include($path."/classes/category.class.php");
-include($path."/classes/country.class.php");
-include($path."/classes/stemmer.class.php");
-include($path."/classes/indexer.class.php");
-include($path."/classes/file.class.php");
-include($path."/classes/logger.php");
-include($path."/classes/image.class.php");
-include($path."/classes/review.class.php");
+require_once("./conf/config.php");
+require_once($_CONFIG['root_path']."/classes/db_pgsql.class.php");
+require_once($_CONFIG['root_path']."/classes/template.class.php");
+require_once($_CONFIG['root_path']."/classes/activity.class.php");
+require_once($_CONFIG['root_path']."/classes/category.class.php");
+require_once($_CONFIG['root_path']."/classes/country.class.php");
+require_once($_CONFIG['root_path']."/classes/stemmer.class.php");
+require_once($_CONFIG['root_path']."/classes/indexer.class.php");
+require_once($_CONFIG['root_path']."/classes/file.class.php");
+require_once($_CONFIG['root_path']."/classes/logger.php");
+require_once($_CONFIG['root_path']."/classes/image.class.php");
+require_once($_CONFIG['root_path']."/classes/review.class.php");
+require_once($_CONFIG['root_path']."/classes/ContentMapping.class.php");
+require_once($_CONFIG['root_path']."/classes/article.class.php");
+require_once($_CONFIG['root_path']."/classes/ArticleCollection.class.php");
 
 /* legacy company/placement classes - methods to return id lists */
-include($path."/classes/company.class.php");
-include($path."/classes/placement.class.php");
+include($_CONFIG['root_path']."/classes/company.class.php");
+include($_CONFIG['root_path']."/classes/placement.class.php");
+
 
 /* Profile System */
 require_once($_CONFIG['root_path']."/classes/ProfileInterface.php");
@@ -81,10 +84,10 @@ set_exception_handler('exception_handler');
 
 
 /* SOLR Search Engine */
-require_once("/www/vhosts/365api.org/htdocs/classes/SolrSearch.php");
-require_once("/www/vhosts/365api.org/htdocs/classes/SolrPlacementSearch.php");
-require_once("/www/vhosts/365api.org/htdocs/classes/SolrCompanySearch.php");
-require_once("/www/vhosts/365api.org/htdocs/classes/SolrIndexer.php");
+require_once($_CONFIG['root_path']."/classes/SolrSearch.php");
+require_once($_CONFIG['root_path']."/classes/SolrPlacementSearch.php");
+require_once($_CONFIG['root_path']."/classes/SolrCompanySearch.php");
+require_once($_CONFIG['root_path']."/classes/SolrIndexer.php");
 
 
 // Solarium

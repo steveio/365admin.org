@@ -11,7 +11,7 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 	}
 
-	function getKeywords($id) {
+	function getKeywords($id, $profile_type) {
 	    
 	    
 	    // Solarium_Query_MoreLikeThis
@@ -31,11 +31,11 @@ class SolrMoreLikeSearch extends SolrSearch {
 	    $query->setFields(array('profile_id'));
 	    $query->setStart(0);
 	    $query->setRows($this->getRows());
-	    $query->createFilterQuery('profile_type')->setQuery('profile_type:0');
+	    $query->createFilterQuery('profile_type')->setQuery('profile_type:'.$profile_type);
 	    //$query->createFilterQuery('active')->setQuery('active: 1');
 	    $query->setInterestingTerms("list");
 	    
-	    $aStopWords = array("i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now");
+	    $aStopWords = array("i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now", "nearly", "get");
 	    
 	    // this executes the query and returns the result#
 	    $request = $this->client->createRequest($query);
