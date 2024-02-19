@@ -344,11 +344,11 @@ class VolunteerTravelProjectProfile extends CompanyProfile {
 	}
 
 	public function GetSpeciesLabelsTxt() {
-	    return implode("/", $this->species_labels);
+	    return implode(" / ", $this->species_labels);
 	}
 	
 	public function GetHabitatsLabelsTxt() {
-	    return implode("/", $this->habitats_labels);
+	    return implode(" / ", $this->habitats_labels);
 	}
 	
 }

@@ -39,9 +39,10 @@ abstract class AbstractContentAssembler {
     protected $strTemplatePath;
 
     protected $oReviewTemplate;
-    protected $aRelatedProfile = array();
-    protected $oRelatedArticle;
-    
+
+    protected $aRelatedArticle;
+    protected $aRelatedProfile;
+
     protected $oRequestRouter; // reference to RequestRouter 
 
     public function __Construct() 
@@ -49,7 +50,8 @@ abstract class AbstractContentAssembler {
         $this->oTemplateList = new TemplateList();
         $this->oTemplateList->GetFromDB();
         
-        $this->oRelatedArticle = new Article();
+        $this->aRelatedArticle = array();
+        $this->aRelatedProfile = array();
 
     }
 
@@ -156,10 +158,9 @@ abstract class AbstractContentAssembler {
         global $solr_config;
         
         $oSolrMoreLikeSearch = new SolrMoreLikeSearch($solr_config);
-
-        $oSolrMoreLikeSearch->getRelatedProfile($solr_id, $profile_type);
-        
         $oSolrMoreLikeSearch->setRows($limit);
+        $oSolrMoreLikeSearch->getRelatedProfile($solr_id, $profile_type);
+
         $aTmp = $oSolrMoreLikeSearch->getId();
 
         $aRelatedProfile = array();
@@ -170,7 +171,8 @@ abstract class AbstractContentAssembler {
             }
             if ($profile_type == CONTENT_PLACEMENT)
             {
-                $this->aRelatedProfile = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$aRelatedId, $filter_from_search = false);
+                //$this->aRelatedProfile = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$aRelatedId, $filter_from_search = false);
+                $this->aRelatedProfile = PlacementProfile::GetRelatedById($aRelatedId, "related_id");
             } else {
                 $this->aRelatedProfile = CompanyProfile::Get("ID", $aRelatedId, false);
             }
@@ -196,12 +198,15 @@ abstract class AbstractContentAssembler {
         $aFilterQuery = array();
         $aFilterQuery['-title'] = "365";
         $aFilterQuery['-desc_short'] = "365";
-        $oSolrMoreLikeSearch->setRows(10);
         
-        $aRelatedArticle = $oSolrMoreLikeSearch->getRelatedArticle($solr_id,$aFilterQuery);
+        $oSolrMoreLikeSearch->setRows($limit);
+        
+        $aRelatedArticle = $oSolrMoreLikeSearch->getRelatedArticle($solr_id,$aFilterQuery, $limit);
 
-        $this->oRelatedArticle = new Article();
-        $this->oRelatedArticle->GetArticleCollection()->AddFromArray($aRelatedArticle);
+        if (is_array($aRelatedArticle))
+        {
+            $this->aRelatedArticle = $aRelatedArticle;
+        }
     }
     
 }

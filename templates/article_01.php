@@ -19,13 +19,16 @@ $aPageOptions = $this->Get('aPageOptions');
 
 
 <div class="row">
-<!-- start: Page section -->
-<section class="article span12">
+<!-- start: article section -->
+<section class="article">
 
 <?php if ($aPageOptions[ARTICLE_DISPLAY_OPT_SOCIAL] != "f") { ?>
-<div class="span12" style="padding: 10px;">
-<div class="pull-right sharethis-inline-share-buttons" style="padding-bottom: 10px;"></div>
+<div class="row">
+<div class="col-12 my-3">
+<div class="col-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
 </div>
+</div>
+
 <?php } ?>
 
 

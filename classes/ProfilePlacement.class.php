@@ -1145,11 +1145,19 @@ class PlacementProfile extends AbstractProfile {
 		return $aProfile;
 	}	
 
-	public static function GetByCompanyId($company_id)
+	public static function GetRelatedById($id, $key = "id")
 	{
 
 	    global $db; 
 
+	    if (($key == "related_id") && (is_array($id))) 
+	    {
+	       $keySql = "p.id in (".implode(",", $id).")";
+	    } elseif ($key == "company_id")
+	    {
+	        $keySql = "p.company_id = ".$id;
+	    }
+	    
 	    $sql = "
         	    SELECT
         	    p.id
@@ -1197,7 +1205,7 @@ class PlacementProfile extends AbstractProfile {
         	    LEFT OUTER JOIN profile_tour p2 on p.id = p2.p_hdr_id
         	    LEFT OUTER JOIN profile_tour p3 on p.id = p3.p_hdr_id
         	    WHERE
-        	    p.company_id = ".$company_id."
+        	    ".$keySql."
         	    ORDER BY p.title asc";
 	        
 	    $db->query($sql);

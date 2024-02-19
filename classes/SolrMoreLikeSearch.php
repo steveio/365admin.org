@@ -234,16 +234,14 @@ class SolrMoreLikeSearch extends SolrSearch {
 	// Get Related content
 	function getRelatedProfile($solr_id,$profile_type = "1", $arrFilterQuery = array()) {
 
-		if (!is_numeric($oid)) return FALSE;
+	    if (!is_numeric($solr_id)) return FALSE;
 
 		// Solarium_Query_MoreLikeThis
 
-		// get a select query instance
 		$query = $this->client->createMoreLikeThis();
 
-
 		// add a query and morelikethis settings (using fluent interface)
-		$query->setQuery('id:'.$oid)
+		$query->setQuery('id:'.$solr_id)
 		->getMoreLikeThis()
 		->setFields('text')
 		->setMinimumDocumentFrequency(1)
@@ -297,9 +295,9 @@ class SolrMoreLikeSearch extends SolrSearch {
 	 * @throws Exception
 	 * @return boolean
 	 */
-	function getRelatedArticle($intArticleId, $arrFilterQuery = array()) {
+	function getRelatedArticle($solr_id, $arrFilterQuery = array()) {
 
-	    if (!is_numeric($intArticleId)) return FALSE;
+	    if (!is_numeric($solr_id)) return FALSE;
 
 	    // Solarium_Query_MoreLikeThis
 
@@ -308,7 +306,7 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 
 	    // add a query and morelikethis settings (using fluent interface)
-	    $query->setQuery('id:'.$intArticleId)
+	    $query->setQuery('id:'.$solr_id)
 	    ->getMoreLikeThis()
 	    ->setFields('text')
 	    ->setMinimumDocumentFrequency(1)
@@ -316,7 +314,7 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 	    $query->setFields(array('profile_id', 'title'));
 	    $query->setStart(0);
-	    $query->setRows(20);
+	    $query->setRows($this->getRows());
 	    $query->createFilterQuery('profile_type')->setQuery('profile_type: 2');
 	    $query->createFilterQuery('active')->setQuery('active: 1');
 

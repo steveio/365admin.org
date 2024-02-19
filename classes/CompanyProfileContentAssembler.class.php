@@ -61,20 +61,25 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
 
             $this->GetEnquiryButtonHtml();
 
-            if ($this->oProfile->GetListingType() >= BASIC_LISTING) 
+            if ($this->oProfile->GetListingType() > BASIC_LISTING) 
             {
                 $this->GetPlacements();
+                $this->oTemplate->Set("displayRelatedProfile","COMPANY");
             } else {
-                $iLimit = 8;
+                $iLimit = 6;
                 $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT, $iLimit);
-                $this->GetRelatedArticle($this->oProfile->GetOid(), $limit);
+                $this->aPlacement  = $this->aRelatedProfile;
+                $this->oTemplate->Set("displayRelatedProfile","RELATED");
+                $this->GetRelatedArticle($this->oProfile->GetOid(), $iLimit);
             }
 
             $this->oTemplate->Set("aEnquiryButtonHtml", $this->aEnquiryButtonHtml);
             $this->oTemplate->Set("aPlacement",$this->aPlacement);
             $this->oTemplate->Set("oProfile",$this->oProfile);
             $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
-            $this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);            
+            $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);
+            $this->oTemplate->Set("aRelatedProfile", $this->aRelatedProfile);
+
             $this->oTemplate->LoadTemplate("profile_company_view.php");
 
             print $oHeader->Render();
@@ -91,7 +96,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
     /* get placements associated with this company */
     public function GetPlacements()
     {
-        $this->aPlacement = PlacementProfile::GetByCompanyId($this->oProfile->GetCompanyId());
+        $this->aPlacement = PlacementProfile::GetRelatedById($this->oProfile->GetCompanyId(),"company_id");
     }
 
     public function GetEnquiryButtonHtml()

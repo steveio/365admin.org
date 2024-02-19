@@ -77,14 +77,6 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 			<b>Location: </b> <?= $oProfile->GetLocation(); ?><br/>
 		<? } ?>
 
-    	<? if (method_exists($oProfile, 'GetDurationFromLabel') && $oProfile->GetDurationFromLabel() != "") { ?>
-    		<b>Program Duration: </b> <?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?><br /> 
-    	<? } ?>
-
-    	<? if (method_exists($oProfile, 'GetPriceFromLabel') && $oProfile->GetPriceFromLabel() != "") { ?>
-    		<b>Program Costs: </b> <?= $oProfile->GetPriceFromLabel(); ?> - <?= $oProfile->GetPriceToLabel(); ?> <?= $oProfile->GetCurrencyLabel(); ?><br /> 
-    	<? } ?>
-
 		<? if ($oProfile->GetProfileType() == PROFILE_SUMMERCAMP) { ?>
 
     		<? if (count($oProfile->GetCampTypeLabels()) > 1) { ?>
@@ -155,14 +147,6 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 	<? } ?>
 <? } ?>
 
-<? if ($oProfile->GetDuration() != "") { ?>
-    <h3>Duration / Dates</h3>
-    <p><?= nl2br($oProfile->GetDuration()) ?></p>
-    <? } ?> <? if ($oProfile->GetCosts() != "") { ?>
-    <h3>Costs / Pay</h3>
-    <p><?= nl2br($oProfile->GetCosts()) ?></p>
-<? } ?> 
-
 <? if ($oProfile->GetListingType() >= ENHANCED_LISTING) { ?>
     <? if (strlen($oProfile->GetPlacementInfo()) > 1) { ?>
     <h3>Placement Info</h3>
@@ -193,6 +177,21 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 <div class="row">
 	<h2>Project Info</h2>
 
+	<div class="row my-3">
+    	<? if (method_exists($oProfile, 'GetDurationFromLabel') && $oProfile->GetDurationFromLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Program Duration: </h3>
+    		<?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?>
+		</div>
+    	<? } ?>
+
+    	<? if (method_exists($oProfile, 'GetPriceFromLabel') && $oProfile->GetPriceFromLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Program Costs: </h3>
+    		<?= $oProfile->GetPriceFromLabel(); ?> - <?= $oProfile->GetPriceToLabel(); ?> <?= $oProfile->GetCurrencyLabel(); ?>
+    	</div>
+    	<? } ?>
+    </div>
 
 	<div class="row my-3">
     	<div class="col-6">
@@ -272,30 +271,51 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
 	<h2>Summer Camp Info</h2>
 
 	<div class="row my-3">
+    	<? if (method_exists($oProfile, 'GetDurationFromLabel') && $oProfile->GetDurationFromLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Program Duration: </h3> 
+    		<?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?>
+		</div>
+    	<? } ?>
+
+    	<? if (method_exists($oProfile, 'GetPriceFromLabel') && $oProfile->GetPriceFromLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Program Costs: </h3> 
+    		<?= $oProfile->GetPriceFromLabel(); ?> - <?= $oProfile->GetPriceToLabel(); ?> <?= $oProfile->GetCurrencyLabel(); ?>
+    	</div>
+    	<? } ?>
+    </div>
+
+	<div class="row my-3">
     	<? if ($oProfile->GetStateLabel() != "") { ?>
-    	<div class="col">
-    		<b>State :</b> <?= $oProfile->GetStateLabel() ?>
+    	<div class="col-6">
+    		<h3>State :</h3> 
+    		<?= $oProfile->GetStateLabel() ?>
     	</div>
     	<? } ?>
 
         <? if (strlen($oProfile->GetCamperAgeFromLabel()) >= 1) { ?>    
-    	<div class="col">
-        	<b>Camp Age Range: </b> <?= $oProfile->GetCamperAgeFromLabel() ?> - <?= $oProfile->GetCamperAgeToLabel() ?> 
+    	<div class="col-6">
+        	<h3>Camp Age Range: </h3> 
+        	<?= $oProfile->GetCamperAgeFromLabel() ?> - <?= $oProfile->GetCamperAgeToLabel() ?> 
         </div>
         <? } ?>
+	</div>
 
+	<div class="row my-3">
         <? if (strlen($oProfile->GetCampGenderLabel()) >= 1) { ?>        
-    	<div class="col">
-        	<b>Camp Gender: </b> <?= $oProfile->GetCampGenderLabel(); ?> 
+    	<div class="col-6">
+        	<h3>Camp Gender: </h3> 
+        	<?= $oProfile->GetCampGenderLabel(); ?> 
     	</div>
         <? } ?>
 
         <? if (strlen($oProfile->GetCampReligionLabel()) >= 1) { ?>
-    	<div class="col">
-        	<b>Camp Affiliation: </b> <?= $oProfile->GetCampReligionLabel(); ?> 
+    	<div class="col-6">
+        	<h3>Camp Affiliation: </h3> 
+        	<?= $oProfile->GetCampReligionLabel(); ?> 
     	</div>
 		<? } ?>
-    
 	</div>
 	
     <div class="row my-3">
@@ -523,8 +543,10 @@ $aPlacement = $this->Get("aPlacement");
 
 if ($oProfile->GetListingType() >= BASIC_LISTING)
 {
+    $strTemplate = "profile_summary.php";
     $strRelatedProfileTitle = $oProfile->GetCompanyName() ." Programs";
 } else {
+    $strTemplate = "profile_summary_small.php";
     $strRelatedProfileTitle = "Related Opportunities"; 
 }
 
@@ -550,6 +572,7 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
 
 	   $oTemplate = new Template();
        $oTemplate->Set("oProfile", $oPlacementProfile);
+       $oTemplate->Set("displayRelatedProfile","COMPANY");
        $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
        $oTemplate->LoadTemplate("profile_summary.php");
        print $oTemplate->Render();
@@ -600,33 +623,27 @@ $(document).ready(function(){
 
 
 
-if (!$oProfile->GetListingType() <= BASIC_LISTING) {
+if (!$oProfile->GetListingType() <= BASIC_LISTING) 
+{
     
-$oRelatedArticle = $this->Get("oRelatedArticle");
-
-    
-if (is_array($oRelatedArticle->GetArticleCollection()->Get()) && count($oRelatedArticle->GetArticleCollection()->Get()) >= 1) {
-
-$aArticle = $oRelatedArticle->GetArticleCollection()->Get();
-$limit = 4;
-    
-?>
-
-    <div class="row-fluid " style="my-3">
+    $aRelatedArticle = $this->Get("aRelatedArticle");
+        
+    if (is_array($aRelatedArticle) && count($aRelatedArticle) >= 1) 
+    { ?>
+    <div class="row" style="my-3">
         <h3>Related Articles</h3>
-        <div class="col-12"><?
-
-
-            for ($i=0;$i<$limit;$i++) {
-                    if (is_object($aArticle[$i])) {
-                            $aArticle[$i]->SetImgDisplay(FALSE);
-                            $aArticle[$i]->LoadTemplate("article_related.php");
-                            print $aArticle[$i]->Render();
-                    }
-            } ?>
-    </div>
+        <div class="row"><?
+        foreach($aRelatedArticle as $oArticle)
+        {
+                if (is_object($oArticle)) 
+                {
+                    $oArticle->LoadTemplate("article_related.php");
+                    print $oArticle->Render();
+                }
+        } ?>
+        </div>
     </div><?php
-}
+    }
 }
 ?>
 
