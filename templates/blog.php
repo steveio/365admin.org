@@ -1,4 +1,4 @@
-<? $oArticle = $this->Get('ARTICLE_OBJECT'); ?>
+<? $oArticle = $this->Get('oArticle'); ?>
 <div class="row">
 
 
@@ -32,9 +32,9 @@
 <div class="row">
         <?
         $oPager = new PagedResultSet();
-        $oPager->SetResultsPerPage(30);
-        $oPager->GetByCount($oArticle->GetAttachedArticleTotal(),"Page");
-
+        $oPager->SetResultsPerPage(10);
+        $oPager->GetByCount($oArticle->GetAttachedArticleTotal(),"page");
+        
         if (is_array($oArticle->GetArticleCollection()->Get()))
         {
             foreach($oArticle->GetArticleCollection()->Get() as $oArticle)

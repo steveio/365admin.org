@@ -176,7 +176,7 @@ if (count($oArticle->GetMapping()) >= 1) {
 				</select>
 				Content From:
     			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ATTACHED) == "t") ? "checked" : "" ; ?>
-    			Attached <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ATTACHED; ?>" <?= $checked ?> />
+    			Attached Articles <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ATTACHED; ?>" <?= $checked ?> />
     			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PATH) == "t") ? "checked" : "" ; ?>
     			Path <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PATH; ?>" <?= $checked ?> />
 

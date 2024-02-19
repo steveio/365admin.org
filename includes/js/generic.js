@@ -43,7 +43,6 @@ function ArticleMapOptions(mid) {
     var v = $('input[name=' + radio_prefix_txtalign + ']:radio:checked').val()+'_T';
 	w.push(v);
 
-    
     // get search phrase 
     var q = $("#sphrase_"+mid).val();
     
@@ -54,8 +53,6 @@ function ArticleMapOptions(mid) {
     var pi = $("#pintro_"+mid).val();
     var oi = $("#ointro_"+mid).val();
     var tid = $("#opt_"+mid+"_20").val(); // template_id
-
-    console.log("TemplateId: "+tid);
     
     var opts = w.join('::');
 	var url = "/article_opt_ajax.php";
@@ -64,6 +61,9 @@ function ArticleMapOptions(mid) {
 	$.post(url, { mid: mid, opts: opts, q: q, pt: pt, ot: ot, nt: nt, pi: pi, oi: oi, tid: tid }, 
 		function(data){
 	
+			$('#alert-msg').removeClass('alert-success');
+			$('#alert-msg').removeClass('alert-warning');
+			$('#alert-msg').addClass('alert-'+data.status);
 			$('#alert-msg').show();
 			$('#alert-msg').html(data.msg);
 

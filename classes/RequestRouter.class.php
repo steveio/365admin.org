@@ -430,7 +430,6 @@ class RequestRouter {
 
     protected function ProcessArticlePageRequest()
     {
-        global $_CONFIG, $oBrand;
 
         if (!isset($this->strContentType) )
         {
@@ -445,7 +444,7 @@ class RequestRouter {
             // 1.  Extract Article Path from URI (Published Articles)
             if (count($this->GetRequestArray()) >= 2 && $this->GetRequestUri(1) != "/article") // Array ( [0] => [1] => url-path
             {
-                $oContentAssembler->GetByPath($this->GetRequestUri(), $oBrand->GetSiteId());
+                $oContentAssembler->GetByPath($this->GetRequestUri());
                 
             } else {
                 

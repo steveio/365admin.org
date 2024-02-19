@@ -1,10 +1,5 @@
 <?php
 
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
-
-
-
 /*
  * Handles :
  * 	- attaching/ detaching links from associated objects
@@ -13,10 +8,13 @@ error_reporting(E_ALL);
  */
 
 require_once("./conf/config.php");
+require_once("./conf/brand_config.php");
+require_once("./classes/Brand.php");
 require_once("./classes/json.class.php");
 require_once("./classes/db_pgsql.class.php");
 require_once("./classes/logger.php");
 require_once("./classes/template.class.php");
+require_once("./classes/TemplateList.class.php");
 require_once("./classes/article.class.php");
 require_once("./classes/ArticleCollection.class.php");
 require_once("./classes/ContentMapping.class.php");
@@ -24,9 +22,15 @@ require_once("./classes/cache.class.php");
 
 $db = new db($dsn,$debug = false);
 
+if (!is_object($oBrand))
+{
+    $oBrand = new Brand($aBrandConfig[HOSTNAME]);
+}
+
 
 $aResponse = array();
 $aResponse['retVal'] = false;
+$aResponse['status'] = "";
 $aResponse['msg'] = "";
 
 
@@ -42,6 +46,8 @@ $tid = $_POST['tid'];
 
 
 if (!is_numeric($mid)) {
+    $aResponse['retVal'] = false;
+    $aResponse['status'] = "warning";
 	$aResponse['msg'] = "ERROR : Invalid / Missing Mapping ID";
 	sendResponse($aResponse);
 }
@@ -54,12 +60,14 @@ foreach($opts_bits as $opt) {
 	$opt_id = $bits[2]; 
 	$opt_val =  $bits[3];
 	if (is_numeric($opt_id) && in_array($opt_val,array("T","F"))) {
-		$opts_array[$opt_id] =  $opt_val;
+		$opts_array[$opt_id] =  strtolower($opt_val);
 	}
 } 
 
 
 if (!is_array($opts_array) || count($opts_array) < 1) {
+    $aResponse['retVal'] = false;
+    $aResponse['status'] = "warning";
 	$aResponse['msg'] = "ERROR : Invalid / empty content options array";
 	sendResponse($aResponse);
 }
@@ -67,6 +75,8 @@ if (!is_array($opts_array) || count($opts_array) < 1) {
 $oContentMapping = new ContentMapping($mid,NULL,NULL);
 $result = $oContentMapping->GetById();
 if (!$result) {
+    $aResponse['retVal'] = false;
+    $aResponse['status'] = "warning";
 	$aResponse['msg'] = "ERROR : Unable to retrieve mapping";
 	sendResponse($aResponse);
 }
@@ -82,15 +92,46 @@ $aTextFieldOpts = array(
 
 $opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = $tid;
 
-$oContentMapping->SetOptions($mid,$opts_array, $aTextFieldOpts);
+$oTemplateList = new TemplateList();
+$oTemplateList->GetFromDB();
+$oTemplateCfg = $oTemplateList->GetById($opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID]);
 
-// update cache
-$oContentMapping->SetCacheUpdate();
+if ($oTemplateCfg->is_collection && ($opts_array[ARTICLE_DISPLAY_OPT_ATTACHED] == "f" && $opts_array[ARTICLE_DISPLAY_OPT_PATH] == "f"))
+{
+    $aResponse['retVal'] = false;
+    $aResponse['status'] = "warning";
+    $aResponse['msg'] = "ERROR : Content From must be either Attached Articles or Path";
+    sendResponse($aResponse);
+}
 
 
-$aResponse['retVal'] = true;
-$aResponse['msg'] = "SUCCESS: Updated article content options";
-sendResponse($aResponse);
+if ($opts_array[ARTICLE_DISPLAY_OPT_PATH] == "t" && $opts_array[ARTICLE_DISPLAY_OPT_ATTACHED] == "t")
+{
+    $aResponse['retVal'] = false;
+    $aResponse['status'] = "warning";
+    $aResponse['msg'] = "ERROR : Content From must be either Attached Articles or Path";
+    sendResponse($aResponse);
+}
+
+if ($oContentMapping->SetOptions($mid,$opts_array, $aTextFieldOpts))
+{
+    // trigger cache update of published page
+    $oContentMapping->SetCacheUpdate();
+    
+    $aResponse['retVal'] = true;
+    $aResponse['status'] = "success";
+    $aResponse['msg'] = "SUCCESS: Updated article content options";
+    sendResponse($aResponse);
+} else {    
+    $aResponse['retVal'] = false;
+    $aResponse['status'] = "warning";
+    $aResponse['msg'] = "ERROR: unable to save article publisher options";
+    sendResponse($aResponse);
+}
+
+
+
+
 
 	
 

@@ -7,17 +7,21 @@ class TemplateList {
     public $filename;
     public $desc_short;
     public $fetch_mode;
+    public $fetch_limit;
+    public $is_collection;
     
     public $arrTemplate;
 
-    public function __Construct($id = null, $title = null, $filename = null, $desc_short = null, $fetch_mode = null) 
+    public function __Construct($id = null, $title = null, $filename = null, $desc_short = null, $fetch_mode = null, $fetch_limit = null, $is_collection = null) 
     {
         $this->id = $id;
         $this->title = $title;
         $this->filename = $filename;
         $this->desc_short = $desc_short;
         $this->fetch_mode = $fetch_mode;
-        
+        $this->fetch_limit = $fetch_limit;
+        $this->is_collection = ($is_collection == "t") ? true : false;
+
         $this->arrTemplate = array();
     }
 
@@ -51,8 +55,8 @@ class TemplateList {
 
         foreach($aResult as $aRow)
         {
-            $oTemplate = new TemplateList($aRow['id'],$aRow['title'],$aRow['filename'],$aRow['desc_short'],$aRow['fetch_mode']);
-            
+            $oTemplate = new TemplateList($aRow['id'],$aRow['title'],$aRow['filename'],$aRow['desc_short'],$aRow['fetch_mode'],$aRow['fetch_limit'],$aRow['is_collection']);
+
             $this->arrTemplate[$aRow['id']] = $oTemplate;
         }
     }

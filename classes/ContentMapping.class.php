@@ -115,6 +115,7 @@ class ContentMapping {
         $this->SetOptionsFromArray($opts);
         
     }
+
     public function GetId() {
         return $this->oid;
     }
@@ -153,11 +154,10 @@ class ContentMapping {
     
     
     public function SetCacheUpdate() {
-        
-        if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-        
-        $sUrl = "http://www.".$this->GetLabel();
-        Cache::Generate($sUrl,$this->GetSectionUri(),$this->GetWebsiteId(),$sleep = false);
+
+        global $oBrand;
+
+        Cache::Generate($oBrand->GetWebsiteUrl(),$this->GetSectionUri(),$this->GetWebsiteId(),$sleep = false);
         
     }
     
@@ -212,13 +212,16 @@ class ContentMapping {
         $sql = "DELETE FROM ".DB__ARTICLE_MAP_OPTS." WHERE article_map_oid = ".$mid;
         
         $db->query($sql);
-        
+
         $search_keywords = addslashes($aTextFieldOpts['search_keywords']);
         $p_title = addslashes($aTextFieldOpts['p_title']);
         $o_title = addslashes($aTextFieldOpts['o_title']);
         $n_title = addslashes($aTextFieldOpts['n_title']);
         $p_intro = addslashes($aTextFieldOpts['p_intro']);
         $o_intro = addslashes($aTextFieldOpts['o_intro']);
+        
+        $opts_array[ARTICLE_DISPLAY_OPT_PATH] = ($opts_array[ARTICLE_DISPLAY_OPT_PATH] == "t") ? "t" : "f";
+        $opts_array[ARTICLE_DISPLAY_OPT_ATTACHED] = ($opts_array[ARTICLE_DISPLAY_OPT_ATTACHED] == "t") ? "t" : "f";
         
         
         $sql = "INSERT INTO ".DB__ARTICLE_MAP_OPTS." (	article_map_oid,
@@ -258,16 +261,45 @@ class ContentMapping {
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_ATTACHED]."'
 											 );";
         
+
         $db->query($sql);
         
         if ($db->getAffectedRows() == 1)
         {
             return TRUE;
-        } else {
-            error_log($sql);
         }
     }
+
+    public function GetDisplayOptProfile()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_PROFILE);
+    }
+
+    public function GetDisplayOptArticle()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_ARTICLE);
+    }
     
+    public function GetDisplayOptReview()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_REVIEW);
+    }
+
+    public function GetDisplayOptSocial()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_SOCIAL);
+    }
+
+    public function GetDisplayOptAds()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_ADS);
+    }
+
+    public function GetDisplayOptIntroImage()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_IMG);
+    }
+        
 }
 
 

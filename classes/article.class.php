@@ -362,7 +362,7 @@ class Content  implements TemplateInterface {
 	public function SetUrl() {
 		
 		global $oBrand;
-
+		
 		/*
 		 * if the article is unpublished
 		 * or not published to the site being viewed
@@ -510,6 +510,7 @@ class Content  implements TemplateInterface {
 		/* get associated publish mappings, attached profiles, attached images */ 
 		$this->SetMapping();
 		$this->SetAttachedImage();
+
 		if ($this->GetFetchMode() == FETCHMODE__FULL) {
 			if ($this->GetFetchAttachedProfile()) {
 				$this->SetAttachedProfile();
@@ -643,7 +644,7 @@ class Content  implements TemplateInterface {
     
     		$this->SetFromArray($aRes);
     		
-    		/* get associated publish mappings, attached profiles, attached images */ 
+    		/* get associated publish mappings, attached profiles, attached images */
     		$this->SetMapping($sSectionUri);
 
     		if($this->GetFetchAttachedProfile())
@@ -669,6 +670,8 @@ class Content  implements TemplateInterface {
 		        $oArticle = new Article();
 		        $oArticle->SetFromArray($aRow);
 		        $oArticle->SetAttachedImage();
+
+		        $oArticle->SetMapping($aRow['section_uri']);
 
 		        $this->oArticleCollection->Add($oArticle);
 		    }
@@ -1176,28 +1179,86 @@ class Content  implements TemplateInterface {
 		}
 		
 	}
-	
-	
+
 	public function  SetAttachedArticleId() 
 	{
 		global $db;
-		
-		$limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
-				
+
+		print $limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
+
 		$db->query("SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY a.published_date DESC ". $limitSql);
 	
 		if ($db->GetNumRows() >= 1) {
+		    $this->aArticleId = array();
+		    $this->iAttachedArticleTotal = 0;
 			$result = $db->getRows();
 			foreach($result as $row) {
 				$this->aArticleId[] = $row['id'];
+				$this->iAttachedArticleTotal++;
 			}
 		}
-
-		$this->iAttachedArticleTotal = count($this->aArticleId);
 	}
 
+	public function  SetAttachedArticleIdByPath($path = null)
+	{
+	    global $db;
+	    
+	    $pathSql = "";
+	    
+	    if ($path != null)
+	    {
+	        $pathSql = "AND m.section_uri like '".$path."%' ";
+	    }
+	   
+	    $sql = "SELECT
+                    m.article_id as id
+                    FROM
+                    ".DB__ARTICLE_MAP_TBL." m,
+                    ".DB__ARTICLE_TBL." a
+                    WHERE 
+                    m.article_id = a.id
+                    ".$pathSql."
+                    ORDER BY a.published_date DESC ". $limitSql;
+	    
+	    $db->query($sql);
+	    
+	    if ($db->GetNumRows() >= 1) {
+	        $this->aArticleId = array();
+	        $this->iAttachedArticleTotal = 0;
+	        $result = $db->getRows();
+	        foreach($result as $row) {
+	            $this->aArticleId[] = $row['id'];
+	            $this->iAttachedArticleTotal++;
+	        }
+	    }
+	}
+	
+	public function PaginateAttachedArticleId($startIndex, $endIndex)
+	{
+	    $aSelectedId = array();
+
+	    $this->iAttachedArticleTotal = 0;
+
+	    for($i = $startIndex; $i <= $endIndex; $i++) {
+	        
+	        if (isset($this->aArticleId[$i]))
+	        {
+	           $aSelectedId[] = $this->aArticleId[$i];
+	           $this->iAttachedArticleTotal++;
+	        }
+	    }
+
+	    unset($this->aArticleId);
+	    $this->aArticleId = $aSelectedId;
+	}
+	
 	public function GetAttachedArticleTotal()
 	{
+	    if (!is_numeric($this->iAttachedArticleTotal))
+	    {
+	        $this->iAttachedArticleTotal = $this->oArticleCollection->Count();
+	    }
+
 	    return $this->iAttachedArticleTotal;
 	}
 

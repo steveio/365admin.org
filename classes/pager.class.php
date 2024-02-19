@@ -38,7 +38,7 @@ class PagedResultSet
 
 	private $sPagerId; /* unique pager instance id */
 	private $iResultCount; /* total no results */
-	private $iResultsPerPage; /* no items per page */
+	private $iResultsPerPage = PAGER_RESULTS_PER_PAGE; /* no items per page */
 	private $page; /* the selected page */ 
 	private $pageSize; /* no items per page */
 	private $sUrl; /* Base Url for pager links   */
@@ -55,6 +55,9 @@ class PagedResultSet
 		$this->SetPagerId($pager_id);
 		$this->SetResultCount($total_results);
 		$current_page = $this->GetOffsetFromUrl($this->GetPagerId());
+		if ($current_page > $total_results)
+		    $current_page = 1;
+
 		$this->pageSize = $this->GetResultsPerPage();
 		if ((int)$current_page <= 0) {
 			$current_page = 1;
@@ -64,7 +67,12 @@ class PagedResultSet
 		}
 		$this->setPageNum($current_page);
 		$this->iResultOffset = (($this->page -1) * $this->pageSize);
-
+		/*
+		print_r("<pre>");
+		print_r($this);
+		print_r("</pre>");
+		die();
+		*/
 	}
 
 
@@ -75,20 +83,21 @@ class PagedResultSet
 		$this->aResults = $array;
 		$total_results = count($array);		
 	
-                $this->SetUrl("http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
+        $this->SetUrl("http://".$_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]);
+        //$this->SetResultsPerPage(PAGER_RESULTS_PER_PAGE);
 
-                $this->SetPagerId($pager_id);
-                $this->SetResultCount($total_results);
-                $current_page = $this->GetOffsetFromUrl($this->GetPagerId());
-                $this->pageSize = $this->GetResultsPerPage();
-                if ((int)$current_page <= 0) {
-                        $current_page = 1;
-                }
-                if ($current_page > $this->GetNumPages()) {
-                        $current_page = $this->GetNumPages();
-                }
-                $this->setPageNum($current_page);
-                $this->iResultOffset = (($this->page -1) * $this->pageSize);
+        $this->SetPagerId($pager_id);
+        $this->SetResultCount($total_results);
+        $current_page = $this->GetOffsetFromUrl($this->GetPagerId());
+        $this->pageSize = $this->GetResultsPerPage();
+        if ((int)$current_page <= 0) {
+                $current_page = 1;
+        }
+        if ($current_page > $this->GetNumPages()) {
+                $current_page = $this->GetNumPages();
+        }
+        $this->setPageNum($current_page);
+        $this->iResultOffset = (($this->page -1) * $this->pageSize);
 
 
 		$start_offset = $this->iResultOffset;
@@ -117,10 +126,6 @@ class PagedResultSet
 
 	private function SetResultCount($total_results) {
 		$this->iResultCount = $total_results;
-	}
-	
-	public function GetResultCount() {
-		return $this->iResultCount;
 	}
 
 	private function SetPagerId($id) {
@@ -243,33 +248,67 @@ class PagedResultSet
 
 			$out .=	"";
 			$out .= "<div class=\"page-links clear\">";
-			$out .= "<ul>";
+			$out .= "<ul class='pager'>";
 
 			for ($i=$this->GetStartIdx(); $i<=$this->GetEndIdx(); $i++) {
-
-				if($this->ShowPreviousLink()  && ($i <= $this->GetStartIdx() )) {
-					$qs = "?&".$this->GetPagerId()."=".$this->GetPrevOffset(); //.$this->GetQueryStr();;
-					$out .= "<li class=\"previous\"><a href=\"".$this->GetUrl().$qs."\" title=\"Previous\">prev</a></li>";
-				} elseif ($i <= $this->GetStartIdx() ) {
-					$out .= "<li class=\"prev-inactive\">prev</li>";
+				if($i == $this->GetStartIdx() && $this->GetPageNum() > 1) {
+					$out .= "<li><a href=\"#\" id=\"pageid_".($i-1)."\">«</a></li>";
 				}
-
+	
 				if ($i==$this->GetPageNum()) {
-					$out .= "<li class=\"currentpage\">$i</li> ";
+					$out .= "<li class=\"active\"><a href=\"#\">".$i."</a></li>";
 				} else {
 					$qs = "?&".$this->GetPagerId()."=".$i; //.$this->GetQueryStr();
-					$out .= "<li><a href=\"".$this->GetUrl().$qs."\" title=\"View Page ".$i."\">".$i."</a></li>";
+					$out .= "<li><a href=\"#\" id=\"pageid_".$i."\" title=\"View Page ".$i."\">".$i."</a></li>";
+				}
+	
+				if ($i == $this->GetEndIdx() && $this->GetPageNum() < $this->GetNumPages()) {
+				    $out .= "<li><a id=\"pageid_".($this->GetStartIdx() + $this->pageSize)."\" href=\"#\" title=\"Next\">»</a></li> ";
 				}
 
-				if ($this->ShowNextLink() && ($i == $this->GetEndIdx() )) {
-					  $qs = $this->GetPagerId()."=".$this->GetNextOffset();
-					  $out .= "<li class=\"next\"><a href=\"".$this->GetUrl()."?&".$qs."\" title=\"Next\">next</a></li> ";
-				}
 			}
 
 			$out .= "</ul>";
 			$out .= "</div>";
 
+			return $out;
+		}
+	}
+
+	public function RenderHTML()
+	{
+
+		global $sUri;
+	
+		if ($this->GetNumPages() > 1) {
+	
+			$out .=	"";
+			$out .= "<div class=\"page-links clear\">";
+			$out .= "<ul class='pager'>";
+	
+			for ($i=$this->GetStartIdx(); $i<=$this->GetEndIdx(); $i++) {
+			    if($i == $this->GetStartIdx() && $this->GetPageNum() > 1 && ($this->GetStartIdx() > $this->GetResultsPerPage())) {
+				    $qs = "?&".$this->GetPagerId()."=".($this->GetStartIdx() - $this->GetResultsPerPage());
+				    $out .= "<li><a href=\"".$sUri.$qs."\" id=\"pageid_".($this->GetStartIdx() + $this->GetResultsPerPage())."\">«</a></li>";
+				}
+	
+				if ($i==$this->GetPageNum()) {
+					$out .= "<li class=\"active\"><a href=\"#\">".$i."</a></li>";
+				} else {
+					$qs = "?&".$this->GetPagerId()."=".$i; //.$this->GetQueryStr();
+					$out .= "<li><a href=\"".$sUri.$qs."\" id=\"pageid_".$i."\" title=\"View Page ".$i."\">".$i."</a></li>";
+				}
+					    
+				if ($i == $this->GetEndIdx() && ($this->GetStartIdx() + $this->GetResultsPerPage()) < $this->GetNumPages()) {
+				    $qs = "?&".$this->GetPagerId()."=".($this->GetStartIdx() + $this->GetResultsPerPage()); //.$this->GetQueryStr();
+				    $out .= "<li><a id=\"pageid_".($this->GetStartIdx() + $this->GetResultsPerPage())."\" href=\"".$sUri.$qs."\" title=\"Next\">»</a></li> ";
+				}
+	
+			}
+	
+			$out .= "</ul>";
+			$out .= "</div>";
+	
 			return $out;
 		}
 	}

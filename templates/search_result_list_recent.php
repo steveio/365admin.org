@@ -10,6 +10,7 @@
 	<th scope="col">Url</th>
 	<th scope="col">Last Updated</th>
 	<th scope="col">Edit</th>
+	<th scope="col">Publish</th>
 	<th scope="col">Delete</th>
 
 </tr>
@@ -36,16 +37,25 @@ if ((is_array($aResult)) && (count($aResult) >= 1)) {
             } else {
                 $oResult->link = $this->Get('WEBSITE_URL').$oResult->url;
             }
-                $oResult->edit_link = "/article-editor?&id=".$oResult->id;
+
+            $oResult->edit_link = "/article-editor?&id=".$oResult->id;
+            $oResult->publish_link = "article-publisher?&id=".$oResult->id;
+
 		} else {
 		    $oResult->link = $this->Get('WEBSITE_URL').$oResult->url;
 		    $oResult->edit_link = $oResult->url."/edit";
+		    $oResult->publish_link = "";
 		}
 		?>
 		<td valign="top"><a href="<?= $oResult->link; ?>" target="_new"><?= $oResult->url; ?></a></td>
 		<td valign="top"><?= $oResult->last_updated; ?></td>
 		<td>
 			<a class="btn btn-primary rounded-pill px-3" target="_new" role="button"  href="<?= $oResult->edit_link ?>" title="Edit">Edit</a>
+		</td>
+		<td>
+		<?php if ($oResult->type == "ARTICLE") { ?> 
+		    <a class="btn btn-primary rounded-pill px-3" target="_new" role="button"  href="<?= $oResult->publish_link ?>" title="Publish">Publish</a>
+		 <?php } ?>
 		</td>
 		<td>
 		<?php if ($oResult->type == "ARTICLE") { ?>

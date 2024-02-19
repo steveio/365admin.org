@@ -70,7 +70,7 @@ abstract class AbstractContentAssembler {
 
     abstract public function GetById($id);
 
-    abstract public function GetByPath($path, $website_id = 0);
+    abstract public function GetByPath($path);
 
     
     public function GetLinkTo() {
