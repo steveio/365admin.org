@@ -13,9 +13,11 @@ if (!is_object($oProfile)) return;
 
     	<div class="float-end"><?
     	if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_mf",'')) { ?>
-    		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class=""> 
-    		<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" /> 		
-    		</a>
+    		<div>
+        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class=""> 
+        		<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" /> 		
+        		</a>
+        	</div>
         	<?php 
         	if (strlen($strCompanyLogoHtml) < 1 && is_object($oProfile->GetCompanyLogo()))
         	{
@@ -23,7 +25,7 @@ if (!is_object($oProfile)) return;
         	}
         	if (strlen($strCompanyLogoHtml) > 1) {
         	?>
-        	<div class="overlay-img">
+        	<div>
         		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?= $oProfile->GetCompanyProfileUrl() ?>" target="_new" class="">
         		<?= $strCompanyLogoHtml; ?>
         		</a>
@@ -48,9 +50,7 @@ if (!is_object($oProfile)) return;
         	<p><?= $oProfile->GetDescShortPlaintext(160); ?></p>
         
         	<ul class="details small">
-        	<? if ($displayRelatedProfile != "COMPANY") { ?>
         	<?= $oProfile->GetCompanyName(); ?><br/> 
-        	<? } ?>
         	<? if (strlen($oProfile->GetLocationLabel()) > 1) { ?> 
         	<?= "Location: ". htmlUtils::convertToPlainText($oProfile->GetLocationLabel()); ?><br/> 
         	<? } ?>

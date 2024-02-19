@@ -12,7 +12,7 @@
 <meta name="keywords" content="<?= $this->Get("KEYWORDS"); ?>" />
 
 <meta property="og:title" content="<?= $this->Get("TITLE"); ?>" />
-<meta property="og:url" content="<?= $_REQUEST['page_url'] ?>" />
+<meta property="og:url" content="<?= $this->Get("URL"); ?>" />
 <meta property="og:description" content="<?= $this->Get("DESCRIPTION"); ?>" />
 
 

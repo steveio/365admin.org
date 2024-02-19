@@ -275,39 +275,39 @@ class PagedResultSet
 		}
 	}
 
+	
 	public function RenderHTML()
 	{
 
-		global $sUri;
 	
 		if ($this->GetNumPages() > 1) {
 	
 			$out .=	"";
-			$out .= "<div class=\"page-links clear\">";
-			$out .= "<ul class='pager'>";
+			$out .= "<nav aria-label=\"Page navigation\">";
+			$out .= "<ul class='pagination'>";
 	
 			for ($i=$this->GetStartIdx(); $i<=$this->GetEndIdx(); $i++) {
 			    if($i == $this->GetStartIdx() && $this->GetPageNum() > 1 && ($this->GetStartIdx() > $this->GetResultsPerPage())) {
 				    $qs = "?&".$this->GetPagerId()."=".($this->GetStartIdx() - $this->GetResultsPerPage());
-				    $out .= "<li><a href=\"".$sUri.$qs."\" id=\"pageid_".($this->GetStartIdx() + $this->GetResultsPerPage())."\">«</a></li>";
+				    $out .= "<li class=\"page-item\"><a class=\"page-link\" href=\"".$sUri.$qs."\" id=\"pageid_".($this->GetStartIdx() + $this->GetResultsPerPage())."\">«</a></li>";
 				}
 	
 				if ($i==$this->GetPageNum()) {
-					$out .= "<li class=\"active\"><a href=\"#\">".$i."</a></li>";
+					$out .= "<li class=\"page-item active\"><a class=\"page-link\" href=\"#\">".$i."</a></li>";
 				} else {
 					$qs = "?&".$this->GetPagerId()."=".$i; //.$this->GetQueryStr();
-					$out .= "<li><a href=\"".$sUri.$qs."\" id=\"pageid_".$i."\" title=\"View Page ".$i."\">".$i."</a></li>";
+					$out .= "<li class=\"page-item\"><a class=\"page-link\" href=\"".$sUri.$qs."\" id=\"pageid_".$i."\" title=\"View Page ".$i."\">".$i."</a></li>";
 				}
 					    
 				if ($i == $this->GetEndIdx() && ($this->GetStartIdx() + $this->GetResultsPerPage()) < $this->GetNumPages()) {
 				    $qs = "?&".$this->GetPagerId()."=".($this->GetStartIdx() + $this->GetResultsPerPage()); //.$this->GetQueryStr();
-				    $out .= "<li><a id=\"pageid_".($this->GetStartIdx() + $this->GetResultsPerPage())."\" href=\"".$sUri.$qs."\" title=\"Next\">»</a></li> ";
+				    $out .= "<li class=\"page-item\"><a class=\"page-link\" id=\"pageid_".($this->GetStartIdx() + $this->GetResultsPerPage())."\" href=\"".$sUri.$qs."\" title=\"Next\">»</a></li> ";
 				}
 	
 			}
 	
 			$out .= "</ul>";
-			$out .= "</div>";
+			$out .= "</nav>";
 	
 			return $out;
 		}

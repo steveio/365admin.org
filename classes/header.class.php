@@ -13,6 +13,7 @@ class Header extends Layout {
    private $sTitle;
    private $sDesc;
    private $sKeywords;
+   private $sUrl;
    private $sVerifyTag;
 
    private $logo_url;
@@ -68,6 +69,14 @@ class Header extends Layout {
 		return $this->sDesc;
    }
 
+   public function SetUrl($sUrl) {
+       $this->sUrl = $sUrl;
+   }
+   
+   public function GetUrl() {
+       return $this->sUrl;
+   }
+   
    public function SetKeywords($sKeywords) {
 		$this->sKeywords = $sKeywords;
    }
@@ -162,6 +171,7 @@ class Header extends Layout {
 										"LOGO_URL" => $this->GetLogoUrl(),
 										"DESCRIPTION" => $this->GetDesc(),
 										"KEYWORDS" => $this->GetKeywords(),
+		                                "URL" => $this->GetUrl(),
 										"JS_INCLUDE" => $this->GetJsInclude(),
 										"JS_ONLOAD" => $this->GetJsOnload(),
 										"CSS_GENERIC" => $this->GetCSSInclude("CSS_GENERIC"),

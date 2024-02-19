@@ -1,9 +1,16 @@
-<? $oArticle = $this->Get('oArticle'); ?>
-<div class="row">
+<? 
+$oArticle = $this->Get('oArticle'); 
+$iTotalMatchedArticle = $this->Get('iTotalMatchedArticle');
+?>
+<div class="container">
+<div class="align-items-center justify-content-center">
 
 
+
 <div class="row">
-	<div class="pull-right sharethis-inline-share-buttons"></div>
+<div class="col-12 my-3">
+<div class="col-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
+</div>
 </div>
 
 
@@ -33,7 +40,7 @@
         <?
         $oPager = new PagedResultSet();
         $oPager->SetResultsPerPage(10);
-        $oPager->GetByCount($oArticle->GetAttachedArticleTotal(),"page");
+        $oPager->GetByCount($iTotalMatchedArticle,"page");
         
         if (is_array($oArticle->GetArticleCollection()->Get()))
         {
@@ -83,4 +90,5 @@
 </div>
 
 
+</div>
 </div>

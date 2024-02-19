@@ -16,6 +16,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     protected $strTemplatePath;
     protected $oTemplate;
 
+    protected $iTotalMatchedArticle = 0;
+
     public function __Construct() 
     {
         parent::__construct();
@@ -102,11 +104,14 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 }
             }
 
+            // setup HTML header meta tags
+            $this->SetPageHeader();
+
             // put content id in scope of parent class for fetching common associated content (reviews etc)
             $this->SetLinkId($this->oArticle->GetId()); 
 
 
-            $this->oArticle->SetAttachedArticleFetchLimit(null);
+            //$this->oArticle->SetAttachedArticleFetchLimit(null);
 
             // fetch associated articles for collection template
             if ($oTemplateCfg->is_collection)
@@ -118,8 +123,10 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 } elseif ($this->oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_ATTACHED) ) { // fetch "attached" articles
     
                     $this->oArticle->SetAttachedArticleId();
-    
+
                 }
+                
+                $this->iTotalMatchedArticle = $this->oArticle->GetAttachedArticleTotal();
     
                 //print_r("<pre>");
                 //print_r("Attached Article Id: ".$this->oArticle->GetAttachedArticleTotal());
@@ -158,6 +165,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oTemplate = new Template();
 
         $this->oTemplate->Set("oArticle",$this->oArticle);
+        $this->oTemplate->Set("iTotalMatchedArticle",$this->iTotalMatchedArticle);
+        
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
 
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
@@ -176,4 +185,18 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         die();
         
     }
+    
+    public function SetPageHeader()
+    {
+        global $oHeader, $oBrand;
+        
+        $aKeywords = $this->GetKeywords($this->oArticle->GetId());
+        $oHeader->SetTitle($this->oArticle->GetTitle());
+        $oHeader->SetDesc($this->oArticle->GetDescShortPlaintext($trunc = 160));
+        $oHeader->SetKeywords(implode(",",$aKeywords));
+        $oHeader->SetUrl($oBrand->GetWebsiteUrl().$this->oRequestRouter->GetRequestUri());
+        
+        $oHeader->Reload();
+    }
+    
 }

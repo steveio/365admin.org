@@ -62,7 +62,7 @@ require_once(BASE_PATH."/classes/layout.class.php");
 require_once(BASE_PATH."/classes/header.class.php");
 require_once(BASE_PATH."/classes/footer.class.php");
 require_once(BASE_PATH."/classes/page.class.php");
-require_once("/www/vhosts/oneworld365.org/htdocs/classes/pager.class.php");
+require_once(BASE_PATH."/classes/pager.class.php");
 require_once(BASE_PATH."/classes/ColumnSort.php");
 require_once(BASE_PATH."/classes/category.class.php");
 require_once(BASE_PATH."/classes/activity.class.php");

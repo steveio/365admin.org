@@ -272,6 +272,17 @@ class Content  implements TemplateInterface {
   		}
   	}
 	
+  	public function GetDescShortPlaintext($trunc = null)
+  	{
+  	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->short_desc));
+  	    if (is_numeric($trunc) && strlen($str) > $trunc)
+  	    {
+  	        return substr($str, 0, $trunc)."...";
+  	    } else {
+  	        return $str;
+  	    }
+  	}
+
 	public function SetDescShort($sDesc) {
 		$this->short_desc = $sDesc;
 	}
@@ -1184,8 +1195,8 @@ class Content  implements TemplateInterface {
 	{
 		global $db;
 
-		print $limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
-
+		$limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
+		
 		$db->query("SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY a.published_date DESC ". $limitSql);
 	
 		if ($db->GetNumRows() >= 1) {
@@ -1218,7 +1229,7 @@ class Content  implements TemplateInterface {
                     WHERE 
                     m.article_id = a.id
                     ".$pathSql."
-                    ORDER BY a.published_date DESC ". $limitSql;
+                    ORDER BY a.published_date DESC ";
 	    
 	    $db->query($sql);
 	    
