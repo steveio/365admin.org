@@ -47,7 +47,7 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 
 <div class="row my-2">
     <div id="review-overallrating" class="col-3"></div>
-    <div class="col-2"><?php if (is_object($oReviewTemplate) &  $oReviewTemplate->Get('HASREVIEWRATING') == true) {
+    <div class="col-lg-6 col-sm-12"><?php if (is_object($oReviewTemplate) &  $oReviewTemplate->Get('HASREVIEWRATING') == true) {
         print "( ".$oReviewTemplate->Get('COUNT'). " Reviews ) ";
     } ?>
     </div>
@@ -55,7 +55,7 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 
 
 <div class="row my-2">
-	<div class="col-6">
+	<div class="col-sm-12 col-lg-6">
 		<?php
 		
 		if (count($oProfile->GetActivityArray()) >= 1) {
@@ -554,7 +554,7 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
 {
 ?>
 <div class="row">
-<div class="featured-proj-list">
+<div class="col-12">
 	<h2><?= $strRelatedProfileTitle ?></h2>
 	
 	<div class="row my-3">
@@ -571,11 +571,11 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
 	   $oPlacementProfile = array_shift($aPlacement);
 
 	   $oTemplate = new Template();
-       $oTemplate->Set("oProfile", $oPlacementProfile);
-       $oTemplate->Set("displayRelatedProfile","COMPANY");
-       $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
-       $oTemplate->LoadTemplate("profile_summary.php");
-       print $oTemplate->Render();
+           $oTemplate->Set("oProfile", $oPlacementProfile);
+           $oTemplate->Set("displayRelatedProfile","COMPANY");
+           $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
+           $oTemplate->LoadTemplate("profile_summary.php");
+           print $oTemplate->Render();
     } ?>
 	</div>
 

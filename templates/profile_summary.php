@@ -9,9 +9,9 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
 if (!is_object($oProfile)) return;
 ?>
 
-<div class="col-6 py-2 my-2">
+<div class="col-lg-6 col-sm-12 py-2 my-2">
 
-    	<div class="float-end"><?
+    	<div class="col-sm-12"><?
     	if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_mf",'')) { ?>
     		<div>
         		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class=""> 
@@ -35,7 +35,7 @@ if (!is_object($oProfile)) return;
     	<? } ?>
     	</div>
 
-        <div class="col-8">
+        <div class="col-lg-8 col-sm-12">
         	<h3><a href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h3>    
 
             <?php if ($oProfile->GetReviewCount() >= 1) { ?>
@@ -63,7 +63,6 @@ if (!is_object($oProfile)) return;
         	<?php } ?>
         	</ul>
         </div>
-
 </div>
 <?php if ($oProfile->GetReviewCount() >= 1) { ?>
 <script>
