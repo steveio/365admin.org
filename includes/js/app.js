@@ -83,6 +83,11 @@ $(document).ready(function(){
 
 		var url = $('#search-query').val();
 		
+		if (typeof url == "undefined")
+		{
+			return false;
+		}
+		
 		if ($('#text-fltr').val() != undefined && $('#text-fltr').val().length > 1) {
 			url = url +'/'+ $('#text-fltr').val();
 		}

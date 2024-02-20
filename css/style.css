@@ -16,6 +16,20 @@ body * {
 	line-height:1.22em;
 }
 
+.container-fluid {
+	padding: 0px;
+	margin: 0px;	
+}
+
+.container img {
+   max-width: 100%;
+   height: auto;
+}
+
+.footer-icon img {
+  margin: 3px;
+}
+
 .red	{ color:red; }
 .grey { color: #016799; }
 .orange { #DD6900; } 
@@ -112,6 +126,7 @@ p3 {
 p.lead {
 	font-size: 1.3em;
 	font-weight: bold;
+	line-height: 1.6em;
 }
 
 .smalltext {
@@ -246,11 +261,3 @@ a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-re
   display: block;
 }
 
-.container img {
-   max-width: 100%;
-   height: auto;
-}
-
-.footer-icon img {
-  margin: 3px;
-}
