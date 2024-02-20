@@ -10,17 +10,16 @@ $aPageOptions = $this->Get('aPageOptions');
 <?php if ($aPageOptions[ARTICLE_DISPLAY_OPT_ADS] != "f") { ?>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
- (adsbygoogle = window.adsbygoogle || []).push({
-      google_ad_client: "ca-pub-9874604497476880",
-      enable_page_level_ads: true
- });
+ //(adsbygoogle = window.adsbygoogle || []).push({
+ //     google_ad_client: "ca-pub-9874604497476880",
+ //     enable_page_level_ads: true
+ //});
 </script> 
 <?php  } ?>
 
+<div class="container">
+<div class="align-items-center justify-content-center">
 
-<div class="row">
-<!-- start: article section -->
-<section class="article">
 
 <?php if ($aPageOptions[ARTICLE_DISPLAY_OPT_SOCIAL] != "f") { ?>
 <div class="row">
@@ -31,11 +30,11 @@ $aPageOptions = $this->Get('aPageOptions');
 <?php } ?>
 
 
-<div class="row my-3">
+<div class="row-fluid my-3">
 <div class="col-12">
 
     <? if ($aPageOptions[ARTICLE_DISPLAY_OPT_IMG] != "f") { ?>
-	<div class="float-end col-6 my-3">
+	<div class="float-end col-lg-6 col-sm-12 m-3">
 	<?
 	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("",'')) {
 		print $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle());
@@ -49,8 +48,7 @@ $aPageOptions = $this->Get('aPageOptions');
 
 	<h1><?= $oArticle->GetTitle(); ?></h1>
 
-	<div class="row-fluid">
-		<p class="lead"><strong><?= strip_tags($oArticle->GetDescShort()); ?></strong></p>
+	<p class="lead"><?= strip_tags($oArticle->GetDescShort()); ?></p>
 
         <?
     	if ($aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT] != "f") {
@@ -60,7 +58,7 @@ $aPageOptions = $this->Get('aPageOptions');
     	}
         ?>
 
-		<div class="row-fluid lead">
+		<div class="">
 					<?
 					  // insert related profiles into article body
 						$strArticleBody = Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3");
@@ -166,6 +164,6 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] != "f")
 
 
 
-</section>
+</div>
 </div>
 <!--  END article_01 -->

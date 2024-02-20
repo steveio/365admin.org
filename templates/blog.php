@@ -1,6 +1,7 @@
 <? 
 $oArticle = $this->Get('oArticle'); 
 $iTotalMatchedArticle = $this->Get('iTotalMatchedArticle');
+
 ?>
 <div class="container">
 <div class="align-items-center justify-content-center">
