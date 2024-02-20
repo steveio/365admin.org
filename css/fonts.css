@@ -250,9 +250,3 @@ a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-re
    max-width: 100%;
    height: auto;
 }
-
-.footer-icon img {
-   max-width: 100%;
-   height: auto;
-   transform: scale(0.5);
-}
