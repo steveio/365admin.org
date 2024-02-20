@@ -21,15 +21,15 @@
         <div class="">
             <div class="footer-icon">
                 <h4>Follow Our Social Media Pages</h4>
-				<div class="col-12 p-3">
+		<div class="col-12 my-3">
                 <a href="http://www.facebook.com/oneworld365" target="_blank"><img alt="One World 365 Facebook" src="http://www.oneworld365.org/img/101/facebook_84_50.png" /></a>
                 <a href="http://www.instagram.com/oneworld365" target="_blank"><img alt="One World 365 Instagram" src="http://www.oneworld365.org/img/101/instagram_84_50.png" /></a>
                 <a href="http://www.twitter.com/oneworld365" target="_blank"><img alt="One World 365 Twitter" src="http://www.oneworld365.org/img/101/twitter_84_50.jpg" /></a>
                 <a href="http://www.pinterest.com/oneworld365" target="_blank"><img alt="One World 365 Pinterest" src="http://www.oneworld365.org/img/101/pinterest_84_50.png" /></a>
-				</div>
+		</div>
             
-            	<div class="col-12 p-3">
                 <h4>Partners &amp; Featured In</h4>
+		<div class="col-12 my-3">
             	<img alt="FCO" src="http://www.oneworld365.org/img/101/fco_84_50.png" />
             	<img alt="BBC Worldwide" src="http://www.oneworld365.org/img/101/bbc_worldwide_84_50.png" /> 
             	<img alt="USA Today" src="http://www.oneworld365.org/img/101/usa_today_84_50.png" />
