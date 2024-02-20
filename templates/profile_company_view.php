@@ -219,7 +219,7 @@ if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1
     	<? if ($oProfile->GetAwards() != "") { ?>
     	<div class="col-6">
     		<h3>Awards / Certification: </h3>
-    		<?= $oProfile->GetHowToApply() ?>
+    		<?= $oProfile->GetAwards() ?>
     	</div>
     	<? } ?>
     </div>
