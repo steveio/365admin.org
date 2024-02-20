@@ -3,13 +3,14 @@
 $oProfile = $this->Get('oProfile');
 $displayRelatedProfile = $this->Get('displayRelatedProfile');
 
+$numCols = $this->Get('numCols');
 
 $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
 
 if (!is_object($oProfile)) return;
 ?>
 
-<div class="col-lg-6 col-sm-12 py-2 my-2">
+<div class="col-lg-3 col-sm-12 py-2 my-2">
 
     	<div class="col-sm-12"><?
     	if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_mf",'')) { ?>
@@ -47,7 +48,7 @@ if (!is_object($oProfile)) return;
             </div><?
             } ?>
         
-        	<p><?= $oProfile->GetDescShortPlaintext(160); ?></p>
+        	<p><? $oProfile->GetDescShortPlaintext(160); ?></p>
         
         	<ul class="details small">
         	<?= $oProfile->GetCompanyName(); ?><br/> 

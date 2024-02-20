@@ -268,7 +268,7 @@ abstract class AbstractProfile implements TemplateInterface {
         
         if (!is_numeric($this->GetCompanyId())) return false;
         
-        $sql = "SELECT i.* FROM image i, image_map m WHERE m.link_id = ".$this->GetCompanyId()." AND m.link_to = '".CONTENT_TYPE_COMPANY."' AND m.type = ".LOGO_IMAGE." AND m.img_id = i.id ORDER BY i.id ASC";
+        $sql = "SELECT i.* FROM image i, image_map m WHERE m.link_id = ".$this->GetCompanyId()." AND m.link_to = 'COMPANY' AND m.type = ".LOGO_IMAGE." AND m.img_id = i.id ORDER BY i.id ASC";
 
         $db->query($sql);
         

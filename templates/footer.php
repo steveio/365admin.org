@@ -58,8 +58,6 @@
 </div>
 
 
-<script src="/includes/js/underscore-min.js"></script>
-<script src="/includes/js/backbone-min.js"></script>
 <script src="/includes/js/app.js"></script>
 
 

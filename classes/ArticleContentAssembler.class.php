@@ -15,6 +15,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     protected $oContentMapping;
     protected $strTemplatePath;
     protected $oTemplate;
+    protected $oSearchResultPanel;
 
     protected $iTotalMatchedArticle = 0;
 
@@ -82,12 +83,12 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             if(!$oTemplateCfg->is_collection) // individual article template
             {
                 // set article fetch options based on publisher settings
-                if ($this->oContentMapping->GetDisplayOptArticle())
+                if ($this->oContentMapping->GetDisplayOptRelatedArticle())
                     $this->oArticle->SetFetchAttachedArticle(false);
-                
-                if ($this->oContentMapping->GetDisplayOptProfile())
+
+                if ($this->oContentMapping->GetDisplayOptRelatedProfile())
                     $this->oArticle->GetFetchAttachedProfile(false);
-                                            
+
             } else {
                 $this->oArticle->SetFetchAttachedArticle(false);
                 $this->oArticle->GetFetchAttachedProfile(false);
@@ -147,6 +148,10 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
             }
 
+            if ($this->oContentMapping->GetDisplayOptSearchResult())
+            {
+                $this->SetSearchResultPanel($this->oContentMapping->GetOptions());
+            }
 
             $this->Render();
 
@@ -168,10 +173,9 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
 
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
+        $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
 
-        //$this->oTemplate->Set("oSearchResult", $this->);
         //$this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);
-        //$this->oTemplate->LoadTemplate("profile_company_view.php");
 
         $this->oTemplate->LoadTemplate($this->strTemplatePath);
 
@@ -196,5 +200,51 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         
         $oHeader->Reload();
     }
-    
+
+    public function SetSearchResultPanel($aPageOptions)
+    {
+        global $oBrand;
+
+        /* have a look for any search params in session */
+        $oSolrSearchPanelSearch = SolrSearchPanelSearch::getFromSession();
+        
+        if (is_object($oSolrSearchPanelSearch)) {
+            $oSolrSearchPanelSearch->setFiltersByUri($sUri);
+            
+            if ($oSolrSearchPanelSearch->filterEnabled('activity')) {
+                $oSearchResultPanel->Set("FACET_ACTIVITY",$oSolrSearchPanelSearch->getFilterAsCheckbox('activity'));
+            }
+            
+            if (is_numeric($oSolrSearchPanelSearch->getDurationFromId)) {
+                //$oSearchResultPanel->Set("FACET_DURATION_FROM","<select id=''><option></option></select>");
+            }
+            
+            if (is_numeric($oSolrSearchPanelSearch->getDurationToId)) {
+                $oSearchResultPanel->Set("FACET_DURATION_FROM",$oSolrSearchPanelSearch->getFilterAsCheckbox('activity'));
+            }
+            
+            
+            /*
+             $oSearchResultPanel->Set("FACET_COUNTRY",$sUri);
+             $oSearchResultPanel->Set("FACET_CONTINENT",$sUri);
+             
+             */
+        }
+
+        $oSearchResultPanel = new Layout();
+        $oSearchResultPanel->Set("URI",$this->oRequestRouter->GetRequestUri());
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_PTITLE]);
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_OTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_OTITLE]);
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PINTRO',$aPageOptions[ARTICLE_DISPLAY_OPT_PINTRO]);
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_OINTRO',$aPageOptions[ARTICLE_DISPLAY_OPT_OINTRO]);
+        
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PLACEMENT',$aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT]);
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD',trim($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]));
+        
+        $oSearchResultPanel->Set('HIDE_FILTERS',false);
+
+        $oSearchResultPanel->LoadTemplate('search_result.php');
+        
+        $this->oSearchResultPanel = $oSearchResultPanel;
+    }
 }

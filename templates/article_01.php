@@ -46,72 +46,76 @@ $aPageOptions = $this->Get('aPageOptions');
 
 	<?php } ?>
 
+	<div class="my-3">
 	<h1><?= $oArticle->GetTitle(); ?></h1>
+	</div>
 
+	<div class="my-3">
 	<p class="lead"><?= strip_tags($oArticle->GetDescShort()); ?></p>
+	</div>
 
-        <?
-    	if ($aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT] != "f") {
-                    $oSearchResultPanel = $this->Get('oSearchResult');
-                    if (is_object($oSearchResultPanel))
-                            print $oSearchResultPanel->Render();
-    	}
-        ?>
+    <?
+	if ($aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT] != "f") {
+                $oSearchResultPanel = $this->Get('oSearchResult');
+                if (is_object($oSearchResultPanel))
+                        print $oSearchResultPanel->Render();
+	}
+    ?>
 
 		<div class="">
-					<?
-					  // insert related profiles into article body
-						$strArticleBody = Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3");
+		<?
+		  // insert related profiles into article body
+			$strArticleBody = Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3");
 
-						$aH2Blocks = explode("<h2>",$strArticleBody);
-						$aH3Blocks = explode("<h3>",$strArticleBody);
-						$aBlocks = (count($aH2Blocks) > count($aH3Blocks)) ? $aH2Blocks : $aH3Blocks;
-						$strHeaderTag = (count($aH2Blocks) > count($aH3Blocks)) ? "<h2>" : "<h3>";
+			$aH2Blocks = explode("<h2>",$strArticleBody);
+			$aH3Blocks = explode("<h3>",$strArticleBody);
+			$aBlocks = (count($aH2Blocks) > count($aH3Blocks)) ? $aH2Blocks : $aH3Blocks;
+			$strHeaderTag = (count($aH2Blocks) > count($aH3Blocks)) ? "<h2>" : "<h3>";
 
-						if ($aPageOptions[ARTICLE_DISPLAY_OPT_PROFILE] != "f") {
-    						// get related placements
-    						$aProfile = $oArticle->GetAttachedProfile();
-						} else {
-						     $aProfile = array();   
-						}
+			if ($aPageOptions[ARTICLE_DISPLAY_OPT_PROFILE] != "f") {
+				// get related placements
+				$aProfile = $oArticle->GetAttachedProfile();
+			} else {
+			     $aProfile = array();   
+			}
 
-						$i = 0; // block index
-						$iAdsInserted = 0;
-						$lineCount = 0;
-						for($i=0; $i<count($aBlocks);$i++)
-						{
+			$i = 0; // block index
+			$iAdsInserted = 0;
+			$lineCount = 0;
+			for($i=0; $i<count($aBlocks);$i++)
+			{
 
-                            if ($i >= 1) print $strHeaderTag;
-                            print $aBlocks[$i];
-                            $lineCount += count(explode("\n",$aBlocks[$i]));
-                            
-                            // insert ads every nth block (except when block line count less than minimum)
-                            if ($lineCount > 20 && count($aProfile) >= 1 && ($i > 1) && ($i % 4 == 0))
-                            {
-                            
-                            	//$strTemplate = (($iAdsInserted % 2) == 0) ? "featured_project_list_col3.php" : "featured_project_list_sm.php";
-                            	//$strProfileGroupName = (($iAdsInserted % 2) == 0) ? "aProfile" : "aCompany";
-                            	$strTemplate = "profile_related.php";
-                            	$strProfileGroupName = "aProfile";
-                            
-                            	$aProfileGroup = array();
-                                $iNumProfiles = 3;
-                                for($j=0;$j<$iNumProfiles;$j++)
-                                {
-                                    $aProfileGroup[] = array_shift($$strProfileGroupName);
-                                }
-                            
-                                $oTemplate = new Template();
-                                $oTemplate->Set("PROFILE_ARRAY",$aProfileGroup);
-                            	$oTemplate->Set("PROFILE_TYPE",$strProfileGroupName);
-                                $oTemplate->LoadTemplate($strTemplate);
-                                print $oTemplate->Render();
-                            	$iAdsInserted++;
-                            	$lineCount = 0;
-                            }
-				   }
+                if ($i >= 1) print $strHeaderTag;
+                print $aBlocks[$i];
+                $lineCount += count(explode("\n",$aBlocks[$i]));
+                
+                // insert ads every nth block (except when block line count less than minimum)
+                if ($lineCount > 20 && count($aProfile) >= 1 && ($i > 1) && ($i % 4 == 0))
+                {
+                
+                	//$strTemplate = (($iAdsInserted % 2) == 0) ? "featured_project_list_col3.php" : "featured_project_list_sm.php";
+                	//$strProfileGroupName = (($iAdsInserted % 2) == 0) ? "aProfile" : "aCompany";
+                	$strTemplate = "profile_related.php";
+                	$strProfileGroupName = "aProfile";
+                
+                	$aProfileGroup = array();
+                    $iNumProfiles = 3;
+                    for($j=0;$j<$iNumProfiles;$j++)
+                    {
+                        $aProfileGroup[] = array_shift($$strProfileGroupName);
+                    }
+                
+                    $oTemplate = new Template();
+                    $oTemplate->Set("PROFILE_ARRAY",$aProfileGroup);
+                	$oTemplate->Set("PROFILE_TYPE",$strProfileGroupName);
+                    $oTemplate->LoadTemplate($strTemplate);
+                    print $oTemplate->Render();
+                	$iAdsInserted++;
+                	$lineCount = 0;
+                }
+	   }
 
-			    ?>
+    ?>
     </div>
 	</div>
 </div>

@@ -270,12 +270,20 @@ class ContentMapping {
         }
     }
 
-    public function GetDisplayOptProfile()
+
+    public function GetDisplayOptSearchResult()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_PLACEMENT);
+    }
+    
+    // related profiles
+    public function GetDisplayOptRelatedProfile()
     {
         return $this->GetOptionById(ARTICLE_DISPLAY_OPT_PROFILE);
     }
 
-    public function GetDisplayOptArticle()
+    // related articles
+    public function GetDisplayOptRelatedArticle()
     {
         return $this->GetOptionById(ARTICLE_DISPLAY_OPT_ARTICLE);
     }
