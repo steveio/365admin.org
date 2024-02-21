@@ -22,8 +22,6 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 
 <h1><?= $oProfile->GetTitle(); ?></h1>
 
-<p class="lead-intro"><?= $oProfile->GetDescShortFirstSentance(); ?></p>
-
 <div class="row my-3">
     <div id="review-overallrating" class="col-3"></div>
     <div class="col-2"><?php if (is_object($oReviewTemplate) &  $oReviewTemplate->Get('HASREVIEWRATING') == true) {
@@ -34,7 +32,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 
 <? if (in_array($oProfile->GetProfileType(),array(PROFILE_VOLUNTEER, PROFILE_TOUR))) { ?>
 <div class="row my-3">
-	<div class="col-12">
+	<div class="col-12 summary-details">
 		<b>Company :</b> <a href="<?= $oProfile->GetCompanyProfileUrl(); ?>" title="Find out more about <?= $oProfile->GetCompanyName(); ?>" style="color: #DD6900;"><?= $oProfile->GetCompanyName(); ?></a><br/>
 		<?php 
 		if (count($oProfile->GetActivityArray()) > 1 && count($oProfile->GetActivityArray()) < 3) {
@@ -75,10 +73,8 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 
 <? if ($oProfile->GetProfileType() == PROFILE_JOB) { /* JOB */ ?>
 <div class="row my-3">
-	<div class="col-12">
+	<div class="col-12 summary-details">
 
-	<h3>Job Description</h3>
-	<b>Job Ref :</b> <?= $oProfile->GetReference(); ?><br/>
 	<b>Company :</b> <?= $oProfile->GetCompanyName(); ?><br/>
 	<b>Country :</b> <?= $oProfile->GetCountryTxt(); ?><br/>
 	<? if (strlen($oProfile->GetLocation()) > 1) { ?>
@@ -105,6 +101,10 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 	<? if (strlen($oProfile->GetJobOptionsLabels()) > 1) { ?>
 		<b>Benefits :</b> <?= $oProfile->GetJobOptionsLabels(); ?><br/>
 	<? } ?>
+	<? if (strlen($oProfile->GetReference()) > 1) { ?>
+	<b>Job Ref :</b> <?= $oProfile->GetReference(); ?><br/>
+	<? } ?>
+
 
 	</div>
 </div>
@@ -112,7 +112,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 
 <div class="row">
 
-	<p class="lead"><?= $oProfile->GetDescShortMinusFirstSentance(); ?></p>			
+	<p class="lead"><?= $oProfile->GetDescShortPlainText(); ?></p>			
 
     <div class="profile-image-container col-12">
         <?php  
