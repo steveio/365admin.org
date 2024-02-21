@@ -1,4 +1,4 @@
-<div class="col-4 py-2 my-2">
+<div class="col-sm-12 col-md-4 col-lg-4 my-2">
 
     	<div class="my-3">
         <? if (is_object($this->Get("ARTICLE_OBJECT")->GetImage(0))) { ?>
@@ -21,7 +21,7 @@
 
     	<div class="col-8">
             <h3><a class="title-summary" href="<?= $this->Get("URL"); ?>" title="<?= $this->Get("TITLE"); ?>"><?= $this->Get("TITLE"); ?></a></h3>
-            <p class=""><?= $this->Get("DESC_SHORT_160"); ?></p>
+            <p class=""><?= $this->Get("DESC_SHORT_120"); ?></p>
     		<p class=""><small class="text-muted"><?= $this->Get("PUBLISHED_DATE"); ?></small></p>
     	</div>
 
