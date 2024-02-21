@@ -55,18 +55,16 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
 
             $this->GetEnquiryButtonHtml();
             
-            /*
-            print_r("<pre>");
-            print_r($this);
-            print_r("</pre>");
-            die();
-            */
+            $this->GetRelatedProfile($this->oProfile->GetOid(), PROFILE_PLACEMENT, $limit = 4);
+            $this->GetRelatedArticle($this->oProfile->GetOid(), $limit = 6); 
 
-            //$this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT);
-
+            
             $this->oTemplate->Set("aEnquiryButtonHtml", $this->aEnquiryButtonHtml);
             $this->oTemplate->Set("oProfile",$this->oProfile);
             $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
+            $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);
+            $this->oTemplate->Set("aRelatedProfile", $this->aRelatedProfile);
+            
             $this->oTemplate->LoadTemplate("profile_placement_view.php");
 
             

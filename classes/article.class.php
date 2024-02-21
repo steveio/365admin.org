@@ -305,12 +305,10 @@ class Content  implements TemplateInterface {
 	public function SetDescFull($sDesc) {
 		$this->full_desc = $sDesc;
 	}
-
-
+	
     public function GetImgSize() {
             return $this->img_size;
     }
-
 
     public function SetImgSize($size) {
             $this->img_size = $size;

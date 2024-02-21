@@ -2,6 +2,8 @@
 
 $oProfile = $this->Get("oProfile");
 $oReviewTemplate = $this->Get("oReviewTemplate");
+$aRelatedProfile = $this->Get('aRelatedProfile');
+$aRelatedArticle = $this->Get('aRelatedArticle');
 
 ?>
 
@@ -313,16 +315,56 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
         </div>
         </div>
     <? } ?>
-    
-    
-    <div class="row my-3">
-    	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
-    <?php 
-    print $oReviewTemplate->Render();
-    ?>
-    </div>
-
 </div>
+
+
+<div class="row my-3">
+	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
+<?php 
+print $oReviewTemplate->Render();
+?>
+</div>
+
+
+<?
+if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
+{ ?>
+<div class="row my-3">
+	<h2>Related Opportunities</h2>
+	<div class="row my-3">
+	<?php 
+	foreach($aRelatedProfile as $oProfile) 
+	{
+	   $oTemplate = new Template();
+       $oTemplate->Set("oProfile", $oProfile);
+       $oTemplate->LoadTemplate("profile_summary.php");
+       print $oTemplate->Render();
+    } ?>
+	</div>
+</div><?
+}
+?>
+
+
+
+<?
+if (is_array($aRelatedArticle) && count($aRelatedArticle) >= 1)
+{ ?>
+<div class="row" style="my-3">
+    <h3>Related Articles</h3>
+    <div class="row"><?
+    foreach($aRelatedArticle as $oArticle)
+    {
+            if (is_object($oArticle)) 
+            {
+                $oArticle->LoadTemplate("article_summary.php");
+                print $oArticle->Render();
+            }
+    } ?>
+    </div>
+</div><?php
+}
+?>
 
 
 <!--  END Placement Profile -->
