@@ -10,13 +10,17 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
 if (!is_object($oProfile)) return;
 ?>
 
-<div class="col-lg-3 col-sm-12 py-2 my-2">
+<div class="col-sm-12 col-md-3 col-lg-3 my-2">
 
     	<div class="col-sm-12"><?
     	if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_mf",'')) { ?>
     		<div>
-        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class=""> 
-        		<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" /> 		
+        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class=""><?
+			if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_lf",'')) { ?>			
+        		<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_lf");  ?>" alt="<?= $oProfile->GetTitle() ?>" /> 		
+			<? } else { ?>
+			<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
+			<? } ?>
         		</a>
         	</div>
         	<?php 
@@ -37,18 +41,18 @@ if (!is_object($oProfile)) return;
     	</div>
 
         <div class="col-lg-10 col-sm-12">
-        	<h3><a class="title-summary" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h3>    
+       	    <h3><a class="title-summary" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h3>    
 
             <?php if ($oProfile->GetReviewCount() >= 1) { ?>
             <input type="hidden" id="rateYo-<?= $oProfile->GetId() ?>-rating" value="<?= $oProfile->GetRating(); ?>" />
-            <div class="row my-2">
+            <div class="row m-2">
                 <div id="rateYo-<?= $oProfile->GetId() ?>" class="rating col-4"></div>
                 <?php  $reviewLabel = ($oProfile->GetReviewCount() == 1) ? "Review" : "Review"; ?>
                 <div class="col-6 small">( <?= $oProfile->GetReviewCount(). " ".$reviewLabel." ) "; ?></div>
             </div><?
             } ?>
         
-        	<p><? $oProfile->GetDescShortPlaintext(160); ?></p>
+        	<!--<p><? $oProfile->GetDescShortPlaintext(120); ?></p>-->
         
         	<ul class="details small">
         	<?= $oProfile->GetCompanyName(); ?><br/> 
