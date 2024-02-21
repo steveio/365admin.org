@@ -78,6 +78,17 @@ abstract class AbstractContentAssembler {
         $this->link_id = $sLinkId;
     }
 
+    public function GetKeywords($solr_id, $profile_type, $limit = 25)
+    {
+        global $solr_config;
+        
+        $oSolrMoreLikeSearch = new SolrMoreLikeSearch($solr_config);
+        $aFilterQuery = array();
+        $oSolrMoreLikeSearch->setRows(25);
+        
+        return $oSolrMoreLikeSearch->getKeywords($solr_id,$profile_type);
+    }
+
     protected function SetReviewTemplate($template)
     {
         $this->sReviewTemplate = $template;
@@ -148,7 +159,10 @@ abstract class AbstractContentAssembler {
     /*
      * 
      * @param profile_type : CONTENT_COMPANY | CONTENT_PLACEMENT
-     * @note - source content id is oid for profiles, id for articles
+     * 
+     * @param solr_id : source content id  ( oid for profiles, id for articles )
+     * @param profile_type : solr index profile type ( 0 = company profile, 1 = placement profile, (1 OR 0) both )
+     * @param limit - number of items to return
      */
     public function GetRelatedProfile($solr_id, $profile_type, $limit = 25)
     {
@@ -174,17 +188,6 @@ abstract class AbstractContentAssembler {
                 $this->aRelatedProfile = CompanyProfile::Get("ID", $aRelatedId, false);
             }
         }
-    }
-
-    public function GetKeywords($solr_id, $profile_type, $limit = 25)
-    {
-        global $solr_config;
-        
-        $oSolrMoreLikeSearch = new SolrMoreLikeSearch($solr_config);
-        $aFilterQuery = array();
-        $oSolrMoreLikeSearch->setRows(25);
-        
-        return $oSolrMoreLikeSearch->getKeywords($solr_id,$profile_type);
     }
 
     public function GetRelatedArticle($solr_id, $limit = 25)

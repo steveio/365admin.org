@@ -287,8 +287,19 @@ class Content  implements TemplateInterface {
 		$this->short_desc = $sDesc;
 	}
 	
+	/**
+	 * Return body text (desc_long) with CKEditor markup cleaned
+	 * and all HTML links <a> tags removed
+	 *
+	 * @return string
+	 */
+	public function GetDescLongClean()
+	{
+	    return htmlUtils::stripLinks(htmlUtils::convertCkEditorFont2Html($this->full_desc,"<p>"));
+	}
+
 	public function GetDescFull() {
-		return $this->full_desc;
+	    return $this->full_desc;
 	}
 
 	public function SetDescFull($sDesc) {
@@ -296,30 +307,30 @@ class Content  implements TemplateInterface {
 	}
 
 
-        public function GetImgSize() {
-                return $this->img_size;
-        }
+    public function GetImgSize() {
+            return $this->img_size;
+    }
 
-	
-        public function SetImgSize($size) {
-                $this->img_size = $size;
-        }       
 
-        public function GetImgDisplay() {
-                return $this->img_display;
-        }
+    public function SetImgSize($size) {
+            $this->img_size = $size;
+    }       
 
-        public function SetImgDisplay($flag) {
-                $this->img_display = $flag;
-        }
+    public function GetImgDisplay() {
+            return $this->img_display;
+    }
 
-        public function GetImgAlign() {
-                return $this->img_align;
-        }
- 
-        public function SetImgAlign($align) {
-                $this->img_align = $align;
-        }
+    public function SetImgDisplay($flag) {
+            $this->img_display = $flag;
+    }
+
+    public function GetImgAlign() {
+            return $this->img_align;
+    }
+
+    public function SetImgAlign($align) {
+            $this->img_align = $align;
+    }
 
 	
 	public function GetCreatedBy() {

@@ -4,6 +4,9 @@
 $oArticle = $this->Get('oArticle');
 $aPageOptions = $this->Get('aPageOptions');
 
+$aRelatedProfile = $this->Get('aRelatedProfile');
+$aRelatedArticle = $this->Get('aRelatedArticle');
+
 ?>
 
 
@@ -54,72 +57,16 @@ $aPageOptions = $this->Get('aPageOptions');
 	<p class="lead"><?= strip_tags($oArticle->GetDescShort()); ?></p>
 	</div>
 
-    <?
-	if ($aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT] != "f") {
-                $oSearchResultPanel = $this->Get('oSearchResult');
-                if (is_object($oSearchResultPanel))
-                        print $oSearchResultPanel->Render();
-	}
-    ?>
-
-		<div class="">
-		<?
-		  // insert related profiles into article body
-			$strArticleBody = Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3");
-
-			$aH2Blocks = explode("<h2>",$strArticleBody);
-			$aH3Blocks = explode("<h3>",$strArticleBody);
-			$aBlocks = (count($aH2Blocks) > count($aH3Blocks)) ? $aH2Blocks : $aH3Blocks;
-			$strHeaderTag = (count($aH2Blocks) > count($aH3Blocks)) ? "<h2>" : "<h3>";
-
-			if ($aPageOptions[ARTICLE_DISPLAY_OPT_PROFILE] != "f") {
-				// get related placements
-				$aProfile = $oArticle->GetAttachedProfile();
-			} else {
-			     $aProfile = array();   
-			}
-
-			$i = 0; // block index
-			$iAdsInserted = 0;
-			$lineCount = 0;
-			for($i=0; $i<count($aBlocks);$i++)
-			{
-
-                if ($i >= 1) print $strHeaderTag;
-                print $aBlocks[$i];
-                $lineCount += count(explode("\n",$aBlocks[$i]));
-                
-                // insert ads every nth block (except when block line count less than minimum)
-                if ($lineCount > 20 && count($aProfile) >= 1 && ($i > 1) && ($i % 4 == 0))
-                {
-                
-                	//$strTemplate = (($iAdsInserted % 2) == 0) ? "featured_project_list_col3.php" : "featured_project_list_sm.php";
-                	//$strProfileGroupName = (($iAdsInserted % 2) == 0) ? "aProfile" : "aCompany";
-                	$strTemplate = "profile_related.php";
-                	$strProfileGroupName = "aProfile";
-                
-                	$aProfileGroup = array();
-                    $iNumProfiles = 3;
-                    for($j=0;$j<$iNumProfiles;$j++)
-                    {
-                        $aProfileGroup[] = array_shift($$strProfileGroupName);
-                    }
-                
-                    $oTemplate = new Template();
-                    $oTemplate->Set("PROFILE_ARRAY",$aProfileGroup);
-                	$oTemplate->Set("PROFILE_TYPE",$strProfileGroupName);
-                    $oTemplate->LoadTemplate($strTemplate);
-                    print $oTemplate->Render();
-                	$iAdsInserted++;
-                	$lineCount = 0;
-                }
-	   }
-
-    ?>
-    </div>
+	<div class="my-3">
+	<p><?= $oArticle->GetDescLongClean();?></p>
 	</div>
+
+
 </div>
 </div>
+
+
+
 
 <?
 if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
@@ -136,35 +83,54 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
 ?>
 
 
+
 <?
-if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] != "f")
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
 {
-    if (is_array($oArticle->GetArticleCollection()->Get()) && count($oArticle->GetArticleCollection()->Get()) >= 1) {
-?>
-    <!--  BEGIN Related Article -->
-
-    <div class="row-fluid " style="margin-top: 10px;">
-        <h3>Related Articles</h3>
-        <div class="span12"><?
-
-            $aArticle = $oArticle->GetArticleCollection()->Get();
-            $limit = 4;
-
-            for ($i=0;$i<$limit;$i++) {
-                    if (is_object($aArticle[$i])) {
-                            $aArticle[$i]->SetImgDisplay(FALSE);
-                            $aArticle[$i]->LoadTemplate("article_related.php");
-                            print $aArticle[$i]->Render();
-                    }
-            } ?>
-    </div>
-    </div>
-
-    <!--  END Related Article -->
-    <?php
+    if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
+    { ?>
+    <div class="row my-3">
+    	<h2>Related Opportunities</h2>
+    	<div class="row my-3">
+    	<?php 
+    	foreach($aRelatedProfile as $oProfile) 
+    	{
+    	   $oTemplate = new Template();
+           $oTemplate->Set("oProfile", $oProfile);
+           $oTemplate->LoadTemplate("profile_summary.php");
+           print $oTemplate->Render();
+        } ?>
+    	</div>
+    </div><?
     }
 }
 ?>
+
+
+
+<?
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
+{
+    if (is_array($aRelatedArticle) && count($aRelatedArticle) >= 1)
+    { ?>
+    <div class="row" style="my-3">
+        <h3>Related Articles</h3>
+        <div class="row"><?
+        foreach($aRelatedArticle as $oArticle)
+        {
+                if (is_object($oArticle)) 
+                {
+                    $oArticle->LoadTemplate("article_summary.php");
+                    print $oArticle->Render();
+                }
+        } ?>
+        </div>
+    </div><?php
+    }
+}
+?>
+
+
 
 
 

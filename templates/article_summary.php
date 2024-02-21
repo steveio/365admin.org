@@ -20,7 +20,7 @@
         </div>
 
     	<div class="col-8">
-            <h3 class=""><a class="" href="<?= $this->Get("URL"); ?>" title="<?= $this->Get("TITLE"); ?>"><?= $this->Get("TITLE"); ?></a></h3>
+            <h3><a class="title-summary" href="<?= $this->Get("URL"); ?>" title="<?= $this->Get("TITLE"); ?>"><?= $this->Get("TITLE"); ?></a></h3>
             <p class=""><?= $this->Get("DESC_SHORT_160"); ?></p>
     		<p class=""><small class="text-muted"><?= $this->Get("PUBLISHED_DATE"); ?></small></p>
     	</div>

@@ -82,6 +82,35 @@ abstract class AbstractProfile implements TemplateInterface {
 	}
 
 	/**
+	 * Return plaintext version of short description
+	 * truncated to n chars
+	 *
+	 * @param int $trunc number of chars
+	 * @return string
+	 */
+	public function GetDescShortFirstSentance()
+	{
+	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short));
+
+	    $first_period_idx = strpos($str,".");
+	    
+	    if (!$first_period_idx) return $str;
+
+	    return ucfirst(trim(substr($str, 0, $first_period_idx+1)));
+	}
+
+	public function GetDescShortMinusFirstSentance()
+	{
+	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short));
+	    
+	    $first_period_idx = strpos($str,".");
+	    
+	    if (!$first_period_idx) return "";
+	    
+	    return substr($str, $first_period_idx+1, strlen($str));
+	}
+
+	/**
 	 * Return plaintext version of short description 
 	 * truncated to n chars
 	 * 

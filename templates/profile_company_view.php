@@ -637,7 +637,7 @@ if (!$oProfile->GetListingType() <= BASIC_LISTING)
         {
                 if (is_object($oArticle)) 
                 {
-                    $oArticle->LoadTemplate("article_related.php");
+                    $oArticle->LoadTemplate("article_summary.php");
                     print $oArticle->Render();
                 }
         } ?>

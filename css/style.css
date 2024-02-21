@@ -110,6 +110,10 @@ h4 {
 	font-size: 1.2em;
 }
 
+a.title-summary {
+	font-size: 0.9em;
+}
+
 p {
 	font-size: 1.1em;
 	line-height: 1.4em;
@@ -125,6 +129,12 @@ p3 {
 
 p.lead {
 	font-size: 1.3em;
+	font-weight: bold;
+	line-height: 1.6em;
+}
+
+p.lead-intro {
+	font-size: 1.6em;
 	font-weight: bold;
 	line-height: 1.6em;
 }

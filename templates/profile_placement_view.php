@@ -22,7 +22,9 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 
 <h1><?= $oProfile->GetTitle(); ?></h1>
 
-<div class="row my-2">
+<p class="lead-intro"><?= $oProfile->GetDescShortFirstSentance(); ?></p>
+
+<div class="row my-3">
     <div id="review-overallrating" class="col-3"></div>
     <div class="col-2"><?php if (is_object($oReviewTemplate) &  $oReviewTemplate->Get('HASREVIEWRATING') == true) {
         print "( ".$oReviewTemplate->Get('COUNT'). " Reviews ) ";
@@ -31,7 +33,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 </div>
 
 <? if (in_array($oProfile->GetProfileType(),array(PROFILE_VOLUNTEER, PROFILE_TOUR))) { ?>
-<div class="row my-2">
+<div class="row my-3">
 	<div class="col-12">
 		<b>Company :</b> <a href="<?= $oProfile->GetCompanyProfileUrl(); ?>" title="Find out more about <?= $oProfile->GetCompanyName(); ?>" style="color: #DD6900;"><?= $oProfile->GetCompanyName(); ?></a><br/>
 		<?php 
@@ -72,7 +74,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 <?php } ?>
 
 <? if ($oProfile->GetProfileType() == PROFILE_JOB) { /* JOB */ ?>
-<div class="row my-2">
+<div class="row my-3">
 	<div class="col-12">
 
 	<h3>Job Description</h3>
@@ -110,7 +112,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 
 <div class="row">
 
-	<p class="lead"><?= $oProfile->GetDescShortPlaintext(); ?></p>			
+	<p class="lead"><?= $oProfile->GetDescShortMinusFirstSentance(); ?></p>			
 
     <div class="profile-image-container col-12">
         <?php  

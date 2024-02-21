@@ -16,7 +16,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     protected $strTemplatePath;
     protected $oTemplate;
     protected $oSearchResultPanel;
-
+    
     protected $iTotalMatchedArticle = 0;
 
     public function __Construct() 
@@ -142,17 +142,27 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->oArticle->SetAttachedArticle($fetch = FALSE);
             }
 
-            if (!$oTemplateCfg->is_collection && $this->oContentMapping->GetDisplayOptReview())
-            {
-                $this->SetReviewTemplate("comment.php");
-                $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
-            }
-
             if ($this->oContentMapping->GetDisplayOptSearchResult())
             {
                 $this->SetSearchResultPanel($this->oContentMapping->GetOptions());
             }
 
+            if ($this->oContentMapping->GetDisplayOptReview())
+            {
+                $this->SetReviewTemplate("comment.php");
+                $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
+            }
+
+            if ($this->oContentMapping->GetDisplayOptRelatedArticle())
+            {
+                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
+            }
+            
+            if ($this->oContentMapping->GetDisplayOptRelatedProfile())
+            {
+                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, $limit = 4);
+            }
+           
             $this->Render();
 
         } catch (Exception $e) {
@@ -168,14 +178,15 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oTemplate = new Template();
 
         $this->oTemplate->Set("oArticle",$this->oArticle);
-        $this->oTemplate->Set("iTotalMatchedArticle",$this->iTotalMatchedArticle);
+        $this->oTemplate->Set("iTotalMatchedArticle",$this->iTotalMatchedArticle); // number matched articles (excluding pagination)
         
-        $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
-
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
+
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
 
-        //$this->oTemplate->Set("oRelatedArticle", $this->oRelatedArticle);
+        $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
+        $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);
+        $this->oTemplate->Set("aRelatedProfile", $this->aRelatedProfile);
 
         $this->oTemplate->LoadTemplate($this->strTemplatePath);
 

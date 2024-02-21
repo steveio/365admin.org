@@ -54,8 +54,9 @@ $(document).ready(function(){
 			}
 		}
 
-		// pass visibility of refine search panel
-		fq = fq+'&rf='+rf;
+		rt = "HTML"; // return data type
+
+		fq = fq+'&rt='+rt;
 		var apiUri = "http://api.oneworld365.org/search";
 	
 		$.ajax({
@@ -402,6 +403,8 @@ $(document).ready(function(){
 	 */
 	function processProfileData(profileData,profileType) {
 
+		console.log(profileType);
+		
 		// profile data -----------------------------------------
 		var ProfileSummary = Backbone.Model.extend({
 		    defaults: {

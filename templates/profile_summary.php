@@ -36,15 +36,15 @@ if (!is_object($oProfile)) return;
     	<? } ?>
     	</div>
 
-        <div class="col-lg-8 col-sm-12">
-        	<h3><a href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h3>    
+        <div class="col-lg-10 col-sm-12">
+        	<h3><a class="title-summary" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h3>    
 
             <?php if ($oProfile->GetReviewCount() >= 1) { ?>
             <input type="hidden" id="rateYo-<?= $oProfile->GetId() ?>-rating" value="<?= $oProfile->GetRating(); ?>" />
             <div class="row my-2">
                 <div id="rateYo-<?= $oProfile->GetId() ?>" class="rating col-4"></div>
                 <?php  $reviewLabel = ($oProfile->GetReviewCount() == 1) ? "Review" : "Review"; ?>
-                <div class="col-4 small">( <?= $oProfile->GetReviewCount(). " ".$reviewLabel." ) "; ?></div>
+                <div class="col-6 small">( <?= $oProfile->GetReviewCount(). " ".$reviewLabel." ) "; ?></div>
             </div><?
             } ?>
         
