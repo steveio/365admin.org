@@ -178,10 +178,10 @@ class Image {
 		$width = ($size != "") ? ImageSize::Get($size,$this->GetAspect(),"WIDTH") : $this->GetWidth();
 		$height = ($size != "") ? ImageSize::Get($size,$this->GetAspect(),"HEIGHT") : $this->GetHeight();
 		
-		$size_str = ($noOutputSize) ? "width='".$width."' height='".$height : "";
+		$size_str = ($noOutputSize) ? " style='width: ".$width."px; height: ".$height."px;'" : "";
 
 		if (file_exists($this->GetPath($size))) {
-			return "<img src='".$this->GetUrl($size)."' class='".$class."' ".$size_str." alt='".$alt."' border='0' />";
+			return "<img src='".$this->GetUrl($size)."' class='".$class."' alt='".$alt."' border='0' />";
 		} else {
 			return FALSE;
 		}

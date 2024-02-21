@@ -354,8 +354,11 @@ class SolrMoreLikeSearch extends SolrSearch {
         foreach($this->aId as $iArticleId)
         {
             $oArticle = new Article();
-            $oArticle->SetFetchMode(FETCHMODE__SUMMARY);
+            $oArticle->SetFetchMode(FETCHMODE__FULL);
+            $oArticle->SetFetchAttachedProfile(false);
+            $oArticle->SetFetchAttachedArticle(false);
             $oArticle->GetById($iArticleId);
+
             if (strlen($oArticle->GetDescShort()) < 60) continue;
             if (!array_key_exists($oArticle->GetId(),$arrResult))
                 $arrResult[$oArticle->GetId()] = $oArticle;
