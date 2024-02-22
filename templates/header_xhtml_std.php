@@ -16,13 +16,9 @@
 <meta property="og:description" content="<?= $this->Get("DESCRIPTION"); ?>" />
 
 
-<link href="/bootstrap-5.3.2-dist/css/bootstrap.min.css" rel="stylesheet" integrity="" crossorigin="anonymous">
-
-
 
 <?= $this->Get("CSS_GENERIC"); ?>
 <?= $this->Get("CSS_FONTS"); ?>
-
 
 <?= $this->Get("JS_INCLUDE"); ?>
 
@@ -42,28 +38,25 @@ $(document).ready(function(){
 
 <body>
 
-<!-- BEGIN Page Wrap (closed in footer) -->
 <div class="container-fluid">
 
 
 <header class="border-bottom">
-    <div class="container">
+<div class="container">
  
      <div class="row">
-        <a href="/dashboard" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
           <img src="<?= $this->Get("LOGO_URL"); ?>" alt="<?= $this->Get("TITLE"); ?>" border="0" />
         </a>
       </div>
 
 
-     <div class="row my-1">
-      <? if ($oAuth->oUser->isValidUser) { ?>
+    <div class="row my-1">
+    <? if ($oAuth->oUser->isValidUser) { ?>
 	<div class="col-12">
         <div class="float-end">
         <div class="dropdown">
           <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu</a>
-  	  <!--<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-ibs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</a>-->
-
           <ul class="dropdown-menu text-small">
             <a class="dropdown-item" href="/dashboard">dashboard</a>
             <? if ($oAuth->oUser->isAdmin) { ?>
@@ -88,9 +81,8 @@ $(document).ready(function(){
     <? } ?>
     </div>
 
-
-    </div>
-  </header>
+</div>
+</header>
 
 
 <div class="container p-0 my-2">

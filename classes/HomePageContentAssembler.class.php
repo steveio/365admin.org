@@ -76,7 +76,7 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
 
         print $oHeader->Render();
-        print $this->oTemplate->Render();
+        //print $this->oTemplate->Render();
         print $oFooter->Render();
         
         die();        

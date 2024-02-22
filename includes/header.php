@@ -37,6 +37,17 @@ $oJsInclude = new JsInclude();
 $oJsInclude->SetSrc("/includes/js/daterangepicker/daterangepicker.js");
 $oHeader->SetJsInclude($oJsInclude);
 
+
+$oCssInclude = new CssInclude();
+$oCssInclude->SetHref('/css/bootstrap.min.css');
+$oCssInclude->SetMedia('screen');
+$oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+
+$oCssInclude = new CssInclude();
+$oCssInclude->SetHref('/css/style.css');
+$oCssInclude->SetMedia('screen');
+$oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+
 $oCssInclude = new CssInclude();
 $oCssInclude->SetHref('/includes/js/daterangepicker/daterangepicker.css');
 $oCssInclude->SetMedia('screen');
@@ -47,12 +58,6 @@ $oCssInclude->SetHref('/includes/js/datatables/css/jquery.dataTables.min.css');
 $oCssInclude->SetMedia('screen');
 $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
 
-
-
-$oCssInclude = new CssInclude();
-$oCssInclude->SetHref('/css/style.css');
-$oCssInclude->SetMedia('screen');
-$oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
 
 
 $oHeader->LoadTemplate("header_xhtml_std.php");
