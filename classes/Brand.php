@@ -92,6 +92,9 @@ class Brand {
 		return $this->site_id;
 	}
 
+	public function GetWebsiteId() {
+	    return $this->site_id;
+	}
 
 	public function GetSiteTitle() {
 		return $this->site_title;

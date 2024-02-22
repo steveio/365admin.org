@@ -540,6 +540,34 @@ class Activity {
 
 	}
 
+	public static function getActivitySelectList()
+	{
+	    global $db;
+	    
+	    $sql = "select
+                        c.id as cid,
+                        c.name as cname,
+                        a.id as aid,
+                        a.name as aname
+                        from
+                        category c
+                        left join cat_act_map m on m.category_id = c.id
+                        left outer join activity a on m.activity_id = a.id
+                        order by c.id, a.name";
+	    
+	    $db->query($sql);
+	    
+	    $aResult = $db->getRows();
+	    
+	    $aActivity = array();
+	    
+	    foreach ($aResult as $aRow) {
+	        $aActivity[$aRow['cname']][] = $aRow['aname'];
+	    }
+	    
+	    return $aActivity;
+	}
+
 }
 
 ?>

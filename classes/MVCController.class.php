@@ -99,13 +99,13 @@ class MVCController{
 		    $this->SetCurrentRouteId(null);
 
 		    $oRoute = $this->GetRouteByUriMapping($this->GetRequestUri());
-
+		    
 		    if (is_object($oRoute))
 		    {
 		        $this->SetCurrentRouteId( $oRoute->GetId() );
 		        return true;
 		    }
-		
+
 		} catch (Exception $e) { // general exception
             throw $e;
 		}
