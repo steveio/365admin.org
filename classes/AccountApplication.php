@@ -104,7 +104,7 @@ class AccountApplication {
 		
 		
 		$a['apply_date'] = "now()::timestamp";
-		$a['approved'] = 'N';
+		$a['approved'] = 'f';
 		$a['ip_address'] = IPAddress::GetVisitorIP();
 		
 		$this->id = $db->getFirstCell("SELECT nextval('act_app_seq')");
@@ -185,7 +185,7 @@ class AccountApplication {
 				AND a.company_id = c.id 
 				AND a.country = cty.id 
 				AND a.approved = 'f' 
-				AND a.rejected != 'f' 
+				AND a.rejected = 'f' 
 				ORDER BY 
 					a.apply_date DESC";
 		
