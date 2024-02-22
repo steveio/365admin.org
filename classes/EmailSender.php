@@ -39,7 +39,7 @@ class EmailSender {
 			Logger::Msg("EmailReturnPath: ".$sReturnPath);			
 		}
 		
-		global $_CONFIG;
+		global $_CONFIG, $oBrand;
 		
 		
 		/* load the html and plain text message templates */
@@ -55,12 +55,12 @@ class EmailSender {
 		}
 	
 		/* add the global site-specific params */
-		$aMsgParams["SITE_TITLE"] = $_CONFIG['page_description'];
-		$aMsgParams["SITE_INFO"] = $_CONFIG['site_info_email'];
-		$aMsgParams["SITE_URL"] = $_CONFIG['url'];
-		$aMsgParams["SITE_LOGO_URL"] = $_CONFIG['logo_url'];
-		$aMsgParams["SITE_NAME"] = $_CONFIG['brand'];
-		$aMsgParams["CONTACT_EMAIL"] = $_CONFIG['admin_email'];
+		$aMsgParams["SITE_TITLE"] = $oBrand->GetSiteTitle();
+		$aMsgParams["SITE_INFO"] = $oBrand->GetSiteDescription();
+		$aMsgParams["SITE_URL"] = $oBrand->GetWebsiteUrl();
+		$aMsgParams["SITE_LOGO_URL"] = $oBrand->GetLogoUrl();
+		$aMsgParams["SITE_NAME"] = $oBrand->GetWebsiteName();
+		$aMsgParams["CONTACT_EMAIL"] = $oBrand->GetAdminEmail();
 		$aMsgParams["YEAR"] = date("Y");
 		$aMsgParams["DISCLAIMER"] = (strlen($aMsgParams["DISCLAIMER"]) > 1) ? $aMsgParams["DISCLAIMER"] : "";
 		
@@ -71,9 +71,9 @@ class EmailSender {
 		}
 	
 		if (TEST_MODE) {
-	    		Logger::Msg("\n\n\n\n");
-    			Logger::Msg($sHtmlTemplate);
-    			Logger::Msg("\n\n\n\n");
+    		Logger::Msg("\n\n\n\n");
+			Logger::Msg($sHtmlTemplate);
+			Logger::Msg("\n\n\n\n");
    	 		Logger::Msg($sTextTemplate);
 		}
 

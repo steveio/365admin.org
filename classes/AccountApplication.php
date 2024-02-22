@@ -184,8 +184,8 @@ class AccountApplication {
 					a.sid = w.id
 				AND a.company_id = c.id 
 				AND a.country = cty.id 
-				AND a.approved = 'N' 
-				AND a.rejected != 'Y' 
+				AND a.approved = 'f' 
+				AND a.rejected != 'f' 
 				ORDER BY 
 					a.apply_date DESC";
 		
@@ -193,6 +193,8 @@ class AccountApplication {
 		
 		$aAccount = $db->getObjects();
 		
+		if (!is_array($aAccount) || count($aAccount) < 1) return array();
+
 		for($i=0;$i<count($aAccount);$i++) {
 			$aAccount[$i]->name = stripslashes($aAccount[$i]->name);
 			$aAccount[$i]->role = stripslashes($aAccount[$i]->role);			
@@ -419,7 +421,7 @@ class AccountApplication {
 			$aMsgParams = array("MSG_TXT" => $sMsg,
 									  "MSG_HTML" => nl2br($sMsg));
 			
-			EmailSender::SendMail($_CONFIG['root_path'].$_CONFIG['template_home']."/generic_html.php"
+			EmailSender::SendMail($_CONFIG['root_path']."/".$_CONFIG['template_home']."/generic_html.php"
 										,$_CONFIG['root_path'].$_CONFIG['template_home']."/generic_txt.php"
 										,$aMsgParams
 										,$sTo

@@ -7,12 +7,6 @@ require_once("./conf/brand_config.php");
 include_once("./includes/header.php");
 include_once("./includes/footer.php");
 
-require_once("./classes/EmailSender.php");
-require_once("./classes/htmlMimeMail.php");
-require_once("./classes/RFC822.php");
-require_once("./classes/smtp.php");
-require_once("./classes/mimePart.php");
-
 
 if (!$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = "/",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
@@ -188,8 +182,4 @@ print $oHeader->Render();
 </div>
 </div>
 
-<?
-
-include("./footer.php");
-
-?>
+<?= $oFooter->Render();?>

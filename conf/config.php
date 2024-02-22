@@ -25,6 +25,7 @@ $solr_config = array(
 define('DEBUG',false);
 define('DEV',FALSE);
 
+define('TEST_MODE', false);
 define('TEST_EMAIL','steveedwards01@yahoo.co.uk');
 
 /* 0 = none, 1 = error, 2 = debug, 3 = verbose debug */
@@ -351,6 +352,7 @@ $_CONFIG = array(
         'site_id' => 0,
         'url' => 'http://admin.oneworld365.org',
         'root_path' => ROOT_PATH,
+        'template_home' => '/templates',
         'company_table' => 'company',
         'placement_table' => 'profile_hdr',
         'profile_hdr_table' => 'profile_hdr', /* placement table is a view in some sites, these must use profile_hdr for add/update */
@@ -359,15 +361,11 @@ $_CONFIG = array(
         'comp_country_map' => 'comp_country_map',
         'image_map' => 'image_map',
         'image' => 'image',
-        
+        'email_template_hdr' => '/email_html_header.php',
+        'email_template_footer' => '/email_html_footer.php',    
         'company_home' => 'company',
 
-        'aProfileVersion' => array(     0 => "oneworld365.org",
-                                                                        1 => "gapyear365.com",
-                                                                        2 => "seasonaljobs365.com",
-                                                                        3 => "summercampjobs365.com",
-                                                                        4 => "tefl365.com"
-                                                                ),
+        'aProfileVersion' => array(     0 => "oneworld365.org" ),
 
         'profile_category_defaults' => array(
 							PROFILE_SUMMERCAMP => array(3),

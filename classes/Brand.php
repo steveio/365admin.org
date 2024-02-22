@@ -49,6 +49,7 @@ class Brand {
 		$this->website_path = $aBrandConfig['website_path'];
 		$this->website_name = $aBrandConfig['website_name']; // eg seasonaljobs365.com
 
+		$this->admin_email = $aBrandConfig['admin_email'];
 		$this->admin_website_url = $aBrandConfig['admin_website_url'];
 		$this->company_base_url = $aBrandConfig['company_base_url'];
 
@@ -120,6 +121,10 @@ class Brand {
 		return $this->website_name;
 	}
 
+	public function GetAdminEmail() {
+	    return $this->admin_email;
+	}
+	
 	public function GetDefaultPlacementProfileTypeId() {
 		return $this->default_placement_profile_type_id;
 	}
