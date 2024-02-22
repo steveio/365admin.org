@@ -1,9 +1,9 @@
-<!-- BEGIN article_01 -->
 <?
 
 $oArticle = $this->Get('oArticle');
 $aPageOptions = $this->Get('aPageOptions');
 
+$aAttachedArticle = $this->Get('aAttachedArticle');
 $aRelatedProfile = $this->Get('aRelatedProfile');
 $aRelatedArticle = $this->Get('aRelatedArticle');
 
@@ -20,6 +20,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 </script> 
 <?php  } ?>
 
+
 <div class="container">
 <div class="align-items-center justify-content-center">
 
@@ -33,38 +34,55 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 <?php } ?>
 
 
-<div class="row-fluid my-3">
-<div class="col-12">
-
-    <? if ($aPageOptions[ARTICLE_DISPLAY_OPT_IMG] != "f") { ?>
-	<div class="float-end col-lg-6 col-sm-12 m-3">
-	<?
-	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("",'')) {
-		print $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle());
-	} elseif (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_mf",'')) {
-		print $oArticle->GetImage(0)->GetHtml("_mf",$oArticle->GetTitle());
-	}
-	?>
-	</div>
-
-	<?php } ?>
-
-	<div class="my-3">
-	<h1><?= $oArticle->GetTitle(); ?></h1>
-	</div>
-
-	<div class="my-3">
-	<p class="lead"><?= $oArticle->GetDescShortPlaintext(); ?></p>
-	</div>
-
-	<div class="my-3">
-	<p><?= $oArticle->GetDescLongClean();?></p>
-	</div>
-
-
+<div class="row my-3">
+    <div class="col-12">
+    
+        <? if ($aPageOptions[ARTICLE_DISPLAY_OPT_IMG] != "f") { ?>
+    	<div class="float-end col-lg-6 col-sm-12 m-3">
+    	<?
+    	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("",'')) {
+    		print $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle());
+    	} elseif (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_mf",'')) {
+    		print $oArticle->GetImage(0)->GetHtml("_mf",$oArticle->GetTitle());
+    	}
+    	?>
+    	</div>
+    
+    	<?php } ?>
+    
+    	<div class="my-3">
+    	<h1><?= $oArticle->GetTitle(); ?></h1>
+    	</div>
+    
+    	<div class="my-3">
+    	<p class="lead"><?= $oArticle->GetDescShortPlaintext(); ?></p>
+    	</div>
+    
+    	<div class="my-3">
+    	<p><?= $oArticle->GetDescLongClean();?></p>
+    	</div>
+    
+    </div>
 </div>
-</div>
 
+
+<?php 
+    if (is_array($aAttachedArticle) && count($aAttachedArticle) >= 1)
+    { ?>
+    <div class="row my-3">
+    	<div class="row my-3">
+    	<?php 
+    	foreach($aAttachedArticle as $oArticle) 
+    	{
+    	   $oTemplate = new Template();
+           $oTemplate->Set("oArticle", $oArticle);
+           $oTemplate->LoadTemplate("article_summary.php");
+           print $oTemplate->Render();
+        } ?>
+    	</div>
+    </div><?
+    }
+?>
 
 
 
@@ -81,7 +99,6 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
     </div><?
 }
 ?>
-
 
 
 <?
@@ -106,8 +123,6 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
 }
 ?>
 
-
-
 <?
 if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
 {
@@ -130,10 +145,5 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
 }
 ?>
 
-
-
-
-
 </div>
 </div>
-<!--  END article_01 -->

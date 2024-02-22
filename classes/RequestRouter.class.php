@@ -31,7 +31,7 @@ class RequestRouter {
         global $oSession;
 
         try {            
-            
+
             $this->SetRequestUri($aRequestUri);
             $this->RouteMapMVC();
             $this->RouteMapStatic();
@@ -400,7 +400,14 @@ class RequestRouter {
         global $db, $_CONFIG;
 
         if (strtolower($this->aRequestUri[1]) == "travel")
-            $this->aRequestUri[1] = "country";
+        {
+            if (!isset($this->aRequestUri[2]) || $this->aRequestUri[2] == "")
+            {
+                return false; // /travel page is an article menu page
+            }
+        }
+
+        $this->aRequestUri[1] = "country";
 
         $sql = "SELECT id,name,url_name FROM ".$this->aRequestUri[1]." WHERE url_name = '".$this->aRequestUri[2]."'";
         $db->query($sql);

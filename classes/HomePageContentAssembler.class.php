@@ -44,13 +44,13 @@ class HomepageContentAssembler extends AbstractContentAssembler {
             
             $oBlogArticle = new Article();
             $oBlogArticle->SetFetchMode(FETCHMODE__SUMMARY);
-            $oBlogArticle->SetAttachedArticleFetchLimit(12);
+            $oBlogArticle->SetAttachedArticleFetchLimit(8);
             $oBlogArticle->Get($oBrand->GetWebsiteId(),"/blog");
             $this->oBlogArticle = $oBlogArticle;
 
             $oHomepageArticle = new Article;
-            $oHomepageArticle->SetFetchMode(FETCHMODE__SUMMARY);
-            $oHomepageArticle->SetAttachedArticleFetchLimit(10);
+            $oHomepageArticle->SetFetchMode(FETCHMODE__FULL);
+            $oHomepageArticle->SetAttachedArticleFetchLimit(4);
             $oHomepageArticle->Get($oBrand->GetWebsiteId(),"/homepage-intro");
             $this->oHomepageArticle = $oHomepageArticle;
 
@@ -76,7 +76,7 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
 
         print $oHeader->Render();
-        //print $this->oTemplate->Render();
+        print $this->oTemplate->Render();
         print $oFooter->Render();
         
         die();        

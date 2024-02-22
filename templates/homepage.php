@@ -16,13 +16,13 @@ $oBlogArticle = $this->Get('oBlogArticle');
 </div>
 <?php } ?>
 
-<div class="homepage row">
-<section id="" class="span12">
-<div class="intro row-fluid">
+<div class="homepage row-fluid">
+<section id="" class="col-12">
+<div class="row">
 
     <section class="news">
-    <div class="span12 container">
-    	<div class="banner-img"><img id="" class="img-responsive img-rounded" src="/images/gapyearslider/v2/gap_year_banner.jpg" width="100%" alt='' /></div>
+    <div class="col-12">
+    	<div class="banner-img"><img id="" class="img-responsive img-rounded" src="/images/gap_year_banner.jpg" width="100%" alt='' /></div>
         <div class="overlay">
             <div class="search-panel">
             <h1><?= $oHomepageArticle->GetTitle(); ?></h1>
@@ -33,44 +33,51 @@ $oBlogArticle = $this->Get('oBlogArticle');
     </div>
     </section>
 
-    <div class="span12" style="margin-top: 20px;">
-    <div class="pull-right sharethis-inline-share-buttons"></div>
+
+    <div class="row">
+    <div class="col-12 my-3">
+    <div class="col-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
+    </div>
     </div>
 
 
     <section class="blog">
-        <div class="row-fluid featured"><?php
+        <div class="row"><?php
         if (is_array($oBlogArticle->GetArticleCollection()->Get()))
         {
-            $aArticle = $oBlogArticle->GetArticleCollection()->Get();
-        } ?>
-        
-        <div class="span8"><?
-        $limit = 5;
-        for ($i=0;$i<$limit;$i++) 
-        {
-            $oArticle = array_shift($aArticle);
-            if (!is_object($oArticle)) continue;
-            $oArticle->SetAttachedImages();
-            $css_class = "span12 row-fluid";
-            ?>
-            <div class="<?= $css_class; ?>" style="">
-            <? if (is_object($oArticle->GetImage(0))) 
+            $aArticle = $oBlogArticle->GetArticleCollection()->Get(); 
+            
+            foreach($aArticle as $oArticle)
             { ?>
-            <div class="img-responsive img-rounded">
-              <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
-              <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
-              </a>
-            </div><? 
-            } ?>
-
-            <div class="pad-b"></div>
-                <h2><a href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
-                <p><?= $oArticle->GetDescShort(160); ?></p>
-            </div><?php
+            <div class="col-sm-12 col-md-6 col-lg-6 my-3">
+            	<div class="pull-right">
+            	<?
+            	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_l",'')) {
+            		print $oArticle->GetImage(0)->GetHtml("_l",$oArticle->GetTitle());
+            	} elseif (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_mf",'')) {
+            		print $oArticle->GetImage(0)->GetHtml("_mf",$oArticle->GetTitle());
+            	}
+            	?>
+            	</div>
+            
+            	<h1><?= $oArticle->GetTitle(); ?></h1>
+            
+            	<p><?= strip_tags($oArticle->GetDescShort()); ?></p>
+            
+            	<div>	
+            	<p><?= Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3"); ?> </p>
+            	</div>
+            	
+            </div><?
+            }
         } ?>
-        </div>        
         </div>
+    </section>
+
+    <section class="row my-3">
+        <div class="col-12">
+        <?= $oHomepageArticle->GetDescFull(); ?>
+        </div>    
     </section>
 
 </div>

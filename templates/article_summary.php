@@ -1,6 +1,6 @@
 <?php 
 
-$oArticle = $this->Get("ARTICLE_OBJECT");
+$oArticle = $this->Get("oArticle");
 
 ?>
 

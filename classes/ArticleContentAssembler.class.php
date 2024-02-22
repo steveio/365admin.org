@@ -54,7 +54,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         global $oBrand;
 
         try {
-            
+
             if ($this->oContentMapping->GetByPath($path))
             {
                 $oTemplateCfg = $this->oTemplateList->GetById($this->oContentMapping->GetTemplateId());
@@ -65,7 +65,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             $this->strTemplatePath = $oTemplateCfg->filename;
 
             $this->oArticle = new Article;
-
+            
             if ($oTemplateCfg->fetch_mode == FETCHMODE__SUMMARY)
             {
                 $this->oArticle->SetFetchMode(FETCHMODE__SUMMARY);
@@ -104,7 +104,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                     return $this->oRequestRouter->ProcessSearchPageRequest();
                 }
             }
-
+            
             // setup HTML header meta tags
             $this->SetPageHeader();
 
@@ -112,36 +112,25 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             //$this->oArticle->SetAttachedArticleFetchLimit(null);
 
             // fetch associated articles for collection template
-            if ($oTemplateCfg->is_collection)
+            if ($this->oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_PATH)) // fetch by path eg /blog/post1, /blog/post2
             {
-                if ($this->oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_PATH)) // fetch by path eg /blog/post1, /blog/post2
-                {
-                    $this->oArticle->SetAttachedArticleIdByPath($this->oContentMapping->GetSectionUri());
-    
-                } elseif ($this->oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_ATTACHED) ) { // fetch "attached" articles
-    
-                    $this->oArticle->SetAttachedArticleId();
+                $this->oArticle->SetAttachedArticleIdByPath($this->oContentMapping->GetSectionUri());
+            } else { // fetch 0..n "attached" articles
+                $this->oArticle->SetAttachedArticleId();
+            }
+            
+            $this->iTotalMatchedArticle = $this->oArticle->GetAttachedArticleTotal();
 
-                }
-                
-                $this->iTotalMatchedArticle = $this->oArticle->GetAttachedArticleTotal();
-    
-                //print_r("<pre>");
-                //print_r("Attached Article Id: ".$this->oArticle->GetAttachedArticleTotal());
-    
+            if (is_numeric($oTemplateCfg->fetch_limit))
+            {
                 $startIndex = ($iPage == 1) ? 0 : ($iPage * $oTemplateCfg->fetch_limit);
                 $endIndex = $startIndex + $oTemplateCfg->fetch_limit -1;
-    
-                //print_r("start: ".$startIndex.", end: ".$endIndex);
-    
                 $this->oArticle->PaginateAttachedArticleId($startIndex, $endIndex);
-                
-                //print_r("Paginated Total: ".$this->oArticle->GetAttachedArticleTotal());
-                //print_r("</pre>");
-    
-                $this->oArticle->SetAttachedArticle($fetch = FALSE);
             }
 
+            $this->oArticle->SetAttachedArticle($fetch = FALSE);
+
+            
             if ($this->oContentMapping->GetDisplayOptSearchResult())
             {
                 $this->SetSearchResultPanel($this->oContentMapping->GetOptions());
@@ -183,6 +172,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
 
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
+        
+        $this->oTemplate->Set("aAttachedArticle", $this->oArticle->oArticleCollection->Get());
 
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
         $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);

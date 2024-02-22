@@ -91,7 +91,7 @@ class Content  implements TemplateInterface {
 	private $aMapping; /* locations to which this content has been published */
 	private $aProfile; /* profiles (company || placements) that have been attached */
 	public  $aImage; /* array of image objects that have been attached */ 
-	private $aArticle; /* array of attached article id's */
+	private $aArticleId; /* array of attached article id's */
 	public 	$oArticleCollection; /* a collection of associated article objects */
 	public  $oLinkGroup; /* a collection of links associated with article */
 
@@ -1205,8 +1205,10 @@ class Content  implements TemplateInterface {
 		global $db;
 
 		$limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
-		
-		$db->query("SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY a.published_date DESC ". $limitSql);
+
+		$sql = "SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY a.published_date DESC ". $limitSql;
+
+		$db->query($sql);
 	
 		if ($db->GetNumRows() >= 1) {
 		    $this->aArticleId = array();
