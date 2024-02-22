@@ -131,15 +131,15 @@ class AccountApplication {
 									".$this->GetId()."
 									,".$_CONFIG['site_id']."
 									,".$a['company_id']."
-									,'".addslashes($a['name'])."'
-									,'".addslashes($a['role'])."'
+									,'".pg_escape_string($a['name'])."'
+									,'".pg_escape_string($a['role'])."'
 									,'".$a['email']."'
 									,'".$a['password']."'
 									,'".$a['tel']."'
 									,".$a['country_id']."
 									,'".$a['account_type']."'
 									,'".$a['listing_type']."'
-									,'".addslashes($a['comments'])."'
+									,'".pg_escape_string($a['comments'])."'
 									,'".$a['approved']."'
 									,".$a['apply_date']."
 									,'".$a['ip_address']."');";
