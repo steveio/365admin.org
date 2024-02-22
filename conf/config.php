@@ -361,6 +361,12 @@ $_CONFIG = array(
         'comp_country_map' => 'comp_country_map',
         'image_map' => 'image_map',
         'image' => 'image',
+    
+        'site_title' => 'One World 365',
+        'logo_url' => '/images/oneworld365_logo_small.png',
+        'admin_email' => 'admin@oneworld365.org',
+        'website_email' => 'website@oneworld365.org',
+        'bcc_list' => 'admin@oneworld365.org',    
         'email_template_hdr' => '/email_html_header.php',
         'email_template_footer' => '/email_html_footer.php',    
         'company_home' => 'company',
