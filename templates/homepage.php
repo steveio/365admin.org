@@ -41,38 +41,58 @@ $oBlogArticle = $this->Get('oBlogArticle');
     </div>
 
 
-    <section class="blog">
-        <div class="row"><?php
-        if (is_array($oBlogArticle->GetArticleCollection()->Get()))
-        {
-            $aArticle = $oBlogArticle->GetArticleCollection()->Get(); 
-            
-            foreach($aArticle as $oArticle)
-            { ?>
-            <div class="col-sm-12 col-md-6 col-lg-6 my-3">
-            	<div class="pull-right">
-            	<?
-            	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_l",'')) {
-            		print $oArticle->GetImage(0)->GetHtml("_l",$oArticle->GetTitle());
-            	} elseif (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_mf",'')) {
-            		print $oArticle->GetImage(0)->GetHtml("_mf",$oArticle->GetTitle());
-            	}
-            	?>
-            	</div>
-            
-            	<h1><?= $oArticle->GetTitle(); ?></h1>
-            
-            	<p><?= strip_tags($oArticle->GetDescShort()); ?></p>
-            
-            	<div>	
-            	<p><?= Article::convertCkEditorFont2Html($oArticle->GetDescFull(),"h3"); ?> </p>
-            	</div>
-            	
-            </div><?
-            }
-        } ?>
+    <section class="news">
+        <!-- BEGIN blog articles -->
+        <div class="row"><?php 
+            if (is_array($oBlogArticle->GetArticleCollection()->Get()))
+            {
+                $aArticle = $oBlogArticle->GetArticleCollection()->Get();
+            } ?>
+
+		   <div class="col-sm-12 col-md-8 col-lg-8"><?
+	        $limit = 5;
+	        for ($i=0;$i<$limit;$i++) {
+                $oArticle = array_shift($aArticle);
+            	if (!is_object($oArticle)) continue;
+                $oArticle->SetAttachedImages(); ?>
+                <div class="row my-3" style="">
+                    <? if (is_object($oArticle->GetImage(0))) { ?>
+                    <div class="">
+                      <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
+                            <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
+                      </a>
+                     </div><? } ?>
+
+                    <div class="my-2"></div>
+                    <h2><a href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
+                    <p><?= $oArticle->GetDescShort(160); ?></p>
+                </div><?
+            } ?>
+            </div>
+
+		   <div class="col-sm-12 col-md-3 col-lg-3 float-sm-none float-md-end float-lg-end"><?
+	        $limit = 7;
+	        for ($i=0;$i<$limit;$i++) { 
+                $oArticle = array_shift($aArticle);
+            	if (!is_object($oArticle)) continue;
+                $oArticle->SetAttachedImages(); ?>
+                <div class="row my-3">                                
+                    <? if (is_object($oArticle->GetImage(0))) { ?>
+                    <div>
+                      <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
+                            <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
+                      </a>
+                     </div><? } ?>
+                    <div class="my-2"></div>
+                    <h2><a href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
+                    <p><?= $oArticle->GetDescShort(160); ?></p>
+                </div><?
+            } ?>
+            </div>
+
         </div>
-    </section>
+	</section>
+
 
     <section class="row my-3">
         <div class="col-12">

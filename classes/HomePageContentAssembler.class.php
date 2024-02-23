@@ -44,7 +44,7 @@ class HomepageContentAssembler extends AbstractContentAssembler {
             
             $oBlogArticle = new Article();
             $oBlogArticle->SetFetchMode(FETCHMODE__SUMMARY);
-            $oBlogArticle->SetAttachedArticleFetchLimit(8);
+            $oBlogArticle->SetAttachedArticleFetchLimit(12);
             $oBlogArticle->Get($oBrand->GetWebsiteId(),"/blog");
             $this->oBlogArticle = $oBlogArticle;
 

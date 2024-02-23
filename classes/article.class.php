@@ -7,6 +7,11 @@ define("CONTENT__SECTION",1);
 
 define("CK_EDITOR_INTRO_DT","2012-07-06 10:00:00");
 
+/* when retrieving articles, use exact "=" or fuzzy "like" pattern matching */
+define("ARTICLE_SEARCH_MODE_FUZZY",0);
+define("ARTICLE_SEARCH_MODE_EXACT",1);
+
+
 // content type flags to signal what to display in template
 define("ARTICLE_DISPLAY_OPT_PLACEMENT",0);
 define("ARTICLE_DISPLAY_OPT_ORG",1); // @ deprecated
@@ -1206,7 +1211,7 @@ class Content  implements TemplateInterface {
 
 		$limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
 
-		$sql = "SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY a.published_date DESC ". $limitSql;
+		$sql = "SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY m.oid DESC, a.created_date DESC ". $limitSql;
 
 		$db->query($sql);
 	

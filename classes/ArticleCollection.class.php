@@ -1,10 +1,5 @@
 <?php
 
-
-/* when retrieving articles, use exact "=" or fuzzy "like" pattern matching */
-define("ARTICLE_SEARCH_MODE_FUZZY",0);
-define("ARTICLE_SEARCH_MODE_EXACT",1);
-
 /*
  * A collection of articles, with various retrieval methods
  *

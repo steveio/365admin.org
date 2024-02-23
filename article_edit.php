@@ -443,6 +443,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
     		Article Url:
     		<input class="form-control" type="text" id="search_phrase" value="<?= $_REQUEST['search_phrase'] ?>" />
     		<input class="btn btn-primary rounded-pill px-3" type="submit" onclick="javascript: ArticleSearch('search',<?= $oArticle->GetId()  ?>,'article_search_result_list_01.php'); return false;" name="article_search" value="Search" />
+			Exact? <input type="checkbox" id="search_exact" name="search_exact" />
     		<input type="hidden" name="web_0" value="on" />
     	</div>
     </div>
