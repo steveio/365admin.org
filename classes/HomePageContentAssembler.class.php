@@ -50,9 +50,26 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
             $oHomepageArticle = new Article;
             $oHomepageArticle->SetFetchMode(FETCHMODE__FULL);
-            $oHomepageArticle->SetAttachedArticleFetchLimit(4);
             $oHomepageArticle->Get($oBrand->GetWebsiteId(),"/homepage-intro");
+
+            if ($this->oContentMapping->GetDisplayOptReview())
+            {
+                $this->SetReviewTemplate("comment.php");
+                $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
+            }
+            
+            if ($this->oContentMapping->GetDisplayOptRelatedArticle())
+            {
+                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
+            }
+            
+            if ($this->oContentMapping->GetDisplayOptRelatedProfile())
+            {
+                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, $limit = 4);
+            }
+
             $this->oHomepageArticle = $oHomepageArticle;
+
 
             $this->Render();
 
@@ -68,10 +85,17 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
         $this->oTemplate = new Template();
 
-        $this->oTemplate->Set("oSearchPanel", $this->oSearchPanel);
-        $this->oTemplate->Set("oBlogArticle", $this->oBlogArticle);
-        $this->oTemplate->Set("oHomepageArticle", $this->oHomepageArticle);
+        $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
 
+        $this->oTemplate->Set("oSearchPanel", $this->oSearchPanel);
+        $this->oTemplate->Set("oArticle", $this->oHomepageArticle);
+
+        $this->oTemplate->Set("aArticle", $this->oBlogArticle->oArticleCollection->Get());
+        $this->oTemplate->Set("aAttachedArticle", $this->oHomepageArticle->oArticleCollection->Get());
+        
+        $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);
+        $this->oTemplate->Set("aRelatedProfile", $this->aRelatedProfile);
+        
         $this->oTemplate->LoadTemplate($this->strTemplatePath);
 
 

@@ -2,6 +2,10 @@
 
 $oArticle = $this->Get("oArticle");
 
+$bHidePublishedDate = $this->Get("bHidePublishedDate");
+$bHideDescShort = $this->Get("bHideDescShort");
+
+
 ?>
 
 <div class="col-sm-12 col-md-4 col-lg-4 my-2">
@@ -24,7 +28,11 @@ $oArticle = $this->Get("oArticle");
 
 	<div class="col-8">
         <h3><a class="title-summary" href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h3>
+        <? if (!$bHideDescShort) { ?>
         <p class=""><?= $oArticle->GetDescShortPlaintext(120); ?></p>
+        <? } ?>
+        <? if (!$bHidePublishedDate) { ?>
 		<p class=""><small class="text-muted"><?= $oArticle->GetPublishedDate(); ?></small></p>
+		<? } ?>
 	</div>
 </div>

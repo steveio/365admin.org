@@ -1,37 +1,39 @@
 <?php 
 
+$aPageOptions = $this->Get('aPageOptions');
+$oMainArticle = $this->Get('oArticle');
+
+$aArticle = $this->Get('aArticle');
+$aAttachedArticle = $this->Get('aAttachedArticle');
+
+$aRelatedProfile = $this->Get('aRelatedProfile');
+$aRelatedArticle = $this->Get('aRelatedArticle');
+
 $oSearchPanel = $this->Get('oSearchPanel');
-$oHomepageArticle = $this->Get('oHomepageArticle');
-$oBlogArticle = $this->Get('oBlogArticle');
 
 ?>
-<?  if ($display_404) { ?>
-<div class="row">
-<div class="search-page-notify span12">
 
-        <div class="alert alert-error">
-        <h2>404 Not Found - Sorry the requested page was not found.</h2>
-        </div>
-</div>
-</div>
-<?php } ?>
 
 <div class="homepage row-fluid">
 <section id="" class="col-12">
 <div class="row">
 
+	<? if (is_object($oMainArticle))
+	{ ?>
     <section class="news">
     <div class="col-12">
-    	<div class="banner-img"><img id="" class="img-responsive img-rounded" src="/images/gap_year_banner.jpg" width="100%" alt='' /></div>
         <div class="overlay">
             <div class="search-panel">
-            <h1><?= $oHomepageArticle->GetTitle(); ?></h1>
-            <p><?= $oHomepageArticle->GetDescShort(); ?></p>
+            <h1><?= $oMainArticle->GetTitle(); ?></h1>
+            <p><?= $oMainArticle->GetDescShort(); ?></p>
+            <? if ($aPageOptions[ARTICLE_DISPLAY_OPT_PROFILE] != "f" && is_object($oSearchPanel)) { ?>
             <?= $oSearchPanel->Render(); ?>
+            <? } ?>
             </div>
         </div>
     </div>
-    </section>
+    </section><?
+	} ?>
 
 
     <div class="row">
@@ -41,14 +43,11 @@ $oBlogArticle = $this->Get('oBlogArticle');
     </div>
 
 
+	<? if (is_array($aArticle))
+	{ ?>
     <section class="news">
-        <!-- BEGIN blog articles -->
-        <div class="row"><?php 
-            if (is_array($oBlogArticle->GetArticleCollection()->Get()))
-            {
-                $aArticle = $oBlogArticle->GetArticleCollection()->Get();
-            } ?>
-
+        <!-- BEGIN articles -->
+        <div class="row">
 		   <div class="col-sm-12 col-md-8 col-lg-8"><?
 	        $limit = 5;
 	        for ($i=0;$i<$limit;$i++) {
@@ -91,14 +90,98 @@ $oBlogArticle = $this->Get('oBlogArticle');
             </div>
 
         </div>
-	</section>
+	</section><? 
+	} ?>
 
 
     <section class="row my-3">
         <div class="col-12">
-        <?= $oHomepageArticle->GetDescFull(); ?>
+        <?= $oMainArticle->GetDescFull(); ?>
         </div>    
     </section>
+
+
+<?php 
+    if (is_array($aAttachedArticle) && count($aAttachedArticle) >= 1)
+    { ?>
+    <div class="row my-3">
+    	<div class="row my-3">
+    	<?php 
+    	foreach($aAttachedArticle as $oArticle) 
+    	{
+    	   $oTemplate = new Template();
+           $oTemplate->Set("oArticle", $oArticle);
+           $oTemplate->Set("bHidePublishedDate", true);
+           $oTemplate->Set("bHideDescShort", true);
+           $oTemplate->LoadTemplate("article_summary.php");
+           print $oTemplate->Render();
+        } ?>
+    	</div>
+    </div><?
+    }
+?>
+
+
+
+<?
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
+{ 
+    $oReviewTemplate = $this->Get('oReviewTemplate');
+    ?>
+    <div class="row my-3">
+    <h2>Comments</h2>
+    <?php 
+    print $oReviewTemplate->Render();
+    ?>
+    </div><?
+}
+?>
+
+
+<?
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
+{
+    if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
+    { ?>
+    <div class="row my-3">
+    	<h2>Related Opportunities</h2>
+    	<div class="row my-3">
+    	<?php 
+    	foreach($aRelatedProfile as $oProfile) 
+    	{
+    	   $oTemplate = new Template();
+           $oTemplate->Set("oProfile", $oProfile);
+           $oTemplate->LoadTemplate("profile_summary.php");
+           print $oTemplate->Render();
+        } ?>
+    	</div>
+    </div><?
+    }
+}
+?>
+
+<?
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
+{
+    if (is_array($aRelatedArticle) && count($aRelatedArticle) >= 1)
+    { ?>
+    <div class="row" style="my-3">
+        <h3>Related Articles</h3>
+        <div class="row"><?
+        foreach($aRelatedArticle as $oArticle)
+        {
+                if (is_object($oArticle)) 
+                {
+                    $oArticle->LoadTemplate("article_summary.php");
+                    print $oArticle->Render();
+                }
+        } ?>
+        </div>
+    </div><?php
+    }
+}
+?>
+
 
 </div>
 </section>

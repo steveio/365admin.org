@@ -94,7 +94,6 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->oArticle->GetFetchAttachedProfile(false);
             }
 
-
             // fetch article mapped directly to URL path eg /blog, /country/brazil
             if (!$this->oArticle->Get($oBrand->GetSiteId(), $this->oContentMapping->GetSectionUri(), $limit = null, $exact = true))
             {
@@ -128,7 +127,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->oArticle->PaginateAttachedArticleId($startIndex, $endIndex);
             }
 
-            $this->oArticle->SetAttachedArticle($fetch = FALSE);
+            $this->oArticle->SetAttachedArticle($fetchId = FALSE);
 
             
             if ($this->oContentMapping->GetDisplayOptSearchResult())
@@ -165,15 +164,15 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         global $oHeader, $oFooter, $oBrand;
 
         $this->oTemplate = new Template();
-
-        $this->oTemplate->Set("oArticle",$this->oArticle);
-        $this->oTemplate->Set("iTotalMatchedArticle",$this->iTotalMatchedArticle); // number matched articles (excluding pagination)
         
+        $this->oTemplate->Set("oArticle",$this->oArticle);
+        
+        $this->oTemplate->Set("iTotalMatchedArticle",$this->iTotalMatchedArticle); // number matched articles (excluding pagination)
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
 
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
         
-        $this->oTemplate->Set("aAttachedArticle", $this->oArticle->oArticleCollection->Get());
+        $this->oTemplate->Set("aArticle", $this->oArticle->oArticleCollection->Get());
 
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
         $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);

@@ -1186,11 +1186,11 @@ class Content  implements TemplateInterface {
 	 * Get attached articles objects and add to article collection  
 	 * 
 	 */
-	public function  SetAttachedArticle($fetch = TRUE) 
+	public function  SetAttachedArticle($fetchId = TRUE) 
 	{	
 		global $db;
 
-		if ($fetch) $this->SetAttachedArticleId();
+		if ($fetchId) $this->SetAttachedArticleId();
 		
 		foreach($this->GetAttachedArticleId() as $id) {
 			$oArticle = new Article();
@@ -1211,7 +1211,7 @@ class Content  implements TemplateInterface {
 
 		$limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
 
-		$sql = "SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY m.oid DESC, a.created_date DESC ". $limitSql;
+		$sql = "SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY m.oid ASC, a.created_date DESC ". $limitSql;
 
 		$db->query($sql);
 	
@@ -1533,7 +1533,8 @@ class Content  implements TemplateInterface {
 				"IMG_SIZE" => $this->GetImgSize(),
 				"IMG_DISPLAY" => $this->GetImgDisplay(),
 				"IMG_ALIGN" => $this->GetImgAlign(),
-				"ARTICLE_OBJECT" => $this
+				"ARTICLE_OBJECT" => $this,
+		        "oArticle" => $this
 		);
 		
 		$aOptions = array_merge($aOptions,$aDefaultOptions);
