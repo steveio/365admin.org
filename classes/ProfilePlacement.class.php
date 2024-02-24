@@ -303,7 +303,14 @@ class PlacementProfile extends AbstractProfile {
   		global $_CONFIG;  		
   		return $_CONFIG['url']."/".$_CONFIG['company_home']."/".$this->GetCompUrlName()."/".$this->GetUrlName();
   	}
-  	
+
+  	public function GetUri()
+  	{
+  	    global $_CONFIG;
+
+  	    return "/".$_CONFIG['company_home']."/".$this->GetCompUrlName()."/".$this->GetUrlName();
+  	}
+
   	public function SetCompUrlName($sCompUrlName) {
   		$this->comp_url_name = $sCompUrlName;
   	}

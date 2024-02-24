@@ -37,7 +37,9 @@ $debug = false;
 
 
 require_once("/www/vhosts/365admin.org/htdocs/conf/config.php");
+require_once("/www/vhosts/365admin.org/htdocs/conf/brand_config.php");
 require_once($_CONFIG['root_path']."/classes/db_pgsql.class.php");
+require_once($_CONFIG['root_path']."/classes/Brand.php");
 require_once($_CONFIG['root_path']."/classes/template.class.php");
 require_once($_CONFIG['root_path']."/classes/activity.class.php");
 require_once($_CONFIG['root_path']."/classes/category.class.php");
@@ -88,6 +90,11 @@ require_once($_CONFIG['root_path']."/classes/SolrSearch.php");
 require_once($_CONFIG['root_path']."/classes/SolrPlacementSearch.php");
 require_once($_CONFIG['root_path']."/classes/SolrCompanySearch.php");
 require_once($_CONFIG['root_path']."/classes/SolrIndexer.php");
+
+if (!is_object($oBrand))
+{
+    $oBrand = new Brand($aBrandConfig[HOSTNAME]);
+}
 
 
 // Solarium

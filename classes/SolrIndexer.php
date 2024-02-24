@@ -144,6 +144,7 @@ class SolrIndexer {
 					
 				// INDEX GENERIC FIELDS COMMON TO ALL PROFILES
 				$oSolrDocument->id = $oCProfile->GetOid();
+				$oSolrDocument->uri = $oCProfile->GetUri();
 				$oSolrDocument->profile_id = $oCProfile->GetId();
 				$oSolrDocument->profile_type = $oCProfile->GetGeneralType(); // only interested in 0 = COMPANY PROFILE, 1 = PLACEMENT
 				$oSolrDocument->prod_type = $oCProfile->GetProdType();
@@ -249,7 +250,7 @@ class SolrIndexer {
 					$oSolrDocument->text .= SolrIndexer::cleanText($oCProfile->GetPlacementInfo())." ";
 		
 				}
-
+				
 				if ($this->debug) var_dump($oSolrDocument);
 
 				try {	
@@ -336,6 +337,9 @@ class SolrIndexer {
 					
 				// INDEX GENERIC FIELDS COMMON TO ALL PROFILES
 				$oSolrDocument->id = $oProfile->GetOid();
+
+				$oSolrDocument->uri = $oProfile->GetUri();
+
 				$oSolrDocument->profile_id = $oProfile->GetId();
 				$oSolrDocument->profile_type = $oProfile->GetGeneralType(); // only interested in 0 = COMPANY PROFILE, 1 = PLACEMENT
 				$oSolrDocument->company_id = $oProfile->GetCompanyId();
@@ -417,7 +421,7 @@ class SolrIndexer {
 				}
 
 				if ($this->debug) var_dump($oSolrDocument);	
-
+				
 				try {			
 					$update->addDocument($oSolrDocument);
 					
@@ -544,7 +548,7 @@ class SolrIndexer {
 				$oArticle->SetFetchAttachedArticle(false);
 				$oArticle->SetFetchAttachedTo(false);
 				$oArticle->GetById($a['id']);
-							
+				
 				if (!is_numeric($oArticle->GetId())) {
 					if (LOG) Logger::DB(1,JOBNAME,"ERROR: FAILED TO FETCH ARTICLE  id : ".$a['id']);
 					continue;
@@ -557,50 +561,23 @@ class SolrIndexer {
 					
 				$oSolrDocument->id = $oArticle->GetId();
 				$oSolrDocument->profile_id = $oArticle->GetId();
+				$oSolrDocument->uri = $oArticle->GetSectionUri();
 				$oSolrDocument->profile_type = 2; // 0 = COMPANY PROFILE, 1 = PLACEMENT, 2 = ARTICLE
 				$oSolrDocument->title = SolrIndexer::cleanText($oArticle->GetTitle());
 				$oSolrDocument->desc_short = SolrIndexer::cleanText($oArticle->GetDescShort());
 				$oSolrDocument->desc_long = SolrIndexer::cleanText($oArticle->GetDescFull());
-				
 				$oSolrDocument->active = 1;
 
 				$aMapping = $oArticle->GetMappingBySiteId(0);
 
 				$url = $oArticle->GetUrl();
-				$tags = array();
 								
 				if (count($aMapping) < 1 || strpos($url, "article.php") !== FALSE)
 				    $oSolrDocument->active = 0;
 
-				$uri = explode("/",$url);
-    
-				//$oSolrDocument->section_uri = $uri;
-
-				$strHostName = $uri[2];
-
-				// unset hostname
-				unset($uri[0]); //  http:
-				unset($uri[1]); // //
-				unset($uri[2]); // www.onewold365.org
-
-				
-				foreach($uri as $str) {
-					if (strpos($str, "-") != -1) {
-						$words = explode("-",$str);
-						$tags = array_merge($tags,$words);
-					} else {
-						$tags[] = $str;
-					}	
-				}
-				$oIndexer = new Indexer($db);
-				
-				$oSolrDocument->tags = $oIndexer->removeStopWordsFromArray($tags);
-
 				$oSolrDocument->website_id = ($strHostName == "www.oneworld365.org") ? 0 : 1;
-				
 				$oSolrDocument->last_updated = gmdate('Y-m-d\TH:i:s\Z', strtotime($oArticle->GetLastUpdated()));
-						
-				$oSolrDocument->text = SolrIndexer::cleanText(implode(" ",$oSolrDocument->tags) . ' ' . $oArticle->GetTitle(). " " . $oArticle->GetDescShort() . " " . $oArticle->GetDescFull());
+				$oSolrDocument->text = SolrIndexer::cleanText($oArticle->GetTitle(). " " . $oArticle->GetDescShort() . " " . $oArticle->GetDescFull());
 			
 				if (LOG) Logger::DB(2,JOBNAME,"PROCESSING ARTICLE : ".$oSolrDocument->title);
 

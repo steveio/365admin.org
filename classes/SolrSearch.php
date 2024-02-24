@@ -287,8 +287,6 @@ class SolrSearch {
 		
 		if (array_key_exists("profile_type", $fq)) {
 			$query['filterquery']['profile_type'] = $fq['profile_type'];
-		} else {
-			$query['filterquery']['profile_type'] = 1;
 		}
 		
 		if (array_key_exists("category_id", $fq)) {

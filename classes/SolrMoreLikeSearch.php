@@ -316,7 +316,6 @@ class SolrMoreLikeSearch extends SolrSearch {
 	    $query->setStart(0);
 	    $query->setRows($this->getRows());
 	    $query->createFilterQuery('profile_type')->setQuery('profile_type: 2');
-	    $query->createFilterQuery('active')->setQuery('active: 1');
 
 	    if (is_array($arrFilterQuery))
 	    {
@@ -328,6 +327,14 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 	    // this executes the query and returns the result
 	    $request = $this->client->createRequest($query);
+	    
+	    /*
+	    print_r("<pre>");
+	    print_r($request);
+	    print_r("</pre>");
+	    die();
+	    */
+	    
 	    $requestInfo = (string)$request;
 
 	    Logger::DB(2,"API SOLR Query: ".$requestInfo);

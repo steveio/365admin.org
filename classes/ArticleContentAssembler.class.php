@@ -40,7 +40,9 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         /* retrieve an unpublished article */
         $this->oArticle = new Article();
         $this->oArticle->GetById($id);
-        
+
+        $this->aArticle = array();
+
         $this->strTemplatePath = $oTemplateCfg->filename;
 
         $this->Render();
@@ -117,8 +119,6 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             } else { // fetch 0..n "attached" articles
                 $this->oArticle->SetAttachedArticleId();
             }
-            
-            $this->iTotalMatchedArticle = $this->oArticle->GetAttachedArticleTotal();
 
             if (is_numeric($oTemplateCfg->fetch_limit))
             {
@@ -127,7 +127,11 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->oArticle->PaginateAttachedArticleId($startIndex, $endIndex);
             }
 
-            $this->oArticle->SetAttachedArticle($fetchId = FALSE);
+            if (count($this->oArticle->GetAttachedArticleId()) >= 1)
+            {
+                $this->oArticle->SetAttachedArticle($fetchId = FALSE);
+                $this->aArticle = $this->oArticle->oArticleCollection->Get();
+            }
 
             
             if ($this->oContentMapping->GetDisplayOptSearchResult())
@@ -141,9 +145,16 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
             }
 
+            // fetch blog articles ( manually attached article take precedence )
+            if ($this->oContentMapping->GetDisplayOptBlogArticle() && count($this->oArticle->GetAttachedArticleId()) < 1)
+            {
+                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog");
+                $this->aArticle = $this->aRelatedArticle;
+            }
+
             if ($this->oContentMapping->GetDisplayOptRelatedArticle())
             {
-                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
+                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, "blog", $exclude = true);
             }
             
             if ($this->oContentMapping->GetDisplayOptRelatedProfile())
@@ -172,7 +183,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
         
-        $this->oTemplate->Set("aArticle", $this->oArticle->oArticleCollection->Get());
+        $this->oTemplate->Set("aArticle", $this->aArticle);
 
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
         $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);

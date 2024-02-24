@@ -91,6 +91,7 @@ class ContentMapping {
         $opts = array();
         $opts[ARTICLE_DISPLAY_OPT_PLACEMENT] = ($aRow['opt_placement'] == NULL) ? "t" : $aRow['opt_placement'];
         $opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "t" : $aRow['opt_article'];
+        $opts[ARTICLE_DISPLAY_OPT_BLOG] = ($aRow['opt_blog'] == NULL) ? "t" : $aRow['opt_blog'];
         $opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "t" : $aRow['opt_profile'];
         $opts[ARTICLE_DISPLAY_OPT_REVIEW] = ($aRow['opt_review'] == NULL) ? "t" : $aRow['opt_review'];
         $opts[ARTICLE_DISPLAY_OPT_SOCIAL] = ($aRow['opt_social'] == NULL) ? "t" : $aRow['opt_social'];
@@ -240,7 +241,8 @@ class ContentMapping {
                                                 opt_img,
                                                 template_id,
                                                 opt_path,
-                                                opt_attached
+                                                opt_attached,
+                                                opt_blog
 											 ) VALUES (
 												".$mid.",
 												'".$opts_array[ARTICLE_DISPLAY_OPT_PLACEMENT]."',
@@ -258,7 +260,8 @@ class ContentMapping {
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_IMG]."',
                                                 ".$opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID].",
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_PATH]."',
-                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ATTACHED]."'
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_ATTACHED]."',
+                                                '".$opts_array[ARTICLE_DISPLAY_OPT_BLOG]."'
 											 );";
         
 
@@ -275,7 +278,12 @@ class ContentMapping {
     {
         return $this->GetOptionById(ARTICLE_DISPLAY_OPT_PLACEMENT);
     }
-    
+
+    public function GetDisplayOptBlogArticle()
+    {
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_BLOG);
+    }
+
     // related profiles
     public function GetDisplayOptRelatedProfile()
     {

@@ -190,7 +190,7 @@ abstract class AbstractContentAssembler {
         }
     }
 
-    public function GetRelatedArticle($solr_id, $limit = 25)
+    public function GetRelatedArticle($solr_id, $limit = 25, $uri = "", $exclude = false)
     {
         global $solr_config;
         
@@ -198,6 +198,13 @@ abstract class AbstractContentAssembler {
         $aFilterQuery = array();
         $aFilterQuery['-title'] = "365";
         $aFilterQuery['-desc_short'] = "365";
+        
+        if (strlen($uri) > 1)
+        {
+            $key = "uri";
+            if ($exclude) $key = "-".$key;
+            $aFilterQuery[$key] = $uri."*";
+        }
         
         $oSolrMoreLikeSearch->setRows($limit);
         
@@ -208,5 +215,40 @@ abstract class AbstractContentAssembler {
             $this->aRelatedArticle = $aRelatedArticle;
         }
     }
+
+    public function SolrQuery($query, $profile_type = 2, $iRows = 25)
+    {
+        global $solr_config;
+        
+        $oSolrQuery = new SolrQuery;
+        
+        $oSolrQuery->setQuery(":");
+        
+        $aFilterQuery = array();
+
+        $oSolrQuery->setFilterQueryByName('profile_type',$profile_type);
+
+        //$oSolrQuery->setupFilterQuery(array("travel", "thailand"));
+
+        $oSolrSearch = new SolrSearch($solr_config);
+        $oSolrSearch->setRows($iRows);
+        $oSolrSearch->setStart($iStart = 0);
+        
+        $oSolrSearch->setSiteId("0");
+        $oSolrSearch->search($oSolrQuery->getQuery(),$oSolrQuery->getFilterQuery(),$oSolrQuery->getSort());
+
+        $oSolrSearch->processResult();
+
+
+         print_r("<pre>");
+         //print_r($oSolrQuery);
+         print_r($oSolrSearch);
+         print_r("</pre>");
+         die();
+        
+        $aId = $oSolrSearch->getId();
+
+        
+   }
     
 }

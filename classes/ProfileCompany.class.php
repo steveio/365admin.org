@@ -188,6 +188,12 @@ class CompanyProfile extends AbstractProfile {
   		$this->url_name = $sUrlName;
   	}
 
+  	public function GetUri()
+  	{
+  	    global $_CONFIG;
+  	    return "/".$_CONFIG['company_home']."/".$this->GetUrlName();
+  	}
+  	
   	public function GetDescShort($trunc = 0) {
 
   		$desc_short = (is_numeric($this->GetProfileVersionIdToFetch())) ? $this->GetFieldByProfileVersion('desc_short') : $this->desc_short;

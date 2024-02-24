@@ -16,6 +16,7 @@ define("ARTICLE_SEARCH_MODE_EXACT",1);
 define("ARTICLE_DISPLAY_OPT_PLACEMENT",0);
 define("ARTICLE_DISPLAY_OPT_ORG",1); // @ deprecated
 define("ARTICLE_DISPLAY_OPT_ARTICLE",2);
+define("ARTICLE_DISPLAY_OPT_BLOG",24);
 define("ARTICLE_DISPLAY_OPT_PROFILE",14);
 define("ARTICLE_DISPLAY_OPT_REVIEW",15);
 define("ARTICLE_DISPLAY_OPT_SOCIAL",16);
@@ -706,8 +707,6 @@ class Content  implements TemplateInterface {
 		
 	}
 
-	
-	
 	public function GetMappingLabel() {
 		
 		$s = "<ul>";
@@ -779,10 +778,11 @@ class Content  implements TemplateInterface {
 			$this->aMapping[] = $oContentMapping; 
 		}
 		
+		$this->SetUrl();
 		//Logger::Msg($this->aMapping);
 	}
-	
-	
+
+
 	public function GetNextArticleSeq() {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -901,7 +901,6 @@ class Content  implements TemplateInterface {
 		$db->query($sql);
 		
 		if (!$db->getAffectedRows() == 1) {
-		    print $sql;
 			$response['save_error'] = "There was a problem adding the ".$this->GetTypeLabel().".";
 			return false;
 		}
