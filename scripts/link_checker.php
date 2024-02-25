@@ -33,6 +33,10 @@ $oLinkChecker->SetReportDate($sDate);
 $oLinkChecker->Process();
 
 
+//print $oLinkChecker->GetLinkHTTPResponseStatus("https://www.");
+
+
+
 print_r("END Processing: Link Status Report ( ".date("Y-m-d H:i:s")." ) \n\n");
 
 ?>

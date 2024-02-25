@@ -84,6 +84,9 @@ class LinkChecker
 
         $aOut = $this->GetHTTPStatus($url);
 
+        /*
+         * @deprecated - using CURL --location to follow redirects
+         * 
         if (substr_count($aOut[0], "301") >= 1 || substr_count($aOut[0], "302") >= 1)
         {
             
@@ -110,13 +113,22 @@ class LinkChecker
                 }
             }            
         }
+        */
 
         $bRecursion = 0;
         
         sleep($this->delay); 
 
-        return $aOut[0];
-        
+        if (substr_count($aOut[0], "301") >= 1 || substr_count($aOut[0], "302") >= 1)
+        {   
+            for($i=count($aOut); $i >= 0; $i--)
+            {
+                if (preg_match("/^HTTP/", $aOut[$i]))
+                    return $aOut[$i];
+            }
+        } else {
+            $aOut[0];
+        }
     }
 
     public function GetCompanyLinkStatus()
