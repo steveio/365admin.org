@@ -1026,7 +1026,7 @@ class Placement {
 
 		global $_CONFIG;
 		
-		return $this->db->getFirstCell("SELECT job_credits FROM ".$_CONFIG['company_table']." WHERE id = $id");
+		return $this->db->getFirstCell("SELECT profile_quota FROM ".$_CONFIG['company_table']." WHERE id = $id");
 	}
 
 	function GetExtraInfo($aPlacementIn) {

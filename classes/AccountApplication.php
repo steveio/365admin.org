@@ -366,7 +366,7 @@ class AccountApplication {
 					break;
 			}
 			
-			$db->query("UPDATE COMPANY set status = 1, prod_type = ".$oAccount->account_type.", job_credits = ".$iProfileQuota." WHERE id = ".$oAccount->company_id);
+			$db->query("UPDATE COMPANY set status = 1, prod_type = ".$oAccount->account_type.", profile_quota = ".$iProfileQuota." WHERE id = ".$oAccount->company_id);
 			if ($db->getAffectedRows() != 1) {
 				$response['msg'] = "Account::Approve() ERROR: set company status approved db write error";
 				return false;

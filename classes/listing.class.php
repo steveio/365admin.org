@@ -320,7 +320,7 @@ class Listing {
 		 * First, update company record with new profile (job_credit) quota
 		 *  
 		 */
-		$iExistingQuota = $db->getFirstCell("SELECT job_credits FROM COMPANY WHERE id = ".$iCompanyId);
+		$iExistingQuota = $db->getFirstCell("SELECT profile_quota FROM COMPANY WHERE id = ".$iCompanyId);
 					
 		$iNewQuota = ($iExistingQuota + $aAllProduct[$sProdCode]['detail']);  
 		
@@ -329,7 +329,7 @@ class Listing {
 		if (DEBUG) Logger::Msg("New Quota : ".$iNewQuota);
 		
 		/* update the company record listing field (prod_type) */
-		$db->query("UPDATE COMPANY SET job_credits = ".$iNewQuota." WHERE id = ".$iCompanyId);
+		$db->query("UPDATE COMPANY SET profile_quota = ".$iNewQuota." WHERE id = ".$iCompanyId);
 	
 		
 		/*

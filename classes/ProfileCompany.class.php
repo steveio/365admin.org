@@ -583,7 +583,7 @@ class CompanyProfile extends AbstractProfile {
 						,c.active
 						,c.homepage
 						,c.prod_type
-						,c.job_credits as profile_quota
+						,c.profile_quota as profile_quota
 						,c.enq_opt
 						,c.prof_opt
 						,c.status

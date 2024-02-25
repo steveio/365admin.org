@@ -155,7 +155,7 @@ class Company {
 
 		$sql = "SELECT 
 					c.*,
-					c.job_credits as pquota,
+					c.profile_quota as pquota,
 					CASE
 						WHEN (select 1 from euser u where u.company_id = c.id limit 1)=1 THEN 1
 						ELSE 0
