@@ -61,7 +61,7 @@ class LinkChecker
 
     protected function GetHTTPStatus($url)
     {
-        $sCmd = "curl --head ".$url;
+        $sCmd = "curl --head --location ".$url;
         $aOut = array();
         
         print_r($sCmd."\n");
