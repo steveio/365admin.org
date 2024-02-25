@@ -11,8 +11,10 @@
  * 
  */
 
+define("LINK_ORIGIN_COMPANY", 10);
 define("LINK_ORIGIN_COMPANY_URL", 0);
 define("LINK_ORIGIN_COMPANY_APPLY", 1);
+define("LINK_ORIGIN_PLACEMENT", 11);
 define("LINK_ORIGIN_PLACEMENT_URL", 3);
 define("LINK_ORIGIN_PLACEMENT_APPLY", 4);
 
@@ -21,6 +23,7 @@ class LinkChecker
 {
     protected $report_date;
     protected $delay;
+    protected $idx;
 
     public function __construct() 
     {
@@ -30,6 +33,8 @@ class LinkChecker
     public function Setup()
     {
         global $db;
+        
+        $this->idx = 0;
         
         print_r("Truncate DB table: link_status \n\n");
         
@@ -61,7 +66,7 @@ class LinkChecker
 
     protected function GetHTTPStatus($url)
     {
-        $sCmd = "curl --head --location ".$url;
+        $sCmd = "curl --head --location --max-time 30 --connect-timeout 10  ".$url;
         $aOut = array();
         
         print_r($sCmd."\n");
@@ -126,7 +131,7 @@ class LinkChecker
         
         foreach($aRows as $aRow)
         {
-            print_r("Processing: ".$aRow['url_name']."\n");
+            print_r("Processing ( ".$this->idx." ): ".$aRow['url_name']."\n");
 
             if ($aRow['url'] != "" && $aRow['url'] != "http://")
             {
@@ -141,6 +146,8 @@ class LinkChecker
                 
                 $this->writeRow($aRow['url'], $http_status, $aRow['url_name'], LINK_ORIGIN_COMPANY_APPLY);
             }
+            
+            $this->idx++;
 
         }
         
@@ -158,7 +165,7 @@ class LinkChecker
         
         foreach($aRows as $aRow)
         {
-            print_r("Processing: ".$aRow['url_name']."\n");
+            print_r("Processing: ( ".$this->idx." ) ".$aRow['url_name']."\n");
 
             if ($aRow['url'] != "" && $aRow['url'] != "http://")
             {
@@ -175,6 +182,7 @@ class LinkChecker
                 $this->writeRow($aRow['url'], $http_status, $aRow['url_name'], LINK_ORIGIN_PLACEMENT_APPLY);
             }
             
+            $this->idx++;
         }
         
     }
@@ -233,12 +241,91 @@ class LinkChecker
         $this->report_date = $sDate;
     }
 
-    public function GetReport()
+    public function GetReport($aRequest)
     {
         global $db;
 
-        $db->query("SELECT * FROM link_status");
+        $sql_constraint = "WHERE 1=1 ";
+
+        if (is_array($aRequest) && count($aRequest) >= 1)
+        {
+            if (isset($aRequest['company_name']))
+            {
+                if ($aRequest['company_name'] != "ALL")
+                {
+                    $sql_constraint .= " AND origin_url like '/company/".$aRequest['company_name']."%'";
+                }
+            }
+
+            if (isset($aRequest['origin_type']))
+            {
+                if ($aRequest['origin_type'] != "ALL")
+                {
+                    switch($aRequest['origin_type'])
+                    {
+                        case  LINK_ORIGIN_COMPANY:
+                            $sql_constraint .= " AND origin_type IN (".LINK_ORIGIN_COMPANY_URL.",".LINK_ORIGIN_COMPANY_APPLY.")";
+                            break;
+                        case  LINK_ORIGIN_COMPANY_URL:
+                            $sql_constraint .= " AND origin_type IN (".LINK_ORIGIN_COMPANY_URL.")";
+                            break;
+                        case  LINK_ORIGIN_COMPANY_APPLY:
+                            $sql_constraint .= " AND origin_type IN (".LINK_ORIGIN_COMPANY_APPLY.")";
+                            break;
+                        case  LINK_ORIGIN_PLACEMENT:
+                            $sql_constraint .= " AND origin_type IN (".LINK_ORIGIN_PLACEMENT_URL.",".LINK_ORIGIN_PLACEMENT_APPLY.")";
+                            break;
+                        case  LINK_ORIGIN_PLACEMENT_URL:
+                            $sql_constraint .= " AND origin_type IN (".LINK_ORIGIN_PLACEMENT_URL.")";
+                            break;
+                        case  LINK_ORIGIN_PLACEMENT_APPLY:
+                            $sql_constraint .= " AND origin_type IN (".LINK_ORIGIN_PLACEMENT_APPLY.")";
+                            break;
+                    }                    
+                }
+            }
+
+            if (isset($aRequest['http_status']))
+            {
+                if ($aRequest['http_status'] != "ALL")
+                {
+                    switch($aRequest['http_status'])
+                    {
+                        case  "OK":
+                            $sql_constraint .= " AND http_status LIKE '%200%'";
+                            break;
+                        case  "ERROR":
+                            $sql_constraint .= " AND http_status NOT LIKE '%200%'";
+                            break;
+                    }
+                }
+            }
+            
+        }
+
+        $sql = "SELECT * FROM link_status ".$sql_constraint;
+        
+        $db->query($sql);
 
         return $db->getRows();
     }
+    
+    public function GetHTTPStatusCode()
+    {
+        global $db;
+        
+        $db->query("SELECT distinct(http_status) as status FROM link_status");
+        
+        return $db->getRows();
+    }
+    
+    public function GetCompanyName()
+    {
+        global $db;
+        
+        $db->query("select distinct(split_part(origin_url, '/', 3)) as company from link_status order by company asc;");
+        
+        return $db->getRows();
+    }
+    
 }

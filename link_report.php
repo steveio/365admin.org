@@ -9,10 +9,24 @@ include_once("./includes/footer.php");
 if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
-
 $oLinkChecker = new LinkChecker();
-$aReport = $oLinkChecker->GetReport();
+$aReport = $oLinkChecker->GetReport($_REQUEST);
 
+$aHttpStatus = $oLinkChecker->GetHTTPStatusCode();
+$aCompany = $oLinkChecker->GetCompanyName();
+
+if (count($_REQUEST) == 0)
+{
+    $_REQUEST['company_name'] = "ALL";
+    $_REQUEST['origin_type'] = "ALL";
+    $_REQUEST['http_status'] = "ALL";
+}
+
+/*
+print_r("<pre>");
+print_r($_REQUEST);
+print_r("</pre>");
+*/
 
 print $oHeader->Render();
 
@@ -26,6 +40,52 @@ print $oHeader->Render();
 
 <form name="report_filter" enctype="multipart/form-data" action="" method="POST">
 
+<div class="row my-3">
+
+	<div class="col-12">
+        <h4>Filter: </h4>
+
+		<input type="hidden" name="filter_report" value="1" />
+
+        <label for="company_name">Company:</label>
+        <select id="" name="company_name">
+        	<option value="ALL">ALL</option><?
+        	foreach($aCompany as $aRow)
+        	{
+        	    $val = $aRow['company'];
+        	?>
+        	<option value="<?= $val; ?>" <?= ($_REQUEST['company_name'] == $val) ? "selected" : ""; ?>><?= $val; ?></option><?
+        	} ?>
+        </select>
+
+        <label for="origin_type">Link Type:</label>
+        <select id="" name="origin_type">
+        	<option value="ALL">ALL</option>
+        	<option value="<?= LINK_ORIGIN_COMPANY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_COMPANY) ? "selected" : ""; ?>>Company</option>
+        	<option value="<?= LINK_ORIGIN_COMPANY_URL; ?>" <?= ($_REQUEST['origin_type'] == "0") ? "selected" : ""; ?>>Company : URL</option>
+        	<option value="<?= LINK_ORIGIN_COMPANY_APPLY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_COMPANY_APPLY) ? "selected" : ""; ?>>Company : APPLY URL</option>
+        	<option value="<?= LINK_ORIGIN_PLACEMENT; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT) ? "selected" : ""; ?>>Placement</option>
+        	<option value="<?= LINK_ORIGIN_PLACEMENT_URL; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_URL) ? "selected" : ""; ?>>Placement : URL</option>
+        	<option value="<?= LINK_ORIGIN_PLACEMENT_APPLY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_APPLY) ? "selected" : ""; ?>>Placement : APPLY URL</option>
+        </select>
+
+        <label for="http_status">HTTP Status:</label>
+        <select id="" name="http_status">
+        	<option value="ALL">ALL</option>
+        	<option value="OK" <?= ($_REQUEST['http_status'] == "OK") ? "selected" : ""; ?>>OK</option>
+        	<option value="ERROR" <?= ($_REQUEST['http_status'] == "ERROR") ? "selected" : ""; ?>>Error</option><?
+        	/*
+        	foreach($aHttpStatus as $aRow)
+        	{
+        	    $val = $aRow['status'];
+        	?>
+        	<option value="<?= $val; ?>" <?= ($_REQUEST['report_status'] == $val) ? "selected" : ""; ?>><?= $val; ?></option><?
+        	}*/ ?>
+        </select>
+
+		<button class="btn btn-primary rounded-pill px-3" type="button" name="report_filter" value="go" onClick="this.form.submit()">submit</button>
+	</div>
+</div>
 
 <div class="row my-3">
 
