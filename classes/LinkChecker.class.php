@@ -306,6 +306,8 @@ class LinkChecker
                         case  "ERROR":
                             $sql_constraint .= " AND http_status NOT LIKE '%200%'";
                             break;
+			default:
+			    $sql_constraint .= " AND http_status = '".$aRequest['http_status']."'";
                     }
                 }
             }
@@ -323,7 +325,7 @@ class LinkChecker
     {
         global $db;
         
-        $db->query("SELECT distinct(http_status) as status FROM link_status");
+        $db->query("SELECT distinct(http_status) as status FROM link_status where http_status != '' ORDER BY http_status ASC");
         
         return $db->getRows();
     }
