@@ -46,7 +46,7 @@ class LinkChecker
     {
         try {
             
-            $this->Setup();
+            //$this->Setup();
 
             $this->GetPlacementLinkStatus();
 
@@ -132,6 +132,8 @@ class LinkChecker
         foreach($aRows as $aRow)
         {
             print_r("Processing ( ".$this->idx." ): ".$aRow['url_name']."\n");
+            
+            if ($this->Processed($aRow['url_name'])) continue;
 
             if ($aRow['url'] != "" && $aRow['url'] != "http://")
             {
@@ -167,6 +169,8 @@ class LinkChecker
         {
             print_r("Processing: ( ".$this->idx." ) ".$aRow['url_name']."\n");
 
+            if ($this->Processed($aRow['url_name'])) continue;
+            
             if ($aRow['url'] != "" && $aRow['url'] != "http://")
             {
 
@@ -328,4 +332,14 @@ class LinkChecker
         return $db->getRows();
     }
     
+    protected function Processed($url_name)
+    {
+        global $db;
+        
+        $db->query("SELECT 1 FROM link_status WHERE origin_url = '".$url_name."'");
+        
+        if ($db->getNumRows() >= 1) return true;
+        
+        return false;
+    }
 }
