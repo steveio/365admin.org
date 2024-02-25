@@ -91,25 +91,20 @@ class LinkChecker
         {
             
             print_r("HTTP STATUS: ".$aOut[0]."\n");
-
             $bRecursion++;
-            
             foreach($aOut as $line)
             {
                 if (preg_match("/^location/i", $line))
                 {
                     $aBits = explode(" ", $line);
                     $redirectUrl = $aBits[1];
-                    
                     print_r("LOCATION: ".$redirectUrl."\n");
-                    
                     if ($bRecursion <= 3)
                     {
                         $aOut[0] = $this->GetLinkHTTPResponseStatus($redirectUrl);
                     } else {
                         $aOut[0] .= $aOut[0]." - Redirect recursion error\n";
                     }
-
                 }
             }            
         }
@@ -143,7 +138,7 @@ class LinkChecker
         
         foreach($aRows as $aRow)
         {
-            print_r("Processing ( ".$this->idx." ): ".$aRow['url_name']."\n");
+            print_r("Processing ( ".$this->idx++." ): ".$aRow['url_name']."\n");
             
             if ($this->Processed($aRow['url_name'])) continue;
 
@@ -160,8 +155,6 @@ class LinkChecker
                 
                 $this->writeRow($aRow['url'], $http_status, $aRow['url_name'], LINK_ORIGIN_COMPANY_APPLY);
             }
-            
-            $this->idx++;
 
         }
         
@@ -179,10 +172,10 @@ class LinkChecker
         
         foreach($aRows as $aRow)
         {
-            print_r("Processing: ( ".$this->idx." ) ".$aRow['url_name']."\n");
+            print_r("Processing: ( ".$this->idx++." ) ".$aRow['url_name']."\n");
 
             if ($this->Processed($aRow['url_name'])) continue;
-            
+
             if ($aRow['url'] != "" && $aRow['url'] != "http://")
             {
 
