@@ -38,6 +38,7 @@ print $oHeader->Render();
     	<th>HTTP Status</th>
     	<th>Origin</th>	
     	<th>Link Type</th>	
+	<th>Status</th>
     	</tr>
 	</thead>
 	
@@ -50,9 +51,11 @@ print $oHeader->Render();
         	<td class="col-1"><?= $aRow['report_date']; ?></td>
         	<td class="col-5"><a href="<?= $aRow['url']; ?>" target="_new"><?= $aRow['url']; ?></a></td>
         	<?php
+		$status = 1;
         	$css_class = "";
         	if (substr_count($aRow['http_status'], "200") >= 1)
         	{
+		   $status = 0;
         	   $css_class = "alert alert-success";
         	} elseif (substr_count($aRow['http_status'], "30") >= 1)
         	{
@@ -82,7 +85,9 @@ print $oHeader->Render();
         	}
 
         	?>
-        	<td class="col-1"><?= $sType; ?></td>
+        	<td class="col-1"><?= $sType; ?></td><?
+		$label = ($status == 0) ? "OK" : "ERROR"; ?>
+		<td class="<?= $css_class; ?>"><?= $label; ?></td>
         	</tr><?
         } 
     } ?>
