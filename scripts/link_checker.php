@@ -1,5 +1,17 @@
 <?php 
 
+/**
+ * CRON script to check and report external link HTTP status
+ * 
+ * Scheduled execution monthly
+ * 
+ * Useage:  
+ *  [web_developer@cloud-vps htdocs]$ php ./scripts/link_checker.php 2>&1 | tee  ../logs/365admin_link_status.log
+ * 
+ * 
+ * 
+ */
+
 require_once("/www/vhosts/365admin.org/htdocs/conf/config.php");
 require_once(BASE_PATH."/classes/db_pgsql.class.php");
 require_once(BASE_PATH."/classes/file.class.php");

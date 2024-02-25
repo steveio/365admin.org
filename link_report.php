@@ -37,6 +37,7 @@ print $oHeader->Render();
     	<th>Url</th>
     	<th>HTTP Status</th>
     	<th>Origin</th>	
+    	<th>Link Type</th>	
     	</tr>
 	</thead>
 	
@@ -62,6 +63,26 @@ print $oHeader->Render();
         	?>
         	<td class="col-1 <?= $css_class; ?>"><?= $aRow['http_status']; ?></td>
         	<td class="5"><a href="<?= $aRow['origin_url']; ?>" target="_new"><?= $aRow['origin_url']; ?></a></td>
+        	<?php 
+
+        	switch($aRow['origin_type'])
+        	{
+        	    case LINK_ORIGIN_COMPANY_URL :
+        	        $sType = "COMPANY URL";
+        	        break;
+        	    case LINK_ORIGIN_COMPANY_APPLY :
+        	        $sType = "COMPANY APPLY";
+        	        break;
+        	    case LINK_ORIGIN_PLACEMENT_URL :
+        	        $sType = "PLACEMENT URL";
+        	        break;
+        	    case LINK_ORIGIN_PLACEMENT_APPLY :
+        	        $sType = "PLACEMENT APPLY";
+        	        break;        	        
+        	}
+
+        	?>
+        	<td class="col-1"><?= $sType; ?></td>
         	</tr><?
         } 
     } ?>

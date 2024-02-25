@@ -11,6 +11,11 @@
  * 
  */
 
+define("LINK_ORIGIN_COMPANY_URL", 0);
+define("LINK_ORIGIN_COMPANY_APPLY", 1);
+define("LINK_ORIGIN_PLACEMENT_URL", 3);
+define("LINK_ORIGIN_PLACEMENT_APPLY", 4);
+
 
 class LinkChecker
 {
@@ -38,8 +43,10 @@ class LinkChecker
             
             $this->Setup();
 
-            $this->GetCompanyLinkStatus();
             $this->GetPlacementLinkStatus();
+
+            $this->GetCompanyLinkStatus();
+
             //$this->GetArticleLinkStatus();
             
         } catch(Exception $e) {
@@ -125,8 +132,16 @@ class LinkChecker
             {
                 $http_status = $this->GetLinkHTTPResponseStatus($aRow['url']);
 
-                $this->writeRow($aRow['url'], $http_status, $aRow['url_name']);
+                $this->writeRow($aRow['url'], $http_status, $aRow['url_name'], LINK_ORIGIN_COMPANY_URL);
             }
+
+            if ($aRow['apply_url'] != "" && $aRow['apply_url'] != "http://")
+            {
+                $http_status = $this->GetLinkHTTPResponseStatus($aRow['url']);
+                
+                $this->writeRow($aRow['url'], $http_status, $aRow['url_name'], LINK_ORIGIN_COMPANY_APPLY);
+            }
+
         }
         
     }
@@ -150,14 +165,14 @@ class LinkChecker
 
                 $http_status = $this->GetLinkHTTPResponseStatus($aRow['url']);
                 
-                $this->writeRow($aRow['url'], $http_status, $aRow['url_name']);
+                $this->writeRow($aRow['url'], $http_status, $aRow['url_name'], LINK_ORIGIN_PLACEMENT_URL);
             }
 
             if ($aRow['apply_url'] != "" && $aRow['apply_url'] != "http://")
             {
                 $http_status = $this->GetLinkHTTPResponseStatus($aRow['apply_url']);
 
-                $this->writeRow($aRow['url'], $http_status, $aRow['url_name']);
+                $this->writeRow($aRow['url'], $http_status, $aRow['url_name'], LINK_ORIGIN_PLACEMENT_APPLY);
             }
             
         }
@@ -166,6 +181,7 @@ class LinkChecker
     
     public function GetArticleLinkStatus()
     {
+        /*
         global $db;
         
         $sql = "SELECT a.id, a.title, a.full_desc, m.section_uri FROM article a, article_map m WHERE a.id = m.article_id ORDER BY m.section_uri desc";
@@ -189,18 +205,19 @@ class LinkChecker
                 }
             }
         }
+        */
         
     }
 
     
-    public function writeRow($linkUrl, $httpStatus, $originUrl)
+    public function writeRow($linkUrl, $httpStatus, $originUrl, $originType)
     {
         global $db;
 
         $sql  = "INSERT INTO link_status 
-                (report_date,url,http_status,origin_url)
+                (report_date,url,http_status,origin_url,origin_type)
                 VALUES
-                ('".$this->GetReportDate()."','".$linkUrl."', '".$httpStatus."', '".$originUrl."')";
+                ('".$this->GetReportDate()."','".$linkUrl."', '".$httpStatus."', '".$originUrl."', $originType)";
         
         $db->query($sql);
 
