@@ -1,6 +1,6 @@
 <?php 
 
-require_once("../conf/config.php");
+require_once("/www/vhosts/365admin.org/htdocs/conf/config.php");
 require_once(BASE_PATH."/classes/db_pgsql.class.php");
 require_once(BASE_PATH."/classes/file.class.php");
 require_once(BASE_PATH."/classes/LinkChecker.class.php");
@@ -18,10 +18,7 @@ $sDate = date("y-m")."-01";
 
 $oLinkChecker->SetReportDate($sDate);
 
-$oLinkChecker->Setup();
-//$oLinkChecker->GetCompanyLinkStatus();
-$oLinkChecker->GetPlacementLinkStatus();
-
+$oLinkChecker->Process();
 
 
 print_r("END Processing: Link Status Report ( ".date("Y-m-d H:i:s")." ) \n\n");

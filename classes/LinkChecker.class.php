@@ -40,7 +40,7 @@ class LinkChecker
 
             $this->GetCompanyLinkStatus();
             $this->GetPlacementLinkStatus();
-            $this->GetArticleLinkStatus();
+            //$this->GetArticleLinkStatus();
             
         } catch(Exception $e) {
             print "\n\n";
@@ -88,10 +88,9 @@ class LinkChecker
                     
                     print_r("LOCATION: ".$redirectUrl."\n");
                     
-                    if ($bRecursion <= 1)
+                    if ($bRecursion <= 3)
                     {
-                        $aOut = $this->GetHTTPStatus($redirectUrl);
-
+                        $aOut[0] = $this->GetLinkHTTPResponseStatus($redirectUrl);
                     } else {
                         $aOut[0] .= $aOut[0]." - Redirect recursion error\n";
                     }
