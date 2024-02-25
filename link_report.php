@@ -124,6 +124,11 @@ print $oHeader->Render();
         	    $css_class = "alert alert-danger";
         	}
         	?>
+		<?
+		if (trim($aRow['http_status']) == "") {
+			$aRow['http_status'] = "DNS / Connect";
+		}
+		?>
         	<td class="col-1 <?= $css_class; ?>"><?= $aRow['http_status']; ?></td>
         	<td class="5"><a href="<?= $aRow['origin_url']; ?>" target="_new"><?= $aRow['origin_url']; ?></a></td>
         	<?php 
