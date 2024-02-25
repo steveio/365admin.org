@@ -11,6 +11,7 @@
 	<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/enquiry-report'; return false;">Enquiries</button>
 	<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/review-report'; return false;">Comments / Reviews</button>
 	<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/user'; return false;">Users</button>
+	<button class="btn btn-outline-primary rounded-pill px-3" type="button" onclick="javascript: window.location = '/link-report'; return false;">Links</button>
 </div>
 </div>
 

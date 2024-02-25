@@ -86,5 +86,8 @@
 		<url>/search-dispatch</url>
 		<filename>searchPanelDispatch_ajax.php</filename>
 	</route>
-
+	<route>
+		<url>/link-report</url>
+		<filename>link_report.php</filename>
+	</route>
 </routes> 

@@ -217,4 +217,12 @@ class LinkChecker
         $this->report_date = $sDate;
     }
 
+    public function GetReport()
+    {
+        global $db;
+
+        $db->query("SELECT * FROM link_status");
+
+        return $db->getRows();
+    }
 }
