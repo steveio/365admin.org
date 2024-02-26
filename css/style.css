@@ -256,3 +256,18 @@ a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-re
   display: block;
 }
 
+
+.span12 {
+	--bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: calc(-1 * var(--bs-gutter-y));
+    margin-right: calc(-.5 * var(--bs-gutter-x));
+    margin-left: calc(-.5 * var(--bs-gutter-x));
+}
+
+.span4 {
+    flex: 0 0 auto;
+    width: 33.33333333%;
+}

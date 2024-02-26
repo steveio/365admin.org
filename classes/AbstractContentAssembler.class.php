@@ -172,6 +172,7 @@ abstract class AbstractContentAssembler {
         $oSolrMoreLikeSearch->setRows($limit);
         $oSolrMoreLikeSearch->getRelatedProfile($solr_id, $profile_type);
 
+
         $aTmp = $oSolrMoreLikeSearch->getId();
 
         $aRelatedProfile = array();

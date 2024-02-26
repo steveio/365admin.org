@@ -247,9 +247,9 @@ class SolrMoreLikeSearch extends SolrSearch {
 		->setMinimumDocumentFrequency(1)
 		->setMinimumTermFrequency(2);
 
-		$query->setFields(array('profile_id'));
+		$query->setFields(array('profile_id','profile_type','company_id'));
 		$query->setStart(0);
-		$query->setRows($this->getRows());
+		$query->setRows(($this->getRows() * 4));
 		$query->createFilterQuery('profile_type')->setQuery('profile_type:'.$profile_type);
 		$query->createFilterQuery('active')->setQuery('active: 1');
 
@@ -278,13 +278,29 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 		$aResult = array();
 
-		if ($resultset->getNumFound() >= 1) {
-			foreach ($resultset as $document) {
-				$profile_type = PlacementProfile::GetTypeById($document->profile_id);
-				$this->aId[] = array('profile_id' => $document->profile_id,'profile_type' => $profile_type);
-			}
+		foreach($resultset as $doc) {
+		    $aResult[$doc->company_id][] = $doc->profile_id;
 		}
-
+		
+		// reindex the array so placement keys for each company are a sequential numeric index
+		$aIdIndexedNumeric = array();
+		$i = 0;
+		foreach($aResult as $company_id => $aPlacementId) {
+		    $aId[$i++] = $aPlacementId;
+		}
+		
+		
+		$oBalancedDistributor = new BalancedDistributor($aId);
+		$oBalancedDistributor->SetFetchSize($this->getRows());
+		$oBalancedDistributor->SetStartIdx(0);
+		$iTotalResults = $oBalancedDistributor->GetTotalElements();
+		
+		$aId = $oBalancedDistributor->Fetch($this->getRows());
+		
+		foreach($aId as $id) {
+		    $this->aId[] = array('profile_id' => $id,'profile_type' => 1);
+		}
+		
 	}
 
 	/**
