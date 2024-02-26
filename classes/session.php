@@ -29,7 +29,7 @@ class Session {
 		 */
 		$this->SetListingType(LISTING_REQUEST_UPDATE);
 		
-		$this->aMessage = array();
+		//$this->aMessage = array();
 	}
 
 	// Used by AJAX webservice endpoints and standalone scripts without common init routine

@@ -22,11 +22,11 @@ class MessageProcessor
         // message(s) in _SESSION
         } elseif (is_object($oSession) && count($oSession->GetMessage()) >= 1) { 
     
-            $oMessagesPanel->Set('UI_MSG', $oSession->GetMessage());
+            $oMessagesPanel->Set('UI_MSG', $oSession->GetMessage());            
             $oSession->UnsetMessage();
-        
+            
         // messages in MVC controller scope (in _SESSION)
-        } elseif (is_object($oSession->GetMVCController()) && count($oSession->GetMVCController()->GetCurrentRoute()->GetMessage()) >= 1) { 
+        } elseif (is_object($oSession->GetMVCController()) && is_object($oSession->GetMVCController()->GetCurrentRoute()) && count($oSession->GetMVCController()->GetCurrentRoute()->GetMessage()) >= 1) { 
 
             $oMessagesPanel->Set('UI_MSG', $oSession->GetMVCController()->GetCurrentRoute()->GetMessage());
             $oSession->UnsetMessage();

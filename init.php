@@ -228,13 +228,6 @@ try {
     }
 
 
-    /*
-    print_r("<pre>");
-    print_r($oAuth);
-    print_r($oSession);
-    print_r("</pre>");
-    */
-
     /* set some additional $_CONFIG params so the legacy classes work */
     $_CONFIG['site_id'] = $aBrandConfig[HOSTNAME]['site_id'];
     $_CONFIG['admin_email'] = $aBrandConfig[HOSTNAME]['admin_email'];

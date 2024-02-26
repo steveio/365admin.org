@@ -49,6 +49,9 @@ class LoginController extends GenericController {
 		
 		$oHeader->SetTitle("Login");		
 		$oHeader->Reload();
+
+		$oMessageProcessor = new MessageProcessor();
+		$oMessagePanel = $oMessageProcessor->GetMessagePanel();
 		
 		$oLoginForm = new Template;
 		$oLoginForm->Set('BRAND_NAME',$oBrand->GetBrandName());
@@ -58,6 +61,7 @@ class LoginController extends GenericController {
 		$oLoginForm->LoadTemplate("LoginTemplate.php");
 		
 		print $oHeader->Render();
+		print $oMessagePanel->Render();
 		print $oLoginForm->Render();
 		print $oFooter->Render();
 		

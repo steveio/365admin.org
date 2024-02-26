@@ -40,19 +40,11 @@ class ContentMapping {
         }
     }
     
-    public function GetByPath($strPath, $fuzzy = false) {
+    public function GetByPath($strPath) {
         
         global $db;
-        
+
         if (strlen($strPath) < 1) throw new Exception("ERROR: Invalid Path");
-        
-        if ($fuzzy)
-        {
-            $operator = "LIKE ";
-            $strPath = $strPath."%";
-        } else {
-            $operator = "= ";
-        }
         
         $sql = "SELECT
                     m.oid
@@ -64,11 +56,11 @@ class ContentMapping {
                     ".DB__ARTICLE_MAP_TBL." m
                     LEFT OUTER JOIN ".DB__ARTICLE_MAP_OPTS." o ON m.oid = o.article_map_oid
                  WHERE
-                    m.section_uri ".$operator." '".$strPath."'";
+                    m.section_uri = '".$strPath."'";
         
         $db->query($sql);
         
-        if (!$fuzzy = false && $db->getNumRows() == 1) {
+        if ($db->getNumRows() == 1) {
             $result = $db->getRow();
             $this->oid = $result['oid'];
             $this->article_id = $result['article_id'];
@@ -79,10 +71,8 @@ class ContentMapping {
 
             return TRUE;
         } else {
-            throw new Exception("ERROR: No Content Mapping found for path: ".$strPath);
+            throw new NotFoundException("ERROR: 404 Page not found : ".$strPath);
         }
-        
-        // @todo - handle fuzzy multiple matches
     }
 
     public function SetContentPubOpts($aRow)

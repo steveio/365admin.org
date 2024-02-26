@@ -35,7 +35,7 @@ class HomepageContentAssembler extends AbstractContentAssembler {
         global $oBrand;
 
         try {
-            
+
             $this->SetTemplatePath("homepage.php");
 
             $this->SetSearchResultPanel($aPageOptions = array());
@@ -51,12 +51,12 @@ class HomepageContentAssembler extends AbstractContentAssembler {
             $oHomepageArticle = new Article;
             $oHomepageArticle->SetFetchMode(FETCHMODE__FULL);
             $oHomepageArticle->Get($oBrand->GetWebsiteId(),"/homepage-intro");
-
+            
             if ($this->oContentMapping->GetDisplayOptReview())
             {
                 $this->SetReviewTemplate("comment.php");
                 $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
-            }
+            }            
             
             if ($this->oContentMapping->GetDisplayOptRelatedArticle())
             {
@@ -70,6 +70,8 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
             $this->oHomepageArticle = $oHomepageArticle;
 
+            $oMessageProcessor = new MessageProcessor();
+            $this->oMessagePanel = $oMessageProcessor->GetMessagePanel();
 
             $this->Render();
 
@@ -92,7 +94,8 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
         $this->oTemplate->Set("aArticle", $this->oBlogArticle->oArticleCollection->Get());
         $this->oTemplate->Set("aAttachedArticle", $this->oHomepageArticle->oArticleCollection->Get());
-        
+
+        $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
         $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);
         $this->oTemplate->Set("aRelatedProfile", $this->aRelatedProfile);
         
@@ -100,6 +103,7 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
 
         print $oHeader->Render();
+        print $this->oMessagePanel->Render();
         print $this->oTemplate->Render();
         print $oFooter->Render();
         

@@ -60,8 +60,6 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             if ($this->oContentMapping->GetByPath($path))
             {
                 $oTemplateCfg = $this->oTemplateList->GetById($this->oContentMapping->GetTemplateId());
-            } else {
-                $oTemplateCfg = $this->oTemplateList->GetById(CONTENT_DEFAULT_RESULT_TEMPLATE);
             }
             
             $this->strTemplatePath = $oTemplateCfg->filename;
@@ -161,9 +159,11 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             {
                 $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, $limit = 4);
             }
-           
+            
             $this->Render();
 
+        } catch (NotFoundException $e) {
+            throw $e;
         } catch (Exception $e) {
             throw $e;
         }

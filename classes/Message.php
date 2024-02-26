@@ -44,7 +44,6 @@ class Message {
 		} elseif (strlen($msg) > 1) {
 			$this->msg_array[] = $msg;
 		}
-		$this->SetIconUrl();
 		$this->SetTemplatePath();
 	}
 	

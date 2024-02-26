@@ -124,9 +124,10 @@ $oSearchPanel = $this->Get('oSearchPanel');
 
 
 <?
-if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] == "t")
 { 
     $oReviewTemplate = $this->Get('oReviewTemplate');
+    die(__FILE__."::".__LINE__);
     ?>
     <div class="row my-3">
     <h2>Comments</h2>

@@ -31,26 +31,20 @@ class RequestRouter {
         global $oSession;
 
         try {            
-
+            
             $this->SetRequestUri($aRequestUri);
-            $this->RouteMapMVC();
-            $this->RouteMapStatic();
+            $this->RouteMapMVC();                        
+            $this->RouteMapStatic();            
 
         } catch (NotFoundException $e) {  // 404 not found error
 
-            print_r("<pre>");
-            print_r($e);
-            print_r("</pre>");
-            die();
+            $oMessage = new Message(MESSAGE_TYPE_WARNING,0, $e->getMessage());
+            $oSession->SetMessage($oMessage);
+            $oSession->Save();
+            
+            Http::Header(404);
+            Http::Redirect("/");            
 
-            if (is_object($oSession))
-            {
-                $oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_VALIDATION_ERROR, $e->getMessage());
-                $oSession->SetMessage($oMessage);
-            }
-
-            $this->HttpRedirect(HEADER_HTTP_404, "/".ROUTE_ERROR);
-            die();
         } catch (Exception $e)
         {
             Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
@@ -437,6 +431,7 @@ class RequestRouter {
 
     protected function ProcessArticlePageRequest()
     {
+        global $oSession;
 
         if (!isset($this->strContentType) )
         {

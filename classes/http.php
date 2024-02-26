@@ -14,13 +14,10 @@ class Http {
 				header("Location: ".$url);
 				break;
 		}
-		
-		die();
 	}
 	
 	public static function Redirect($url_to) {
 
-		
 		header('Location: '.$url_to);
 		die();
 	}  
