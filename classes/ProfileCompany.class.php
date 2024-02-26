@@ -1004,7 +1004,7 @@ class CompanyProfile extends AbstractProfile {
 					 ,last_indexed
 					 ,last_indexed_solr
 					 ,prod_type
-					 ,job_credits
+					 ,profile_quota
 					 ,profile_filter_from_search
 					 ,url_name
 					 ,prof_opt
@@ -1109,13 +1109,11 @@ class CompanyProfile extends AbstractProfile {
 				,state_id = ".$p['state_id']."
 				,country_id = ".$p['country_id']."
 				,sub_type = '".$p['sub_type']."'
-				,sc_gender = '".$p['sc_gender']."'
-				,staff_gender = '".$p['staff_gender']."'
 				,costs = '".$p['costs']."'
 				,duration = '".$p['duration']."'
 				,keywords = '".$p['keywords']."'
 				,prod_type = '".$p['prod_type']."'
-				,job_credits = '".$p['profile_quota']."'
+				,profile_quota = '".$p['profile_quota']."'
 				,profile_filter_from_search = ".$p['profile_filter_from_search']."
 				,prof_opt = '".$p['prof_opt']."'
 				,enq_opt = '".$p['enq_opt']."'
