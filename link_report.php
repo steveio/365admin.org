@@ -10,7 +10,6 @@ if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedire
 
 
 $oLinkChecker = new LinkChecker();
-$aReport = $oLinkChecker->GetReport($_REQUEST);
 
 $aHttpStatus = $oLinkChecker->GetHTTPStatusCode();
 $aCompany = $oLinkChecker->GetCompanyName();
@@ -20,7 +19,10 @@ if (count($_REQUEST) == 0)
     $_REQUEST['company_name'] = "ALL";
     $_REQUEST['origin_type'] = "ALL";
     $_REQUEST['http_status'] = "ALL";
+} else {
+    $aReport = $oLinkChecker->GetReport($_REQUEST);
 }
+
 
 /*
 print_r("<pre>");
