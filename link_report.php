@@ -10,7 +10,6 @@ if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedire
 
 
 $oLinkChecker = new LinkChecker();
-$aReport = $oLinkChecker->GetReport($_REQUEST);
 
 $aHttpStatus = $oLinkChecker->GetHTTPStatusCode();
 $aCompany = $oLinkChecker->GetCompanyName();
@@ -20,7 +19,10 @@ if (count($_REQUEST) == 0)
     $_REQUEST['company_name'] = "ALL";
     $_REQUEST['origin_type'] = "ALL";
     $_REQUEST['http_status'] = "ALL";
+} else {
+    $aReport = $oLinkChecker->GetReport($_REQUEST);
 }
+
 
 /*
 print_r("<pre>");
@@ -47,8 +49,10 @@ print $oHeader->Render();
 
 		<input type="hidden" name="filter_report" value="1" />
 
+	<div class="row my-3">
+	<div class="col-6">
         <label for="company_name">Company:</label>
-        <select id="" name="company_name">
+        <select id="" class="form-select" name="company_name">
         	<option value="ALL">ALL</option><?
         	foreach($aCompany as $aRow)
         	{
@@ -57,9 +61,11 @@ print $oHeader->Render();
         	<option value="<?= $val; ?>" <?= ($_REQUEST['company_name'] == $val) ? "selected" : ""; ?>><?= $val; ?></option><?
         	} ?>
         </select>
+	</div>
 
+	<div class="col-6">
         <label for="origin_type">Link Type:</label>
-        <select id="" name="origin_type">
+        <select id="" class="form-select" name="origin_type">
         	<option value="ALL">ALL</option>
         	<option value="<?= LINK_ORIGIN_COMPANY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_COMPANY) ? "selected" : ""; ?>>Company</option>
         	<option value="<?= LINK_ORIGIN_COMPANY_URL; ?>" <?= ($_REQUEST['origin_type'] == "0") ? "selected" : ""; ?>>Company : URL</option>
@@ -68,22 +74,31 @@ print $oHeader->Render();
         	<option value="<?= LINK_ORIGIN_PLACEMENT_URL; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_URL) ? "selected" : ""; ?>>Placement : URL</option>
         	<option value="<?= LINK_ORIGIN_PLACEMENT_APPLY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_APPLY) ? "selected" : ""; ?>>Placement : APPLY URL</option>
         </select>
+	</div>
+	</div>
 
+	<div class="row my-3">
+	<div class="col-6">
         <label for="http_status">HTTP Status:</label>
-        <select id="" name="http_status">
+        <select id="" class="form-select" name="http_status">
         	<option value="ALL">ALL</option>
         	<option value="OK" <?= ($_REQUEST['http_status'] == "OK") ? "selected" : ""; ?>>OK</option>
         	<option value="ERROR" <?= ($_REQUEST['http_status'] == "ERROR") ? "selected" : ""; ?>>Error</option><?
-        	/*
+        	
         	foreach($aHttpStatus as $aRow)
         	{
         	    $val = $aRow['status'];
         	?>
         	<option value="<?= $val; ?>" <?= ($_REQUEST['report_status'] == $val) ? "selected" : ""; ?>><?= $val; ?></option><?
-        	}*/ ?>
+        	} ?>
         </select>
-
+	</div>
+	</div>
+	<div class="row my-3">
+	<div class="col-1">
 		<button class="btn btn-primary rounded-pill px-3" type="button" name="report_filter" value="go" onClick="this.form.submit()">submit</button>
+	</div>
+	</div>
 	</div>
 </div>
 
