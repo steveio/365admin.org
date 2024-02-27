@@ -20,7 +20,7 @@ class MessageProcessor
             $oMessagesPanel->Set('UI_MSG', array($oMessage));
 
         // message(s) in _SESSION
-        } elseif (is_object($oSession) && count($oSession->GetMessage()) >= 1) { 
+        } elseif (is_object($oSession) && is_array($oSession->GetMessage()) && count($oSession->GetMessage()) >= 1) { 
     
             $oMessagesPanel->Set('UI_MSG', $oSession->GetMessage());            
             $oSession->UnsetMessage();

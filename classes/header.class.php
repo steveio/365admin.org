@@ -143,12 +143,12 @@ class Header extends Layout {
       $this->aCssInclude[$sBrowserCode][] = $oInclude;
    }
 
-   public function SetNav($sName, $oNav) {
-		$this->aNav[$sName] = $oNav;
+   public function SetNav($key, $oNav) {
+		$this->aNav[$key] = $oNav;
    }
 
-   public function GetNav($sName) {
-		return $this->aNav[$sName];
+   public function GetNav($key) {
+		return $this->aNav[$key];
    }
 
    public function SetBreadCrumb($aBreadCrumb) {
@@ -175,7 +175,8 @@ class Header extends Layout {
 										"JS_INCLUDE" => $this->GetJsInclude(),
 										"JS_ONLOAD" => $this->GetJsOnload(),
 										"CSS_GENERIC" => $this->GetCSSInclude("CSS_GENERIC"),
-										"CSS_FONTS" => $this->GetCSSInclude("CSS_FONTS")
+										"CSS_FONTS" => $this->GetCSSInclude("CSS_FONTS"),
+		                                "TOP_NAV" => $this->GetNav("TOP_NAV")
 										));
 
 		$this->oTemplate->LoadTemplate($this->GetCurrentTemplate());

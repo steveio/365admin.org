@@ -12,9 +12,52 @@ class Nav implements TemplateInterface {
 		private $aSections;
 
 		public function __Construct() {
+		    
 			$this->aSections = array();
 		}
 
+		public function Setup($filePath = PATH_NAV_CONFIG)
+		{
+
+		    $file = $filePath;
+		    $xml = simplexml_load_file($file) or die ("Unable to load Navigation XML file!");
+		    
+		    foreach($xml->xpath('//section') as $section) {
+		        
+		        $oSection = new NavSection();
+		        $oSection->SetTitle((string)$section->title);
+		        $oSection->SetDesc((string)$section->desc);
+		        $oSection->SetLink((string)$section->link);
+		        
+		        foreach($section->subsections as $subsections) {
+		            foreach($subsections as $subsection) {
+		                $oSubSection = new NavSubSection();
+		                $oSubSection->SetTitle((string)$subsection->title);
+		                $oSubSection->SetLink((string)$subsection->link);
+		                $oSubSection->SetClass((string)$subsection->class);
+		                
+		                // only support for 2 level nav, could be made into recursive func in future
+		                foreach($subsection->subsections as $section_subsections) {
+		                    foreach($section_subsections as $section_subsection) {
+		                        $oLevel2SubSection = new NavSubSection();
+		                        $oLevel2SubSection->SetTitle((string)$section_subsection->title);
+		                        $oLevel2SubSection->SetLink((string)$section_subsection->link);
+		                        $oLevel2SubSection->SetClass((string)$section_subsection->class);
+		                        $oSubSection->SetSubSection($oLevel2SubSection);
+		                        
+		                    }
+		                }
+		                $oSection->SetSubSection($oSubSection);
+		            }
+		        }
+		        
+		        $this->SetSection($oSection);
+		    }
+		    
+		    
+		    $this->LoadTemplate("nav_primary.php");
+
+		}
 
 		public function GetSections() {
 			return $this->aSections;
@@ -105,7 +148,8 @@ class NavSubSection {
 	private $sTitle;
 	private $sLink;
 	private $sClass;
-
+	private $aSubSection;
+	
 	public function __Construct() {
 	}
 
@@ -133,7 +177,18 @@ class NavSubSection {
 		return $this->sClass;
 	}
 
-
+	public function GetSubSections() {
+		return $this->aSubSection;
+	}
+	
+	public function SetSubSection($oSubSection) {
+		$this->aSubSection[] = $oSubSection;
+	}
+	
+	public function HasSubSections() {
+		return (is_array($this->aSubSection) && (count($this->aSubSection)) >= 1) ? TRUE : FALSE;
+	}
+	
 }
 
 

@@ -26,6 +26,16 @@ class Authenticate {
 		$this->oUser = null; // a valid user object
 	}
 
+    public function IsWebsite()
+    {
+        return (CURRENT_SITE == WEBSITE) ? true : false;        
+    }
+
+    public function IsAdminSystem()
+    {
+        return (CURRENT_SITE == ADMIN_SYSTEM) ? true : false;
+    }
+
 	public function IsValidUser() {
 		if (is_object($this->oUser)) {
 			return $this->oUser->isValidUser;

@@ -43,6 +43,9 @@ define("PATH_TO_STATIC_ROUTE_MAP", BASE_PATH."/conf/routes_static.xml"); // Stat
 define('PATH_2_DATA_DIR',BASE_PATH. '/data/');
 define('PATH_UNDER_MAINTENANCE','/back_soon.php');
 
+define('WEBSITE',"oneworld365.org");
+define('ADMIN_SYSTEM',"admin.oneworld365.org");
+define('CURRENT_SITE', ADMIN_SYSTEM);
 
 define('HOSTNAME',"oneworld365.org");
 define('BASE_URL','https://admin.'.HOSTNAME);

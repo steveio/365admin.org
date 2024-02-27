@@ -44,17 +44,51 @@ $(document).ready(function(){
 <header class="border-bottom">
 <div class="container">
  
-     <div class="row">
+    <div class="row">
+    	<div class="col-6">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
           <img src="<?= $this->Get("LOGO_URL"); ?>" alt="<?= $this->Get("TITLE"); ?>" border="0" />
         </a>
-      </div>
+        </div>
+        
+        <? if ($oAuth->IsWebsite()) { ?>
+        <div class="col-6">
+            <div class="adbanner_web">
+                <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+            </div>
+            <div class="adbanner_mob">
+            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!-- One World365 Mobile Banner Header -->
+            <ins class="adsbygoogle"
+                 style="display:inline-block;width:290px;height:70px"
+                 data-ad-client="ca-pub-9874604497476880"
+                 data-ad-slot="1198653468"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+            </div>
+       </div>
+       <? } ?>
 
+    </div>
+    <? if ($oAuth->IsWebsite()) { ?>
+	<div class="row">
+        <div class="col-12">
+        <?
+        $oNav = $this->Get('TOP_NAV');
+        print $oNav->Render();
+        ?>
+        </div>
+	</div>
+	<? } ?>
+      
 
     <div class="row my-1">
-    <? if ($oAuth->oUser->isValidUser) { ?>
+    
+
+    <? if ($oAuth->IsAdminSystem() && $oAuth->oUser->isValidUser) { ?>
 	<div class="col-12">
-        <div class="float-end">
+        <div class="float-end">        
         <div class="dropdown">
           <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu</a>
           <ul class="dropdown-menu text-small">
@@ -77,8 +111,9 @@ $(document).ready(function(){
           </ul>
       </div>
       </div>
-      </div>
+    </div>
     <? } ?>
+
     </div>
 
 </div>
