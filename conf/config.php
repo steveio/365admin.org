@@ -50,6 +50,7 @@ define("COOKIE_DOMAIN", ".".HOSTNAME);
 
 define('SITE_TITLE','365 Admin');
 
+define('CACHE_ENABLED', false);
 
 /* profile types - from db table profile_types */
 define("PROFILE_COMPANY",0);

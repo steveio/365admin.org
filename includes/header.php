@@ -1,5 +1,10 @@
 <?
 
+// Cache deployed for all website (non-admin system) HTML pages  
+if (!is_numeric($oAuth->oUser->id)) {
+    include("./scripts/cache/cache.php");
+}
+
 
 $oHeader = new Header();
 
@@ -61,6 +66,7 @@ $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
 
 
 $oHeader->LoadTemplate("header_xhtml_std.php");
+
 
 
 

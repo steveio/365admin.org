@@ -27,8 +27,6 @@ class Cache {
 	/* save a cache page */
 	public static function Save($f,$d) {
 		
-		if (DEBUG) Logger::Msg(get_class()."::".__FUNCTION__."()");
-		
 		$fh = fopen($f, 'w');
 		if (!$fh) return false;
 		fwrite($fh, $d);
@@ -83,25 +81,10 @@ class Cache {
 	public static function Generate($sUrl,$sUri,$iSiteId,$sleep = true) {
 
 		global $db;
-		
-		if (DEBUG) Logger::Msg(__CLASS__."::".__FUNCTION__."() url: ".$sUrl.", uri: ".$sUri.", site_id: ".$iSiteId.", sleep: ".$sleep);
 
-		/* dirty hardcoded values! */
 		switch($iSiteId) {
 			case 0:
 				$sPath = "/www/vhosts/oneworld365.org/htdocs/cache/page/";
-				break;
-			case 1:
-				$sPath = "/www/vhosts/gapyear365.com/htdocs/cache/page/";
-				break;
-			case 2:
-				$sPath = "/www/vhosts/seasonaljobs365.com/htdocs/cache/page/";
-				break;
-			case 3:
-				$sPath = "/www/vhosts/summercampjobs365.com/htdocs/cache/page/";
-				break;
-			case 4:
-				$sPath = "/www/vhosts/tefl365.com/htdocs/cache/page/";			
 				break;
 			default: 
 				return false;
