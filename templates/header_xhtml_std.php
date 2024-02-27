@@ -69,52 +69,46 @@ $(document).ready(function(){
             </div>
        </div>
        <? } ?>
-
     </div>
-    <? if ($oAuth->IsWebsite()) { ?>
+
 	<div class="row">
-        <div class="col-12">
+        <div class="col-8">
         <?
         $oNav = $this->Get('TOP_NAV');
         print $oNav->Render();
         ?>
         </div>
-	</div>
-	<? } ?>
-      
 
-    <div class="row my-1">
+
+        <? if ($oAuth->oUser->isValidUser) { ?>    
+    	<div class="col-4">
+            <div class="float-end">        
+            <div class="dropdown">
+              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+              <ul class="dropdown-menu text-small">
+                <a class="dropdown-item" href="/dashboard">dashboard</a>
+                <? if ($oAuth->oUser->isAdmin) { ?>
+                        <a class="dropdown-item" href="/company/add" title="add a new company">add company</a>
+                        <a class="dropdown-item" href="/placement/add" title="add a new placement">add placement</a>
+                        <a class="dropdown-item"  href="/user/" title="manage users">user</a>
+                        <a class="dropdown-item" href="/activity-admin" title="activity admin">activity</a>
+                <? } ?>
+                <? if ($oAuth->oUser->isValidUser) { ?>
+                        <a class="dropdown-item" href="/enquiry-report/" title="enquiry admin">enquiries</a>
+                        <? if ($oAuth->oUser->isAdmin) { ?>
+                        <a class="dropdown-item" href="/review-report/" title="reviews admin">reviews</a>
+                        <?php } ?>
+                <? } ?>
     
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+              </ul>
+          </div>
+          </div>
+        </div>
+        <? } ?>
 
-    <? if ($oAuth->IsAdminSystem() && $oAuth->oUser->isValidUser) { ?>
-	<div class="col-12">
-        <div class="float-end">        
-        <div class="dropdown">
-          <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Menu</a>
-          <ul class="dropdown-menu text-small">
-            <a class="dropdown-item" href="/dashboard">dashboard</a>
-            <? if ($oAuth->oUser->isAdmin) { ?>
-                    <a class="dropdown-item" href="/company/add" title="add a new company">add company</a>
-                    <a class="dropdown-item" href="/placement/add" title="add a new placement">add placement</a>
-                    <a class="dropdown-item"  href="/user/" title="manage users">user</a>
-                    <a class="dropdown-item" href="/activity-admin" title="activity admin">activity</a>
-            <? } ?>
-            <? if ($oAuth->oUser->isValidUser) { ?>
-                    <a class="dropdown-item" href="/enquiry-report/" title="enquiry admin">enquiries</a>
-                    <? if ($oAuth->oUser->isAdmin) { ?>
-                    <a class="dropdown-item" href="/review-report/" title="reviews admin">reviews</a>
-                    <?php } ?>
-            <? } ?>
-
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
-          </ul>
-      </div>
-      </div>
-    </div>
-    <? } ?>
-
-    </div>
+	</div>
 
 </div>
 </header>
