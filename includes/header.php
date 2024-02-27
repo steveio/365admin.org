@@ -65,18 +65,12 @@ $oCssInclude->SetMedia('screen');
 $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
 
 
-if ($oAuth->IsWebsite()) {
-    require_once("./classes/navigation.class.php");
-    $oNav = new Nav();
-    $oNav->Setup();
-    /*
-    print_r("<pre>");
-    print_r($oNav);
-    print_r("</pre>");
-    die();
-    */
-    $oHeader->SetNav('TOP_NAV', $oNav);
-}
+
+require_once("./classes/navigation.class.php");
+$oNav = new Nav();
+$oNav->Setup();
+$oHeader->SetNav('TOP_NAV', $oNav);
+
 
 $oHeader->LoadTemplate("header_xhtml_std.php");
 
