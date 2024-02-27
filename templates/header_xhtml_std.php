@@ -44,7 +44,7 @@ $(document).ready(function(){
 <header class="border-bottom">
 <div class="container">
  
-    <div class="row">
+<div class="row">
     	<div class="col-6">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
           <img src="<?= $this->Get("LOGO_URL"); ?>" alt="<?= $this->Get("TITLE"); ?>" border="0" />
@@ -60,7 +60,7 @@ $(document).ready(function(){
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- One World365 Mobile Banner Header -->
             <ins class="adsbygoogle"
-                 style="display:inline-block;width:290px;height:70px"
+                 style="display:inline-block;width:320px;height:100px"
                  data-ad-client="ca-pub-9874604497476880"
                  data-ad-slot="1198653468"></ins>
             <script>
@@ -69,22 +69,12 @@ $(document).ready(function(){
             </div>
        </div>
        <? } ?>
-    </div>
 
-	<div class="row">
-        <div class="col-8">
-        <?
-        $oNav = $this->Get('TOP_NAV');
-        print $oNav->Render();
-        ?>
-        </div>
-
-
-        <? if ($oAuth->oUser->isValidUser) { ?>    
-    	<div class="col-4">
-            <div class="float-end">        
+        <? if ($oAuth->oUser->isValidUser) { ?>
+        <div class="col-6 my-3">
+            <div class="float-end">
             <div class="dropdown">
-              <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+              <a href="#" class="btn btn-light d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
               <ul class="dropdown-menu text-small">
                 <a class="dropdown-item" href="/dashboard">dashboard</a>
                 <? if ($oAuth->oUser->isAdmin) { ?>
@@ -99,7 +89,7 @@ $(document).ready(function(){
                         <a class="dropdown-item" href="/review-report/" title="reviews admin">reviews</a>
                         <?php } ?>
                 <? } ?>
-    
+   
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/logout">Sign out</a></li>
               </ul>
@@ -108,7 +98,17 @@ $(document).ready(function(){
         </div>
         <? } ?>
 
-	</div>
+</div>
+
+<div class="row my-3">
+   <div class="col-12">
+   <?
+   $oNav = $this->Get('TOP_NAV');
+   print $oNav->Render();
+   ?>
+</div>
+
+
 
 </div>
 </header>
