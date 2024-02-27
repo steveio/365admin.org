@@ -4,12 +4,13 @@
 #  Static page cache refresh process -
 #  Generates static HTML files for all page urls defined in db table cache 
 #
-#  Runs every morning at 4am after /root/cache_build.sh 
+#  Runs every morning at 4am GMT after /root/cache_build.sh 
 #
 
+/usr/bin/php /www/vhosts/365admin.org/htdocs/scripts/cache/cache_generator2.php http://www.oneworld365.org
 
-/usr/bin/php /www/vhosts/oneworld365.org/htdocs/cache_generator2.php oneworld365.org
+# grant read & write on cache files to apache/php */
+chmod -R 0770 /www/vhosts/oneworld365.org/htdocs/cache/
 
-# make the cache files world writeable so apache/php can update */
-chmod -R 0777 /www/vhosts/oneworld365.org/htdocs/cache/page/
+chown -R web_developer:apache /www/vhosts/oneworld365.org/htdocs/cache/
 
