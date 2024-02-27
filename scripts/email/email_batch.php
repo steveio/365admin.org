@@ -31,7 +31,7 @@ if (strlen($brand) < 1) die("ERROR : BRAND identifier must be supplied");
 $mode = (isset($argv[2])) ? $argv[2] : "";
 
 
-include("/www/vhosts/oneworld365.org/htdocs/conf/config.php");
+include("/www/vhosts/365admin.org/htdocs/conf/config.php");
 
 require_once(ROOT_PATH."/classes/db_pgsql.class.php");
 require_once(ROOT_PATH."/classes/logger.php");
