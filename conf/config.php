@@ -9,7 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
 date_default_timezone_set('Europe/London');
 
 // db connection
-$dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "","dbport" => "5432");
+$dsn = array("dbhost" => "localhost","dbuser" => "oneworld365_pgsql", "dbpass" => "bra@zi1","dbname" => "oneworld365_20240218","dbport" => "5432");
 
 
 $solr_config = array(
@@ -32,6 +32,13 @@ define('TEST_EMAIL','steveedwards01@yahoo.co.uk');
 define('LOG_PATH',"/www/vhosts/365admin.org/logs/365admin_app.log");
 define('LOG_LEVEL',3);
 
+define('HOSTNAME',"oneworld365.org");
+define('BASE_URL','http://admin.'.HOSTNAME);
+define('WEBSITE',HOSTNAME);
+define('ADMIN_SYSTEM',BASE_URL);
+define('API_URL','http://api.'.HOSTNAME);
+define('CURRENT_SITE', ADMIN_SYSTEM);
+
 define('BASE_PATH','/www/vhosts/365admin.org/htdocs');
 define('ROOT_PATH',BASE_PATH); // required for some classes
 define('ROOT_PATH_IMAGE_UPLOAD','/www/vhosts/oneworld365.org/htdocs'); // required for some classes
@@ -39,20 +46,13 @@ define('PATH_CLASSES',BASE_PATH. '/classes/');
 define('PATH_CONTROLLERS',BASE_PATH. '/controllers/');
 define("PATH_TO_MVC_ROUTE_MAP", BASE_PATH."/conf/routes.xml"); // MVC routes (URL -> Class / Method)
 define("PATH_TO_STATIC_ROUTE_MAP", BASE_PATH."/conf/routes_static.xml"); // Static routes (URL -> PHP Script file)
+define('PATH_NAV_CONFIG','/www/vhosts/oneworld365.org/htdocs/conf/nav.xml');
 
 define('PATH_2_DATA_DIR',BASE_PATH. '/data/');
 define('PATH_UNDER_MAINTENANCE','/back_soon.php');
 
-define('WEBSITE',"oneworld365.org");
-define('ADMIN_SYSTEM',"admin.oneworld365.org");
-define('CURRENT_SITE', ADMIN_SYSTEM);
-
-define('HOSTNAME',"oneworld365.org");
-define('BASE_URL','https://admin.'.HOSTNAME);
-define("COOKIE_DOMAIN", ".".HOSTNAME);
-
 define('SITE_TITLE','365 Admin');
-
+define("COOKIE_DOMAIN", ".".HOSTNAME);
 define('CACHE_ENABLED', false);
 
 /* profile types - from db table profile_types */
@@ -354,7 +354,7 @@ define('ERROR_ADD_ACCOUNT_FAILED','Add account failed :');
 /* config params required to make classes work */
 $_CONFIG = array( 
         'site_id' => 0,
-        'url' => 'http://admin.oneworld365.org',
+        'url' => 'http://admin.'.HOSTNAME,
         'root_path' => ROOT_PATH,
         'template_home' => '/templates',
         'company_table' => 'company',

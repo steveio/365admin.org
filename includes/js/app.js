@@ -21,7 +21,7 @@ $(document).ready(function(){
 	var profileData;
 	var rf; // refine search panel visibility
 	
-	var getProfileData = function(url,fqSet,start,rows) {
+	var getProfileData = function(searchQuery,fqSet,start,rows) {
 		
 		var fq = '';
 		
@@ -57,10 +57,13 @@ $(document).ready(function(){
 		rt = "HTML"; // return data type
 
 		fq = fq+'&rt='+rt;
-		var apiUri = "http://api.oneworld365.org/search";
-	
+		var apiUrl = $('#api-url').val()+"/search";
+		console.log(apiUrl);
+		console.log(searchQuery);
+		console.log(fq);
+		
 		$.ajax({
-		     url:apiUri+url+fq,
+		     url:apiUrl+searchQuery+fq,
 		     dataType: 'jsonp', // Notice! JSONP <-- P (lowercase)
 		     success:function(json){
 		    	 if (json.status == 1) {
@@ -277,9 +280,8 @@ $(document).ready(function(){
 
         $('#result-hdr').append('<h4>Found '+json.total_results+' Results ('+json.pageNum+' of '+json.totalPages+')</h4>');
 
-        if (json.rf == 1) {
-             $('#refine-search-panel').show();
-        }
+
+        $('#refine-search-panel').show();
 
         $('#spinner').hide();
 

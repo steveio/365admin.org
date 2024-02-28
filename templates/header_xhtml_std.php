@@ -51,24 +51,6 @@ $(document).ready(function(){
         </a>
         </div>
         
-        <? if ($oAuth->IsWebsite()) { ?>
-        <div class="col-6">
-            <div class="adbanner_web">
-                <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-            </div>
-            <div class="adbanner_mob">
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- One World365 Mobile Banner Header -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:320px;height:100px"
-                 data-ad-client="ca-pub-9874604497476880"
-                 data-ad-slot="1198653468"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-            </div>
-       </div>
-       <? } ?>
 
         <? if ($oAuth->oUser->isValidUser) { ?>
         <div class="col-6 my-3">

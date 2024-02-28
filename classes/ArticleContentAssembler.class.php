@@ -215,7 +215,6 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
     public function SetSearchResultPanel($aPageOptions)
     {
-        global $oBrand;
 
         /* have a look for any search params in session */
         $oSolrSearchPanelSearch = SolrSearchPanelSearch::getFromSession();
@@ -244,6 +243,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         }
 
         $oSearchResultPanel = new Layout();
+        $oSearchResultPanel->Set("API_URL",API_URL);
         $oSearchResultPanel->Set("URI",$this->oRequestRouter->GetRequestUri());
         $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_PTITLE]);
         $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_OTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_OTITLE]);

@@ -10,9 +10,10 @@
         $strQuery = $this->Get('URI');
     }
     ?>
-	<input id="search-query" class="" type="hidden" value="<?= $strQuery; ?>" name="query">
-	<input id="query-origin" class="" type="hidden" value="0" name="query-origin">
-	<input id="currency" class="" type="hidden" value="GBP" name="currency">
+	<input id="api-url" class="" type="hidden" value="<?= $this->Get('API_URL'); ?>" name="" />
+	<input id="search-query" class="" type="hidden" value="<?= $strQuery; ?>" name="query" />
+	<input id="query-origin" class="" type="hidden" value="0" name="query-origin" />
+	<input id="currency" class="" type="hidden" value="GBP" name="currency" />
 	<input id="search_projects" class="search_type" name="search_type" value="(1 OR 0)" type="hidden" />
 	
 	<div id="search-result-panel" class="row">

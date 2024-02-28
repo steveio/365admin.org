@@ -13,10 +13,10 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 <?php if ($aPageOptions[ARTICLE_DISPLAY_OPT_ADS] != "f") { ?>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
- (adsbygoogle = window.adsbygoogle || []).push({
-      google_ad_client: "ca-pub-9874604497476880",
-      enable_page_level_ads: true
- });
+ //(adsbygoogle = window.adsbygoogle || []).push({
+ //     google_ad_client: "ca-pub-9874604497476880",
+ //     enable_page_level_ads: true
+ //});
 </script> 
 <?php  } ?>
 
@@ -57,6 +57,16 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	<div class="my-3">
     	<p class="lead"><?= $oArticle->GetDescShortPlaintext(); ?></p>
     	</div>
+
+      <?
+        if ($aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT] != "f") {
+            $oSearchResultPanel = $this->Get('oSearchResult');
+            if (is_object($oSearchResultPanel))
+            {
+                    print $oSearchResultPanel->Render();
+            }
+        }
+        ?>
     
     	<div class="my-3">
     	<p><?= $oArticle->GetDescLongClean();?></p>
