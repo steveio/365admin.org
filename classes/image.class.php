@@ -173,15 +173,10 @@ class Image {
 	    $this->aspect = $aRow['aspect'];
 	}
 
-	public function GetHtml($size,$alt = '', $class = 'img-fluid rounded mb-3', $noOutputSize = FALSE) {
-
-		$width = ($size != "") ? ImageSize::Get($size,$this->GetAspect(),"WIDTH") : $this->GetWidth();
-		$height = ($size != "") ? ImageSize::Get($size,$this->GetAspect(),"HEIGHT") : $this->GetHeight();
-		
-		$size_str = ($noOutputSize) ? " style='width: ".$width."px; height: ".$height."px;'" : "";
-
+	public function GetHtml($size,$alt = '', $class = 'img-fluid rounded mb-3', $style = '') {
+	    
 		if (file_exists($this->GetPath($size))) {
-			return "<img src='".$this->GetUrl($size)."' class='".$class."' alt='".$alt."' border='0' />";
+			return "<img src='".$this->GetUrl($size)."' class='".$class."' style='".$style."' alt='".$alt."' border='0' />";
 		} else {
 			return FALSE;
 		}

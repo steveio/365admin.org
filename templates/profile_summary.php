@@ -13,35 +13,35 @@ if (!is_object($oProfile)) return;
 <div class="col-sm-12 col-md-3 col-lg-3 my-2">
 
     	<div class="col-sm-12"><?
+    	if (strlen($strCompanyLogoHtml) < 1 && is_object($oProfile->GetCompanyLogo()))
+    	{
+    	    $strCompanyLogoHtml = $oProfile->GetCompanyLogo()->GetHtml('','','','width: 240px; height: 180px;');
+    	    $strCompanyLogoHtmlSmall = $oProfile->GetCompanyLogo()->GetHtml('_sm');
+    	}
+
     	if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_mf",'')) { ?>
-    		<div>
-        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class=""><?
-			if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_lf",'')) { ?>			
-        		<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_lf");  ?>" alt="<?= $oProfile->GetTitle() ?>" /> 		
-			<? } else { ?>
-			<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
-			<? } ?>
+    		<div style="min-height: 190px;">
+        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class="">
+				<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
         		</a>
         	</div>
-        	<?php 
-        	if (strlen($strCompanyLogoHtml) < 1 && is_object($oProfile->GetCompanyLogo()))
-        	{
-        	    $strCompanyLogoHtml = $oProfile->GetCompanyLogo()->GetHtml('_sm');
-        	}
+    	<? } else {
+ 
         	if (strlen($strCompanyLogoHtml) > 1) {
         	?>
-        	<div>
+        	<div style="min-height: 190px;">
         		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?= $oProfile->GetCompanyProfileUrl() ?>" target="_new" class="">
         		<?= $strCompanyLogoHtml; ?>
         		</a>
-        	</div>
-        	<?php } ?>
+        	</div><?php 
+        	} 
+    	} ?>
 
-    	<? } ?>
+
     	</div>
 
         <div class="col-lg-10 col-sm-12">
-       	    <h3><a class="title-summary" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h3>    
+       	    <h4><a href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" title="" target="_new"><?= $oProfile->GetTitle(); ?></a></h4>    
 
             <?php if ($oProfile->GetReviewCount() >= 1) { ?>
             <input type="hidden" id="rateYo-<?= $oProfile->GetId() ?>-rating" value="<?= $oProfile->GetRating(); ?>" />
@@ -54,17 +54,17 @@ if (!is_object($oProfile)) return;
         
         	<!--<p><? $oProfile->GetDescShortPlaintext(120); ?></p>-->
         
-        	<ul class="details small">
-        	<?= $oProfile->GetCompanyName(); ?><br/> 
+        	<ul class="small">
+        	<li><?= $oProfile->GetCompanyName(); ?></li> 
         	<? if (strlen($oProfile->GetLocationLabel()) > 1) { ?> 
-        	<?= "Location: ". htmlUtils::convertToPlainText($oProfile->GetLocationLabel()); ?><br/> 
+        		<li><?= htmlUtils::convertToPlainText($oProfile->GetLocationLabel()); ?></li> 
         	<? } ?>
         	<? if (is_numeric($oProfile->GetDurationFromId())) { ?>
-        	<?= "Duration: ". $oProfile->GetDurationFromLabel(); ?> to <?= $oProfile->GetDurationToLabel(); ?><br />
+        		<li><?= $oProfile->GetDurationFromLabel(); ?> to <?= $oProfile->GetDurationToLabel(); ?></li>
         	<? } ?>
         	<?php if (is_numeric($oProfile->GetPriceFromId())) { ?>
-        	<?=    $oProfile->GetPriceFromLabel(); ?> to <?= $oProfile->GetPriceToLabel(); ?>
-        	<?= $oProfile->GetCurrencyLabel(); ?><br />
+        		<li><?= $oProfile->GetPriceFromLabel(); ?> to <?= $oProfile->GetPriceToLabel(); ?>
+        		<?= $oProfile->GetCurrencyLabel(); ?></li>
         	<?php } ?>
         	</ul>
         </div>
