@@ -182,14 +182,8 @@ class GeneralProfile extends PlacementProfile implements ProfileInterface {
 		return true;
 	}
 
-	private function UpdateRefdata($p) {
-				
-	}
-	
-	public function GetType() {
-		return $this->profile_type;
-	}
-	
+	private function UpdateRefdata($p) {}
+
 	public function GetDurationText() {
 		return $this->duration_txt;
 	}

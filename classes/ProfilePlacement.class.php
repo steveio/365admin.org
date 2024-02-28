@@ -864,64 +864,6 @@ class PlacementProfile extends AbstractProfile {
 		}
 	}
 		
-	/*
-	 * @todo - migrate to a template
-	 * 
-	 */
-	public static function GetPlacementTitleTextList($iCompanyId,$iLimit = 25) {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
-		global $_CONFIG,$db;
-		
-		$oPlacement = new Placement($db);
-		$aResult = $oPlacement->GetPlacementById($iCompanyId,$key = "company_id",$ret_type = "rows");
-	
-	
-		$aProfile['WITH_IMAGE'] = array();
-		$aProfile['NO_IMAGE'] = array();
-		
-		if (is_array($aResult)) {
-			foreach($aResult as $aRow) {
-				$oProfile = new PlacementProfile();
-				$oProfile->SetFromArray($aRow);
-				$aImg = $oProfile->GetImages();
-				if ((count($aImg) >= 1)) {
-					$aProfile['WITH_IMAGE'][] = $oProfile; 
-				} else {
-					$aProfile['NO_IMAGE'][] = $oProfile;
-				}
-				
-			}
-		}
-		
-		if (count($aProfile['WITH_IMAGE']) > $iLimit) {
-			shuffle($aProfile['WITH_IMAGE']);
-			$aProfile['WITH_IMAGE'] = array_slice($aProfile['WITH_IMAGE'],0,$iLimit);
-			$aProfile['NO_IMAGE'] = array(); /* we have 25 profiles with images, no need to display text only profiles here */
-		}
-		
-		foreach($aProfile['WITH_IMAGE'] as $oProfile) {
-			
-			$s .= "<div id='profile_placement_thumbs_item'>";
-			$s .= "<a href='".$oProfile->GetProfileUrl()."' title='".$oProfile->GetTitle()."'>".$oProfile->GetImage(0)->GetHtml("_sm",$oProfile->GetTitle())."</a>";
-			$s .= "<br><a style='font-size: 8px;' href='".$oProfile->GetProfileUrl()."'>".$oProfile->GetTitle(17	) ."</a>";
-			$s .= "</div> <!-- end profile placement item -->";
-			
-		} // end foreach placement
-
-		if(count($aProfile['NO_IMAGE']) >= 1) {
-			$s .= "<div id='profile_placement_item_txt'>";
-			$s .= "<p style='font-size: 10px;'>Other Placements :<br/>";
-			foreach($aProfile['NO_IMAGE'] as $oProfile) {
-				$s .= "<a style='font-size: 10px;' href='".$oProfile->GetProfileUrl()."'>".$oProfile->GetTitle() ."</a>&nbsp;&nbsp;/&nbsp;&nbsp;";
-			}
-			
-			$s .= "</div> <!-- end profile placement text only -->";
-		
-		}
-		return $s;
-	}
 	
 	function Delete() {
 
@@ -1029,7 +971,7 @@ class PlacementProfile extends AbstractProfile {
 	    }
 	}
 	
-	public static function Get($key,$id, $fetchmode = FETCHMODE__FULL) {
+	public static function Get($key,$id, $fetchmode = FETCHMODE__FULL, $bFilterFromSearch = false) {
 
 		global $_CONFIG, $db;
 		
@@ -1037,6 +979,7 @@ class PlacementProfile extends AbstractProfile {
 		{
     		$select = "p.id
                        ,p.type
+                       ,p.type as profile_type
     				   ,p.url_name
     				   ,p.title        
     				   ,p.desc_short   
@@ -1062,6 +1005,7 @@ class PlacementProfile extends AbstractProfile {
 		    $select = "
                     p.id
                     ,p.type
+                    ,p.type as profile_type
                     ,p.url_name
                     ,p.title
                     ,p.desc_short
@@ -1108,7 +1052,7 @@ class PlacementProfile extends AbstractProfile {
 			case "ID_LIST_SEARCH_RESULT" :
 			    if (!is_array($id) || count($id) < 1) return FALSE;
 			    $where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
-			    if ($filter_from_search == true)
+			    if ($bFilterFromSearch)
 			        $where .= " and c.profile_filter_from_search != 't'";
 		        break;
 			case "ID_LIST" :
@@ -1145,36 +1089,21 @@ class PlacementProfile extends AbstractProfile {
 
 		    $oProfile = ProfileFactory::Get($o->type);
 
-			//$oProfile = new PlacementProfile();
 			$oProfile->SetFromObject($o);
-			
+
 			$oProfile->GetImages();
 			$oProfile->SetCompanyLogo();
-
-			if ($fetchmode == FETCHMODE__FULL) {
-    		    $oProfile->GetCategoryInfo();
-    		    $oProfile->GetActivityInfo();
-			}
-
+		    $oProfile->GetActivityInfo();
 		    $oProfile->GetCountryInfo();
-
+		    $oProfile->GetReviewRating();
+		    
 			$aProfile[$oProfile->GetId()] = $oProfile;
 		}
-
-		/*
-		 * 
-		    $oProfile = ProfileFactory::Get($o->type);
-		    $oProfile->GetById($o->id);
-		    $oProfile->GetReviewRating();
-
-		    $aProfile[$oProfile->GetId()] = $oProfile;			
-
-		 */
 		
 		return $aProfile;
 	}	
 
-	public static function GetRelatedById($id, $key = "id")
+	public static function GetPlacementById($id, $key = "id")
 	{
 
 	    global $db; 
@@ -1191,6 +1120,7 @@ class PlacementProfile extends AbstractProfile {
         	    SELECT
         	    p.id
         	    ,p.type
+                ,p.type as profile_type
         	    ,p.url_name
         	    ,p.title
         	    ,p.desc_short

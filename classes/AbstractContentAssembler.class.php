@@ -184,7 +184,7 @@ abstract class AbstractContentAssembler {
             if ($profile_type == CONTENT_PLACEMENT)
             {
                 //$this->aRelatedProfile = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$aRelatedId, $filter_from_search = false);
-                $this->aRelatedProfile = PlacementProfile::GetRelatedById($aRelatedId, "related_id");
+                $this->aRelatedProfile = PlacementProfile::GetPlacementById($aRelatedId, "related_id");
             } else {
                 $this->aRelatedProfile = CompanyProfile::Get("ID", $aRelatedId, false);
             }

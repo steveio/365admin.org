@@ -26,9 +26,9 @@
 	if (!$this->Get('HIDE_FILTERS')) { ?>
 	<div id="refine-search-panel" class="row">
 	
-	
+		<h5>Refine Search</h5>
 		<div class="row my-3">
-			<div id="facet-continent" class="facet-col col-4"><?= $this->Get('FACET_CONTINENT'); ?></div>
+			<!--  <div id="facet-continent" class="facet-col col-4"><?= $this->Get('FACET_CONTINENT'); ?></div>-->
 			<div id="facet-country" class="facet-col col-4"><?= $this->Get('FACET_COUNTRY'); ?></div> 
 			<div id="facet-activity" class="facet-col col-4"><?= $this->Get('FACET_ACTIVITY'); ?></div>
 		</div>

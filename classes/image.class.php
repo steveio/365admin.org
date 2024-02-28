@@ -278,10 +278,10 @@ class Image {
 	}
 	
 	
-	public function GetPath($sSize = "") {
+	public function GetPath($sSize = "", $bMakePath = false) {
 		
 		$sPath = IMG_BASE_PATH . $this->GetPartition();		
-		if (!file_exists($sPath)) {
+		if (!file_exists($sPath) && $bMakePath) {
 			mkdir  ( $sPath, $mode= 0777, $recursive= true );
 			chmod ( $sPath , 0777 );
 		}
