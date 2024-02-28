@@ -243,6 +243,17 @@ class CompanyProfile extends AbstractProfile {
 		}
 		return $this->url;
   	}
+
+  	public function GetCompUrlName()
+  	{
+        return $this->GetUrlName();  	    
+  	}
+
+  	/* returns the url to the company profile */
+  	public function GetCompanyProfileUrl() {
+  	    global $_CONFIG;
+  	    return $_CONFIG['url']."/".$_CONFIG['company_home']."/".$this->GetUrlName();
+  	}
   	
   	public function GetApplyUrl() {
   		return $this->apply_url;

@@ -22,7 +22,7 @@ if (!is_object($oProfile)) return;
     	if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_mf",'')) { ?>
     		<div style="min-height: 190px;">
         		<a title="<?= $oProfile->GetTitle() ?>" href="<?= "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName() ?>" class="">
-				<img class="img-responsive img-rounded" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
+				<img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
         		</a>
         	</div>
     	<? } else {

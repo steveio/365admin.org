@@ -70,4 +70,3 @@
     </div>
 </div>
 <!-- end: Search Results Panel-->
-        

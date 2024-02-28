@@ -58,9 +58,6 @@ $(document).ready(function(){
 
 		fq = fq+'&rt='+rt;
 		var apiUrl = $('#api-url').val()+"/search";
-		console.log(apiUrl);
-		console.log(searchQuery);
-		console.log(fq);
 		
 		$.ajax({
 		     url:apiUrl+searchQuery+fq,
@@ -280,7 +277,6 @@ $(document).ready(function(){
 
         $('#result-hdr').append('<h4>Found '+json.total_results+' Results ('+json.pageNum+' of '+json.totalPages+')</h4>');
 
-
         $('#refine-search-panel').show();
 
         $('#spinner').hide();
@@ -327,26 +323,24 @@ $(document).ready(function(){
 
 	function processPagerClick(e) {
 
-  	  if(e.handled !== true)
-	  {
+		if(e.handled !== true)
+		{
+			e.preventDefault();
+			var a = this.id.split('_');
+			var start = a[1];
+			
+			var fqSet = [];		
+			var fqSet = getFiltersFromSelect();
+			
+			$('#pager').html('');
+			
+			e.handled = true;
 
-  		e.preventDefault();
-		var a = this.id.split('_');
-		var start = a[1];
-		
-		var fqSet = [];		
-		var fqSet = getFiltersFromSelect();
+			doSearch(fqSet,start);
+			
+			$('html, body').animate({scrollTop:0}, 'slow');
+		}  
 
-		$('#pager').html('');
-
-		e.handled = true;
-
-		doSearch(fqSet,start);
-
-		$('html, body').animate({scrollTop:0}, 'slow');
-	 }  
-	
-	
 	}
 	
 	function addTextFilter() {		
