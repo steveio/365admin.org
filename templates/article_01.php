@@ -68,7 +68,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
         }
         ?>
     
-    	<div class="my-3">
+    	<div class="article-body my-3">
     	<p><?= $oArticle->GetDescLongClean();?></p>
     	</div>
     

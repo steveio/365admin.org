@@ -137,10 +137,7 @@ a.title-summary {
 	color: #DD6900;
 }
 
-ul {
-	list-style-position: inside;
-	margin-left: 14px;
-}
+ul {}
 
 ul, li {
  	font-size: 1.1em;
@@ -154,9 +151,9 @@ ul {
     margin-bottom: 10px;
 }
 
-ul .profile-details {
+.article-body ul {
 	list-style-position: inside;
-	margin-left: 4px;
+	margin-left: 8px;
 }
 
 #wrap {
@@ -300,6 +297,7 @@ a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-re
 
 .brand-overlay {
     position: absolute;
-    top: 124px;
+    top: 0px;
     left: 0px;
 }
+

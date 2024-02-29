@@ -118,7 +118,9 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 
 <? include("./templates/profile_images_view.php"); ?>
 
+	<div class="article-body">
 	<p><?= $oProfile->GetDescLongClean();?></p>
+	</div>
 
 	<? if (strlen(trim($oProfile->GetVideo())) > 1) { ?>
 		<div class='col-12'>

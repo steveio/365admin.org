@@ -109,7 +109,9 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 
 <? include("./templates/profile_images_view.php"); ?>	
 
+<div class="article-body">
 <p><?= $oProfile->GetDescLongClean();?></p>
+</div>
 
 
 <div class="row">
