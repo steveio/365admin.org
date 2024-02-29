@@ -137,7 +137,12 @@ a.title-summary {
 	color: #DD6900;
 }
 
- ul, li {
+ul {
+	list-style-position: inside;
+	margin-left: 14px;
+}
+
+ul, li {
  	font-size: 1.1em;
 }
 
