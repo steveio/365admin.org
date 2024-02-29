@@ -57,7 +57,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 		<? if (is_numeric($oProfile->GetDurationFromId())) { ?>
 			<b>Duration:</b> <?= $oProfile->GetDurationFromLabel(); ?> to <?= $oProfile->GetDurationToLabel(); ?><br />
 		<? } ?>
-		<?php if (is_numeric($oProfile->GetPriceFromId())) { ?>
+		<?php if (is_numeric($oProfile->GetPriceFromId()) && $oProfile->GetPriceFromLabel() != "0") { ?>
 			<b>Approx Costs:</b> <?= $oProfile->GetPriceFromLabel(); ?> to <?= $oProfile->GetPriceToLabel(); ?>
 			<?= $oProfile->GetCurrencyLabel(); ?><br />
 		<?php } ?>

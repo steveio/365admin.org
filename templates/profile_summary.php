@@ -76,7 +76,7 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
         	<? if (is_numeric($oProfile->GetDurationFromId())) { ?>
         		<li><?= $oProfile->GetDurationFromLabel(); ?> to <?= $oProfile->GetDurationToLabel(); ?></li>
         	<? } ?>
-        	<?php if (is_numeric($oProfile->GetPriceFromId())) { ?>
+        	<?php if (is_numeric($oProfile->GetPriceFromId()) && $oProfile->GetPriceFromLabel() != "0") { ?>
         		<li><?= $oProfile->GetPriceFromLabel(); ?> to <?= $oProfile->GetPriceToLabel(); ?>
         		<?= $oProfile->GetCurrencyLabel(); ?></li>
         	<?php } ?>
