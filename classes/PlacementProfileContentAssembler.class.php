@@ -55,7 +55,7 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
 
             $this->GetEnquiryButtonHtml();
             
-            $this->GetRelatedProfile($this->oProfile->GetOid(), PROFILE_PLACEMENT, $limit = 4);
+            $this->GetRelatedProfile($this->oProfile->GetOid(), PROFILE_PLACEMENT, "", $limit = 4);
             $this->GetRelatedArticle($this->oProfile->GetOid(), $limit = 6); 
 
             

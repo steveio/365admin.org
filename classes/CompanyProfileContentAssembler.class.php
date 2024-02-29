@@ -66,11 +66,18 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
                 $this->GetPlacements();
                 $this->oTemplate->Set("displayRelatedProfile","COMPANY");
             } else {
-                $iLimit = 6;
-                $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT, $iLimit);
+
+                $iCompanyId = null;
+                if ($this->oProfile->GetListingType() >= BASIC_LISTING)
+                {
+                    $iCompanyId = $this->oProfile->GetId();
+                }
+                $this->GetRelatedProfile($this->oProfile->GetOid(),CONTENT_PLACEMENT, $iCompanyId, $iLimit = 8);
                 $this->aPlacement  = $this->aRelatedProfile;
+
                 $this->oTemplate->Set("displayRelatedProfile","RELATED");
-                $this->GetRelatedArticle($this->oProfile->GetOid(), $iLimit);
+
+                $this->GetRelatedArticle($this->oProfile->GetOid(), $iLimit = 6);
             }
 
             $this->oTemplate->Set("aEnquiryButtonHtml", $this->aEnquiryButtonHtml);

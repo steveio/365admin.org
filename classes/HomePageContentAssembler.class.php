@@ -65,7 +65,7 @@ class HomepageContentAssembler extends AbstractContentAssembler {
             
             if ($this->oContentMapping->GetDisplayOptRelatedProfile())
             {
-                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, $limit = 4);
+                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, null, $limit = 4);
             }
 
             $this->oHomepageArticle = $oHomepageArticle;

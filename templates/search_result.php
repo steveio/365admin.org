@@ -24,20 +24,20 @@
 	
 	<?
 	if (!$this->Get('HIDE_FILTERS')) { ?>
-	<div id="refine-search-panel" class="row">
+	<div id="refine-search-panel" class="row my-2">
 	
 		<h5>Refine Search</h5>
-		<div class="row my-3">
+		<div class="row my-1">
 			<!--  <div id="facet-continent" class="facet-col col-4"><?= $this->Get('FACET_CONTINENT'); ?></div>-->
-			<div id="facet-country" class="facet-col col-4"><?= $this->Get('FACET_COUNTRY'); ?></div> 
-			<div id="facet-activity" class="facet-col col-4"><?= $this->Get('FACET_ACTIVITY'); ?></div>
+			<div id="facet-country" class="facet-col col-lg-4 col-md-6 col-sm-12"><?= $this->Get('FACET_COUNTRY'); ?></div> 
+			<div id="facet-activity" class="facet-col col-lg-4 col-md-6 col-sm-12"><?= $this->Get('FACET_ACTIVITY'); ?></div>
 		</div>
 		
-		<div class="row my-3">
-			<div id="facet-duration" class="facet-col col-3"></div>
-			<div id="facet-price" class="facet-col col-3"></div>
-			<div id="facet-species" class="facet-col col-3"></div>
-			<div id="facet-habitats" class="facet-col col-3"></div>
+		<div class="row my-1">
+			<div id="facet-duration" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+			<div id="facet-price" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+			<div id="facet-species" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+			<div id="facet-habitats" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
 		</div>
 
 		<div class="row my-3">

@@ -34,7 +34,7 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 </div>
 
 
-<div style="margin: 12px 0px 16px 0px;">
+<div>
 <? if ((strlen($this->Get('banner_img')) > 1) && ($oProfile->GetListingType() >= BASIC_LISTING)) { ?>
 	<div style="div-center" class=""><?= $this->Get('banner_img'); ?></div>
 <? } elseif ((strlen($this->Get('logo_img')) > 1) && ($oProfile->GetListingType() >= BASIC_LISTING)) { ?>

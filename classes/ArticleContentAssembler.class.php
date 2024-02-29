@@ -157,7 +157,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             
             if ($this->oContentMapping->GetDisplayOptRelatedProfile())
             {
-                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, $limit = 8);
+                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, null, $limit = 8);
             }
             
             $this->Render();

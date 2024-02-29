@@ -19,7 +19,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 </div>
 
 <? if (strlen($this->Get('logo_img')) > 1) { ?>
-	<div style=""><?= $this->Get('logo_img') ?></div>
+	<div><?= $this->Get('logo_img') ?></div>
 <? } ?>
 
 <h1><?= $oProfile->GetTitle(); ?></h1>

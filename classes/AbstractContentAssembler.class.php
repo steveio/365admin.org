@@ -164,13 +164,21 @@ abstract class AbstractContentAssembler {
      * @param profile_type : solr index profile type ( 0 = company profile, 1 = placement profile, (1 OR 0) both )
      * @param limit - number of items to return
      */
-    public function GetRelatedProfile($solr_id, $profile_type, $limit = 25)
+    public function GetRelatedProfile($solr_id, $profile_type, $company_id,  $limit = 25)
     {
         global $solr_config;
         
         $oSolrMoreLikeSearch = new SolrMoreLikeSearch($solr_config);
         $oSolrMoreLikeSearch->setRows($limit);
-        $oSolrMoreLikeSearch->getRelatedProfile($solr_id, $profile_type);
+        
+        $arrFilterQuery = array();
+
+        if (is_numeric($company_id))
+        {
+            $arrFilterQuery['company_id'] = $company_id;
+        }
+
+        $oSolrMoreLikeSearch->getRelatedProfile($solr_id, $profile_type, $arrFilterQuery);
 
 
         $aTmp = $oSolrMoreLikeSearch->getId();
