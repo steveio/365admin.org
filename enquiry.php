@@ -127,7 +127,7 @@ print $oHeader->Render();
 	<? } ?>
 
 
-	<div style="font-size: 1.4em;">
+	<div>
 		<? if ($oEnquiry->GetLinkTo() == PROFILE_PLACEMENT) { ?>
 			<p>To : <a href="<?= $oProfile->GetCompanyProfileUrl(); ?>" class="link_sm" target="_new" title="View Profile" ><?= $oProfile->GetCompanyName(); ?></a></p>
 			<p>Subject : <a href="<?= $oProfile->GetProfileUrl(); ?>" class="link_sm" target="_new" title="View Profile" ><?= $oProfile->GetTitle(); ?></a></p>
@@ -138,6 +138,15 @@ print $oHeader->Render();
 
 				
 </div>
+
+<?
+if (isset($aResponse['msg']) && count($aResponse['msg']) >= 1) {
+?>
+<div class="alert alert-<?= (isset($aResponse['status'])) ? $aResponse['status'] : "warning";  ?>" role="alert">
+    <?= implode("<br />",$aResponse['msg']);  ?>
+</div>
+<? } ?>
+
 	
 <div class="row">
 <div class="col-12 my-3">
@@ -151,22 +160,22 @@ print $oHeader->Render();
 	<input type="hidden" name="q" value="<?= $_REQUEST['q']; ?>" />
 		
 	<div class="row my-2">
-		<div class="col-6">    
+		<div class="col-lg-6 col-sm-12">    
     		<span class="label_col"><label for="name" style="<?= isset($response['msg']['name']) ? "color:red;" : ""; ?>">Your Name <span class="red"> *</span></label></span>
     		<span class="input_col"><input type="text" class="form-control" id="name" name="name" maxlength="45" value="<?= stripslashes($_POST['name']); ?>" /></span>
 		</div>
-		<div class="col-6">    
+		<div class="col-lg-6 col-sm-12">    
     		<span class="label_col"><label for="country_id" style="<?= isset($response['msg']['country_id']) ? "color:red;" : ""; ?>">Your Country <span class="red"> *</span></label></span>
     		<span class="input_col"><?= $sCountryListHTML ?></span>
 		</div>
 	</div>
 
 	<div class="row my-2">
-		<div class="col-6">    
+		<div class="col-lg-6 col-sm-12">    
     		<span class="label_col"><label for="email" style="<?= isset($response['msg']['email']) ? "color:red;" : ""; ?>">Contact Email <span class="red"> *</span></label></span>
     		<span class="input_col"><input type="text" class="form-control" id="email" name="email" maxlength="75" value="<?= $_POST['email']; ?>" /></span>
     	</div>
-		<div class="col-6">
+		<div class="col-lg-6 col-sm-12">
     		<span class="label_col"><label for="email_conf" style="<?= isset($response['msg']['email']) ? "color:red;" : ""; ?>">Confirm Email <span class="red"> *</span></label></span>
     		<span class="input_col"><input type="text" class="form-control" id="email_conf" name="email_conf" maxlength="75	" value="<?= $_POST['email_conf']; ?>" /></span>
 		</div>
@@ -203,7 +212,7 @@ print $oHeader->Render();
 			
 	<div class="row my-2">
 		<div class="col-6">    
-    		<span class="label_col"><label for="title">Group Size / Number of Traveller</label></span>
+    		<span class="label_col"><label for="title">Group Size</label></span>
     		<span class="input_col"><input type="text"  class="form-control" id="grp_size" maxlength="4" name="grp_size" value="<?= $_POST['grp_size']; ?>" /></span>
 		</div>
 		<div class="col-6">

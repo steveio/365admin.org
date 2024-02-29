@@ -45,7 +45,7 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
         } else { // no images, display company profile logo
         	if (strlen($strCompanyLogoHtml) > 1) {
         	?>
-        	<div style="min-height: 190px;">
+        	<div style="profile-image">
         		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?= $oProfile->GetCompanyProfileUrl() ?>" target="_new" class="">
         		<?= $strCompanyLogoHtml; ?>
         		</a>
