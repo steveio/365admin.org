@@ -274,7 +274,6 @@ if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
 { ?>
 <div class="row my-3">
 	<h2>Related Opportunities</h2>
-	<div class="row my-3">
 	<?php 
 	foreach($aRelatedProfile as $oProfile) 
 	{
@@ -283,7 +282,6 @@ if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
        $oTemplate->LoadTemplate("profile_summary.php");
        print $oTemplate->Render();
     } ?>
-	</div>
 </div><?
 }
 ?>

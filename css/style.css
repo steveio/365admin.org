@@ -150,8 +150,13 @@ ul, ol {
     margin-left 0;
 }
 
-ul ul {
-    margin-bottom: 20px;
+ul {
+    margin-bottom: 10px;
+}
+
+ul .profile-details {
+	list-style-position: inside;
+	margin-left: 4px;
 }
 
 #wrap {

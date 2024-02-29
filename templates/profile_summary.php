@@ -24,16 +24,25 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
     	    $strCompanyLogoHtmlSmall = $oProfile->GetCompanyLogo()->GetHtml('_sm', $oProfile->GetCompUrlName());
     	}
 
-    	if (is_object($oProfile->GetImage(0)) && $oProfile->GetImage(0)->GetHtml("_mf",'')) { ?>
-    		<div class="profile-image">
+    	if (is_object($oProfile->GetImage(0))) // profile has 1 or more image
+    	{ 
+    	    if ($oProfile->GetImage(0)->GetHtml("_lf",'')) // try fetch large fixed-aspect image  
+    	    {
+    	        $img_url = $oProfile->GetImage(0)->GetUrl("_lf");
+    	    } elseif ($oProfile->GetImage(0)->GetHtml("_mf",'')) // older profiles may only have medium size
+    	    {
+    	        $img_url = $oProfile->GetImage(0)->GetUrl("_mf");
+    	    } ?>
+    		<div class="col-12 profile-image">
         		<a title="<?= $oProfile->GetTitle() ?>" href="<?= $sProfileUrl;  ?>" class="">
-				<img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImage(0)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
+				<img class="img-fluid rounded mb-3" src="<?= $img_url;  ?>" alt="<?= $oProfile->GetTitle() ?>" />
         		</a>
         	</div>
         	<div class="brand-overlay">
         		<?= $strCompanyLogoHtmlSmall; ?>
-        	</div>
-    	<? } else {
+        	</div><?
+
+        } else { // no images, display company profile logo
         	if (strlen($strCompanyLogoHtml) > 1) {
         	?>
         	<div style="min-height: 190px;">
@@ -57,7 +66,7 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
             </div><?
             } ?>
 
-        	<ul class="small">
+        	<ul class="profile-details small">
         	<? if ($oProfile->GetGeneralType() == PROFILE_PLACEMENT) { ?>
         		<li><?= $oProfile->GetCompanyName(); ?></li>
         	<? } ?>
