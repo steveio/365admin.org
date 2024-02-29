@@ -7,6 +7,11 @@
  *
  */
 
+/* retrieve company id from url */
+if (!isset($_REQUEST['q']) || strlen($_REQUEST['q']) < 1)
+{
+  AppError::StopRedirect(BASE_URL,$sMsg = 'Error, invalid enquiry request.');
+}
 
 
 /* define which types of enquiry are available for each profile type */
@@ -17,10 +22,12 @@ $aEnqJob = array(PROFILE_JOB);
 
 
 
-
-$oAffiliateArticle = new Article;
-$oAffiliateArticle->Get($_CONFIG['site_id'],"/enquiry-sent-page");
-$oAffiliateArticle->LoadTemplate("article_01.php");
+if ($bProcessed)
+{
+   $oAffiliateArticle = new Article;
+   $oAffiliateArticle->Get($_CONFIG['site_id'],"/enquiry-sent-page");
+   $oAffiliateArticle->LoadTemplate("article_01.php");
+}
 
 
 $oEnquiry = new Enquiry();
@@ -35,8 +42,6 @@ $t = new Template();
  * 
  */
 
-/* retrieve company id from url */
-if (strlen($_REQUEST['q']) < 1) AppError::StopRedirect($sUrl = $_CONFIG['url'],$sMsg = 'Sorry, that was an invalid enquiry request.');	
 
 $sParams = base64_decode($_REQUEST['q']);
 $aBits = explode("::",$sParams);
@@ -53,6 +58,8 @@ if (!is_numeric($oEnquiry->GetLinkId())) AppError::StopRedirect($sUrl = $_CONFIG
 
 
 
+$aResponse = array();
+
 /* retrieve referring profile details */
 $oProfile = ProfileFactory::Get($oEnquiry->GetLinkTo());
 $aProfile = $oProfile->GetById($oEnquiry->GetLinkId());
@@ -68,7 +75,7 @@ if (isset($_POST['submit'])) {
 	$response = array();
 	
 	
-	if ($oEnquiry->Process($_POST,$response)) {
+	if ($oEnquiry->Process($_POST,$aResponse)) {
 		$oEnquiry->GetById($oEnquiry->GetId());
 		$bProcessed = true;
 	}
@@ -122,10 +129,10 @@ print $oHeader->Render();
 
 	<div style="font-size: 1.4em;">
 		<? if ($oEnquiry->GetLinkTo() == PROFILE_PLACEMENT) { ?>
-			<p>Recipient : <a href="<?= $oProfile->GetCompanyProfileUrl(); ?>" class="link_sm" target="_new" title="View Profile" ><?= $oProfile->GetCompanyName(); ?></a></p>
+			<p>To : <a href="<?= $oProfile->GetCompanyProfileUrl(); ?>" class="link_sm" target="_new" title="View Profile" ><?= $oProfile->GetCompanyName(); ?></a></p>
 			<p>Subject : <a href="<?= $oProfile->GetProfileUrl(); ?>" class="link_sm" target="_new" title="View Profile" ><?= $oProfile->GetTitle(); ?></a></p>
 		<? } elseif ($oEnquiry->GetLinkTo() == PROFILE_COMPANY) { ?>
-			<p>Recipient : <a href="<?= $oProfile->GetProfileUrl(); ?>" class="link_sm" target="_new" title="View Profile" ><?= $oProfile->GetTitle(); ?></a></p>
+			<p>To : <a href="<?= $oProfile->GetProfileUrl(); ?>" class="link_sm" target="_new" title="View Profile" ><?= $oProfile->GetTitle(); ?></a></p>
 		<? } ?>
 	</div>
 
@@ -196,11 +203,11 @@ print $oHeader->Render();
 			
 	<div class="row my-2">
 		<div class="col-6">    
-    		<span class="label_col"><label for="title">Group Size / Number of Traveller<span class="red"> *</span></label></span>
+    		<span class="label_col"><label for="title">Group Size / Number of Traveller</label></span>
     		<span class="input_col"><input type="text"  class="form-control" id="grp_size" maxlength="4" name="grp_size" value="<?= $_POST['grp_size']; ?>" /></span>
 		</div>
 		<div class="col-6">
-    		<span class="label_col"><label for="title">Approx Budget<span class="red"> *</span></label></span>
+    		<span class="label_col"><label for="title">Approx Budget</label></span>
     		<span class="input_col">
     			<input type="text" class="form-control" id="budget" maxlength="119" name="budget" value="<?= $_POST['budget']; ?>" />
     			<!-- 
@@ -215,7 +222,7 @@ print $oHeader->Render();
 	</div>
 
 	<div class="col-12 my-2">
-		<span class="label_col"><label for="title">Est. Departure Date<span class="red"> *</span></label></span>
+		<span class="label_col"><label for="title">Est. Departure Date</label></span>
 		<span class="input_col"><? print Date::GetDateInput('Departure',false,true,true); ?></span>
 	</div>
 
@@ -224,6 +231,7 @@ print $oHeader->Render();
 		<span class="input_col"><textarea name="enquiry" class="form-control" rows="6" cols="40"><?= stripslashes($_POST['enquiry']) ?></textarea></span>
 	</div>
 
+	<!--
 	<div class="col-12 my-2">
 		<span class="label_col"><label for="contact_type" style="<?= isset($response['msg']['contact_type']) ? "color: red;" : ""; ?>">How to contact me <span class="red"> *</span></label></span>
 		<span class="input_col">
@@ -234,6 +242,7 @@ print $oHeader->Render();
 			</select>
 		</span>
 	</div>
+	-->
 
 	<!--  END BOOKING ENQUIRY -->
 	</div>

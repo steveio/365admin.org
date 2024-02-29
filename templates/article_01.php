@@ -100,6 +100,8 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
 { 
     $oReviewTemplate = $this->Get('oReviewTemplate');
+    if (is_object($oReviewTemplate)) 
+    {
     ?>
     <div class="row my-3">
     <h2>Comments</h2>
@@ -107,6 +109,7 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
     print $oReviewTemplate->Render();
     ?>
     </div><?
+    }
 }
 ?>
 

@@ -671,10 +671,6 @@ class Enquiry {
 			$aResponse['msg']['email'] = "Email address should be less than 49 chars";
 		}
 
-		if (strlen($a['tel']) > 29) {
-			$aResponse['msg']['tel'] = "Telephone number should be less than 30 chars";
-		}
-
 
 		if ($a['enquiry_type'] == "null") {
 			$aResponse['msg']['enquiry_type'] = "Please specify enquiry type";
@@ -685,25 +681,17 @@ class Enquiry {
 			if (strlen($a['enquiry']) < 1) {
 				$aResponse['msg']['enquiry'] = "Please enter details of your enquiry";
 			}
-			
+		
+			/*	
 			if ((strlen($a['grp_size']) > 4) || (!is_numeric($a['grp_size'])))  {
 				$aResponse['msg']['grp_size'] = "Group size should be numeric and less than 4 characters";
 			}			
 
 			if (strlen($a['budget']) > 119)  {
 				$aResponse['msg']['budget'] = "Budget should be less than 120 chars";
-			}			
+			}
+			*/			
 			
-				
-			if ($a['contact_type'] == "null") {
-				$aResponse['msg']['contact_type'] = "Please specify a prefered contact method";
-			}
-
-			if ($a['contact_type'] == "PHONE") {
-				if (strlen($a['tel']) < 1) {
-					$aResponse['msg']['tel'] = "Please specify a contact telephone number including dialing codes";
-				}
-			}
 				
 		}
 
@@ -753,7 +741,7 @@ class Enquiry {
 		}
 
 
-		if (count($aResponse['msg']) < 1) {
+		if (isset($aResponse['msg']) && count($aResponse['msg']) < 1) {
 			return true;
 		}
 
