@@ -79,16 +79,16 @@ class ContentMapping {
     {
 
         $opts = array();
-        $opts[ARTICLE_DISPLAY_OPT_PLACEMENT] = ($aRow['opt_placement'] == NULL) ? "t" : $aRow['opt_placement'];
-        $opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "t" : $aRow['opt_article'];
-        $opts[ARTICLE_DISPLAY_OPT_BLOG] = ($aRow['opt_blog'] == NULL) ? "t" : $aRow['opt_blog'];
-        $opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "t" : $aRow['opt_profile'];
-        $opts[ARTICLE_DISPLAY_OPT_REVIEW] = ($aRow['opt_review'] == NULL) ? "t" : $aRow['opt_review'];
-        $opts[ARTICLE_DISPLAY_OPT_SOCIAL] = ($aRow['opt_social'] == NULL) ? "t" : $aRow['opt_social'];
+        $opts[ARTICLE_DISPLAY_OPT_PLACEMENT] = ($aRow['opt_placement'] == NULL) ? "f" : $aRow['opt_placement'];
+        $opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "f" : $aRow['opt_article'];
+        $opts[ARTICLE_DISPLAY_OPT_BLOG] = ($aRow['opt_blog'] == NULL) ? "f" : $aRow['opt_blog'];
+        $opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "f" : $aRow['opt_profile'];
+        $opts[ARTICLE_DISPLAY_OPT_REVIEW] = ($aRow['opt_review'] == NULL) ? "f" : $aRow['opt_review'];
+        $opts[ARTICLE_DISPLAY_OPT_SOCIAL] = ($aRow['opt_social'] == NULL) ? "f" : $aRow['opt_social'];
         $opts[ARTICLE_DISPLAY_OPT_PARENT_TABS] = ($aRow['opt_ptab'] == 't') ? 't' : 'f';
         $opts[ARTICLE_DISPLAY_OPT_FEATURED_PROJECT] = ($aRow['opt_fproject'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_ADS] = ($aRow['opt_ads'] == NULL) ? "t" : $aRow['opt_ads'];
-        $opts[ARTICLE_DISPLAY_OPT_IMG] = ($aRow['opt_img'] == NULL) ? "t" : $aRow['opt_img'];
+        $opts[ARTICLE_DISPLAY_OPT_ADS] = ($aRow['opt_ads'] == NULL) ? "f" : $aRow['opt_ads'];
+        $opts[ARTICLE_DISPLAY_OPT_IMG] = ($aRow['opt_img'] == NULL) ? "f" : $aRow['opt_img'];
         $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER] = ($aRow['opt_txtalignh'] == 't') ? 't' : 'f';
         $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY] = ($aRow['opt_txtalignb'] == 't') ? 't' : 'f';
         $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER] = ($aRow['opt_txtalignf'] == 't') ? 't' : 'f';
@@ -101,7 +101,7 @@ class ContentMapping {
         $opts[ARTICLE_DISPLAY_OPT_PINTRO] = stripslashes($aRow['p_intro']);
         $opts[ARTICLE_DISPLAY_OPT_OINTRO] = stripslashes($aRow['o_intro']);
         
-        $opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = $aRow['template_id'];
+        $opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = ($aRow['template_id'] == null) ? CONTENT_DEFAULT_RESULT_TEMPLATE : $aRow['template_id'];
 
         $this->SetOptionsFromArray($opts);
         

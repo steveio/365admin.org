@@ -43,41 +43,29 @@ class RequestRouter {
             $oSession->Save();
             
             Http::Header(404);
-            Http::Redirect("/");            
+            Http::Redirect("/");
 
         } catch (Exception $e)
         {
             Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
             Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getTraceAsString());
-            
-            
-            print_r($e->getMessage());
-            print_r($e->getTraceAsString());
-            die(__FILE__."::".__LINE__);
-            
-            if ($this->strRequestUri == "/".ROUTE_ERROR)
+                        
+            if ($this->strRequestUri == "/".ROUTE_ERROR) // Critical Error - DB unavailable etc
             {
                 $this->HttpRedirect(HEADER_HTTP_500, "/back_soon.php");
                 die();
             } else {
 
-                if (is_object($oSession))
-                {
-                    $oMessage = new Message(MESSAGE_TYPE_ERROR, MESSAGE_TYPE_ERROR, $e->getMessage());
-                    $oSession->SetMessage($oMessage);
-                }
+                $oMessage = new Message(MESSAGE_TYPE_WARNING,0, "ERROR - An error occured.  We have logged the fault.  <a href='/contact'>Contact us</a> for assistance.");
+                $oSession->SetMessage($oMessage);
+                $oSession->Save();
+                
+                Http::Header(500);
+                Http::Redirect("/");
 
-                $this->HttpRedirect(HEADER_HTTP_500, "/".ROUTE_ERROR);
             }
             
         }
-        /*    
-        } catch (InvalidSessionException $e) {  // invalid session / session expired
-            $this->HttpRedirect(HEADER_HTTP_500, "/".ROUTE_ERROR);
-        } catch (Exception $e) { // general exception
-                        
-        }
-        */
     }
     
     public function GetRequestUri($index = null)

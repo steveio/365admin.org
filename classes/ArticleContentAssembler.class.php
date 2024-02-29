@@ -59,7 +59,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
             if ($this->oContentMapping->GetByPath($path))
             {
-                $oTemplateCfg = $this->oTemplateList->GetById($this->oContentMapping->GetTemplateId());
+                $iTemplateId = (is_numeric($this->oContentMapping->GetTemplateId())) ? $this->oContentMapping->GetTemplateId() : CONTENT_DEFAULT_RESULT_TEMPLATE;                
+                $oTemplateCfg = $this->oTemplateList->GetById($iTemplateId);
             }
             
             $this->strTemplatePath = $oTemplateCfg->filename;
@@ -259,4 +260,5 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         
         $this->oSearchResultPanel = $oSearchResultPanel;
     }
+    
 }

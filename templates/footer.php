@@ -48,7 +48,7 @@
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/company/a-z" title="Company A-Z">Company A-Z</a></li>
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/advertising" title="Advertise">Advertise</a></li>
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/press" title="Press">Press</a></li>
-        <li class="nav-item"><a class="nav-link px-2 text-muted" href="/contact-us" title="Contact">Contact</a></li>
+        <li class="nav-item"><a class="nav-link px-2 text-muted" href="/contact" title="Contact">Contact</a></li>
     </ul>
     <p class="text-center text-body-secondary"><?= $this->Get("DESCRIPTION"); ?></p>
 
