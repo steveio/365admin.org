@@ -106,31 +106,8 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 <p class="lead"><strong><?= $oProfile->GetDescShortPlaintext(); ?></strong></p>
 </div>
 
-<?php
-if (is_array($oProfile->GetAllImages()) && count($oProfile->GetAllImages()) >= 1) { ?>
-<div class="profile-image span4 pull-right">
-<ul class="unstyled"><?
-        $i = 0;
-        foreach($oProfile->GetAllImages() as $oImage) {
 
-        // exclude profile body (desc_full) embedded images
-        if (substr_count($oProfile->GetDescLong(),$oImage->GetId()) >= 1)
-        {
-            continue;
-        }
-
-        if ($i++ == 4) break;
-            if (strlen($oImage->GetHtml("_lf","")) > 1) {
-                print "<li style='margin-bottom: 10px;'>".$oImage->GetHtml("_lf","")."</li>";
-            } else {
-                print "<li style='margin-bottom: 10px;'>".$oImage->GetHtml("_mf","")."</li>";
-            }
-	} ?>
-</ul>
-</div><?
-}
-?>
-
+<? include("./templates/profile_images_view.php"); ?>	
 
 <p><?= $oProfile->GetDescLongClean();?></p>
 
