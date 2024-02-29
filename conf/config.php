@@ -9,7 +9,7 @@ error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
 date_default_timezone_set('Europe/London');
 
 // db connection
-$dsn = array("dbhost" => "localhost","dbuser" => "oneworld365_pgsql", "dbpass" => "bra@zi1","dbname" => "oneworld365_20240218","dbport" => "5432");
+$dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "","dbport" => "5432");
 
 
 $solr_config = array(

@@ -19,7 +19,7 @@ function goExternal(url) {
 
 
 function ArticleMapOptions(mid) {
-
+	
 	var prefix = "opt_"+mid;
     var w = [];
     
@@ -32,28 +32,23 @@ function ArticleMapOptions(mid) {
     		w.push(v2);
     	}
     });
-    
-    var radio_prefix_txtalign = "opt_rad_"+mid+"_txtalign";
-    
-    var v = $('input[name=' + radio_prefix_txtalign + ']:radio:checked').val()+'_T';
-	w.push(v);
 
     // get search phrase 
     var q = $("#sphrase_"+mid).val();
     
     // get titles if specified
     var pt = $("#ptitle_"+mid).val();
-    var ot = $("#otitle_"+mid).val();
-    var nt = $("#ntitle_"+mid).val();
     var pi = $("#pintro_"+mid).val();
-    var oi = $("#ointro_"+mid).val();
+
     var tid = $("#opt_"+mid+"_20").val(); // template_id
-    
+    var scid = $("#opt_"+mid+"_25").val(); // search panel cfg
+
     var opts = w.join('::');
 	var url = "/article_opt_ajax.php";
-    var pars = '&mid='+mid+'&opts='+opts+'&q='+q+'&pt='+pt+'&ot='+ot+'&nt='+nt+'&tid='+tid;
-    
-	$.post(url, { mid: mid, opts: opts, q: q, pt: pt, ot: ot, nt: nt, pi: pi, oi: oi, tid: tid }, 
+    var pars = '&mid='+mid+'&opts='+opts+'&q='+q+'&pt='+pt+'&pi='+pi+'&tid='+tid;
+
+
+	$.post(url, { mid: mid, opts: opts, q: q, pt: pt, pi: pi, tid: tid, scid: scid }, 
 		function(data){
 	
 			$('#alert-msg').removeClass('alert-success');

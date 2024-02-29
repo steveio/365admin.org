@@ -38,11 +38,9 @@ $mid = $_POST['mid'];
 $opts = $_POST['opts'];
 $search_keywords = trim($_POST['q']);
 $p_title = trim($_POST['pt']);
-$o_title = trim($_POST['ot']);
-$n_title = trim($_POST['nt']);
 $p_intro = trim($_POST['pi']);
-$o_intro = trim($_POST['oi']);
 $tid = $_POST['tid'];
+$scid = $_POST['scid'];
 
 
 if (!is_numeric($mid)) {
@@ -84,13 +82,11 @@ if (!$result) {
 $aTextFieldOpts = array(
 					"search_keywords" => $search_keywords,
 					"p_title" => $p_title,
-					"o_title" => $o_title,
-					"n_title" => $n_title,
-					"p_intro" => $p_intro,
-					"o_intro" => $o_intro
+					"p_intro" => $p_intro
 					);
 
 $opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = $tid;
+$opts_array[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] = $scid;
 
 $oTemplateList = new TemplateList();
 $oTemplateList->GetFromDB();

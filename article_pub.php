@@ -141,8 +141,6 @@ if (count($oArticle->GetMapping()) >= 1) {
 
     <tr>
       <td colspan="2">
-			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PLACEMENT) == "t") ? "checked" : "" ; ?>
-			Profile Search Results <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_PLACEMENT; ?>" <?= $checked ?> />
 
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_IMG) == "t") ? "checked" : "" ; ?>
 			Intro Article / Image <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_IMG; ?>" <?= $checked ?> />
@@ -196,26 +194,46 @@ if (count($oArticle->GetMapping()) >= 1) {
     <tr>
         <td colspan="2">
 
-      	<div class="row">
+      	<div class="row my-2">
+    		<div class="col-2">
+    			Search Panel:
+    		</div>
+    		<div class="col-2">
+    			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_PANEL) == "t") ? "checked" : "" ; ?>
+    			Display Search Panel <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_SEARCH_PANEL; ?>" <?= $checked ?> />
+
+    		</div>
+    		<div class="col-2">
+    			Search Results:
+				<select id="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_SEARCH_CONFIG; ?>" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_SEARCH_CONFIG; ?>" class="form-select">
+					<option value="<?= ARTICLE_SEARCH_PANEL_ONLY ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_CONFIG) == ARTICLE_SEARCH_PANEL_ONLY) ? "selected" : ""; ?>>Search Panel Only</option>
+					<option value="<?= ARTICLE_SEARCH_URL ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_CONFIG) == ARTICLE_SEARCH_URL) ? "selected" : ""; ?>>Results From URL</option>
+					<option value="<?= ARTICLE_SEARCH_KEYWORDS ?>" <?= ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_CONFIG) == ARTICLE_SEARCH_KEYWORDS) ? "selected" : ""; ?>>Results From Keywords</option>
+				</select>
+    		</div>
+    		<div class="col-4">
+    			Search Keywords <span class="small">(comma seperate)</span>:
+				<input id="sphrase_<?= $oArticleMapping->GetId() ?>" type="text" name="sphrase_<?= $oArticleMapping->GetId() ?>" class="form-control" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD); ?>" maxlength="128" style="width: 300px;" />    		
+    		</div>
+
+    		</div>
+		</div>
+		<div class="row my-2">
     		<div class="col-2">
     			Profile Result Title: 
     		</div>
     		<div class="col-9">
 				<input id="ptitle_<?= $oArticleMapping->GetId() ?>" type="text" class="form-control" name="ptitle_<?= $oArticleMapping->GetId() ?>" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PTITLE); ?>" maxlength="128"  style="width: 300px;" />    		
     		</div>
+		</div>
+		<div class="row my-2">
     		<div class="col-2">
     			Profile Intro Paragraph:
     		</div>
     		<div class="col-9">
 				<textarea id="pintro_<?= $oArticleMapping->GetId() ?>" type="text" name="pintro_<?= $oArticleMapping->GetId() ?>" class="form-control" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PINTRO); ?>" style="width: 300px; height: 60px;" maxlength="512"><?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PINTRO); ?></textarea>    		
     		</div>
-    		<div class="col-2">
-    			Search Result Keywords:
-    		</div>
-    		<div class="col-9">
-				<input id="sphrase_<?= $oArticleMapping->GetId() ?>" type="text" name="sphrase_<?= $oArticleMapping->GetId() ?>" class="form-control" value="<?= $oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD); ?>" maxlength="128" style="width: 300px;" />    		
-    		</div>
-    	</div>
+		</div>
 
     	</td>
 	</tr>

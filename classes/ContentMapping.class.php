@@ -79,7 +79,7 @@ class ContentMapping {
     {
 
         $opts = array();
-        $opts[ARTICLE_DISPLAY_OPT_PLACEMENT] = ($aRow['opt_placement'] == NULL) ? "f" : $aRow['opt_placement'];
+        $opts[ARTICLE_DISPLAY_OPT_SEARCH_PANEL] = ($aRow['opt_placement'] == NULL) ? "f" : $aRow['opt_placement'];
         $opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "f" : $aRow['opt_article'];
         $opts[ARTICLE_DISPLAY_OPT_BLOG] = ($aRow['opt_blog'] == NULL) ? "f" : $aRow['opt_blog'];
         $opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "f" : $aRow['opt_profile'];
@@ -94,14 +94,14 @@ class ContentMapping {
         $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER] = ($aRow['opt_txtalignf'] == 't') ? 't' : 'f';
         $opts[ARTICLE_DISPLAY_OPT_ATTACHED] = ($aRow['opt_attached'] == 't') ? 't' : 'f';
         $opts[ARTICLE_DISPLAY_OPT_PATH] = ($aRow['opt_path'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD] = stripslashes($aRow['search_keywords']);
         $opts[ARTICLE_DISPLAY_OPT_PTITLE] = stripslashes($aRow['p_title']);
         $opts[ARTICLE_DISPLAY_OPT_OTITLE] = stripslashes($aRow['o_title']);
         $opts[ARTICLE_DISPLAY_OPT_NTITLE] = stripslashes($aRow['n_title']);
         $opts[ARTICLE_DISPLAY_OPT_PINTRO] = stripslashes($aRow['p_intro']);
-        $opts[ARTICLE_DISPLAY_OPT_OINTRO] = stripslashes($aRow['o_intro']);
-        
+        $opts[ARTICLE_DISPLAY_OPT_OINTRO] = stripslashes($aRow['o_intro']);        
         $opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = ($aRow['template_id'] == null) ? CONTENT_DEFAULT_RESULT_TEMPLATE : $aRow['template_id'];
+        $opts[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] = ($aRow['sc_id'] == null) ? ARTICLE_SEARCH_URL : $aRow['sc_id'];
+        $opts[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD] = stripslashes($aRow['search_keywords']);
 
         $this->SetOptionsFromArray($opts);
         
@@ -223,37 +223,32 @@ class ContentMapping {
                                                 opt_social,
 												search_keywords,
 												p_title,
-												o_title,
-												n_title,
 												p_intro,
-												o_intro,
                                                 opt_ads,
                                                 opt_img,
                                                 template_id,
+                                                sc_id,
                                                 opt_path,
                                                 opt_attached,
                                                 opt_blog
 											 ) VALUES (
 												".$mid.",
-												'".$opts_array[ARTICLE_DISPLAY_OPT_PLACEMENT]."',
+												'".$opts_array[ARTICLE_DISPLAY_OPT_SEARCH_PANEL]."',
 												'".$opts_array[ARTICLE_DISPLAY_OPT_ARTICLE]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_PROFILE]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_REVIEW]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_SOCIAL]."',
 												'".$search_keywords."',
 												'".$p_title."',
-												'".$o_title."',
-												'".$n_title."',
 												'".$p_intro."',
-												'".$o_intro."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_ADS]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_IMG]."',
                                                 ".$opts_array[ARTICLE_DISPLAY_OPT_TEMPLATE_ID].",
+                                                ".$opts_array[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG].",
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_PATH]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_ATTACHED]."',
                                                 '".$opts_array[ARTICLE_DISPLAY_OPT_BLOG]."'
 											 );";
-        
 
         $db->query($sql);
         
@@ -264,9 +259,9 @@ class ContentMapping {
     }
 
 
-    public function GetDisplayOptSearchResult()
+    public function GetDisplayOptSearchPanel()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_PLACEMENT);
+        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_PANEL);
     }
 
     public function GetDisplayOptBlogArticle()

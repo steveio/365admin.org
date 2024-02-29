@@ -234,7 +234,6 @@ $(document).ready(function(){
 				  		facet.divName = 'facet-category';
 					  	break;
 				  	case 'price' :
-				  		// (<a name=\'currency_gbp\'>GBP &pound;</a> | <a name=\'currency_usd\'>USD &dollar;</a> | <a name=\'currency_eur\'>EUR &euro;</a>)
 				  		facet.title = 'Price From';
 				  		facet.divName = 'facet-price';
 				  		facet = mapPriceLabels(facet);

@@ -13,7 +13,6 @@ define("ARTICLE_SEARCH_MODE_EXACT",1);
 
 
 // content type flags to signal what to display in template
-define("ARTICLE_DISPLAY_OPT_PLACEMENT",0);
 define("ARTICLE_DISPLAY_OPT_ORG",1); // @ deprecated
 define("ARTICLE_DISPLAY_OPT_ARTICLE",2);
 define("ARTICLE_DISPLAY_OPT_BLOG",24);
@@ -24,27 +23,37 @@ define("ARTICLE_DISPLAY_OPT_ADS",17);
 define("ARTICLE_DISPLAY_OPT_GADS",18);
 define("ARTICLE_DISPLAY_OPT_IMG",19);
 
-// keywords to drive search results
+// search panel config
+define("ARTICLE_DISPLAY_OPT_SEARCH_PANEL",0);
+define("ARTICLE_DISPLAY_OPT_SEARCH_CONFIG",25);
+// optional keywords to drive search results
 define("ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD",3);
+
 // user define titles for search results, news panels 
 define("ARTICLE_DISPLAY_OPT_PTITLE",4);
+define("ARTICLE_DISPLAY_OPT_PINTRO",8);
+
+// @deprecated
 define("ARTICLE_DISPLAY_OPT_OTITLE",5);
 define("ARTICLE_DISPLAY_OPT_NTITLE",6);
 define("ARTICLE_DISPLAY_OPT_PARENT_TABS",7);
-define("ARTICLE_DISPLAY_OPT_PINTRO",8);
 define("ARTICLE_DISPLAY_OPT_OINTRO",9);
-// whether to show animated featured project
 define("ARTICLE_DISPLAY_OPT_FEATURED_PROJECT",10);
-
-// alignment of article body text { header | middle | footer }
+// @deprecated (alignment of article body text { header | middle | footer }
 define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER",11);
 define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY",12);
 define("ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER",13);
 
+// page template config
 define("ARTICLE_DISPLAY_OPT_TEMPLATE_ID",20);
 define("ARTICLE_DISPLAY_OPT_TEMPLATE_PATH",23);
 define("ARTICLE_DISPLAY_OPT_PATH",21);
 define("ARTICLE_DISPLAY_OPT_ATTACHED",22);
+
+// search panel config
+define("ARTICLE_SEARCH_PANEL_ONLY", 0);
+define("ARTICLE_SEARCH_URL", 1);
+define("ARTICLE_SEARCH_KEYWORDS", 2);
 
 // templates
 define("ARTICLE_TEMPLATE_ARTICLE_DEFAULT",0);

@@ -129,11 +129,11 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             if (count($this->oArticle->GetAttachedArticleId()) >= 1)
             {
                 $this->oArticle->SetAttachedArticle($fetchId = FALSE);
-                $this->aArticle = $this->oArticle->oArticleCollection->Get();
+                $this->aArticle = $this->oArticle->oArticleCollection->Get();                
             }
 
             
-            if ($this->oContentMapping->GetDisplayOptSearchResult())
+            if ($this->oContentMapping->GetDisplayOptSearchPanel())
             {
                 $this->SetSearchResultPanel($this->oContentMapping->GetOptions());
             }
@@ -147,6 +147,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             // fetch blog articles ( manually attached article take precedence )
             if ($this->oContentMapping->GetDisplayOptBlogArticle() && count($this->oArticle->GetAttachedArticleId()) < 1)
             {
+                // @todo - method to drive blog article selection from keyword query
                 $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog");
                 $this->aArticle = $this->aRelatedArticle;
             }
@@ -183,7 +184,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
 
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
-        
+
         $this->oTemplate->Set("aArticle", $this->aArticle);
 
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
@@ -247,13 +248,9 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $oSearchResultPanel->Set("API_URL",API_URL);
         $oSearchResultPanel->Set("URI",$this->oRequestRouter->GetRequestUri());
         $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_PTITLE]);
-        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_OTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_OTITLE]);
         $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PINTRO',$aPageOptions[ARTICLE_DISPLAY_OPT_PINTRO]);
-        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_OINTRO',$aPageOptions[ARTICLE_DISPLAY_OPT_OINTRO]);
-        
-        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PLACEMENT',$aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT]);
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_SEARCH_CONFIG',$aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG]);
         $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD',trim($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]));
-        
         $oSearchResultPanel->Set('HIDE_FILTERS',false);
 
         $oSearchResultPanel->LoadTemplate('search_result.php');

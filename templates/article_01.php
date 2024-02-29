@@ -3,6 +3,8 @@
 $oArticle = $this->Get('oArticle');
 $aPageOptions = $this->Get('aPageOptions');
 
+$aArticle = $this->Get('aArticle');
+
 $aAttachedArticle = $this->Get('aAttachedArticle');
 $aRelatedProfile = $this->Get('aRelatedProfile');
 $aRelatedArticle = $this->Get('aRelatedArticle');
@@ -13,10 +15,10 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 <?php if ($aPageOptions[ARTICLE_DISPLAY_OPT_ADS] != "f") { ?>
 <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
- //(adsbygoogle = window.adsbygoogle || []).push({
- //     google_ad_client: "ca-pub-9874604497476880",
- //     enable_page_level_ads: true
- //});
+ (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-9874604497476880",
+      enable_page_level_ads: true
+ });
 </script> 
 <?php  } ?>
 
@@ -59,7 +61,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	</div>
 
       <?
-        if ($aPageOptions[ARTICLE_DISPLAY_OPT_PLACEMENT] != "f") {
+        if ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_PANEL] != "f") {
             $oSearchResultPanel = $this->Get('oSearchResult');
             if (is_object($oSearchResultPanel))
             {
@@ -71,6 +73,57 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	<div class="article-body my-3">
     	<p><?= $oArticle->GetDescLongClean();?></p>
     	</div>
+ 
+     	<?
+     	if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "t") {
+            if (is_array($aArticle))
+        	{ ?>
+                <!-- BEGIN articles -->
+                <div class="row">
+        		   <div class="col-sm-12 col-md-8 col-lg-8"><?
+        	        $limit = 5;
+        	        for ($i=0;$i<$limit;$i++) {
+                        $oArticle = array_shift($aArticle);
+                    	if (!is_object($oArticle)) continue;
+                        $oArticle->SetAttachedImages(); ?>
+                        <div class="row my-3" style="">
+                            <? if (is_object($oArticle->GetImage(0))) { ?>
+                            <div class="">
+                              <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
+                                    <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
+                              </a>
+                             </div><? } ?>
+        
+                            <div class="col-8 my-2">
+                            <h2><a href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
+                            <p><?= $oArticle->GetDescShort(160); ?></p>
+                            </div>
+                        </div><?
+                    } ?>
+                    </div>
+        
+        		   <div class="col-sm-12 col-md-3 col-lg-3 float-sm-none float-md-end float-lg-end"><?
+        	        $limit = 7;
+        	        for ($i=0;$i<$limit;$i++) { 
+                        $oArticle = array_shift($aArticle);
+                    	if (!is_object($oArticle)) continue;
+                        $oArticle->SetAttachedImages(); ?>
+                        <div class="row my-3">                                
+                            <? if (is_object($oArticle->GetImage(0))) { ?>
+                            <div>
+                              <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
+                                    <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
+                              </a>
+                             </div><? } ?>
+                            <div class="my-2"></div>
+                            <h2><a href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
+                            <p><?= $oArticle->GetDescShort(160); ?></p>
+                        </div><?
+                    } ?>
+                    </div>
+                </div><? 
+        	} 
+     	} ?>
     
     </div>
 </div>
