@@ -239,7 +239,12 @@ try {
     }
     
     set_exception_handler('exception_handler');
-    
+
+    // Cache deployed for all website (non-admin system) HTML pages
+    if (!is_numeric($oAuth->oUser->id)) {
+        include(BASE_PATH."/scripts/cache/cache.php");
+    }
+
 } catch (Exception $e) {
     print_r($e);
     die();

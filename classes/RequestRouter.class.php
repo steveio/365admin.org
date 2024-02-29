@@ -31,9 +31,9 @@ class RequestRouter {
         global $oSession;
 
         try {            
-            
+
             $this->SetRequestUri($aRequestUri);
-            $this->RouteMapMVC();                        
+            $this->RouteMapMVC();
             $this->RouteMapStatic();            
 
         } catch (NotFoundException $e) {  // 404 not found error
@@ -159,15 +159,6 @@ class RequestRouter {
                 $callback = $this->aStaticCallback[$this->GetRequestUri(1)];
             }
 
-            /*
-            print_r("<pre>");
-            print_r($this);
-            print_r($script);
-            print_r($callback);
-            print_r("</pre>");
-            die();
-            */
-
             if (strlen($script) >= 1) // matched static url -> php script route
             {
                 $this->processInclude($script);
@@ -263,7 +254,6 @@ class RequestRouter {
                 {
                     die();
                 }
-
             }
 
         } catch (Exception $e)
@@ -274,7 +264,6 @@ class RequestRouter {
 
     public function GetPageTypeFromUri()
     {
-        
         switch(true)
         {
             case $this->isCategory($this->GetRequestUri(1)) :
@@ -330,6 +319,9 @@ class RequestRouter {
 
     protected function ProcessCompanyPageRequest()
     {
+   
+        global $db, $oHeader, $oFooter;
+
         // Placement request /company/<comp-name>/<placement-name>
         if ((isset( $this->aRequestUri[3]) && 
                     $this->aRequestUri[3] != "") 
@@ -342,9 +334,13 @@ class RequestRouter {
         // Company AZ request /company/a-z/<letter>
         if ((isset($this->aRequestUri[2]) && $this->aRequestUri[2] != "") && ($this->aRequestUri[2] == "a-z")) 
         {
-            $oContentAssembler = new CompanyProfileContentAssembler();
-            $oContentAssembler->SetRequestRouter($this);
-            $oContentAssembler->ProcessCompanyAZPageRequest();
+            if ($this->aRequestUri[3] != "" && preg_match('/^[a-z]/',$this->aRequestUri[3])) {
+                $_REQUEST['letter'] = $this->aRequestUri[3];
+            } else {
+                $_REQUEST['letter'] = "a";
+            }
+            
+            require_once("./company_az.php");
             die();
         }
 

@@ -1,11 +1,5 @@
 <?
 
-// Cache deployed for all website (non-admin system) HTML pages  
-if (!is_numeric($oAuth->oUser->id)) {
-    include(BASE_PATH."/scripts/cache/cache.php");
-}
-
-
 
 $oHeader = new Header();
 
@@ -73,7 +67,6 @@ $oHeader->SetNav('TOP_NAV', $oNav);
 
 
 $oHeader->LoadTemplate("header_xhtml_std.php");
-
 
 
 ?>

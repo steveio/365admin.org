@@ -51,7 +51,7 @@ class CompanyProfileController extends ProfileController {
 	public function Process() {
 
 		global $oSession;
-
+		
 		if (!$this->SetMode()) // determine request type ( VIEW || ADD || EDIT )
 		{
 		    $this->bPassThrough = true;		    
@@ -108,7 +108,13 @@ class CompanyProfileController extends ProfileController {
 
 		if ($this->aRequestArray[1] != ROUTE_COMPANY) throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$$this->aRequestArray));
 
-		// Non MVC handled request URL - view/edit placement, company A-Z... return to RequestRouter
+		if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
+		    ($this->aRequestArray[2]) == "a-z")
+		{
+		    return false;
+		}
+
+		// Non MVC handled request URL - view/edit placement return to RequestRouter
 		if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
 		    (strlen($this->aRequestArray[2]) > 1) &&
 		    (strlen($this->aRequestArray[3]) > 1) &&
