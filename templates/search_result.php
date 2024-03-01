@@ -40,7 +40,7 @@
 	<?php } ?>
 	</div>
 		
-    <div id="profiles" class="col-12">
+    <div id="profiles" class="col-12 my-3">
     	<div class="my-3">
     		<h2><?= $this->Get('ARTICLE_DISPLAY_OPT_PTITLE'); ?></h2>
     		<p class='lead'><?= $this->Get('ARTICLE_DISPLAY_OPT_PINTRO'); ?></p>

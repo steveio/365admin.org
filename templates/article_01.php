@@ -78,7 +78,8 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
      	if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "t") {
             if (is_array($aArticle))
         	{ ?>
-                <div class="row">
+                <div class="row my-3">
+		<h3>Related Articles</h3>
         	    <div class="col-sm-12 col-md-8 col-lg-8"><?
         	        $limit = 5;
         	        for ($i=0;$i<$limit;$i++) {
