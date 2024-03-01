@@ -25,7 +25,7 @@
         if (count($arrImage) > $iDisplay +1) { ?>
         
 			<div id="image-viewall-lnk" class="float-end">
-				<a href="#" id="image-viewall" class="btn btn-primary rounded-pill px-3" id="profile-list-viewall">View All Images</a>
+				<a href="#" id="image-viewall" class="btn btn-primary rounded-pill px-3">View All Images</a>
 			</div>
 
             <div id="image-all" class="col-12 hide"><?php

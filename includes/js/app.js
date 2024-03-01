@@ -212,7 +212,7 @@ $(document).ready(function(){
 
 		if (json.rows != 0)
 		{
-			processProfileHTML(json.data.profile.html);
+			processProfileHTML(json.data.profile);
 			//processProfileData(json.data.profile,json.profileType);
 	
 			$.each(json.data.profile, function(idx,profile) {
@@ -408,8 +408,13 @@ $(document).ready(function(){
 			
 	}
 
-	function processProfileHTML(profileHTML) {
-		$('#search-result').html(profileHTML);
+	function processProfileHTML(data) {
+		$('#search-result-b1').html(data.b1);
+		$('#search-result-b2').html(data.b2);
+		
+		$('#search-result-b2').hide();
+		$('#pager').hide();
+		$('#search-viewall-lnk').show();
 	}
 
 	/*
@@ -531,4 +536,5 @@ $(document).ready(function(){
 				
 	doSearch(fqSet);
 
+	$('#search-viewall-lnk').hide();
 });

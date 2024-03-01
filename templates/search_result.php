@@ -47,12 +47,26 @@
     	</div>
 	    <div id="result-hdr"></div>
 	    <div class="col-12">
-			<div id="search-result" class="row">
-		</div>
+			<div id="search-result-b1" class="row"></div>
+			<div id="search-viewall-lnk" class="">
+				<a href="#" id="search-viewall" class="btn btn-primary rounded-pill px-3">View All Results</a>
+			</div>
+			<div id="search-result-b2" class="row"></div>
 		</div>
 		<div id="pager" class="col-12 pagination pagination-large pagination-centered page-links"></div>
 	</div>
 
+    <script>
+	$(document).ready(function(){ 
+		$('#search-viewall').click(function(e) {
+		   e.preventDefault();
+	       $('#search-result-b2').show();
+	       $('#pager').show();
+	       $('#search-viewall-lnk').hide();
+	       return false;
+		});
+	}); 
+    </script>
 
 
     </div>
