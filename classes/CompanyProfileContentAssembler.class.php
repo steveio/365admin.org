@@ -103,7 +103,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
     /* get placements associated with this company */
     public function GetPlacements()
     {
-        $this->aPlacement = PlacementProfile::GetRelatedById($this->oProfile->GetCompanyId(),"company_id");
+        $this->aPlacement = PlacementProfile::GetPlacementById($this->oProfile->GetCompanyId(),"company_id");
     }
 
     public function GetEnquiryButtonHtml()

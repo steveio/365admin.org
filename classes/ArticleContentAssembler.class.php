@@ -235,22 +235,41 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             if (is_numeric($oSolrSearchPanelSearch->getDurationToId)) {
                 $oSearchResultPanel->Set("FACET_DURATION_FROM",$oSolrSearchPanelSearch->getFilterAsCheckbox('activity'));
             }
-            
-            
+
             /*
              $oSearchResultPanel->Set("FACET_COUNTRY",$sUri);
-             $oSearchResultPanel->Set("FACET_CONTINENT",$sUri);
-             
+             $oSearchResultPanel->Set("FACET_CONTINENT",$sUri);             
              */
         }
 
+        $strQuery = '';
+        $strProfileType = "(1 OR 0)"; // default: return company & placement profiles
+
+        
+
+        if ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] == ARTICLE_SEARCH_KEYWORDS)
+        {
+            $strQuery = $this->ProcessSearchKeywords($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]);
+            $iSearchType = 1;
+        } elseif ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] == ARTICLE_SEARCH_URL) {
+            // search query from URI eg /volunteer-with-animals 
+            $strQuery = $this->oRequestRouter->GetRequestUri();
+            $iSearchType = 1;
+        } else { // SEARCH_PANEL_ONLY (facet query, no results)
+            $strQuery = (strlen($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]) > 1) ? $this->ProcessSearchKeywords($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]) : "";
+            $iSearchType = 0;
+        }
+
+        $iRows = 24;
+
         $oSearchResultPanel = new Layout();
         $oSearchResultPanel->Set("API_URL",API_URL);
-        $oSearchResultPanel->Set("URI",$this->oRequestRouter->GetRequestUri());
+        $oSearchResultPanel->Set("SEARCH_QUERY",$strQuery);
+        $oSearchResultPanel->Set("SEARCH_TYPE",$iSearchType);
+        $oSearchResultPanel->Set("SEARCH_PROFILE_TYPE",$strProfileType);
+        $oSearchResultPanel->Set("SEARCH_ROWS",$iRows);
         $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_PTITLE]);
         $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PINTRO',$aPageOptions[ARTICLE_DISPLAY_OPT_PINTRO]);
-        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_SEARCH_CONFIG',$aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG]);
-        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD',trim($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]));
         $oSearchResultPanel->Set('HIDE_FILTERS',false);
 
         $oSearchResultPanel->LoadTemplate('search_result.php');
@@ -258,4 +277,15 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oSearchResultPanel = $oSearchResultPanel;
     }
     
+    private function ProcessSearchKeywords($keywords)
+    {
+        // search query from keywords (specified in article publisher)
+        $aBits = explode(",",trim($keywords));
+        $aQuery = array();
+        foreach($aBits as $str)
+        {
+            $aQuery[] = trim(preg_replace("/ /","-", $str));
+        }
+        return implode("",$aQuery);
+    }
 }

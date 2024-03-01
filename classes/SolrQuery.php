@@ -286,7 +286,6 @@ class SolrQuery {
 		// setup keyword query string
 		$this->query = SolrSearch::SolrQueryCharSafe(implode(" ",$arrProcessedKeywords));
 		$this->query = $this->filterQueryKeywords($this->query);
-
 	}
 
 	/**

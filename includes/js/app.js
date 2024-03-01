@@ -31,20 +31,17 @@ $(document).ready(function(){
 
 		fq = fq+'&start='+start;
 
-		if (typeof rows == 'undefined') {
-			var rows = 24;
-		}
+		var st = $('#search-type').val();
 
 		fq = fq+'&rows='+rows;
-		
-		var profileType = $('input[name=search_type]').val();
+
+		var profileType = $('input[name=profile_type]').val();
 		fq = fq+'&fq0=profile_type:'+profileType;
-		
+
 		// query origin
 		var o = $('#query-origin').val();
 		fq = fq+'&o='+o;
-		
-		
+
 		// append filter queries
 		if (typeof fqSet !== 'undefined' && fqSet.length > 0) {
 			for(i=0;i<fqSet.length;i++) {
@@ -54,9 +51,12 @@ $(document).ready(function(){
 			}
 		}
 
+		var st = $('#search-type').val();
+		
 		rt = "HTML"; // return data type
 
-		fq = fq+'&rt='+rt;
+		fq = fq+'&rt='+rt+'&st='+st;
+
 		var apiUrl = $('#api-url').val()+"/search";
 		
 		$.ajax({
@@ -80,30 +80,47 @@ $(document).ready(function(){
  		$('#result-hdr').html('<h4 style="color: red;">Sorry, an error occured and it was not possible to run your search.  Please try again later or email admin@oneworld365.org.</h4>');
 	}
 	
-	function doSearch(fqSet,start,rows) {
+	function doSearch(fqSet,start,rows) 
+	{
 
-		var url = $('#search-query').val();
+		var searchQuery = $('#search-query').val();
+
+		var url = searchQuery;
 		
 		if (typeof url == "undefined")
 		{
-			return false;
+			url = "*";
+		} else {
+			if (url.substring(0, 2) == "q=") {
+				url = "/?"+url;
+			} else if (url.indexOf("/") !== 0) {
+				url = "/"+url+'?';
+			} else {
+				url = url+'?';	
+			}			
 		}
 		
 		if ($('#text-fltr').val() != undefined && $('#text-fltr').val().length > 1) {
 			url = url +'/'+ $('#text-fltr').val();
+		}		
+
+		var st = $('#search-type').val();
+
+		if (typeof rows == 'undefined')
+		{
+			if (st == 0) // display search panel only, facet query search (unless keywords supplied)
+			{
+				if (searchQuery.length > 1)
+				{
+					var rows = $('#search-rows').val();
+				} else {
+					var rows = 0;
+				}
+			} else {
+				var rows = $('#search-rows').val();		
+			}
 		}
-		
-		if (url.length == 0) return false;
-		
-		if (url.substring(0, 2) == "q=") {
-			url = "/?"+url;
-		} else if (url.indexOf("/") !== 0) {
-			url = "/"+url+'?';
-		} else {
-			url = url+'?';	
-		}
-		
-		
+
 		rf = $('#refine-search-panel').is(':visible') ? 1 : 0;
 		$('#refine-search-panel').hide();
 		
@@ -118,16 +135,18 @@ $(document).ready(function(){
 		});
 		$('#facets-all').hide();
 		
-		getProfileData(url,fqSet,start,rows);
-	
+		getProfileData(url,fqSet,start,rows);	
 	}
 
 	function refineSearch(el) {
 
 		var fqSet = [];		
 		var fqSet = getFiltersFromSelect();
-		
-		doSearch(fqSet);
+
+		var start;
+		var rows = $('#search-rows').val();
+
+		doSearch(fqSet, start, rows);
 	}
 
 	
@@ -196,22 +215,24 @@ $(document).ready(function(){
 			}
 		}
 
-		processProfileHTML(json.data.profile.html);
-		
-		//processProfileData(json.data.profile,json.profileType);
-
-		$.each(json.data.profile, function(idx,profile) {
-			if (!profile.review_rating !== null)
-			{
-				$("#rateYo-"+profile.id).rateYo({
-					 rating: profile.review_rating,
-					 starWidth: "16px",
-					 fullStar: true,
-					 readOnly: true
-				});
-			}
-		});
-		
+		if (json.rows != 0)
+		{
+			processProfileHTML(json.data.profile.html);
+			//processProfileData(json.data.profile,json.profileType);
+	
+			$.each(json.data.profile, function(idx,profile) {
+				if (!profile.review_rating !== null)
+				{
+					$("#rateYo-"+profile.id).rateYo({
+						 rating: profile.review_rating,
+						 starWidth: "16px",
+						 fullStar: true,
+						 readOnly: true
+					});
+				}
+			});
+		}
+	
 		if (typeof(json.data.facet) != "undefined") {
 
 			$.each(json.data.facet, function(name,facet) {
@@ -274,7 +295,10 @@ $(document).ready(function(){
 
 		}
 
-        $('#result-hdr').append('<h4>Found '+json.total_results+' Results ('+json.pageNum+' of '+json.totalPages+')</h4>');
+		if (json.rows != 0)
+		{
+			$('#result-hdr').append('<h4>'+json.total_results+' Results ('+json.pageNum+' of '+json.totalPages+')</h4>');
+		}
 
         $('#refine-search-panel').show();
 
@@ -397,8 +421,6 @@ $(document).ready(function(){
 	 * @deprecated - rendering HTML template server side
 	 */
 	function processProfileData(profileData,profileType) {
-
-		console.log(profileType);
 		
 		// profile data -----------------------------------------
 		var ProfileSummary = Backbone.Model.extend({
@@ -469,11 +491,6 @@ $(document).ready(function(){
 	
 	}
 
-	function go(url) {
-        window.location = url;
-	}
-		
-
 	$('#facet-clear').click(function(e) {
 		e.preventDefault();
 	
@@ -494,7 +511,7 @@ $(document).ready(function(){
 		$('#facets-all').toggle();	
 	});
 	
-	$('#search-btn').click(function() {
+	$('#do-search').click(function() {
 		doSearch();
 	});
 
@@ -505,8 +522,6 @@ $(document).ready(function(){
 		doSearch(fqSet);
 
 	});
-	
-	
 
 	$('input[name=search_type]').change(function() {
 		var fqSet = [];		
@@ -515,7 +530,6 @@ $(document).ready(function(){
 		doSearch(fqSet);
 	
 	});
-
 
 	var fqSet = [];		
 	var fqSet = getFiltersFromSelect();
