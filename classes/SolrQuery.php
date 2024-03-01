@@ -252,7 +252,7 @@ class SolrQuery {
 		$arrProcessedKeywords = array();
 
         // URI segment terms to exclude from search query eg /search/travel/<country>
-		$arrKeywordException = array("search","travel");
+		$arrKeywordException = array("search");
 
 		foreach($aRequestUri as $strKeyword)
 		{
