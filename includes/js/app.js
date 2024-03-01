@@ -108,14 +108,9 @@ $(document).ready(function(){
 
 		if (typeof rows == 'undefined')
 		{
-			if (st == 0) // display search panel only, facet query search (unless keywords supplied)
+			if (st == 0) // display search panel & facet counts, no results
 			{
-				if (searchQuery.length > 1)
-				{
-					var rows = $('#search-rows').val();
-				} else {
-					var rows = 0;
-				}
+				var rows = 0;
 			} else {
 				var rows = $('#search-rows').val();		
 			}

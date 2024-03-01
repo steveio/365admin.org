@@ -258,14 +258,15 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
         if ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] == ARTICLE_SEARCH_KEYWORDS)
         {
+            // search query from keywords
             $strQuery = $this->oContentMapping->GetSearchKeywords();
             $iSearchType = 1;
         } elseif ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] == ARTICLE_SEARCH_URL) {
             // search query from URI eg /volunteer-with-animals 
             $strQuery = $this->oRequestRouter->GetRequestUri();
             $iSearchType = 1;
-        } else { // SEARCH_PANEL_ONLY (facet query, no results)
-            $strQuery = (strlen($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]) > 1) ? $this->oContentMapping->GetSearchKeywords() : "";
+        } else { // SEARCH_PANEL_ONLY (facet counts (for query on URI / Keywords), no results displayed)
+            $strQuery = (strlen($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]) > 1) ? $this->oContentMapping->GetSearchKeywords() : $this->oRequestRouter->GetRequestUri();
             $iSearchType = 0;
         }
 
