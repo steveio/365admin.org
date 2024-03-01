@@ -53,18 +53,15 @@ $(document).ready(function(){
 <div class="container">
  
 <div class="row">
-	<div class="col-8">
-		<div class="col-4">
+    <div class="col-8">
+	<div class="col-lg-4 col-sm-12">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
           <img src="<?= $this->Get("LOGO_URL"); ?>" alt="<?= $this->Get("TITLE"); ?>" border="0" />
         </a>
         </div>
 
     	<? if (!$oAuth->IsValidUser()) { ?>
-		<div class="col-8">
-            <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
-        </div>
-        <div class="col-8 adbanner_mob">
+        <div class="col-lg-8 col-sm-12 adbanner_mob">
             <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
             <!-- Mobile Banner -->
             <ins class="adsbygoogle"
