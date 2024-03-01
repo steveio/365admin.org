@@ -301,6 +301,26 @@ class ContentMapping {
         return $this->GetOptionById(ARTICLE_DISPLAY_OPT_IMG);
     }
         
+    public function GetSearchKeywords()
+    {
+        if (strlen($this->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD)) > 1)
+        {
+            return $this->ProcessSearchKeywords($this->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD));
+        }
+    }
+        
+    private function ProcessSearchKeywords($keywords)
+    {
+        // search query from keywords (specified in article publisher)
+        $aBits = explode(",",trim($keywords));
+        $aQuery = array();
+        foreach($aBits as $str)
+        {
+            $aQuery[] = trim(preg_replace("/ /","-", $str));
+        }
+        return implode("",$aQuery);
+    }
+    
 }
 
 

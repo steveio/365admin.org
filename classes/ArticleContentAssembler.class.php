@@ -144,12 +144,22 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
             }
 
-            // fetch blog articles ( manually attached article take precedence )
+            // fetch related blog articles ( there are 0 attached articles )
             if ($this->oContentMapping->GetDisplayOptBlogArticle() && count($this->oArticle->GetAttachedArticleId()) < 1)
             {
-                // @todo - method to drive blog article selection from keyword query
-                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog");
-                $this->aArticle = $this->aRelatedArticle;
+                // search keywords specified, fetch blog articles related to these 
+                if (strlen($this->oContentMapping->GetSearchKeywords()) > 1)
+                {
+                    $strQuery = $this->oContentMapping->GetSearchKeywords();
+                    
+                    $this->SolrQuery($strQuery, $profile_type = 2, $rows = 25, $start = 0);
+                    $this->aArticle = $this->aRelatedArticle;
+
+                } else {
+                    // Default: Fetch articles via SOLR MLT 
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog");
+                    $this->aArticle = $this->aRelatedArticle;
+                }
             }
 
             if ($this->oContentMapping->GetDisplayOptRelatedArticle())
@@ -244,19 +254,18 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
         $strQuery = '';
         $strProfileType = "(1 OR 0)"; // default: return company & placement profiles
-
         
 
         if ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] == ARTICLE_SEARCH_KEYWORDS)
         {
-            $strQuery = $this->ProcessSearchKeywords($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]);
+            $strQuery = $this->oContentMapping->GetSearchKeywords();
             $iSearchType = 1;
         } elseif ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] == ARTICLE_SEARCH_URL) {
             // search query from URI eg /volunteer-with-animals 
             $strQuery = $this->oRequestRouter->GetRequestUri();
             $iSearchType = 1;
         } else { // SEARCH_PANEL_ONLY (facet query, no results)
-            $strQuery = (strlen($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]) > 1) ? $this->ProcessSearchKeywords($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]) : "";
+            $strQuery = (strlen($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD]) > 1) ? $this->oContentMapping->GetSearchKeywords() : "";
             $iSearchType = 0;
         }
 
@@ -277,15 +286,4 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oSearchResultPanel = $oSearchResultPanel;
     }
     
-    private function ProcessSearchKeywords($keywords)
-    {
-        // search query from keywords (specified in article publisher)
-        $aBits = explode(",",trim($keywords));
-        $aQuery = array();
-        foreach($aBits as $str)
-        {
-            $aQuery[] = trim(preg_replace("/ /","-", $str));
-        }
-        return implode("",$aQuery);
-    }
 }
