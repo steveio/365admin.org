@@ -10,11 +10,11 @@ $bHideDescShort = $this->Get("bHideDescShort");
 
 <div class="col-sm-12 col-md-4 col-lg-4 my-2">
     <? if (is_object($oArticle->GetImage(0))) { ?>
-	<div class="my-3">
+	<div class="sol-sm-12 my-3">
         <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
-            <?= $oArticle->GetImage(0)->GetHtml("_mf",$oArticle->GetTitle()); ?>
+            <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
         </a>
-    </div>
+        </div>
     <? } else { 
         $html = $oArticle->GetDescFull();
         $aImgUrl = array();
@@ -26,7 +26,7 @@ $bHideDescShort = $this->Get("bHideDescShort");
         }
     } ?>
 
-	<div class="col-8">
+	<div class="col-sm-12 col-lg-8 col-md-8">
         <h3><a class="title-summary" href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h3>
         <? if (!$bHideDescShort) { ?>
         <p class=""><?= $oArticle->GetDescShortPlaintext(120); ?></p>

@@ -78,48 +78,27 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
      	if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "t") {
             if (is_array($aArticle))
         	{ ?>
-                <!-- BEGIN articles -->
                 <div class="row">
-        		   <div class="col-sm-12 col-md-8 col-lg-8"><?
+        	    <div class="col-sm-12 col-md-8 col-lg-8"><?
         	        $limit = 5;
         	        for ($i=0;$i<$limit;$i++) {
-                        $oArticle = array_shift($aArticle);
-                    	if (!is_object($oArticle)) continue;
-                        $oArticle->SetAttachedImages(); ?>
-                        <div class="row my-3" style="">
-                            <? if (is_object($oArticle->GetImage(0))) { ?>
-                            <div class="">
-                              <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
-                                    <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
-                              </a>
-                             </div><? } ?>
-        
-                            <div class="col-8 my-2">
-                            <h2><a href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
-                            <p><?= $oArticle->GetDescShort(160); ?></p>
-                            </div>
-                        </div><?
-                    } ?>
+                          $oArticle = array_shift($aArticle);
+                    	  if (!is_object($oArticle)) continue;
+                          $oArticle->SetAttachedImages(); 
+			  $oArticle->LoadTemplate("article_summary.php"); 
+			  print $oArticle->Render();
+                        } ?>
                     </div>
         
-        		   <div class="col-sm-12 col-md-3 col-lg-3 float-sm-none float-md-end float-lg-end"><?
+        	   <div class="col-sm-12 col-md-3 col-lg-3 float-sm-none float-md-end float-lg-end"><?
         	        $limit = 7;
         	        for ($i=0;$i<$limit;$i++) { 
-                        $oArticle = array_shift($aArticle);
-                    	if (!is_object($oArticle)) continue;
-                        $oArticle->SetAttachedImages(); ?>
-                        <div class="row my-3">                                
-                            <? if (is_object($oArticle->GetImage(0))) { ?>
-                            <div>
-                              <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
-                                    <?= $oArticle->GetImage(0)->GetHtml("",$oArticle->GetTitle()); ?>
-                              </a>
-                             </div><? } ?>
-                            <div class="my-2"></div>
-                            <h2><a href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h2>
-                            <p><?= $oArticle->GetDescShort(160); ?></p>
-                        </div><?
-                    } ?>
+                          $oArticle = array_shift($aArticle);
+                    	  if (!is_object($oArticle)) continue;
+                          $oArticle->SetAttachedImages(); 
+			  $oArticle->LoadTemplate("article_summary.php");
+			  print $oArticle->Render();
+                        } ?>
                     </div>
                 </div><? 
         	} 
