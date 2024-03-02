@@ -414,6 +414,7 @@ $(document).ready(function(){
 		
 		$('#search-result-b2').addClass("d-sm-none d-md-inline-flex");
 		$('#pager').addClass("d-sm-none d-md-inline-flex");
+		$('#search-viewall-lnk').removeClass("d-sm-none");
 		$('#search-viewall-lnk').addClass("d-sm-inline-flex d-md-none");
 		
 
