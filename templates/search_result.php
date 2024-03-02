@@ -63,7 +63,9 @@
 
             $('#search-result-b2').removeClass("d-sm-none");
             $('#pager').removeClass("d-sm-none");
-            $('#search-viewall-lnk').addClass("d-sm-none");
+
+    		$('#search-result-b2').addClass("d-sm-inline-flex");
+    		$('#pager').addClass("d-sm-inline-flex");
 
             return false;
 		});
