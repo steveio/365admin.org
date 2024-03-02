@@ -412,9 +412,13 @@ $(document).ready(function(){
 		$('#search-result-b1').html(data.b1);
 		$('#search-result-b2').html(data.b2);
 		
-		$('#search-result-b2').hide();
-		$('#pager').hide();
-		$('#search-viewall-lnk').show();
+		$('#search-result-b2').addClass("d-sm-none d-md-inline-flex");
+		$('#pager').addClass("d-sm-none d-md-inline-flex");
+		$('#search-viewall-lnk').addClass("d-sm-inline-flex d-md-none");
+		
+
+		//$('#pager').addClass("d-lg-block d-sm-none");
+		//$('#search-viewall-lnk').addClass("d-lg-block d-sm-none");
 	}
 
 	/*
@@ -536,5 +540,4 @@ $(document).ready(function(){
 				
 	doSearch(fqSet);
 
-	$('#search-viewall-lnk').hide();
 });

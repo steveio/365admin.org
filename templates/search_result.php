@@ -48,7 +48,7 @@
 	    <div id="result-hdr"></div>
 	    <div class="col-12">
 			<div id="search-result-b1" class="row"></div>
-			<div id="search-viewall-lnk" class="">
+			<div id="search-viewall-lnk" class="row d-sm-none d-md-none">
 				<a href="#" id="search-viewall" class="btn btn-primary rounded-pill px-3">View All Results</a>
 			</div>
 			<div id="search-result-b2" class="row"></div>
@@ -60,9 +60,9 @@
 	$(document).ready(function(){ 
 		$('#search-viewall').click(function(e) {
 		   e.preventDefault();
-	       $('#search-result-b2').show();
+	       $('#search-result-b2').removeClass("d-sm-none");
 	       $('#pager').show();
-	       $('#search-viewall-lnk').hide();
+	       $('#search-viewall-lnk').removeClass("d-sm-none");
 	       return false;
 		});
 	}); 
