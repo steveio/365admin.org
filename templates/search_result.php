@@ -51,9 +51,9 @@
 			<div id="search-viewall-lnk" class="row d-sm-none d-md-none">
 				<a href="#" id="search-viewall" class="btn btn-primary rounded-pill px-3">View All Results</a>
 			</div>
-			<div id="search-result-b2" class="row d-sm-none d-md-inline-flex"></div>
+			<div id="search-result-b2" class="row d-none d-md-inline-flex"></div>
 		</div>
-		<div id="pager" class="col-12 d-sm-none d-md-inline-flex pagination pagination-large pagination-centered page-links"></div>
+		<div id="pager" class="col-12 d-none d-md-inline-flex pagination pagination-large pagination-centered page-links"></div>
 	</div>
 
     <script>
@@ -61,13 +61,13 @@
 		$('#search-viewall').click(function(e) {
             e.preventDefault();
 
-            $('#search-result-b2').removeClass("d-sm-none");
-    		$('#search-result-b2').addClass("d-sm-inline-flex");
+            $('#search-result-b2').removeClass("d-none");
+    		$('#search-result-b2').addClass("d-inline-flex");
 
-            $('#pager').removeClass("d-sm-none");
-    		$('#pager').addClass("d-sm-inline-flex");
+            $('#pager').removeClass("d-none");
+    		$('#pager').addClass("d-inline-flex");
 
-    		$('#search-viewall-lnk').addClass("d-sm-none");
+    		$('#search-viewall-lnk').addClass("d-none");
 
             return false;
 		});
