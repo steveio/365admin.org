@@ -59,11 +59,13 @@
     <script>
 	$(document).ready(function(){ 
 		$('#search-viewall').click(function(e) {
-		   e.preventDefault();
-	       $('#search-result-b2').removeClass("d-sm-none");
-	       $('#pager').show();
-	       $('#search-viewall-lnk').removeClass("d-sm-none");
-	       return false;
+            e.preventDefault();
+
+            $('#search-result-b2').removeClass("d-sm-none");
+            $('#pager').removeClass("d-sm-none");
+            $('#search-viewall-lnk').addClass("d-sm-none");
+
+            return false;
 		});
 	}); 
     </script>
