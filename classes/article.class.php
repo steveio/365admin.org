@@ -119,7 +119,7 @@ class Content  implements TemplateInterface {
 	public $fetch_mapped_profiles; // bool whether to fetch attached profiles
 	private $iAttachedArticleFetchLimit;  // int how many attached articles to fetch
 	
-	private $oTemplate; /* a template instance used to render the content */
+	public $oTemplate; /* a template instance used to render the content */
 
 	private $bFetchAttachedTo; // bool whether to fetch associations with other articles
 	private $aAttachedTo; // array details of articles this article is attached to
@@ -1529,7 +1529,10 @@ class Content  implements TemplateInterface {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
-		$this->oTemplate = new Template(); 
+		if (!is_object($this->oTemplate))
+		{
+		  $this->oTemplate = new Template();
+		}
 		
 		$aDefaultOptions = array(
 				"TITLE" => $this->GetTitle(),

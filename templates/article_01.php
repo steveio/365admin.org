@@ -85,9 +85,11 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
         	        for ($i=0;$i<$limit;$i++) {
                           $oArticle = array_shift($aArticle);
                     	  if (!is_object($oArticle)) continue;
-                          $oArticle->SetAttachedImages(); 
-			  $oArticle->LoadTemplate("article_summary.php"); 
-			  print $oArticle->Render();
+                          $oArticle->SetAttachedImages();
+                          $oArticle->initTemplate();
+                          $oArticle->oTemplate->Set('CSS_CLASS_COL','col');
+            			  $oArticle->LoadTemplate("article_summary.php"); 
+            			  print $oArticle->Render();
                         } ?>
                     </div>
         
@@ -97,8 +99,10 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
                           $oArticle = array_shift($aArticle);
                     	  if (!is_object($oArticle)) continue;
                           $oArticle->SetAttachedImages(); 
-			  $oArticle->LoadTemplate("article_summary.php");
-			  print $oArticle->Render();
+                          $oArticle->initTemplate();
+                          $oArticle->oTemplate->Set('CSS_CLASS_COL','col');
+                          $oArticle->LoadTemplate("article_summary.php");
+            			  print $oArticle->Render();
                         } ?>
                     </div>
                 </div><? 
@@ -110,7 +114,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 
 
 <?php 
-    if (is_array($aAttachedArticle) && count($aAttachedArticle) >= 1)
+    if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "f" && is_array($aAttachedArticle) && count($aAttachedArticle) >= 1)
     { ?>
     <div class="row my-3">
     	<div class="row my-3">
@@ -119,7 +123,9 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	{
     	   $oTemplate = new Template();
            $oTemplate->Set("oArticle", $oArticle);
-           $oTemplate->LoadTemplate("article_summary.php");
+           $oArticle->initTemplate();
+           $oArticle->oTemplate->Set('CSS_CLASS_COL','col-3');
+           $oArticle->LoadTemplate("article_summary.php");
            print $oTemplate->Render();
         } ?>
     	</div>
@@ -181,6 +187,9 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
         {
                 if (is_object($oArticle)) 
                 {
+                    $oTemplate = new Template();
+                    $oArticle->initTemplate();
+                    $oArticle->oTemplate->Set('CSS_CLASS_COL','col-4');
                     $oArticle->LoadTemplate("article_summary.php");
                     print $oArticle->Render();
                 }
