@@ -180,6 +180,7 @@ class PlacementProfile extends AbstractProfile {
 						,c.prod_type as listing_type
 						,c.prof_opt as comp_prof_opt
 						,c.enq_opt as comp_enq_opt
+                        ,c.profile_filter_from_search
 						,p.title
 						,p.url_name
 						,p.desc_short
@@ -391,6 +392,11 @@ class PlacementProfile extends AbstractProfile {
   		return $this->location;
   	}
   	
+  	public function GetFilterFromSearch()
+  	{
+  	    return ($this->profile_filter_from_search == "t") ? true : false;
+  	}
+
 	public function GetUrl() {
 		
 		if (!preg_match("/http/",$this->url)) {
@@ -1052,8 +1058,6 @@ class PlacementProfile extends AbstractProfile {
 			case "ID_LIST_SEARCH_RESULT" :
 			    if (!is_array($id) || count($id) < 1) return FALSE;
 			    $where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
-			    if ($bFilterFromSearch)
-			        $where .= " and c.profile_filter_from_search != 't'";
 		        break;
 			case "ID_LIST" :
 				$where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
@@ -1099,7 +1103,7 @@ class PlacementProfile extends AbstractProfile {
 		    
 			$aProfile[$oProfile->GetId()] = $oProfile;
 		}
-		
+
 		return $aProfile;
 	}	
 

@@ -132,7 +132,12 @@ class SolrIndexer {
 					if (LOG) Logger::DB(1,JOBNAME,"ERROR: FAILED TO FETCH COMPANY  id : ".$a['id']);
 					continue;
 				}
-		
+
+				if ($oCProfile->GetFilterFromSearch()) {
+				    if (LOG) Logger::DB(1,JOBNAME,"ERROR: Filter from search id : ".$a['id']);
+				    continue;
+				}
+				
 				$aIdBatch[] = $a['id'];
 					
 				$oCProfile->GetCategoryInfo();
@@ -329,7 +334,12 @@ class SolrIndexer {
 					if (LOG) Logger::DB(1,JOBNAME,"ERROR: FAILED TO FETCH PLACEMENT id : ".$a['id']);
 					continue;
 				}
-					
+
+				if ($oProfile->GetFilterFromSearch()) {
+				    if (LOG) Logger::DB(1,JOBNAME,"ERROR: Filter from search id : ".$a['id']);
+				    continue;
+				}
+
 				$aIdBatch[] = $a['id'];
 					
 		

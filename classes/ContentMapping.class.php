@@ -1,6 +1,10 @@
 <?php 
 
 
+// default results template for an unpublished URL
+define("CONTENT_DEFAULT_RESULT_TEMPLATE", "0");
+
+
 class ContentMapping {
     
     private $oid;

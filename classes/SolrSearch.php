@@ -65,7 +65,15 @@ class SolrSearch {
 	public function getRows() {
 		return $this->rows;
 	}
+
+	public function setRowsToFetch($rows) {
+	    $this->rows_fetch = $rows;
+	}
 	
+	public function getRowsToFetch() {
+	    return $this->rows_fetch;
+	}
+
 	public function getId($bIdOnly = false) {
 
 	    if ($bIdOnly)

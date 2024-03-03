@@ -451,7 +451,6 @@ class RequestRouter {
 
     }
 
-
     /*
     * Handles pages that display result sets:
     * 			/search/<search-phrase>
@@ -471,16 +470,6 @@ class RequestRouter {
         $oContentAssembler->SetRequestRouter($this);        
         $oContentAssembler->GetByPath($this->GetRequestUri(1));
         
-        die(__FILE__."::".__LINE__);
-    }
-
-    protected function ProcessHomePageRequest()
-    {
-
-        $oContentAssembler = new HomePageContentAssembler();
-        $oContentAssembler->SetRequestRouter($this);
-        $oContentAssembler->GetByPath($this->GetRequestUri(1));
-
         die(__FILE__."::".__LINE__);
     }
 

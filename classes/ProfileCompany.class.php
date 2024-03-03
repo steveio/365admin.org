@@ -39,7 +39,7 @@ class CompanyProfile extends AbstractProfile {
 	protected $homepage;
 	protected $prod_type;
 	protected $profile_quota;
-	protected $profile_filter_from_search = false;
+	protected $profile_filter_from_search;
 	protected $enq_opt;
 	protected $prof_opt;
 	protected $aEnqOpt;
@@ -377,6 +377,11 @@ class CompanyProfile extends AbstractProfile {
 	public function SetProfileFilterFromSearch($bFilter)
 	{
 		$this->profile_filter_from_search = $bFilter;
+	}
+
+	public function GetFilterFromSearch()
+	{
+	    return $this->profile_filter_from_search;
 	}
 
 	public function GetProfileFilterFromSearch()
@@ -1084,7 +1089,7 @@ class CompanyProfile extends AbstractProfile {
 		$sApproved = ($p['status'] == 1) ? ",status=1" : "";
 
 		$p['logo_refresh_fl'] = 'F'; /* @depreciated, removed from web form */
-		$p['profile_filter_from_search'] = ($p['profile_filter_from_search'] == true) ? 'true' : 'false';
+		$p['profile_filter_from_search'] = ($p['profile_filter_from_search'] == true) ? 't' : 'f';
 
 		if (trim($p['video']) > 1) {
 			$video_str = "'".htmlspecialchars_decode(trim($p['video']))."'";
@@ -1273,7 +1278,6 @@ class CompanyProfile extends AbstractProfile {
 			case "INDEX_LIST_DELTA_SOLR" :
 				$sql = "SELECT id FROM ".$_CONFIG['company_table']." WHERE status = 1 AND last_updated > last_indexed_solr";
 				break;
-				
 			case "INDEX_LIST_ALL" :
 				$sql = "SELECT id FROM ".$_CONFIG['company_table'];
 				break;				
@@ -1298,6 +1302,9 @@ class CompanyProfile extends AbstractProfile {
 			case "ID_SORTED" :
 				$sql = "$select FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") ORDER BY prod_type desc";
 				break;
+			case "OID_SORTED" :
+			    $sql = "$select FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.oid in (".implode(",",$id).") ORDER BY prod_type desc";
+			    break;
 			case "RECENT" :
 				$sql = "SELECT id,title,desc_short,url_name,logo_url,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." ORDER BY last_updated desc LIMIT 20";
 				break;
