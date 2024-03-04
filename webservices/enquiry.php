@@ -62,7 +62,8 @@ $aResponse = array();
 
 /* retrieve referring profile details */
 $oProfile = ProfileFactory::Get($oEnquiry->GetLinkTo());
-$aProfile = $oProfile->GetById($oEnquiry->GetLinkId());
+$aProfile = $oProfile->GetById($oEnquiry->GetLinkId(), $return = "ARRAY");
+
 
 if (!$aProfile) AppError::StopRedirect($sUrl = $_CONFIG['url'],$sMsg = 'Error, invalid enquiry request.');
 $oProfile->SetFromArray($aProfile);
