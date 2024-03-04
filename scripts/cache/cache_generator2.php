@@ -23,7 +23,7 @@ if ($db->getNumRows() >= 1) {
 	$aRows = $db->getRows();
 	foreach($aRows as $aRow) {
 	    $sUrl = $sTargetUrl.$aRow['uri'];
-		print_r($sUrl."\n");
+		//print_r($sUrl."\n");
 		Cache::Generate($sUrl,$aRow['uri'],$_CONFIG['site_id']);
 	}
 }
