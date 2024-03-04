@@ -13,6 +13,8 @@ $oSearchPanel = $this->Get('oSearchPanel');
 
 ?>
 
+<div class="container">
+<div class="align-items-center justify-content-center">
 
 <div class="homepage row-fluid">
 <section id="" class="col-12">
@@ -38,7 +40,7 @@ $oSearchPanel = $this->Get('oSearchPanel');
 
     <div class="row">
     <div class="col-12 my-3">
-    <div class="col-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
+    <div class="col-sm-12 col-lg-8 col-md-8 sharethis-inline-share-buttons" style="display: block; float: right;"></div>
     </div>
     </div>
 
@@ -186,4 +188,7 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
 
 </div>
 </section>
+</div>
+
+</div>
 </div>
