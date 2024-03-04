@@ -378,9 +378,6 @@ class SolrSearch {
 		$request = $this->client->createRequest($query);
 		$requestInfo = (string)$request;
 
-		
-		Logger::DB(2,"API SOLR Query: ".$requestInfo);
-
 		try {
 			// this executes the query and returns the result
 			$this->resultset = $this->client->select($query);

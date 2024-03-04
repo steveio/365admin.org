@@ -141,8 +141,6 @@ class SolrMoreLikeSearch extends SolrSearch {
 		$request = $this->client->createRequest($query);
 		$requestInfo = (string)$request;
 
-		Logger::DB(2,"API SOLR Query: ".$requestInfo);
-
 		try {
 			// this executes the query and returns the result
 			$resultset = $this->client->select($query);
@@ -186,8 +184,6 @@ class SolrMoreLikeSearch extends SolrSearch {
 		// this executes the query and returns the result#
 		$request = $this->client->createRequest($query);
 		$requestInfo = (string)$request;
-
-		Logger::DB(2,"API SOLR Query: ".$requestInfo);
 
 		try {
 			// this executes the query and returns the result
@@ -266,8 +262,6 @@ class SolrMoreLikeSearch extends SolrSearch {
 		// this executes the query and returns the result#
 		$request = $this->client->createRequest($query);
 		$requestInfo = (string)$request;
-
-		Logger::DB(2,"API SOLR Query: ".$requestInfo);
 
 		try {
 			// this executes the query and returns the result
@@ -352,8 +346,6 @@ class SolrMoreLikeSearch extends SolrSearch {
 	    */
 	    
 	    $requestInfo = (string)$request;
-
-	    Logger::DB(2,"API SOLR Query: ".$requestInfo);
 
 	    try {
 	        // this executes the query and returns the result
