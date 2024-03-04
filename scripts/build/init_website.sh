@@ -4,8 +4,6 @@ cd /www/vhosts/oneworl365.org/htdocs
 
 mkdir cache
 mkdir cache/page
-chmod -R 0774 ./cache
-chown -R apache:web_developer ./cache
 
 ln -s /www/vhosts/365admin.org/htdocs/classes/ classes
 ln -s /www/vhosts/365admin.org/htdocs/controllers/ controllers 
@@ -19,3 +17,5 @@ ln -s /www/vhosts/365admin.org/htdocs/templates/ templates
 ln -s /www/vhosts/365admin.org/htdocs/vendor/ vendor
 ln -s /www/vhosts/365admin.org/htdocs/webservices webservices
 
+chown -R web_developer:apache ./
+chmod -R 0774 ./ 
