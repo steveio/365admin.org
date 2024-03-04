@@ -9,7 +9,7 @@ $bHideDescShort = $this->Get("bHideDescShort");
 
 ?>
 
-<div class="<?= $css_class_col; ?> col my-2">
+<div class="<?= $css_class_col; ?> my-2">
 	<div class="sol-sm-12 my-3">
     <? if (is_object($oArticle->GetImage(0))) { ?>
         <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">

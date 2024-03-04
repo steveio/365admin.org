@@ -189,7 +189,7 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
                 {
                     $oTemplate = new Template();
                     $oArticle->initTemplate();
-                    $oArticle->oTemplate->Set('CSS_CLASS_COL','col-4');
+                    $oArticle->oTemplate->Set('CSS_CLASS_COL','col-lg-4 col-md-4 col-sm-12');
                     $oArticle->LoadTemplate("article_summary.php");
                     print $oArticle->Render();
                 }
