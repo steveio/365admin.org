@@ -1,0 +1,8 @@
+Filesystem              1K-blocks     Used Available Use% Mounted on
+/dev/mapper/centos-root 165107712 21633392 143474320  14% /
+devtmpfs                  3983272        0   3983272   0% /dev
+tmpfs                     3995136        4   3995132   1% /dev/shm
+tmpfs                     3995136   437908   3557228  11% /run
+tmpfs                     3995136        0   3995136   0% /sys/fs/cgroup
+/dev/sda1                  520868   217480    303388  42% /boot
+tmpfs                      799028        0    799028   0% /run/user/1000

@@ -134,6 +134,7 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 <? } ?> 
 
 <? if ($oProfile->GetListingType() >=  BASIC_LISTING) { ?>
+	<? if ($oProfile->GetAddress() != "" || $oProfile->GetTel() != "") { ?>
 	<h3>Contact Info</h3>
 	<? if ($oProfile->GetListingType() >= ENHANCED_LISTING) { ?>
 		<? if ($oProfile->GetTel() != "") { ?> 
@@ -145,7 +146,8 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 	<? } ?> 
 	<? if ($oProfile->GetAddress() != "") { ?>
 		<p>Address : <?= $oProfile->GetAddress() ?></p>
-	<? } ?> 
+	<? }
+	}  ?> 
 <? } ?> 
 
 </div>

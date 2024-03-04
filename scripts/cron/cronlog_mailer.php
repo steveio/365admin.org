@@ -1,5 +1,5 @@
 <?
-$path = "/home/web_developer/cron/";
+$path = "/www/vhosts/365admin.org/htdocs/scripts/cron/";
 $f = file_get_contents($path."df.out");
 $f2 = file_get_contents($path."biggest_files.out");
 $f3 = file_get_contents($path."oneworld_db_size.out");
