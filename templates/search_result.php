@@ -77,4 +77,7 @@
 
     </div>
 </div>
+
+<script src="/includes/js/app.js"></script>
+
 <!-- end: Search Results Panel-->

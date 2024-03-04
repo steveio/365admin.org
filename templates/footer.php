@@ -93,7 +93,6 @@
 </div>
 
 
-<script src="/includes/js/app.js"></script>
 <script src="/includes/js/popper.min.js" integrity="" crossorigin="anonymous"></script>
 <script src="/includes/js/bootstrap.min.js" integrity="" crossorigin="anonymous"></script>
  

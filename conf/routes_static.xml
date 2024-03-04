@@ -22,7 +22,7 @@
 	</route>
 	<route>
 		<url>/review</url>
-		<filename>review_ajax.php</filename>
+		<filename>/webservices/review_ajax.php</filename>
 	</route>	
 	<route>
 		<url>/review-report</url>
@@ -42,9 +42,7 @@
 	</route>
 	<route>
 		<url>/article</url>
-
 		<callback>$this->ProcessArticlePageRequest()</callback>
-
 	</route>
 	<route>
 		<url>/article-manager</url>
@@ -79,10 +77,6 @@
 		<callback>$this->ProcessDestinationPageRequest()</callback>
 	</route>
 	<route>
-		<url>/search</url>
-		<callback>$this->ProcessSearchResultPageRequest()</callback>
-	</route>
-	<route>
 		<url>/search-dispatch</url>
 		<filename>searchPanelDispatch_ajax.php</filename>
 	</route>
@@ -90,4 +84,8 @@
 		<url>/link-report</url>
 		<filename>link_report.php</filename>
 	</route>
-</routes> 
+	<route>
+		<url>/search</url>
+		<callback>$this->ProcessSearchResultPageRequest()</callback>
+	</route>
+</routes>

@@ -146,13 +146,13 @@ class RequestRouter {
 
             // load static routes from configuration 
             $this->LoadStaticRoutes(PATH_TO_STATIC_ROUTE_MAP);
-            
+                        
             // url -> php script mappings
             if (array_key_exists($this->GetRequestUri(1), $this->aStaticRoute))
             {
                 $script = $this->aStaticRoute[$this->GetRequestUri(1)];
             }
-
+            
             // url -> $class->method() mappings
             if (array_key_exists($this->GetRequestUri(1), $this->aStaticCallback))
             {
@@ -188,6 +188,7 @@ class RequestRouter {
             require_once($script);
             die();
         } else {
+            die("processInclude - exception");
             throw new Exception("Static Route Map: php script ".$script." does not exist (Request URI: ".$this->GetRequestUri(1).")");
         }
     }
@@ -451,6 +452,16 @@ class RequestRouter {
 
     }
 
+    protected function ProcessHomePageRequest()
+    {
+                
+        $oContentAssembler = new HomepageContentAssembler();
+        $oContentAssembler->SetRequestRouter($this);
+        $oContentAssembler->GetByPath($this->GetRequestUri());
+
+        die();
+    }
+    
     /*
     * Handles pages that display result sets:
     * 			/search/<search-phrase>

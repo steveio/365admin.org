@@ -568,6 +568,23 @@ class Activity {
 	    return $aActivity;
 	}
 
+	public function GetByName($sName) {
+	    
+	    global $db;
+	    
+	    $db->query("SELECT id,name,url_name FROM activity WHERE name = '".addslashes($sName)."';");
+	    
+	    if ($db->getNumRows() == 1)
+	    {
+	        $oRes = $db->getObject();
+	        $oRes->id = $oRes->id;
+	        $oRes->name = stripslashes($oRes->name);
+	        $oRes->url_name = $oRes->url_name;
+	        return $oRes;
+	    }
+	    return false;
+	}
+	
 }
 
 ?>

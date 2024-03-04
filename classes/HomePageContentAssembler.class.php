@@ -8,8 +8,11 @@
  * 
  *
  */
+require_once(BASE_PATH."/classes/ArticleContentAssembler.class.php");
 
-class HomepageContentAssembler extends AbstractContentAssembler {
+
+
+class HomepageContentAssembler extends ArticleContentAssembler {
 
     protected $strTemplatePath;
     protected $oTemplate;
@@ -37,7 +40,6 @@ class HomepageContentAssembler extends AbstractContentAssembler {
         try {
 
             $this->SetTemplatePath("homepage.php");
-
             $this->SetSearchResultPanel($aPageOptions = array());
             
             // homepage news articles
@@ -50,22 +52,40 @@ class HomepageContentAssembler extends AbstractContentAssembler {
 
             $oHomepageArticle = new Article;
             $oHomepageArticle->SetFetchMode(FETCHMODE__FULL);
-            $oHomepageArticle->Get($oBrand->GetWebsiteId(),"/homepage-intro");
+            $oHomepageArticle->Get($oBrand->GetWebsiteId(),"/");            
             
             if ($this->oContentMapping->GetDisplayOptReview())
             {
                 $this->SetReviewTemplate("comment.php");
                 $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
-            }            
+            }
+            
+            // fetch related blog articles ( there are 0 attached articles )
+            if ($this->oContentMapping->GetDisplayOptBlogArticle() && count($this->oArticle->GetAttachedArticleId()) < 1)
+            {
+                // search keywords specified, fetch blog articles related to these
+                if (strlen($this->oContentMapping->GetSearchKeywords()) > 1)
+                {
+                    $strQuery = $this->oContentMapping->GetSearchKeywords();
+                    
+                    $this->SolrQuery($strQuery, $profile_type = 2, $rows = 25, $start = 0);
+                    $this->aArticle = $this->aRelatedArticle;
+                    
+                } else {
+                    // Default: Fetch articles via SOLR MLT
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog");
+                    $this->aArticle = $this->aRelatedArticle;
+                }
+            }
             
             if ($this->oContentMapping->GetDisplayOptRelatedArticle())
             {
-                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
+                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, "blog", $exclude = true);
             }
             
             if ($this->oContentMapping->GetDisplayOptRelatedProfile())
             {
-                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, null, $limit = 4);
+                $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, null, $limit = 8);
             }
 
             $this->oHomepageArticle = $oHomepageArticle;
@@ -85,6 +105,17 @@ class HomepageContentAssembler extends AbstractContentAssembler {
     {
         global $oHeader, $oFooter, $oBrand;
 
+        $oJsInclude = new JsInclude();
+        $oJsInclude->SetSrc("/includes/js/autocomplete/jquery-ui.min.js");
+        $oHeader->SetJsInclude($oJsInclude);
+        
+        $oJsInclude = new JsInclude();
+        $oJsInclude->SetSrc("/includes/js/search_panel.js");
+        $oHeader->SetJsInclude($oJsInclude);
+        
+        $oHeader->Reload();
+        
+        
         $this->oTemplate = new Template();
 
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
@@ -129,10 +160,10 @@ class HomepageContentAssembler extends AbstractContentAssembler {
         // clear any previous search
         SolrSearchPanelSearch::clearFromSession();
         
-        $fq = array();
-        $fq['profile_type'] = "1";
+        //$fq = array();
+        //$fq['profile_type'] = "1";
         //$fq['category_id'] = "7";
-        $oSolrSearchPanel->setFilterQuery($fq);
+        //$oSolrSearchPanel->setFilterQuery($fq);
         
         $aFacetField = array();
         $aFacetField[] = array("country" => "country");

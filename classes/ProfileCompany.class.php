@@ -1130,7 +1130,7 @@ class CompanyProfile extends AbstractProfile {
 				,keywords = '".$p['keywords']."'
 				,prod_type = '".$p['prod_type']."'
 				,profile_quota = '".$p['profile_quota']."'
-				,profile_filter_from_search = ".$p['profile_filter_from_search']."
+				,profile_filter_from_search = '".$p['profile_filter_from_search']."'
 				,prof_opt = '".$p['prof_opt']."'
 				,enq_opt = '".$p['enq_opt']."'
 				,keyword_exclude = '".$p['keyword_exclude']."'

@@ -124,10 +124,10 @@ class SolrSearchPanelSearch {
 			if (!$oCat)
 				$oAct = $oActivity->GetByName($aSearchParams['search-panel-activity']);
 		}
-		if ($aSearchParams['search-panel-destinations'] != "NULL") {
-			$oCtn = $oContinent->GetByName($aSearchParams['search-panel-destinations']);
+		if ($aSearchParams['search-panel-destination'] != "NULL") {
+			$oCtn = $oContinent->GetByName($aSearchParams['search-panel-destination']);
 			if (!$oCtn)
-				$oCty = $oCountry->GetByName($aSearchParams['search-panel-destinations']);
+				$oCty = $oCountry->GetByName($aSearchParams['search-panel-destination']);
 			
 		}
 		if (is_numeric($aSearchParams['search-panel-duration-from'])) {

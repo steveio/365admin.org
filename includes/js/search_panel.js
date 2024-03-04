@@ -1,11 +1,8 @@
-
-
 /*
  * search_panel.js  
- * JS controller logic for search panel
+ * JS controller logic for homepage search panel
  * 
  */
-
 
 $(document).ready(function(){
 
@@ -15,19 +12,20 @@ $(document).ready(function(){
 	});
 
 	var doSearchDispatch = function(action,changed,selected) {
-
+		
         var url = '/search-dispatch';
 
-        var keywords = $('#search-panel-keywords').val();
+        //var keywords = $('#search-panel-keywords').val();
+        // 'k='+keywords+'
         var activity = $('#search-panel-activity').val();
         var destination = $('#search-panel-destination').val();
         
-        var pars = 'k='+keywords+'&a='+action+'&act='+activity+'&d='+destination;
+        var pars = 'a='+action+'&act='+activity+'&d='+destination;
   
 		$.getJSON(url,pars, function(json) {
 			if (json.status == 1) {
 				if (json.action == 'dispatch') {
-					//console.log(json.url);
+					window.location.href=json.url;
 				}
 			} else {
 				processError();
@@ -63,8 +61,7 @@ $(document).ready(function(){
 				output.push('<option value="'+ facet.facet +'" '+selected_str+'>'+ facet.facet +' ('+facet.count+')</option>');
 			});
 
-			el.html(output.join(''));			
-			//var list = $("#"+facetData.divName).append('<div class="facet-col-inner"><ul class="unstyled"></ul></div>').find('ul');
+			el.html(output.join(''));
 			
 		}); // end each facet
 			
@@ -75,37 +72,22 @@ $(document).ready(function(){
 	}
 
 	var validateSearch = function() {
-	    if (($('#search-panel-activity').val() == 'NULL') &&
-			($('#search-panel-destination').val() == '') &&
-	        ($('#search-panel-keywords').val() == '')) {
+	    if ( $('#search-panel-activity').val() == 'NULL' &&
+			 $('#search-panel-destination').val() == '' ) 
+			{
 	    		$('#search-panel-msg').addClass("alert-warning");
-	        	$('#search-panel-msg').html('Please select one or more from Destination, Activity, or Keyword(s)');
+	        	$('#search-panel-msg').html('Please select a Destination and/or Activity');
 	        	$('#search-panel-msg').show().delay(5000).fadeOut();
 	        return false;
 	    }
 	    return true;
 	};
 
-	/*
-	$('select[id^=search-panel-]').change(function(e) {
-		e.preventDefault();
-		var curval = $('#'+this.id).val();
-		var changed = this.id;
-		doSearchDispatch('update',changed,curval);		
-	})
-	*/
-
-	$('#search-panel-btn').click(function(e) {
-		if (validateSearch()) {
-			//doSearchDispatch('dispatch',null,null);
-			document.getElementById("searchForm").submit();
-		}
-		return false;
-	});
-
-	$('#search-panel-destination').click(function(e) {
-	    if ($(this).val() == "Destination")
-	    	$(this).val("");
-	});
+    $('#search-panel-btn').click(function(e) {
+        e.preventDefault();
+        if (validateSearch()) {
+                doSearchDispatch('dispatch',null,null);
+        }
+    });
 
 });
