@@ -1219,7 +1219,7 @@ class Content  implements TemplateInterface {
 
 		$limitSql = ($this->GetAttachedArticleFetchLimit() >= 1) ? " LIMIT ".$this->GetAttachedArticleFetchLimit() : "";   
 
-		$sql = "SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY m.oid ASC, a.created_date DESC ". $limitSql;
+		$sql = "SELECT m.a2 as id FROM ".DB__ARTICLE_LINK_TBL." m, ".DB__ARTICLE_TBL." a WHERE m.a1 = ".$this->GetId(). " AND m.a2 = a.id ORDER BY a.created_date DESC ". $limitSql;
 
 		$db->query($sql);
 	
