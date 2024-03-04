@@ -46,7 +46,7 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
         	if (strlen($strCompanyLogoHtml) > 1) {
         	?>
         	<div style="profile-image">
-        		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?= $oProfile->GetCompanyProfileUrl() ?>" target="_new" class="">
+        		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?= $sProfileUrl; ?>" target="_new" class="">
         		<?= $strCompanyLogoHtml; ?>
         		</a>
         	</div><?php 

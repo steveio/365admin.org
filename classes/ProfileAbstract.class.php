@@ -136,7 +136,7 @@ abstract class AbstractProfile implements TemplateInterface {
 	 */
 	public function GetDescLongClean()
 	{
-	    return htmlUtils::stripLinks(htmlUtils::convertCkEditorFont2Html($this->GetDescLong(),"<p>"));
+	    return htmlUtils::convertCkEditorFont2Html($this->GetDescLong(),"<p>");
 	}
 
 	/*

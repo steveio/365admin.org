@@ -310,7 +310,7 @@ class Content  implements TemplateInterface {
 	 */
 	public function GetDescLongClean()
 	{
-	    return htmlUtils::stripLinks(htmlUtils::convertCkEditorFont2Html($this->full_desc,"<p>"));
+	    return htmlUtils::convertCkEditorFont2Html($this->full_desc,"<p>");
 	}
 
 	public function GetDescFull() {
