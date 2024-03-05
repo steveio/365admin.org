@@ -289,7 +289,7 @@ class CompanyProfileController extends ProfileController {
 
 
 		$oJsInclude = new JsInclude();
-		$oJsInclude->SetSrc("https://cdn.tiny.cloud/1/64vi9u0mlw972adwn9riluuctbqvquz44j5udsiffm2xvx3y/tinymce/6/tinymce.min.js");
+		$oJsInclude->SetSrc("/includes/js/tinymce/js/tinymce/tinymce.min.js");
 		$oJsInclude->SetReferrerPolicy("origin");
 		$oHeader->SetJsInclude($oJsInclude);
 
