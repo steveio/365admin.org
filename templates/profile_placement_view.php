@@ -303,6 +303,7 @@ if (is_array($aRelatedArticle) && count($aRelatedArticle) >= 1)
                 $oArticle->initTemplate();
                 $oArticle->oTemplate->Set('CSS_CLASS_COL','col-sm-12 col-lg-4 col-md-4');
                 $oArticle->LoadTemplate("article_summary.php");
+                $oArticle->oTemplate->Set('IMG_FORMAT', '_lf');
                 print $oArticle->Render();
             }
     } ?>
