@@ -229,6 +229,28 @@ class Country {
 		return $db->getRows();
 	}
 
+	public function GetByContinentId($continent_id) {
+	    
+	    global $db;
+	    
+	    $sql = "SELECT c.id,c.name FROM country c, continent ct WHERE c.continent_id = ct.id and ct.id = ".$continent_id." ORDER BY c.name ASC;";
+	    
+	    $db->query($sql);
+	    return $db->getRows();
+	    
+	}
+	
+	public function GetByContinentName($continent_name) {
+	    
+	    global $db;
+	    
+	    $sql = "SELECT c.id,c.name FROM country c, continent ct WHERE c.continent_id = ct.id and ct.name = '".$continent_name."' ORDER BY c.name ASC;";
+	    
+	    $db->query($sql);
+	    
+	    return $db->getRows();
+	    
+	}
 
 	function GetCountryLinkList($mode = "post",$aSelected = array(),$slash = true, $return = "HTML") {
 
