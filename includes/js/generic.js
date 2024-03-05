@@ -44,7 +44,7 @@ function ArticleMapOptions(mid) {
     var scid = $("#opt_"+mid+"_25").val(); // search panel cfg
 
     var opts = w.join('::');
-	var url = "/article_opt_ajax.php";
+	var url = "/webservices/article_opt_ajax.php";
     var pars = '&mid='+mid+'&opts='+opts+'&q='+q+'&pt='+pt+'&pi='+pi+'&tid='+tid;
 
 
@@ -73,7 +73,7 @@ function ArticleMapOptions(mid) {
 
 function ArticleDeattach(pid,aid) {
 
-	var url = "/article_deattach_ajax.php";
+	var url = "/webservices/article_deattach_ajax.php";
     var pars = '&pid='+pid+'&aid='+aid;
     
 	$.getJSON(url, pars, function(data){
@@ -132,7 +132,7 @@ function SearchAPI() {
 	$('#spinner').show();
 
 
-    var url = "/searchAPI_ajax.php";
+    var url = "/webservices/searchAPI_ajax.php";
     var pars = '&exp='+exp+'&match='+match+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
 
 	$.getJSON(url, pars, function(data){
@@ -190,7 +190,7 @@ function ArticleSearch(mode,aid,template) {
 		match = 1; /* exact "=" equal matching */
 	}
 	
-    var url = "/article_search_ajax.php";
+    var url = "/webservices/article_search_ajax.php";
     var pars = '&m='+mode+'&uri='+uri+'&aid='+aid+'&r='+search_recursive+'&t='+template+'&match='+match+'&wid='+wid;
 
 	$.getJSON(url, pars, function(data){
@@ -323,44 +323,49 @@ function setLightSwitch(e,state) {
         }
 }
 
+/*
+ * @deprecated - links embedded as inline content 		 
+ */
+function AttachLink(url,link_to,link_id) {
 
-	    function AttachLink(url,link_to,link_id) {
+    var link_title = document.getElementById('link_title').value;
+    var link_url = document.getElementById('link_url').value;
 
-            var link_title = document.getElementById('link_title').value;
-            var link_url = document.getElementById('link_url').value;
+    var url = url +"/attach_link_ajax.php";
+    var pars = '&m=ADD&link_to='+link_to+'&link_to_id='+link_id+'&link_title='+link_title+'&link_url='+link_url;
 
-            var url = url +"/attach_link_ajax.php";
-            var pars = '&m=ADD&link_to='+link_to+'&link_to_id='+link_id+'&link_title='+link_title+'&link_url='+link_url;
+    console.log("attach link");
+    
+	$.getJSON(url, pars, function(data){
+		if (data.retVal == 1) {
+			$('#link_msg').html('<span class="red">'+data.msg+'</span>');
+			$('#link_result').html(data.html);
+		}
+		return false;
+	});
+}
 
-            console.log("attach link");
-            
-			$.getJSON(url, pars, function(data){
-				if (data.retVal == 1) {
-					$('#link_msg').html('<span class="red">'+data.msg+'</span>');
-					$('#link_result').html(data.html);
-				}
-				return false;
-			});
-        }
+/*
+ * @deprecated - links embedded as inline content 		 
+ */
+function RemoveLink(url,link_id,link_to_id) {
 
-        function RemoveLink(url,link_id,link_to_id) {
+        var url = url +"/attach_link_ajax.php";
+        var pars = '&m=DEL&link_id='+link_id+'&link_to_id='+link_to_id+'&link_to=ARTICLE';
 
-                var url = url +"/attach_link_ajax.php";
-                var pars = '&m=DEL&link_id='+link_id+'&link_to_id='+link_to_id+'&link_to=ARTICLE';
-
-		$.getJSON(url, pars, function(data){
-			if (data.retVal == 1) {
-				$('#link_msg').html('<span class="red">'+data.msg+'</span>');
-				$('#link_result').html(data.html);
-			}
-			return false;
-		});
-        }
+        $.getJSON(url, pars, function(data){
+		if (data.retVal == 1) {
+			$('#link_msg').html('<span class="red">'+data.msg+'</span>');
+			$('#link_result').html(data.html);
+		}
+		return false;	
+        });
+}
 
 
 function RemoveImage(link_type,link_id,image_id) {
 
-        var url = "/image_detach_ajax.php";
+        var url = "/webservices/image_detach_ajax.php";
         var target = '';
         var pars = '&link_to='+link_type+'&link_id='+link_id+'&image_id='+image_id;
 
@@ -378,6 +383,9 @@ function RemoveImage(link_type,link_id,image_id) {
         });
 }
 
+/*
+ * @deprecated - no longer referenced
+ */
 function doProjectSearchRequest(host) {
 	var url = host + '/project_search_ajax.php';
 	var aid = document.project_search.s_activity_id.value.toUpperCase();
