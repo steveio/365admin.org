@@ -19,7 +19,7 @@ class Category {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
-		$sql = "SELECT c.id,c.name,c.url_name FROM category c ORDER BY sort_order DESC;";
+		$sql = "SELECT c.id,c.name,c.url_name FROM category c ORDER BY name ASC;";
 		$this->db->query($sql);
 		return $this->db->getRows();
 	}
@@ -79,11 +79,7 @@ class Category {
 		
 		global $_CONFIG;
 		
-		if ($all) {
-			$aCategories = $this->GetAll();
-		} else {
-			$aCategories = $this->GetCategoriesByWebsite($_CONFIG['site_id']);
-		}
+		$aCategories = $this->GetAll();
 		
 		$idx = 0;
 		unset($ct_text);
