@@ -154,7 +154,7 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
 
 
 <?
-if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_PROFILE] == "t")
 {
     if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
     { ?>
