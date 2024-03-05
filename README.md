@@ -9,7 +9,7 @@ v3.0.1   04/03/2024
 
 - Website Responsive UI updated to latest version
 - Templates optimised for mobile, tablet & desktop screen sizes
-- Extended Profile metadata displayed for Tours, Summer Camp, Seasonal Jobs & Volunteer Project profile types
+- Extended Profile metadata for Tours, Summer Camp, Seasonal Jobs & Volunteer Project profile types
 - Additional Publisher options to create article  pages with variety of content elements (search results, blog articles, reviews, related profiles / articles)
 - Easier maintenance: single CMS codebase, templates for all content elements 
 - Use of larger image formats in article / profile summary
@@ -23,7 +23,9 @@ Build / Hosting Install Notes
 Required Components:
 
 oneworld365.org /www/vhosts/oneworld365.org/htdocs ( website front-end )
+
 365admin.org /www/vhosts/365admin.org/htdocs ( CMS admin system )
+
 365api.org /www/vhosts/365api.org/htdocs ( SOLR REST API ) 
 
 ...................................................................................................
