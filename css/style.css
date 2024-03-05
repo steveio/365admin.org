@@ -140,7 +140,7 @@ a.title-summary {
 ul {}
 
 ul, li {
- 	font-size: 1.1em;
+ 	font-size: 1em;
 }
 
 ul, ol {
@@ -152,7 +152,7 @@ ul {
 }
 
 .article-body ul {
-	list-style-position: inside;
+	list-style-position: outside;
 	margin-left: 8px;
 }
 
