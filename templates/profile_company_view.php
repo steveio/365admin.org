@@ -59,8 +59,9 @@ if($oProfile->GetListingType() < BASIC_LISTING) {
 		<?php
 		
 		if (count($oProfile->GetActivityArray()) >= 1) {
-			$label = "Activities: "; ?>
-			<b><?= $label; ?></b> <?= $oProfile->GetActivityTxt(); ?><br/><?
+			$label = "Activities: ";
+			$value = (count($oProfile->GetActivityArray()) > 6) ? "Multiple Program Types" : $oProfile->GetActivityTxt(); ?>
+			<b><?= $label; ?></b> <?= $value; ?><br/><?
 		}
 		?>
 		<?php 
