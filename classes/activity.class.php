@@ -198,7 +198,7 @@ class Activity {
 			foreach($a as $aActivity)
 			{
 				if ($strCurrentCategory != $strCategoryName) {
-					$row = "<b>".$strCategoryName."</b>";
+					$row = "<li class='hdr'><b>".$strCategoryName."</b></li>";
 					$sHtml .= $row;
 					$aElements[] = $row;
 					$strCurrentCategory = $strCategoryName;
