@@ -14,7 +14,17 @@ class ProfileController extends GenericController {
 		parent::__construct();
 		
 	}
- 
+
+	public function CheckDomain()
+	{
+	    // NGINX reverse proxy does currently not set hostname in $_SERVER
+	    // if (Request::GetHostName($subdomain = true) != ADMIN_SYSTEM_HOSTNAME)
+	    if (CURRENT_SITE != ADMIN_SYSTEM)
+	    {
+	        Http::Redirect(ADMIN_SYSTEM.Request::GetUri("STRING"));
+	    }
+	}
+
 	public function SaveYouTubeVideo($link_to, $link_id, $video_str) {
 		
 		//if (strlen(trim($video_str)) < 1) return FALSE; 

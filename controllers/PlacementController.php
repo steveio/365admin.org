@@ -71,14 +71,6 @@ class PlacementController extends ProfileController {
 		
 	}
 
-	public function CheckDomain()
-	{
-	    if (Request::GetHostName($subdomain = true) != ADMIN_SYSTEM_HOSTNAME)
-	    {
-	        Http::Redirect(ADMIN_SYSTEM.Request::GetUri("STRING"));
-	    }
-	}
-
 	private function GetPlacementDetailsFromUrl() {
 		
 		global $db;

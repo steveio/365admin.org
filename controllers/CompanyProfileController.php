@@ -93,14 +93,6 @@ class CompanyProfileController extends ProfileController {
 		}
 	}
 
-	public function CheckDomain()
-	{
-	    if (Request::GetHostName($subdomain = true) != ADMIN_SYSTEM_HOSTNAME)
-	    {
-	        Http::Redirect(ADMIN_SYSTEM.Request::GetUri("STRING"));
-	    }
-	}
-
 	public function SetMVCMode($intMode)
 	{
 	    if ($intMode != null)
