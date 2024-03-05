@@ -1,11 +1,10 @@
 <?php 
-
 $oArticle = $this->Get("oArticle");
 
 $css_class_col = $this->Get("CSS_CLASS_COL");
 $bHidePublishedDate = $this->Get("bHidePublishedDate");
 $bHideDescShort = $this->Get("bHideDescShort");
-$img_size = ($this->Get("IMG_SIZE") == "") ? "" : "_lf";
+$img_size = ($this->Get("IMG_FORMAT") == "") ? "" : "_lf";
 
 ?>
 
