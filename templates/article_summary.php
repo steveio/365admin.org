@@ -5,15 +5,15 @@ $oArticle = $this->Get("oArticle");
 $css_class_col = $this->Get("CSS_CLASS_COL");
 $bHidePublishedDate = $this->Get("bHidePublishedDate");
 $bHideDescShort = $this->Get("bHideDescShort");
-
+$img_size = ($this->Get("IMG_SIZE") == "") ? "" : "_lf";
 
 ?>
 
 <div class="<?= $css_class_col; ?> my-2">
-	<div class="sol-sm-12 my-3">
+	<div class="col-sm-12 my-3">
     <? if (is_object($oArticle->GetImage(0))) { ?>
         <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
-            <?= $oArticle->GetImage(0)->GetHtml("_lf",$oArticle->GetTitle()); ?>
+            <?= $oArticle->GetImage(0)->GetHtml($img_size,$oArticle->GetTitle()); ?>
         </a>
     <? } else { 
         $html = $oArticle->GetDescFull();

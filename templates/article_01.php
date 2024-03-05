@@ -87,6 +87,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
                     	  if (!is_object($oArticle)) continue;
                           $oArticle->SetAttachedImages();
                           $oArticle->initTemplate();
+			  $oArticle->oTemplate->Set('IMG_SIZE', '');
                           $oArticle->oTemplate->Set('CSS_CLASS_COL','col');
             			  $oArticle->LoadTemplate("article_summary.php"); 
             			  print $oArticle->Render();
