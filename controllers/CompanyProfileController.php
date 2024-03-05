@@ -73,6 +73,7 @@ class CompanyProfileController extends ProfileController {
 				$this->DeleteProfile();
 				break;
 			case self::MODE_EDIT :
+			    $this->CheckDomain();
 				$this->GetCompanyIdFromUrl();
 				$this->CheckPermissions();
 				if (isset($_POST['save_video_btn'])) {
@@ -90,6 +91,14 @@ class CompanyProfileController extends ProfileController {
 				throw new Exception(ERROR_INVALID_MODE);
 
 		}
+	}
+
+	public function CheckDomain()
+	{
+	    if (Request::GetHostName($subdomain = true) != ADMIN_SYSTEM_HOSTNAME)
+	    {
+	        Http::Redirect(ADMIN_SYSTEM.Request::GetUri("STRING"));
+	    }
 	}
 
 	public function SetMVCMode($intMode)

@@ -16,11 +16,14 @@ class Request {
 		
 	}
 	
-	public static function GetHostName() {
-		
-		$a = explode(".",$_SERVER['HTTP_HOST']);
-		return $hostname = $a[1].".".$a[2];
-		
+	public static function GetHostName($subdomain = false) {
+	    if ($subdomain)
+	    {
+	        return $_SERVER['HTTP_HOST'];
+	    } else {
+    		$a = explode(".",$_SERVER['HTTP_HOST']);
+    		return $hostname = $a[1].".".$a[2];
+	    }
 	}
 	
 

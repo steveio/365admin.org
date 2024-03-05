@@ -46,6 +46,7 @@ class PlacementController extends ProfileController {
 				$this->SetFormElements();
 				break;
 			case self::MODE_EDIT :
+			    $this->CheckDomain();
 				$this->GetPlacementDetailsFromUrl();
 				$this->CheckPermissions();
 				if (isset($_POST['save_video_btn'])) {
@@ -69,7 +70,15 @@ class PlacementController extends ProfileController {
 		}
 		
 	}
-	
+
+	public function CheckDomain()
+	{
+	    if (Request::GetHostName($subdomain = true) != ADMIN_SYSTEM_HOSTNAME)
+	    {
+	        Http::Redirect(ADMIN_SYSTEM.Request::GetUri("STRING"));
+	    }
+	}
+
 	private function GetPlacementDetailsFromUrl() {
 		
 		global $db;
