@@ -341,7 +341,7 @@ class RequestRouter {
                 $_REQUEST['letter'] = "a";
             }
             
-            require_once("./company_az.php");
+            require_once("/www/vhosts/365admin.org/htdocs/company_az.php");
             die();
         }
 
