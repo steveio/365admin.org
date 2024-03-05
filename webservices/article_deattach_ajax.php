@@ -9,13 +9,13 @@
  *  
  */
 
-require_once("./conf/config.php");
-require_once("./classes/json.class.php");
-require_once("./classes/db_pgsql.class.php");
-require_once("./classes/logger.php");
-require_once("./classes/template.class.php");
-require_once("./classes/link.class.php");
-require_once("./classes/article.class.php");
+require_once("../conf/config.php");
+require_once("../classes/json.class.php");
+require_once("../classes/db_pgsql.class.php");
+require_once("../classes/logger.php");
+require_once("../classes/template.class.php");
+require_once("../classes/link.class.php");
+require_once("../classes/article.class.php");
 
 
 $db = new db($dsn,$debug = false);

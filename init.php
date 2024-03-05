@@ -151,7 +151,7 @@ require_once(BASE_PATH."/classes/SolrMoreLikeSearch.php");
 require_once(BASE_PATH."/classes/SolrSearchPanelSearch.php");
 
 /* Placement Profile By Company */
-require_once("./classes/BalancedDistributor.php");
+require_once(BASE_PATH."/classes/BalancedDistributor.php");
 
 
 

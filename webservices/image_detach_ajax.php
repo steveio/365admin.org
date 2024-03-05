@@ -11,14 +11,14 @@
  *  
  */
 
-require_once("./conf/config.php");
-require_once("./init.php");
-require_once("./classes/json.class.php");
-require_once("./classes/db_pgsql.class.php");
-require_once("./classes/logger.php");
-require_once("./classes/file.class.php");
-require_once("./classes/image.class.php");
-require_once("./classes/session.php");
+require_once("../conf/config.php");
+require_once("../init.php");
+require_once("../classes/json.class.php");
+require_once("../classes/db_pgsql.class.php");
+require_once("../classes/logger.php");
+require_once("../classes/file.class.php");
+require_once("../classes/image.class.php");
+require_once("../classes/session.php");
 
 
 
