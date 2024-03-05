@@ -36,7 +36,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 <div class="row my-3">
 	<div class="col-12 summary-details">
 		<b>Company :</b> <a href="<?= $oProfile->GetCompanyProfileUrl(); ?>" title="Find out more about <?= $oProfile->GetCompanyName(); ?>" style="color: #DD6900;"><?= $oProfile->GetCompanyName(); ?></a><br/>
-		<?php 
+		<?php
 		if (count($oProfile->GetActivityArray()) > 1 && count($oProfile->GetActivityArray()) < 3) {
 			$label = "Activities: "; ?>
 			<b><?= $label; ?></b> <?= $oProfile->GetActivityTxt(); ?><br/><?
@@ -302,8 +302,8 @@ if (is_array($aRelatedArticle) && count($aRelatedArticle) >= 1)
             {
                 $oArticle->initTemplate();
                 $oArticle->oTemplate->Set('CSS_CLASS_COL','col-sm-12 col-lg-4 col-md-4');
-                $oArticle->LoadTemplate("article_summary.php");
                 $oArticle->oTemplate->Set('IMG_FORMAT', '_lf');
+                $oArticle->LoadTemplate("article_summary.php");
                 print $oArticle->Render();
             }
     } ?>
