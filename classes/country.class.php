@@ -223,7 +223,7 @@ class Country {
 			$sKey = "m.prod_id";
 		}
 
-		$sql = "SELECT a.id,a.name,ct.name as continent FROM ".$sTable.", country a, continent ct WHERE ".$sKey." = $id AND m.country_id=a.id and a.continent_id = ct.id ORDER BY a.name ASC;";
+		$sql = "SELECT a.id,a.name,ct.id as continent_id, ct.name as continent FROM ".$sTable.", country a, continent ct WHERE ".$sKey." = $id AND m.country_id=a.id and a.continent_id = ct.id ORDER BY a.name ASC;";
 
 		$db->query($sql);
 		return $db->getRows();
