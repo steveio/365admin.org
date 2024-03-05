@@ -265,44 +265,44 @@ class ContentMapping {
 
     public function GetDisplayOptSearchPanel()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_SEARCH_PANEL);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_SEARCH_PANEL);
     }
 
     public function GetDisplayOptBlogArticle()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_BLOG);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_BLOG);
     }
 
     // related profiles
     public function GetDisplayOptRelatedProfile()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_PROFILE);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_PROFILE);
     }
 
     // related articles
     public function GetDisplayOptRelatedArticle()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_ARTICLE);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_ARTICLE);
     }
     
     public function GetDisplayOptReview()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_REVIEW);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_REVIEW);
     }
 
     public function GetDisplayOptSocial()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_SOCIAL);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_SOCIAL);
     }
 
     public function GetDisplayOptAds()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_ADS);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_ADS);
     }
 
     public function GetDisplayOptIntroImage()
     {
-        return $this->GetOptionById(ARTICLE_DISPLAY_OPT_IMG);
+        return $this->GetOptionEnabled(ARTICLE_DISPLAY_OPT_IMG);
     }
         
     public function GetSearchKeywords()

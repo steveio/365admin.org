@@ -75,11 +75,18 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	</div>
  
      	<?
-     	if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "t") {
-            if (is_array($aArticle))
+     	if (is_array($aArticle) && count($aArticle) >= 1)  // display "Attached" or "Blog" Articles
+     	{
+            if (count($aArticle) > 6)
         	{ ?>
-                <div class="row my-3">
-		<h3>Related Articles</h3>
+                <div class="row my-3"><?
+                if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "t")
+                {
+                    $title = "Blog Articles";
+                } else {
+                    $title = "Related Articles";   
+                } ?>
+				<h3><?= $title; ?></h3>
         	    <div class="col-sm-12 col-md-8 col-lg-8"><?
         	        $limit = 5;
         	        for ($i=0;$i<$limit;$i++) {
@@ -106,7 +113,23 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
                         } ?>
                     </div>
                 </div><? 
-        	} 
+            } else { ?>
+        		<div class="row my-3">
+				<h3>Related Articles</h3>
+        	    <div class="col-sm-12 col-md-12 col-lg-12"><?
+        	        foreach ($aArticle as $oArticle) {
+                    	  if (!is_object($oArticle)) continue;
+                          $oArticle->SetAttachedImages();
+                          $oArticle->initTemplate();
+                          $oArticle->oTemplate->Set('CSS_CLASS_COL','col-sm-6 col-md-6 col-lg-3');
+                          $oArticle->oTemplate->Set("bHideDescShort", true);
+                          $oArticle->oTemplate->Set("bHidePublishedDate", true);
+            			  $oArticle->LoadTemplate("article_summary.php"); 
+            			  print $oArticle->Render();
+                    } ?>
+                 </div>
+		        </div>    
+         <? }
      	} ?>
     
     </div>

@@ -148,7 +148,7 @@ if (count($oArticle->GetMapping()) >= 1) {
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_BLOG) == "t") ? "checked" : "" ; ?>
 			Blog Articles <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_BLOG; ?>" <?= $checked ?> />		
 
-			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PROFILE) == "f") ?  "" : "checked"; ?>
+			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_ARTICLE) == "f") ?  "" : "checked"; ?>
 			Related Articles <input type="checkbox" name="opt_<?= $oArticleMapping->GetId() ?>_<?= ARTICLE_DISPLAY_OPT_ARTICLE; ?>" <?= $checked ?> />		
 
 			<?php $checked = ($oArticleMapping->GetOptionById(ARTICLE_DISPLAY_OPT_PROFILE) == "f") ?  "" : "checked"; ?>

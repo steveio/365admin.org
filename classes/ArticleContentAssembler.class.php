@@ -128,8 +128,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
             if (count($this->oArticle->GetAttachedArticleId()) >= 1)
             {
-                $this->oArticle->SetAttachedArticle($fetchId = FALSE);
-                $this->aArticle = $this->oArticle->oArticleCollection->Get();                
+                $this->aArticle = $this->oArticle->oArticleCollection->Get();
             }
 
             
@@ -145,8 +144,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             }
 
             // fetch related blog articles ( there are 0 attached articles )
-            if ($this->oContentMapping->GetDisplayOptBlogArticle() && count($this->oArticle->GetAttachedArticleId()) < 1)
-            {
+            if ($this->oContentMapping->GetDisplayOptBlogArticle())
+            {                
                 // search keywords specified, fetch blog articles related to these 
                 if (strlen($this->oContentMapping->GetSearchKeywords()) > 1)
                 {
@@ -164,7 +163,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
             if ($this->oContentMapping->GetDisplayOptRelatedArticle())
             {
-                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, "blog", $exclude = true);
+                $this->aRelatedArticle = array();
+                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
             }
             
             if ($this->oContentMapping->GetDisplayOptRelatedProfile())
@@ -185,6 +185,18 @@ class ArticleContentAssembler extends AbstractContentAssembler {
     protected function Render()
     {
         global $oHeader, $oFooter, $oBrand;
+
+        $oCssInclude = new CssInclude();
+        $oCssInclude->SetHref('/css/jquery.rateyo.min.css');
+        $oCssInclude->SetMedia('screen');
+        $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+        $oHeader->Reload();
+
+        $oJsInclude = new JsInclude();
+        $oJsInclude->SetSrc("/includes/js/jquery.rateyo.min.js");
+        $oHeader->SetJsInclude($oJsInclude);
+
+        $oHeader->Reload();
 
         $this->oTemplate = new Template();
         

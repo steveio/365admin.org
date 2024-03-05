@@ -206,14 +206,16 @@ abstract class AbstractContentAssembler {
         
         if (strlen($uri) > 1)
         {
-            $key = "uri";
-            if ($exclude) $key = "-".$key;
-            $aFilterQuery[$key] = $uri."*";
+            $field = "uri";
+            if ($exclude) {
+                $field = "-".$field;
+            }
+            $aFilterQuery[$field] = $uri."*";
         }
-        
+
         $oSolrMoreLikeSearch->setRows($limit);
         
-        $aRelatedArticle = $oSolrMoreLikeSearch->getRelatedArticle($solr_id,$aFilterQuery, $limit);
+        $aRelatedArticle = $oSolrMoreLikeSearch->getRelatedArticle($solr_id,$aFilterQuery,$limit);
 
         if (is_array($aRelatedArticle))
         {
