@@ -178,6 +178,13 @@ class Image {
 		if (file_exists($this->GetPath($size))) {
 			return "<img src='".$this->GetUrl($size)."' class='".$class."' style='".$style."' alt='".$alt."' border='0' />";
 		} else {
+		    if ($size == "_lf") {
+		        if (file_exists($this->GetPath("_mf"))) 
+		        {
+		            return "<img src='".$this->GetUrl("_mf")."' class='".$class."' style='width: 400px; height: 267px;' alt='".$alt."' border='0' />";
+		        }
+		    }
+		    
 			return FALSE;
 		}
 	}
