@@ -584,7 +584,30 @@ class ImageProcessor {
 				
 				$cmd .= $oImage->GetPath() ." -resize ".$percent."% -format ".$format." ".$oImage->GetPath("_sm");
 				break;
-				
+
+			case "_promo" :
+			    /* calculate the required resize percentage */
+			    $actualWidth = $oImage->GetWidth();
+			    $targetWidth = PROMO__DIMENSIONS_WIDTH;
+			    $actualHeight = $oImage->GetHeight();
+			    $targetHeight = PROMO__DIMENSIONS_HEIGHT;
+
+			    /* work out which dimension is larger and use this to calculate resize percentage */
+			    $widthDiff = ($actualWidth - $targetWidth);
+			    $heightDiff = ($actualHeight - $targetHeight);
+			    
+			    $dimension = ($widthDiff > $heightDiff) ? "WIDTH" : "HEIGHT";
+			    
+			    /* calculate re-size required */
+			    if ($dimension == "WIDTH") {
+			        $percent = (100 - ceil((($actualWidth - $targetWidth) / $actualWidth) * 100));
+			    } else {
+			        $percent = (100 - ceil((($actualHeight - $targetHeight) / $actualHeight) * 100));
+			    }
+			    
+			    $cmd .= $oImage->GetPath() ." -resize ".$percent."% -format ".$format." ".$oImage->GetPath("_mf");
+			    break;
+
 					
 			/* landscape thumbnail cut to size */
 			case "_sf" :
@@ -798,10 +821,7 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 	public function Process($aPath,$sLinkTo,$iLinkId,$iImgType = PROFILE_IMAGE) {
 
 		global $db,$_CONFIG;
-	
-		Logger::DB(3,get_class($this)."::".__FUNCTION__."()",implode($aPath,"::"). "  ".$sLinkTo. "  ".$iLinkId . "  " . $iImgType );    
-	
-	
+
 		foreach($aPath as $sImgPath) {
 
 			$bErrorFl  = false;
@@ -849,16 +869,6 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 				$bErrorFl = true;
 				continue;
 			}
-		
-			//print $sImgPath;
-			//print "<br />";
-			//print $oImage->GetPath();
-			//$cmd = "mv ".$sImgPath." ".$oImage->GetPath();
-			//exec(print $cmd);	
-
-			//if (!file_exists($oImage->GetPath())) {
-			//	print "FILE MOVE ERROR";
-			//}
 
 			/* move image from tmp path to img folder */
 			Logger::DB(2,get_class($this)."::".__FUNCTION__."()","rename(".$sImgPath.",".$oImage->GetPath().")");
@@ -882,7 +892,10 @@ class ImageProcessor_FileUpload extends ImageProcessor {
 					}
 				} elseif ($this->GetResizeProfile() == LOGO_IMAGE) {					
 					$this->Convert($oImage,"_logo");
-				}
+				} elseif ($this->GetResizeProfile() == PROMO_IMAGE) {
+			        $this->Convert($oImage,"_promo");
+			    }
+			
 			}
 
 			/* 6.  INSERT image_map link */

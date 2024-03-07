@@ -35,13 +35,14 @@ define('LOG_LEVEL',3);
 define('HOSTNAME',"oneworld365.org");
 define('BASE_URL','http://admin.'.HOSTNAME);
 define('WEBSITE',HOSTNAME);
-define('ADMIN_SYSTEM',BASE_URL);
+define('ADMIN_SYSTEM_HOSTNAME', 'admin.oneworld365.org');
+define('ADMIN_SYSTEM',"http://".ADMIN_SYSTEM_HOSTNAME);
 define('API_URL','http://api.'.HOSTNAME);
 define('CURRENT_SITE', ADMIN_SYSTEM);
 
 define('BASE_PATH','/www/vhosts/365admin.org/htdocs');
 define('ROOT_PATH',BASE_PATH); // required for some classes
-define('ROOT_PATH_IMAGE_UPLOAD','/www/vhosts/oneworld365.org/htdocs'); // required for some classes
+define('ROOT_PATH_IMAGE_UPLOAD','/www/vhosts/oneworld365.org/htdocs'); // image upload (ProfileController)
 define('PATH_CLASSES',BASE_PATH. '/classes/');
 define('PATH_CONTROLLERS',BASE_PATH. '/controllers/');
 define("PATH_TO_MVC_ROUTE_MAP", BASE_PATH."/conf/routes.xml"); // MVC routes (URL -> Class / Method)
@@ -405,15 +406,23 @@ define("SQUARE","S");
 
 define("PROFILE_IMAGE",0);
 define("LOGO_IMAGE",1);
+define("PROMO_IMAGE",2);
 
-define("LOGO__DIMENSIONS_MAXWIDTH", 500);
-define("LOGO__DIMENSIONS_MINWIDTH", 100);
-define("LOGO__DIMENSIONS_MAXHEIGHT", 300);
-define("LOGO__DIMENSIONS_MINHEIGHT", 40);
+define("LOGO__DIMENSIONS_MAXWIDTH", 2000);
+define("LOGO__DIMENSIONS_MINWIDTH", 200);
+define("LOGO__DIMENSIONS_MAXHEIGHT", 1500);
+define("LOGO__DIMENSIONS_MINHEIGHT", 100);
 
+define("PROMO__DIMENSIONS_MAXWIDTH", 2000);
+define("PROMO__DIMENSIONS_MINWIDTH", 250);
+define("PROMO__DIMENSIONS_MAXHEIGHT", 1500);
+define("PROMO__DIMENSIONS_MINHEIGHT", 200);
 
 define("LOGO__DIMENSIONS_SMALL_WIDTH", 120); /* width of auto generated logo small version */
 define("LOGO__DIMENSIONS_SMALL_HEIGHT", 60); /* width of auto generated logo small version */
+
+define("PROMO__DIMENSIONS_WIDTH", 250); /* width of auto generated logo small version */
+define("PROMO__DIMENSIONS_HEIGHT", 250); /* width of auto generated logo small version */
 
 define("IMG_HOST","http://www.oneworld365.org/");
 define("IMG_BASE_URL",IMG_HOST ."img/");

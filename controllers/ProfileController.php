@@ -58,6 +58,8 @@ class ProfileController extends GenericController {
 	 */
 	public function DoImageUpload($link_to, $link_id) {
 
+	    $aError = array();
+
 		/* file upload params */
 		//$max_size = 1024000;
 		$max_size = IMAGE_MAX_UPLOAD_SIZE;
@@ -65,30 +67,33 @@ class ProfileController extends GenericController {
 		$path = ROOT_PATH_IMAGE_UPLOAD.'/upload/images/';
 		
 
-		if (isset($_REQUEST['do_file_upload']) || isset($_REQUEST['do_logo_upload'])) {
-		
-			if (DEBUG) Logger::Msg("Upload: Begin...");
+		if (isset($_REQUEST['do_file_upload']) || isset($_REQUEST['do_logo_upload']) || isset($_REQUEST['do_promo_upload'])) {
 		
 			/* retrieve uploaded file from correct field depending on whether we upload a logo or an image */
-			$file_field = (isset($_REQUEST['do_logo_upload'])) ? "logo" : "file";
+		    if (isset($_REQUEST['do_logo_upload']))
+		    {
+		        $file_field = "logo";
+		    } elseif ($_REQUEST['do_promo_upload'])
+		    {
+		        $file_field = "promo";
+		    } else {
+		        $file_field = "file";
+		    }
 			
 			if (count($_FILES[$file_field]['name'])<=$max_uploads) {
-				if (DEBUG) Logger::Msg("Upload: Multiple...");
 				
 				$upload = new File_upload();
 				$upload->allow('images');
 				$upload->set_path($path);
 				$upload->set_max_size($max_size);		
-				
-				
+
 				$aResult = $upload->upload_multiple($_FILES[$file_field]);
 				
 				if ($upload->is_error()) {
-					$aError = array();
-					$aError['msg']['img_upload'] = $upload->get_error();
+					$aError['msg']['file_upload'] = $upload->get_error();
 				}
 				
-				if (!is_array($aError) && is_array($aResult['TMP_PATH']) && (count($aResult['TMP_PATH']) >= 1)) {
+				if (!is_array($aError['msg']) && is_array($aResult['TMP_PATH']) && (count($aResult['TMP_PATH']) >= 1)) {
 
 					/* Now call ImageProcessor to generate proxy images */
 					if (isset($_REQUEST['do_file_upload'])) {
@@ -98,15 +103,14 @@ class ProfileController extends GenericController {
 						$oIP->Process($aResult['TMP_PATH'],$link_to,$link_id,$iImgType = PROFILE_IMAGE);
 
 					} elseif (isset($_REQUEST['do_logo_upload'])) {
+
 						/* process logo */
-						$oIP = new ImageProcessor_FileUpload;
-		
+						$oIP = new ImageProcessor_FileUpload;		
 						$oIP->SetResizeProfile(LOGO_IMAGE);
-						
+
 						$aImageDetails = $oIP->Identify($aResult['TMP_PATH'][0]);
 						
-						/* logo size boundaries */
-						
+						/* logo size boundaries */						
 						if (($aImageDetails['width'] > LOGO__DIMENSIONS_MAXWIDTH) ||
 							($aImageDetails['width'] < LOGO__DIMENSIONS_MINWIDTH) ||
 							($aImageDetails['height'] > LOGO__DIMENSIONS_MAXHEIGHT) ||
@@ -116,16 +120,14 @@ class ProfileController extends GenericController {
 							/* wrong size image, delete uploaded file, throw an error */
 							unset($aResult['TMP_PATH'][0]);
 
-							$aError = array();
-							$aError['msg']['img_upload'] = "Error: Invalid logo size.  Permitted sizes (in pixels) width: ".LOGO__DIMENSIONS_MINWIDTH."-".LOGO__DIMENSIONS_MAXWIDTH."px, height: ".LOGO__DIMENSIONS_MINHEIGHT."-".LOGO__DIMENSIONS_MAXHEIGHT."px.";
-											
+							$aError['msg']['img_filesize'] = "ERROR: Invalid size.  Minimum size: width: ".LOGO__DIMENSIONS_MINWIDTH."px / height: ".LOGO__DIMENSIONS_MINHEIGHT."px";
+
 						} else {
 			
 							/* process the new logo */
 							$oIP->Process($aResult['TMP_PATH'],$link_to,$link_id,$iImgType = LOGO_IMAGE);
 									
 							/* delete existing (old) logo */
-							if (DEBUG) Logger::Msg("Checking for existing logo...");
 							if ($link_to == "COMPANY") {
 								$aProfile = new CompanyProfile();
 							} elseif ($link_to == "PLACEMENT") {
@@ -134,9 +136,7 @@ class ProfileController extends GenericController {
 							$aProfile->SetId($link_id);
 							$aExistingLogo = $aProfile->GetImages(LOGO_IMAGE);
 							unset($aProfile);
-							if (is_array($aExistingLogo) && count($aExistingLogo) >= 1) {
-								if (DEBUG) Logger::Msg("Delete ".count($aExistingLogo)." Existing Logo...");
-								
+							if (is_array($aExistingLogo) && count($aExistingLogo) >= 1) {								
 								foreach($aExistingLogo as $oLogoImage) {
 									if (!in_array($oLogoImage->GetId(), $oIP->GetProcessedIds())) {
 										$oLogoImage->Delete();
@@ -145,18 +145,60 @@ class ProfileController extends GenericController {
 							}
 							
 						}
-						
+					} elseif (isset($_REQUEST['do_promo_upload'])) {
+
+					    /* process promo image */
+					    $oIP = new ImageProcessor_FileUpload;
+					    $oIP->SetResizeProfile(PROMO_IMAGE);
+					    
+					    $aImageDetails = $oIP->Identify($aResult['TMP_PATH'][0]);					    
+					    
+					    /* logo size boundaries */
+					    if (($aImageDetails['width'] > PROMO__DIMENSIONS_MAXWIDTH) ||
+					        ($aImageDetails['width'] < PROMO__DIMENSIONS_MINWIDTH) ||
+					        ($aImageDetails['height'] > PROMO__DIMENSIONS_MAXHEIGHT) ||
+					        ($aImageDetails['height'] < PROMO__DIMENSIONS_MINHEIGHT)
+					        )
+					    {
+					        /* wrong size image, delete uploaded file, throw an error */
+					        unset($aResult['TMP_PATH'][0]);
+
+					        $aError['msg']['img_filesize'] = "ERROR: Invalid size.  Minimum size: width: ".PROMO__DIMENSIONS_MINWIDTH."px / height: ".PROMO__DIMENSIONS_MINHEIGHT."px";
+
+					    } else {
+					        
+					        /* process the new logo */
+					        $oIP->Process($aResult['TMP_PATH'],$link_to,$link_id,$iImgType = PROMO_IMAGE);
+					        
+					        /* delete existing (old) logo */
+					        if ($link_to == "COMPANY") {
+					            $aProfile = new CompanyProfile();
+					        } elseif ($link_to == "PLACEMENT") {
+					            $aProfile = new PlacementProfile();
+					        }
+					        $aProfile->SetId($link_id);
+					        $aExistingImg = $aProfile->GetImages(PROMO_IMAGE);
+					        unset($aProfile);
+					        if (is_array($aExistingImg) && count($aExistingImg) >= 1) {
+					            foreach($aExistingImg as $oImg) {
+					                if (!in_array($oImg->GetId(), $oIP->GetProcessedIds())) {
+					                    $oImg->Delete();
+					                }
+					            }
+					        }
+					        
+					    }
+
 					}
 				}
 				
 			} else {  
-				$aError = array();
 				$aError['msg']['img_upload'] = 'Trying to upload to many files';
 			}   
 			
-			
-			if (is_array($aError) && count($aError['msg']) >= 1) {
-				$this->ProcessValidationErrors($aError['msg']);
+			if (is_array($aError['msg']) && count($aError['msg']) >= 1) {
+			    $oMessage = new Message(MESSAGE_TYPE_WARNING, 'img_upload', implode("<br/>",$aError['msg']));
+			    $this->SetMessage($oMessage);
 			} else {
 				$plural = (count($aResult['FILENAME']) > 1) ? "s" : "";
 				$message = "SUCCESS : uploaded ".count($aResult['FILENAME']) ." file".$plural."<br/>".implode("<br />",$aResult['FILENAME']);
