@@ -3,12 +3,7 @@
 $oProfile = $this->Get('oProfile');
 if (!is_object($oProfile)) return;
 
-if ($oProfile->GetGeneralType() == PROFILE_PLACEMENT) 
-{
-    $sProfileUrl = "/company/".$oProfile->GetCompUrlName()."/".$oProfile->GetUrlName();
-} else {
-    $sProfileUrl = "/company/".$oProfile->GetCompUrlName();
-}
+$bHideProfileDetails = $this->Get('bHideProfileDetails');
 
 $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
 
@@ -29,12 +24,9 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
     	    if ($oProfile->GetImage(0)->GetHtml("_lf",'')) // try fetch large fixed-aspect image  
     	    {
     	        $img_url = $oProfile->GetImage(0)->GetUrl("_lf");
-    	    } elseif ($oProfile->GetImage(0)->GetHtml("_mf",'')) // older profiles may only have medium size
-    	    {
-    	        $img_url = $oProfile->GetImage(0)->GetUrl("_mf");
     	    } ?>
     		<div class="col-12 profile-image">
-        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= $sProfileUrl;  ?>" class="">
+        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetUri();  ?>" class="">
 				<img class="img-fluid rounded mb-3" src="<?= $img_url;  ?>" alt="<?= $oProfile->GetTitle() ?>" />
         		</a>
         	</div>
@@ -46,7 +38,7 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
         	if (strlen($strCompanyLogoHtml) > 1) {
         	?>
         	<div style="profile-image">
-        		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?= $sProfileUrl; ?>" target="_new" class="">
+        		<a title="<?= $oProfile->GetCompanyName() ?>" href="<?=  $oProfile->GetUri(); ?>" target="_new" class="">
         		<?= $strCompanyLogoHtml; ?>
         		</a>
         	</div><?php 
@@ -55,7 +47,9 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
     	</div>
 
         <div class="col-lg-10 col-sm-12">
-       	    <h4><a href="<?= $sProfileUrl;  ?>" title="<?= $oProfile->GetTitle(); ?>" target="_new"><?= $oProfile->GetTitle(); ?></a></h4>    
+        <? if (!$bHideProfileDetails) { ?>
+       	    <h4><a href="<?= $oProfile->GetUri(); ?>" title="<?= $oProfile->GetTitle(); ?>" target="_new"><?= $oProfile->GetTitle(); ?></a></h4>
+       	<? } ?>    
 
             <?php if ($oProfile->GetReviewCount() >= 1) { ?>
             <input type="hidden" id="rateYo-<?= $oProfile->GetId() ?>-rating" value="<?= $oProfile->GetRating(); ?>" />
@@ -66,6 +60,7 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
             </div><?
             } ?>
 
+		<? if (!$bHideProfileDetails) { ?>
         	<ul class="profile-details small">
         	<? if ($oProfile->GetGeneralType() == PROFILE_PLACEMENT) { ?>
         		<li><?= $oProfile->GetCompanyName(); ?></li>
@@ -81,6 +76,7 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
         		<?= $oProfile->GetCurrencyLabel(); ?></li>
         	<?php } ?>
         	</ul>
+        <? } ?>
         </div>
 </div>
 <?php if ($oProfile->GetReviewCount() >= 1) { ?>

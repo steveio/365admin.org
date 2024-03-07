@@ -6,6 +6,7 @@ $aPageOptions = $this->Get('aPageOptions');
 $aArticle = $this->Get('aArticle');
 
 $aAttachedArticle = $this->Get('aAttachedArticle');
+$aAttachedProfile = $this->Get('aAttachedProfile');
 $aRelatedProfile = $this->Get('aRelatedProfile');
 $aRelatedArticle = $this->Get('aRelatedArticle');
 
@@ -75,18 +76,12 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	</div>
  
      	<?
-     	if (is_array($aArticle) && count($aArticle) >= 1)  // display "Attached" or "Blog" Articles
+     	if (is_array($aArticle) && count($aArticle) >= 1)  // display Blog Articles
      	{
             if (count($aArticle) > 6)
         	{ ?>
-                <div class="row my-3"><?
-                if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "t")
-                {
-                    $title = "Blog Articles";
-                } else {
-                    $title = "Related Articles";   
-                } ?>
-				<h3><?= $title; ?></h3>
+                <div class="row my-3">
+				<h3>Blog Articles</h3>
         	    <div class="col-sm-12 col-md-8 col-lg-8"><?
         	        $limit = 5;
         	        for ($i=0;$i<$limit;$i++) {
@@ -113,23 +108,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
                         } ?>
                     </div>
                 </div><? 
-            } else { ?>
-        		<div class="row my-3">
-				<h3>Related Articles</h3>
-        	    <div class="col-sm-12 col-md-12 col-lg-12"><?
-        	        foreach ($aArticle as $oArticle) {
-                    	  if (!is_object($oArticle)) continue;
-                          $oArticle->SetAttachedImages();
-                          $oArticle->initTemplate();
-                          $oArticle->oTemplate->Set('CSS_CLASS_COL','col-sm-6 col-md-6 col-lg-3');
-                          $oArticle->oTemplate->Set("bHideDescShort", true);
-                          $oArticle->oTemplate->Set("bHidePublishedDate", true);
-            			  $oArticle->LoadTemplate("article_summary.php"); 
-            			  print $oArticle->Render();
-                    } ?>
-                 </div>
-		        </div>    
-         <? }
+            }
      	} ?>
     
     </div>
@@ -137,19 +116,18 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 
 
 <?php 
-    if ($aPageOptions[ARTICLE_DISPLAY_OPT_BLOG] == "f" && is_array($aAttachedArticle) && count($aAttachedArticle) >= 1)
+    if (is_array($aAttachedArticle) && count($aAttachedArticle) >= 1)
     { ?>
     <div class="row my-3">
     	<div class="row my-3">
     	<?php 
     	foreach($aAttachedArticle as $oArticle) 
     	{
-    	   $oTemplate = new Template();
-           $oTemplate->Set("oArticle", $oArticle);
            $oArticle->initTemplate();
-           $oArticle->oTemplate->Set('CSS_CLASS_COL','col-3');
+           $oArticle->oTemplate->Set('CSS_CLASS_COL','col-4');
+           $oArticle->oTemplate->Set('bHidePublishedDate', true);
            $oArticle->LoadTemplate("article_summary.php");
-           print $oTemplate->Render();
+           print $oArticle->Render();
         } ?>
     	</div>
     </div><?
@@ -172,6 +150,26 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] != "f")
     ?>
     </div><?
     }
+}
+?>
+
+<?php 
+if (is_array($aAttachedProfile) && count($aAttachedProfile) >= 1)
+{ ?>
+<div class="row my-3">
+	<h2>Top Rated Companies</h2>
+	<div class="row my-3">
+	<?php 
+	foreach($aAttachedProfile as $oProfile) 
+	{
+	   $oTemplate = new Template();
+       $oTemplate->Set("oProfile", $oProfile);
+       $oTemplate->Set("bHideProfileDetails", true);
+       $oTemplate->LoadTemplate("profile_summary.php");
+       print $oTemplate->Render();
+    } ?>
+	</div>
+</div><?
 }
 ?>
 

@@ -81,18 +81,13 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             }
 
 
-            if(!$oTemplateCfg->is_collection) // individual article template
+            if($oTemplateCfg->is_collection) // collection template eg /blog
             {
-                // set article fetch options based on publisher settings
-                if ($this->oContentMapping->GetDisplayOptRelatedArticle())
-                    $this->oArticle->SetFetchAttachedArticle(false);
-
-                if ($this->oContentMapping->GetDisplayOptRelatedProfile())
-                    $this->oArticle->GetFetchAttachedProfile(false);
-
-            } else {
                 $this->oArticle->SetFetchAttachedArticle(false);
                 $this->oArticle->GetFetchAttachedProfile(false);
+            } else {
+                $this->oArticle->SetFetchAttachedArticle(true);                    
+                $this->oArticle->GetFetchAttachedProfile(true);
             }
 
             // fetch article mapped directly to URL path eg /blog, /country/brazil
@@ -108,14 +103,11 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             // setup HTML header meta tags
             $this->SetPageHeader();
 
-
-            //$this->oArticle->SetAttachedArticleFetchLimit(null);
-
             // fetch associated articles for collection template
             if ($this->oContentMapping->GetOptionEnabled(ARTICLE_DISPLAY_OPT_PATH)) // fetch by path eg /blog/post1, /blog/post2
             {
                 $this->oArticle->SetAttachedArticleIdByPath($this->oContentMapping->GetSectionUri());
-            } else { // fetch 0..n "attached" articles
+            } else { // fetch "Attached" articles
                 $this->oArticle->SetAttachedArticleId();
             }
 
@@ -128,9 +120,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
             if (count($this->oArticle->GetAttachedArticleId()) >= 1)
             {
-                $this->aArticle = $this->oArticle->oArticleCollection->Get();
+                $this->aAttachedArticle = $this->oArticle->oArticleCollection->Get();
             }
-
             
             if ($this->oContentMapping->GetDisplayOptSearchPanel())
             {
@@ -207,7 +198,9 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
 
-        $this->oTemplate->Set("aArticle", $this->aArticle);
+        $this->oTemplate->Set("aArticle", $this->aArticle); // blog article
+        $this->oTemplate->Set("aAttachedArticle", $this->aAttachedArticle);
+        $this->oTemplate->Set("aAttachedProfile", $this->oArticle->GetAttachedProfile());
 
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
         $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);

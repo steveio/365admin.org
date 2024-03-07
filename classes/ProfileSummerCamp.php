@@ -232,9 +232,9 @@ class SummerCampProfile extends CompanyProfile {
 		global $db;
 
 		if (!is_numeric($p['id'])) return false;
-                if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF])) $p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF] = 'NULL';
-                if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER] = 'NULL';
-                if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF])) $p[PROFILE_FIELD_SUMMERCAMP_NO_STAFF] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER] = 'NULL';
+        if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN])) $p[PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN] = 'NULL';
 
 
 		/* is there an existing sub-type record ? */

@@ -454,12 +454,7 @@ class RequestRouter {
 
     protected function ProcessHomePageRequest()
     {
-                
-        $oContentAssembler = new HomepageContentAssembler();
-        $oContentAssembler->SetRequestRouter($this);
-        $oContentAssembler->GetByPath($this->GetRequestUri());
-
-        die();
+        $this->ProcessArticlePageRequest();
     }
     
     /*

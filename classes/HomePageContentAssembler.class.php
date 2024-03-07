@@ -14,6 +14,7 @@ require_once(BASE_PATH."/classes/ArticleContentAssembler.class.php");
 
 class HomepageContentAssembler extends ArticleContentAssembler {
 
+    protected $oArticle;
     protected $strTemplatePath;
     protected $oTemplate;
     protected $oSearchResultPanel;
@@ -39,20 +40,24 @@ class HomepageContentAssembler extends ArticleContentAssembler {
 
         try {
 
+            if ($this->oContentMapping->GetByPath($path))
+            {
+                $iTemplateId = (is_numeric($this->oContentMapping->GetTemplateId())) ? $this->oContentMapping->GetTemplateId() : CONTENT_DEFAULT_RESULT_TEMPLATE;
+                $oTemplateCfg = $this->oTemplateList->GetById($iTemplateId);
+            }
+
             $this->SetTemplatePath("homepage.php");
             $this->SetSearchResultPanel($aPageOptions = array());
             
-            // homepage news articles
+            $this->oArticle = new Article;
+            $this->oArticle->SetFetchMode(FETCHMODE__FULL);
+            $this->oArticle->Get($oBrand->GetWebsiteId(),"/");
             
             $oBlogArticle = new Article();
             $oBlogArticle->SetFetchMode(FETCHMODE__SUMMARY);
             $oBlogArticle->SetAttachedArticleFetchLimit(12);
             $oBlogArticle->Get($oBrand->GetWebsiteId(),"/blog");
             $this->oBlogArticle = $oBlogArticle;
-
-            $oHomepageArticle = new Article;
-            $oHomepageArticle->SetFetchMode(FETCHMODE__FULL);
-            $oHomepageArticle->Get($oBrand->GetWebsiteId(),"/");            
             
             if ($this->oContentMapping->GetDisplayOptReview())
             {
@@ -61,7 +66,7 @@ class HomepageContentAssembler extends ArticleContentAssembler {
             }
             
             // fetch related blog articles ( there are 0 attached articles )
-            if ($this->oContentMapping->GetDisplayOptBlogArticle() && count($this->oArticle->GetAttachedArticleId()) < 1)
+            if ($this->oContentMapping->GetDisplayOptBlogArticle())
             {
                 // search keywords specified, fetch blog articles related to these
                 if (strlen($this->oContentMapping->GetSearchKeywords()) > 1)
@@ -82,13 +87,11 @@ class HomepageContentAssembler extends ArticleContentAssembler {
             {
                 $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, "blog", $exclude = true);
             }
-            
+
             if ($this->oContentMapping->GetDisplayOptRelatedProfile())
             {
                 $this->GetRelatedProfile($this->oArticle->GetId(), PROFILE_PLACEMENT, null, $limit = 8);
             }
-
-            $this->oHomepageArticle = $oHomepageArticle;
 
             $oMessageProcessor = new MessageProcessor();
             $this->oMessagePanel = $oMessageProcessor->GetMessagePanel();
@@ -121,10 +124,10 @@ class HomepageContentAssembler extends ArticleContentAssembler {
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
 
         $this->oTemplate->Set("oSearchPanel", $this->oSearchPanel);
-        $this->oTemplate->Set("oArticle", $this->oHomepageArticle);
+        $this->oTemplate->Set("oArticle", $this->oArticle);
 
         $this->oTemplate->Set("aArticle", $this->oBlogArticle->oArticleCollection->Get());
-        $this->oTemplate->Set("aAttachedArticle", $this->oHomepageArticle->oArticleCollection->Get());
+        $this->oTemplate->Set("aAttachedArticle", $this->oArticle->oArticleCollection->Get());
 
         $this->oTemplate->Set("oReviewTemplate",$this->oReviewTemplate);
         $this->oTemplate->Set("aRelatedArticle", $this->aRelatedArticle);

@@ -148,7 +148,7 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_PROFILE] == "t")
     if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
     { ?>
     <div class="row my-3">
-    	<h2>Related Opportunities</h2>
+    	<h2>Top Rated Companies</h2>
     	<div class="row my-3">
     	<?php 
     	foreach($aRelatedProfile as $oProfile) 
