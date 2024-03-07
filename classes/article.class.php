@@ -1067,6 +1067,7 @@ class Content  implements TemplateInterface {
 		
 		if ($db->getAffectedRows() == 1) {
 		    $response['msg'] = "SUCCESS : Attached profile";
+		    $response['status'] = "success";
 		    return true;
 		} else {
 		    $response['msg'] = "ERROR : A problem occured and profile was not attached";
