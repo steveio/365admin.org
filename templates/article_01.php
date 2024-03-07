@@ -124,7 +124,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	foreach($aAttachedArticle as $oArticle) 
     	{
            $oArticle->initTemplate();
-           $oArticle->oTemplate->Set('CSS_CLASS_COL','col-4');
+           $oArticle->oTemplate->Set('CSS_CLASS_COL','col-sm-12 col-md-4 col-lg-4');
            $oArticle->oTemplate->Set('bHidePublishedDate', true);
            $oArticle->LoadTemplate("article_summary.php");
            print $oArticle->Render();
@@ -165,6 +165,7 @@ if (is_array($aAttachedProfile) && count($aAttachedProfile) >= 1)
 	   $oTemplate = new Template();
        $oTemplate->Set("oProfile", $oProfile);
        $oTemplate->Set("bHideProfileDetails", true);
+       $oTemplate->Set("bDisplayPromoImg", true);
        $oTemplate->LoadTemplate("profile_summary.php");
        print $oTemplate->Render();
     } ?>

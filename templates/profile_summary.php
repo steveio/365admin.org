@@ -4,6 +4,7 @@ $oProfile = $this->Get('oProfile');
 if (!is_object($oProfile)) return;
 
 $bHideProfileDetails = $this->Get('bHideProfileDetails');
+$bDisplayPromoImg = $this->Get('bDisplayPromoImg');
 
 $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
 
@@ -19,7 +20,20 @@ $strCompanyLogoHtml = $this->Get('strCompanyLogoHtml');
     	    $strCompanyLogoHtmlSmall = $oProfile->GetCompanyLogo()->GetHtml('_sm', $oProfile->GetCompUrlName());
     	}
 
-    	if (is_object($oProfile->GetImage(0))) // profile has 1 or more image
+	if ($bDisplayPromoImg && is_object($oProfile->GetImage(PROMO_IMAGE)))
+	{
+
+            if ($oProfile->GetImage(PROMO_IMAGE)->GetHtml("_mf",'')) 
+            {
+                $img_url = $oProfile->GetImage(PROMO_IMAGE)->GetUrl("_mf");
+            } ?>
+                <div class="col-12 profile-image">
+                        <a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetUri();  ?>" class="">
+                                <img class="img-fluid rounded mb-3" src="<?= $img_url;  ?>" alt="<?= $oProfile->GetTitle() ?>" />
+                        </a>
+                </div><?
+	
+    	} elseif (is_object($oProfile->GetImage(0))) // profile has 1 or more image
     	{ 
     	    if ($oProfile->GetImage(0)->GetHtml("_lf",'')) // try fetch large fixed-aspect image  
     	    {
