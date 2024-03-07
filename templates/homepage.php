@@ -115,6 +115,8 @@ $oSearchPanel = $this->Get('oSearchPanel');
            $oTemplate->Set("oArticle", $oArticle);
            $oTemplate->Set("bHidePublishedDate", true);
            $oTemplate->Set("bHideDescShort", true);
+	   $oTemplate->Set("CSS_CLASS_COL", "col-sm-12 col-md-4 col-lg-4");
+	   $oTemplate->Set("IMG_FORMAT", "_lf");
            $oTemplate->LoadTemplate("article_summary.php");
            print $oTemplate->Render();
         } ?>
@@ -129,7 +131,6 @@ $oSearchPanel = $this->Get('oSearchPanel');
 if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] == "t")
 { 
     $oReviewTemplate = $this->Get('oReviewTemplate');
-    die(__FILE__."::".__LINE__);
     ?>
     <div class="row my-3">
     <h2>Comments</h2>
@@ -142,7 +143,7 @@ if ($aPageOptions[ARTICLE_DISPLAY_OPT_REVIEW] == "t")
 
 
 <?
-if ($aPageOptions[ARTICLE_DISPLAY_OPT_ARTICLE] == "t")
+if ($aPageOptions[ARTICLE_DISPLAY_OPT_PROFILE] == "t")
 {
     if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
     { ?>

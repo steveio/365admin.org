@@ -11,7 +11,7 @@ $img_size = ($this->Get("IMG_FORMAT") == "") ? "" : "_lf";
 <div class="<?= $css_class_col; ?> my-2">
 	<div class="col-sm-12 my-3">
     <? if (is_object($oArticle->GetImage(0))) { ?>
-        <a title="<?= $oArticle->GetTitle(); ?>" href="<?= $oArticle->GetUrl(); ?>">
+        <a title="<?= $oArticle->GetDescShortPlaintext(120); ?>" href="<?= $oArticle->GetUrl(); ?>">
             <?= $oArticle->GetImage(0)->GetHtml($img_size,$oArticle->GetTitle()); ?>
         </a>
     <? } else { 
@@ -27,7 +27,7 @@ $img_size = ($this->Get("IMG_FORMAT") == "") ? "" : "_lf";
 	</div>
 
 	<div class="col-sm-12 col-lg-8 col-md-8">
-        <h3><a class="title-summary" href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetTitle(); ?>"><?= $oArticle->GetTitle(); ?></a></h3>
+        <h3><a class="title-summary" href="<?= $oArticle->GetUrl(); ?>" title="<?= $oArticle->GetDescShortPlaintext(120); ?>"><?= $oArticle->GetTitle(); ?></a></h3>
         <? if (!$bHideDescShort) { ?>
         <p class=""><?= $oArticle->GetDescShortPlaintext(120); ?></p>
         <? } ?>
