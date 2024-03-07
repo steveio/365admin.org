@@ -135,6 +135,9 @@ $(document).ready(function(){
 
 	function refineSearch(el) {
 
+                $('#search-viewall-lnk').removeClass("d-none");
+                $('#search-viewall-lnk').addClass("d-inline-flex d-md-none");
+
 		var fqSet = [];		
 		var fqSet = getFiltersFromSelect();
 
@@ -411,15 +414,9 @@ $(document).ready(function(){
 	function processProfileHTML(data) {
 		$('#search-result-b1').html(data.b1);
 		$('#search-result-b2').html(data.b2);
-		
-		//$('#search-result-b2').addClass("d-sm-none");
-		//$('#pager').addClass("d-sm-none");
-		//$('#search-viewall-lnk').removeClass("d-sm-none");
-		//$('#search-viewall-lnk').addClass("d-sm-inline-flex");
-		
 
-		//$('#pager').addClass("d-lg-block d-sm-none");
-		//$('#search-viewall-lnk').addClass("d-lg-block d-sm-none");
+                $('#search-viewall-lnk').removeClass("d-none");
+                $('#search-viewall-lnk').addClass("d-inline-flex d-md-none");
 	}
 
 	/*
@@ -529,6 +526,7 @@ $(document).ready(function(){
 	});
 
 	$('input[name=search_type]').change(function() {
+
 		var fqSet = [];		
 		var fqSet = getFiltersFromSelect();
 					

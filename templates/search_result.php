@@ -48,7 +48,7 @@
 	    <div id="result-hdr"></div>
 	    <div class="col-12">
 			<div id="search-result-b1" class="row"></div>
-			<div id="search-viewall-lnk" class="row d-sm-none d-md-none">
+			<div id="search-viewall-lnk" class="row d-none">
 				<a href="#" id="search-viewall" class="btn btn-primary rounded-pill px-3">View All Results</a>
 			</div>
 			<div id="search-result-b2" class="row d-none d-md-inline-flex"></div>
@@ -58,16 +58,16 @@
 
     <script>
 	$(document).ready(function(){ 
-		$('#search-viewall').click(function(e) {
+	    $('#search-viewall').click(function(e) {
             e.preventDefault();
 
             $('#search-result-b2').removeClass("d-none");
-    		$('#search-result-b2').addClass("d-inline-flex");
+            $('#search-result-b2').addClass("d-inline-flex");
 
             $('#pager').removeClass("d-none");
-    		$('#pager').addClass("d-inline-flex");
+    	    $('#pager').addClass("d-inline-flex");
 
-    		$('#search-viewall-lnk').addClass("d-none");
+    	    $('#search-viewall-lnk').addClass("d-none");
 
             return false;
 		});
