@@ -513,13 +513,11 @@ class Content  implements TemplateInterface {
 	 * @return mixed content object or false if not found
 	 */
 	public function GetById($id) {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."() id=".$id);
 
-		global $db;
-		
+	    global $db;
+
 		if (!is_numeric($id)) return false;
-	
+
 		$field_sql = ($this->GetFetchMode() == FETCHMODE__FULL) ? "a.*" : "a.id, a.title, a.short_desc, a.meta_desc, a.meta_keywords, a.published_status, a.published_date";	
 
         $sql = "SELECT 
@@ -534,6 +532,7 @@ class Content  implements TemplateInterface {
 						a.id = ".$id." 
 					";
 
+		
 		$db->query($sql);
 		
 		if ($db->getNumRows() != 1) return false;
@@ -546,16 +545,14 @@ class Content  implements TemplateInterface {
 		$this->SetMapping();
 		$this->SetAttachedImage();
 
-		if ($this->GetFetchMode() == FETCHMODE__FULL) {
-			if ($this->GetFetchAttachedProfile()) {
-				$this->SetAttachedProfile();
-			}
-			if ($this->GetFetchAttachedArticle()) {
-				$this->SetAttachedArticle();
-			}
-			if ($this->GetFetchAttachedTo()) {
-				$this->SetAttachedTo();
-			}
+		if ($this->GetFetchAttachedProfile()) {
+			$this->SetAttachedProfile();
+		}
+		if ($this->GetFetchAttachedArticle()) {
+			$this->SetAttachedArticle();
+		}
+		if ($this->GetFetchAttachedTo()) {
+			$this->SetAttachedTo();
 		}
 		
 		return true;
@@ -973,39 +970,36 @@ class Content  implements TemplateInterface {
 		$this->aProfile = $aProfile;
 	}
 	
-	public function SetAttachedProfile($fetch = TRUE,$aRes = array()) {
+	public function SetAttachedProfile() {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
 		global $db;
+
+		$sql = "SELECT m.profile_type, m.profile_id FROM ".DB__ARTICLE_PROFILE_MAP_TBL." m WHERE m.article_id = ".$this->GetId();
+
+		$db->query($sql);
 		
-		if ($fetch) {
-			$db->query("SELECT m.profile_type, m.profile_id FROM ".DB__ARTICLE_PROFILE_MAP_TBL." m WHERE m.article_id = ".$this->GetId());
-			
-			if ($db->GetNumRows() < 1) return false;
-			
-			$aRes = $db->GetRows();
-		}
+		if ($db->GetNumRows() < 1) return false;
 		
+		$aRes = $db->GetRows();
+
 		foreach($aRes as $aRow) {
+
 			$oProfile = ProfileFactory::Get($aRow['profile_type']);
+
 			try {
-				$aProfile = $oProfile->GetById($aRow['profile_id']);
+				$oProfile->GetById($aRow['profile_id']);
+
+				if (!$oProfile) continue;
+
+				$this->aProfile[] = $oProfile;
+
 			} catch (Exception $e) {
-				// @todo comp profile deleted, remove this profile mapping
 				continue;
 			}
-			if (!$aProfile) continue;
-			$oProfile->SetFromArray($aProfile);
-			$oProfile->GetImages($iType = PROFILE_IMAGE);
-			if (in_array($aRow['profile_type'], array(PROFILE_PLACEMENT, PROFILE_VOLUNTEER))) {
-				$oProfile->SetCompanyLogo();
-			}
-			$this->aProfile[] = $oProfile; 
 		}
-		
 		return true;
-		
 	}
 	
 	
@@ -1035,19 +1029,17 @@ class Content  implements TemplateInterface {
 	
 	
 	public function AttachProfile($aRequest,&$response) {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 
 		global $db;
 
 		$aRequest['profile_type'] = PROFILE_COMPANY;
 		$aRequest['profile_id'] = $aRequest['company_id'];
-		
+
 		if (!is_numeric($aRequest['company_id'])) {
-			$response['profle_id'] = "ERROR : Please select a valid profile to attach";
+			$response['msg'] = "ERROR : Please select a valid profile to attach";
 			return false;
 		}
-		
+
 		if (is_numeric($aRequest['placement_id'])) {
 			$aRequest['profile_type'] = PROFILE_PLACEMENT;
 			$aRequest['profile_id'] = $aRequest['placement_id'];
@@ -1064,24 +1056,21 @@ class Content  implements TemplateInterface {
 					");
 		
 		if ($db->getNumRows() == 1) {
-			$response['duplicate_check'] = "ERROR : This profile is already attached";
+			$response['msg'] = "ERROR : This profile is already attached";
 			return false;
 		}
-
-		//$aRequest['placement_id']
 		
 		$db->query("INSERT INTO ".DB__ARTICLE_PROFILE_MAP_TBL." 
 						(article_id,profile_type,profile_id) 
 					VALUES 
 						(".$this->GetId().",".$aRequest['profile_type'].",".$aRequest['profile_id'].");");
 		
-		if ($db->getAffectedRows() != 1) {
-			$response['attach_err'] = "ERROR : A problem occured and profile was not attached";
-			return true;
-			
+		if ($db->getAffectedRows() == 1) {
+		    $response['msg'] = "SUCCESS : Attached profile";
+		    return true;
 		} else {
-			$response['msg'] = "SUCCESS : Attached profile";
-			return true;
+		    $response['msg'] = "ERROR : A problem occured and profile was not attached";
+		    return false;
 		}
 	}
 	

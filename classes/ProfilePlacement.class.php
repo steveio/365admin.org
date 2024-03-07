@@ -108,7 +108,17 @@ class PlacementProfile extends AbstractProfile {
 
 	public function GetById($id)
 	{
-	    return $this->GetProfileById($id);
+	    $oStd = $this->GetProfileById($id, $key = "PLACEMENT_ID",$return = "OBJECT");
+	    if (is_object($oStd))
+	    {
+	        $this->SetFromObject($oStd);
+	        $this->GetImages();
+	        $this->SetCompanyLogo();
+	        $this->GetCategoryInfo();
+	        $this->GetActivityInfo();
+	        $this->GetCountryInfo();
+	        $this->GetReviewRating();
+	    }
 	}
 
 	/*
@@ -1244,8 +1254,9 @@ class PlacementProfile extends AbstractProfile {
 								"DESC_SHORT" => nl2br($this->GetDescShort()),
 								"DESC_SHORT_60" => nl2br($this->GetDescShort(60)),
 								"COMPANY_NAME" => $this->GetCompanyName(),
-								"COUNTRY_TXT" => $this->country_txt
-									));
+								"COUNTRY_TXT" => $this->country_txt,
+		                        "oProfile" => $this
+							));
 									
 									
 		if (is_object($this->GetImage(0))) {

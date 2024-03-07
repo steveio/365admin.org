@@ -65,9 +65,7 @@ $_SESSION['article_id'] = $_REQUEST['id'];
 
 if (isset($_REQUEST['attach_profile'])) {
 	$oArticle->SetId($article_id);
-	if (!$oArticle->AttachProfile($_REQUEST,$aResponse)) {
-		$aResponse['msg'] = "ERROR : Please select a profile to attach";
-	}
+	$oArticle->AttachProfile($_REQUEST,$aResponse);
 }
 
 
@@ -79,8 +77,8 @@ if (isset($_REQUEST['remove_profile'])) {
 		 $aResponse['msg'] = "SUCCESS : Removed attached profile";
 		 $aResponse['status'] = "success";
 	} else {
-		$aResponse['msg'] = "ERROR : Please select a placement to remove";
-		$aResponse['status'] = "success";
+		$aResponse['msg'] = "ERROR : Please select a profile to remove";
+		$aResponse['status'] = "warning";
 	}
 }
 
@@ -208,8 +206,6 @@ if(isset($_REQUEST['company_id']))
 }
 
 
-
-
 print $oHeader->Render();
 
 ?>
@@ -315,26 +311,6 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 
 	<div class="row">
 		<!-- MULTIPLE FILE UPLOAD -->
-
-		<script type="text/javascript">
-		<!--
-			var gFiles = 0;
-			function addFile() {
-				var tr = document.createElement('tr');
-				tr.setAttribute('id', 'file-' + gFiles);
-				var td = document.createElement('td');
-				td.innerHTML = '<input type="file" size="30" name="file[]"><span onclick="removeFile(\'file-' + gFiles + '\')" style="cursor:pointer;">Remove</span>';
-				tr.appendChild(td);
-				document.getElementById('files-root').appendChild(tr);
-				gFiles++;
-			}
-			function removeFile(aId) {
-				var obj = document.getElementById(aId);
-				obj.parentNode.removeChild(obj);
-			}
-		-->
-		</script>
-
 		<span onclick="addFile()" style="cursor:pointer;cursor:hand;">Add More +</span>
 
 		<input type="hidden" name="mode" value="misc" />
@@ -370,28 +346,38 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 
 <div class="row my-3">
 	<h2>Attached Profiles :</h2>
-
-	<?
-
-	foreach($oArticle->GetAttachedProfile() as $oProfile) {
-
-		if ($oProfile->GetType() == PROFILE_COMPANY) {
-			$oProfile->LoadTemplate("profile_summary_01_sm.php");
-		} else { /* assume everything else is a placement profile varient */
-			$oProfile->LoadTemplate("profile_summary_01_sm.php");
-		}
-
-		?>
-		<div class="border" style="float: left; width: 250px;">
-    		<div style="float: right; padding-right: 10px;"><a class="p_small" title="Remove Profile" href="/article-editor/?&id=<?= $oArticle->GetId() ?>&profile_id=<?= $oProfile->GetId() ?>&profile_type=<?= $oProfile->GetType(); ?>&remove_profile=1">[REMOVE]</a></div>
-    		<div style="height: 200px;">
-    		<?= $oProfile->Render(); ?>
-			</div>
-		</div>
-		<?
-	}
-
-?>
+		
+    <table  cellspacing="2" cellpadding="0" border="0" width="" class="table table-striped">
+    <thead>
+    <tr>
+    	<th scope="col">&nbsp;</th>
+    	<th scope="col">Type</th>
+    	<th scope="col">Title</th>
+    	<th scope="col">Url</th>
+    	<th scope="col">Remove</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?
+    if (count($oArticle->GetAttachedProfile()) >= 1)
+    {
+        $i = 1;
+        foreach($oArticle->GetAttachedProfile() as $oProfile) 
+        { ?>
+    	<tr>
+    		<td><?= $i++ ?></td>
+    		<td><?= $oProfile->GetTypeLabel(); ?></td>
+			<td><?= $oProfile->GetTitle(); ?></td>
+    		<td><?= $oProfile->GetUri(); ?></td>
+    		<td><a class="btn btn-primary rounded-pill px-3" title="Remove Profile" href="/article-editor/?&id=<?= $oArticle->GetId() ?>&profile_id=<?= $oProfile->GetId() ?>&profile_type=<?= $oProfile->GetType(); ?>&remove_profile=1">Remove</a>
+    	</tr><? 
+        }
+    } else {
+    	print "<tr><td colspan=5>0 attached profile.</tr>";
+    }
+    ?>
+    </tbody>
+    </table>
 
 </div>
 

@@ -1,6 +1,6 @@
 <form enctype="multipart/form-data" id="recent_activity" action="<? $_SERVER['PHP_SELF'] ?>" method="POST">
 
-<table  id="report" class="display" cellspacing="2" cellpadding="4" border="0" width="" class="table table-striped">
+<table cellspacing="2" cellpadding="4" border="0" width="" class="table table-striped">
 <thead>
 <tr>
 	<th scope="col">&nbsp;</th>

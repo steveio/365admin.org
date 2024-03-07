@@ -1363,7 +1363,8 @@ class CompanyProfile extends AbstractProfile {
 								"COMPANY_NAME" => $this->GetCompanyName(),
 								"WEBSITE_LINK" => $this->GetUrl(),
 								"WEBSITE_LINK_TRACKER" => "/outgoing/". $this->GetUrlName() ."/www",
-								"PROFILE_OBJECT" => $this
+								"PROFILE_OBJECT" => $this,
+		                        "oProfile" => $this
 									));
 									
 		if (is_object($this->GetImage(0,LOGO_IMAGE))) {
