@@ -12,7 +12,7 @@
 	<h2>Existing Images</h2>
 
 	<?
-	$aImage = $oProfile->GetImageArray();	
+	$aImage = $oProfile->GetImageByType();	
 	if (is_array($aImage) && count($aImage) >= 1) {
 		foreach($aImage as $oImage) {
 			$type = ($oProfile->GetGeneralType() == PROFILE_COMPANY) ? "COMPANY" : "PLACEMENT";

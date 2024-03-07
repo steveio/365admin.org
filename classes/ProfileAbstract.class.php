@@ -400,9 +400,13 @@ abstract class AbstractProfile implements TemplateInterface {
 	public function SetLinkTo($sLinkTo) {
 		$this->link_to = $sLinkTo;
 	}
-	
-	public function GetImageArray($iType = PROFILE_IMAGE) {
-		return $this->aImage[$iType];
+
+	public function GetImageArray() {
+	    return $this->aImage;
+	}
+
+	public function GetImageByType($iType = PROFILE_IMAGE, $index = 0) {
+	    return $this->aImage[$iType][$index];
 	}
 	
 	public function GetImages($iType = PROFILE_IMAGE) {
@@ -411,9 +415,9 @@ abstract class AbstractProfile implements TemplateInterface {
 		
 		if (is_array($this->aImage) && count($this->aImage) >= 1) return;
 
-		$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$this->GetLinkTo()."' AND m.link_id = ".$this->GetId()." ORDER BY i.id ASC");
-		
-		//$db->query("SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$link_to."' AND m.link_id = ".$link_id." AND i.type = '".$iType."' ORDER BY i.id ASC");
+		$sql = "SELECT i.*,m.type FROM image_map m, image i WHERE m.img_id = i.id AND m.link_to = '".$this->GetLinkTo()."' AND m.link_id = ".$this->GetId()." ORDER BY i.id ASC";
+
+		$db->query($sql);
 
 		if ($db->getNumRows() >= 1) {
 
@@ -427,7 +431,6 @@ abstract class AbstractProfile implements TemplateInterface {
 		}
 		
 		return $this->aImage[$iType]; 
-
 	}
 	
 
