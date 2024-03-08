@@ -1,6 +1,7 @@
 <? 
 $oArticle = $this->Get('oArticle'); 
 $iTotalMatchedArticle = $this->Get('iTotalMatchedArticle');
+$iPageSize = $this->Get('iPageSize');
 
 ?>
 <div class="container">
@@ -40,7 +41,7 @@ $iTotalMatchedArticle = $this->Get('iTotalMatchedArticle');
 <div class="row">
         <?
         $oPager = new PagedResultSet();
-        $oPager->SetResultsPerPage(10);
+        $oPager->SetResultsPerPage($iPageSize);
         $oPager->GetByCount($iTotalMatchedArticle,"page");
         
         if (is_array($oArticle->GetArticleCollection()->Get()))

@@ -75,7 +75,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             // handle collection tempates with paged result sets
             if (is_numeric($oTemplateCfg->fetch_limit) &&  $oTemplateCfg->fetch_limit >= 1)
             {
-                $this->oArticle->SetAttachedArticleFetchLimit($oTemplateCfg->fetch_limit);
+                //$this->oArticle->SetAttachedArticleFetchLimit($oTemplateCfg->fetch_limit);
 
                 $iPage = isset($_REQUEST['page']) ? $_REQUEST['page'] : 1;
             }
@@ -111,15 +111,20 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->oArticle->SetAttachedArticleId();
             }
 
+	    $this->iTotalMatchedArticle = count($this->oArticle->GetAttachedArticleId());
+
+
             if (is_numeric($oTemplateCfg->fetch_limit))
             {
                 $startIndex = ($iPage == 1) ? 0 : ($iPage * $oTemplateCfg->fetch_limit);
                 $endIndex = $startIndex + $oTemplateCfg->fetch_limit -1;
                 $this->oArticle->PaginateAttachedArticleId($startIndex, $endIndex);
+		$this->iPageSize = $oTemplateCfg->fetch_limit -1;
             }
 
             if (count($this->oArticle->GetAttachedArticleId()) >= 1)
             {
+		$this->oArticle->SetAttachedArticle($fetchId = false);
                 $this->aAttachedArticle = $this->oArticle->oArticleCollection->Get();
             }
             
@@ -194,6 +199,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oTemplate->Set("oArticle",$this->oArticle);
         
         $this->oTemplate->Set("iTotalMatchedArticle",$this->iTotalMatchedArticle); // number matched articles (excluding pagination)
+	$this->oTemplate->Set("iPageSize", $this->iPageSize);
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
 
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);
