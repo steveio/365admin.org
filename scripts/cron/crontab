@@ -1,0 +1,8 @@
+0 2 * * * /www/vhosts/365admin.org/htdocs/scripts/cron/nightly.cron.sh 2>&1 /www/vhosts/365admin.org/htdocs/scripts/cron/nightly.cron.out 
+7,20,35,50 * * * * /usr/bin/php /www/vhosts/365admin.org/htdocs/solr/solr_indexer.php DELTA > /dev/null 2>&1
+*/5 * * * * /www/vhosts/365admin.org/htdocs/scripts/email/email_batch.sh > /dev/null 2>&1
+0 4 * * 6 /www/vhosts/365admin.org/htdocs/solr/solr_reindex.sh > /dev/null 2>&1
+0 2 * * 6 /www/vhosts/365admin.org/htdocs/scripts/cache/cache_build.sh > /dev/null 2>&1
+15 2 * * 6 /www/vhosts/365admin.org/htdocs/scripts/cache/cache_all.sh 
+50 * * * * /www/vhosts/365admin.org/htdocs/scripts/cache/cache_refresh.sh
+

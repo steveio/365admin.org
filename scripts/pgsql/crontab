@@ -1,0 +1,3 @@
+0 5 * * * /var/lib/pgsql/vacuum_db.sh
+10 5 * * * /var/lib/pgsql/pgsql_reindex.sh
+
