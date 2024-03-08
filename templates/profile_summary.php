@@ -15,7 +15,7 @@ $sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_l
         if ($bDisplayPromoImg && is_object($oProfile->GetImageByType(2)))
     	{  ?>
             <div class="col-12 profile-image">
-                    <a title="<?= $oProfile->GetDescShort(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
+                    <a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
                             <img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImageByType(2)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
                     </a>
             </div><?
@@ -26,7 +26,7 @@ $sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_l
     	        $img_url = $oProfile->GetImage(0)->GetUrl($sImgSize);
     	    } ?>
     		<div class="col-12 profile-image">
-        		<a title="<?= $oProfile->GetDescShort(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
+        		<a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
 				<img class="img-fluid rounded mb-3" src="<?= $img_url;  ?>" alt="<?= $oProfile->GetTitle() ?>" />
         		</a>
         	</div>
@@ -45,7 +45,7 @@ $sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_l
 
         <div class="col-lg-10 col-sm-12">
         <? if (!$bHideProfileDetails) { ?>
-       	    <h4><a href="<?= $oProfile->GetProfileUrl(); ?>" title="<?= $oProfile->GetDescShort(120); ?>" target="_new"><?= $oProfile->GetTitle(); ?></a></h4>
+       	    <h4><a href="<?= $oProfile->GetProfileUrl(); ?>" title="<?= $oProfile->GetDescShortPlaintext(120); ?>" target="_new"><?= $oProfile->GetTitle(); ?></a></h4>
        	<? } ?>    
 
             <?php if ($oProfile->GetReviewCount() >= 1) { ?>
