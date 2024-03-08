@@ -15,12 +15,12 @@ $(document).ready(function(){
 		
         var url = '/search-dispatch';
 
-        //var keywords = $('#search-panel-keywords').val();
-        // 'k='+keywords+'
+        var keywords = $('#search-panel-keywords').val();
+
         var activity = $('#search-panel-activity').val();
         var destination = $('#search-panel-destination').val();
-        
-        var pars = 'a='+action+'&act='+activity+'&d='+destination;
+
+        var pars = 'a='+action+'&act='+activity+'&d='+destination+'&	k='+keywords;
   
 		$.getJSON(url,pars, function(json) {
 			if (json.status == 1) {
@@ -73,10 +73,12 @@ $(document).ready(function(){
 
 	var validateSearch = function() {
 	    if ( $('#search-panel-activity').val() == 'NULL' &&
-			 $('#search-panel-destination').val() == '' ) 
+			 $('#search-panel-destination').val() == '' && 
+			 $('#search-panel-keywords').val() == '' 
+	    	) 
 			{
 	    		$('#search-panel-msg').addClass("alert-warning");
-	        	$('#search-panel-msg').html('Please select a Destination and/or Activity');
+	        	$('#search-panel-msg').html('Please select one or more from Destination, Activity, Keywords');
 	        	$('#search-panel-msg').show().delay(5000).fadeOut();
 	        return false;
 	    }

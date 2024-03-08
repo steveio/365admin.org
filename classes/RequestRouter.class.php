@@ -52,7 +52,7 @@ class RequestRouter {
                         
             if ($this->strRequestUri == "/".ROUTE_ERROR) // Critical Error - DB unavailable etc
             {
-                $this->HttpRedirect(HEADER_HTTP_500, "/back_soon.php");
+                Http::Header(HEADER_HTTP_500, "/back_soon.php");
                 die();
             } else {
 
@@ -279,7 +279,9 @@ class RequestRouter {
     public function isCategory($strUrlName)
     {
         global $db, $_CONFIG;
-        
+
+        $this->validateUriNamespaceIdentifier($this->aRequestUri[1]);
+
         $sql = "SELECT id,name FROM category WHERE url_name = '".$this->GetRequestUri(1)."'";
         $db->query($sql);
         if ($db->getNumRows() == 1) {
@@ -299,7 +301,9 @@ class RequestRouter {
     public function isActivity($strUrlName)
     {
         global $db, $_CONFIG;
-        
+
+        $this->validateUriNamespaceIdentifier($this->aRequestUri[1]);
+
         $sql = "SELECT id,name FROM activity WHERE url_name = '".$this->GetRequestUri(1)."'";
         $db->query($sql);
         if ($db->getNumRows() == 1) {
@@ -386,11 +390,21 @@ class RequestRouter {
             }
         }
 
-        $this->aRequestUri[1] = "country";
+        if (in_array($this->aRequestUri[1], array("travel", "country")))
+        {
+            $table = "country";   
+        } elseif ($this->aRequestUri[1] == "continent") {
+            $table = "continent";
+        } else {
+            throw new NotFoundException("ERROR: resource ".$this->aRequestUri[1]." not found.");
+        }
 
-        $sql = "SELECT id,name,url_name FROM ".$this->aRequestUri[1]." WHERE url_name = '".$this->aRequestUri[2]."'";
+        $this->validateUriNamespaceIdentifier($this->aRequestUri[2]);
+
+        $sql = "SELECT id,name,url_name FROM ".$table." WHERE url_name = '".$this->aRequestUri[2]."'";
         $db->query($sql);
         if ($db->getNumRows() == 1) {
+
             $aRes = $db->getRow();
 
             $_REQUEST['cat'] = $this->aRequestUri[1];
@@ -516,12 +530,12 @@ class RequestRouter {
         }
         return true;
     }
-
-    public function HttpRedirect($strHttpHeader, $redirectUrl )
+    
+    public function validateUriNamespaceIdentifier($str)
     {
-        ob_end_clean();
-        header($strHttpHeader);
-        header("Location: ".$redirectUrl);
-        die();
+        if (!preg_match('/[a-zA-Z0-9_\-\/]+/',$str) || strlen($str) > 120 )
+            throw new Exception("ERROR: invalid URI segment");
+        
+        return true;
     }
 }

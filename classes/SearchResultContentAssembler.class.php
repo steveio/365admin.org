@@ -63,99 +63,78 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
             
             $oHeader->Reload();
 
-            $oSearchPanel = new Template();
-            $oSearchResult = new Template();
 
-            print_r("<pre>");
-            print_r($_REQUEST);
-            print_r("</pre>");
-
-            if(isset($_REQUEST['search-process']) && strlen($_REQUEST['search-panel-keywords']) > 1)
-            {
-                $oSearchPanel->Set('SEARCH_KEYWORDS', $_REQUEST['search-panel-keywords']);
-
-                $this->SetSearchQuery(urldecode($_REQUEST['search-panel-keywords']));
-                
-                /*
-                 * Run Search...
-                 * 
-                 */
-                $this->ProcessSearch("(1 OR 0)"); // profiles
-                $this->ProcessSearch("2", $iRows = 30); // articles
-
-                /*
-                print_r("<pre>");
-                var_dump($this->aArticle);
-                var_dump($this->aProfile);
-                print_r("</pre>");
-                */
-
-                $oSearchResult = new Template();
-                $oSearchResult->Set('aArticle',$this->aArticle);
-                $oSearchResult->Set('aProfile',$this->aProfile);
-
-                $oSearchResult->LoadTemplate("search_result_combined.php");
-                
-            }
-
-            /*
-             * retrieve any previously submitted search keywords
-             * 
-             * (Ajax search dispatch)
-             * 
-            $oSearchParameters = SolrSearchPanelSearch::getFromSession();
-            if (is_object($oSearchParameters))
-            {
-                $oSearchPanel->Set('SEARCH_KEYWORDS', $oSearchParameters->getKeywords());
-            }
-            */
-
-            // setup search panel
-            $oSearchPanel->Set('ACTIVITY_LIST',Activity::getActivitySelectList());
-            $oSearchPanel->LoadTemplate("search_panel.php");
+            $this->SetSearchResultPanel();
 
             print $oHeader->Render();
-            print $oSearchPanel->Render();
-            print $oSearchResult->Render();
-
+            print $this->oSearchPanel->Render();
             print $oFooter->Render();
 
             
-            die(__FILE__." :: ".__LINE__);
+            die();
 
         } catch (Exception $e) {
             throw $e;
         }
     }
 
+    public function SetSearchResultPanel()
+    {
+        $oSolrSearchPanel = new SolrSearchPanel;
+        
+        // clear any previous search
+        SolrSearchPanelSearch::clearFromSession();
+        
+        //$fq = array();
+        //$fq['profile_type'] = "1";
+        //$fq['category_id'] = "7";
+        //$oSolrSearchPanel->setFilterQuery($fq);
+        
+        $aFacetField = array();
+        $aFacetField[] = array("country" => "country");
+        $aFacetField[] = array("continent" => "continent");
+        $aFacetField[] = array("activity" => "activity");
+        $oSolrSearchPanel->setFacetField($aFacetField);
+        $oSolrSearchPanel->setup($_CONFIG['site_id']);
+        
+        $oSearchPanel = new Template;
+        $oSearchPanel->Set('HOSTNAME',$_CONFIG['url']);
+        $oSearchPanel->Set('ACTIVITY_LIST',Activity::getActivitySelectList());
+        
+        $oSearchPanel->LoadTemplate("./search_panel.php");
+        
+        $this->oSearchPanel = $oSearchPanel;
+    }
+
+    
     /*
-     * Run SOLR search 
-     * 
+     * Run SOLR search
+     *
      * @param profile_type { 0 = Company, 1 = Placement, 2 = Article, (1 OR 0) Comined profile)
-     * 
+     *
      */
     public function ProcessSearch($profile_type, $iRows = 100)
     {
         try {
-
+            
             global $solr_config, $oBrand;
             
             $this->oSolrQuery = new SolrQuery;
             $this->oSolrQuery->setQuery($this->GetSearchQuery());
-    
+            
             $aFilterQuery = array();
             $aFilterQuery['profile_type'] = $profile_type;
             $this->oSolrQuery->setFilterQuery($aFilterQuery);
-    
+            
             if ($profile_type == 2) // article
             {
                 $this->oSolrQuery->setSort('score','desc');
-                $this->oSolrQuery->setSort('last_updated','asc');            
+                $this->oSolrQuery->setSort('last_updated','asc');
             } else {
                 $this->oSolrQuery->setSort('score','desc');
                 $this->oSolrQuery->setSort('prod_type','desc');
             }
-
+            
             /*
              // now add activity, country or continent filters
              if (isset($aSearchParams['search-panel-activity']) && $aSearchParams['search-panel-activity'] != "NULL") {
@@ -168,23 +147,19 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
              $fq['continent'] = '"'.$aSearchParams['search-panel-continent'].'"';
              }
              */
-
+            
             $this->GetSolrSearchInstance();
-
+            
             $this->oSolrSearch->setRows($iRows);
             $this->oSolrSearch->setStart($iStart = 0);
             $this->oSolrSearch->setSiteId($oBrand->GetSiteId());
             $this->oSolrSearch->search($this->oSolrQuery->getQuery(),$this->oSolrQuery->getFilterQuery(),$this->oSolrQuery->getSort());
             $this->oSolrSearch->processResult();
-
+            
             $this->ProcessSOLRSearchResult($this->oSolrSearch->getId());
-
-
+            
+            
         } catch (Exception $e) {
-            print_r("<pre>");
-            var_dump($e);
-            print_r("</pre>");
-            die(__FILE__."::".__LINE);
         }
     }
 
