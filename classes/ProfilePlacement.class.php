@@ -307,19 +307,19 @@ class PlacementProfile extends AbstractProfile {
   	/* returns the url to the company profile */
   	public function GetCompanyProfileUrl() {
   		global $_CONFIG;  		
-  		return $_CONFIG['url']."/".$_CONFIG['company_home']."/".$this->GetCompUrlName();
+  		return $_CONFIG['url']."/company/".$this->GetCompUrlName();
   	}
   	
   	public function GetProfileUrl() {
   		global $_CONFIG;  		
-  		return $_CONFIG['url'].$_CONFIG['company_home']."/".$this->GetCompUrlName()."/".$this->GetUrlName();
+  		return $_CONFIG['url']."/company/".$this->GetCompUrlName()."/".$this->GetUrlName();
   	}
 
   	public function GetUri()
   	{
   	    global $_CONFIG;
 
-  	    return "/".$_CONFIG['company_home']."/".$this->GetCompUrlName()."/".$this->GetUrlName();
+  	    return "/company/".$this->GetCompUrlName()."/".$this->GetUrlName();
   	}
 
   	public function SetCompUrlName($sCompUrlName) {
