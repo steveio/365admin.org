@@ -5,6 +5,7 @@ if (!is_object($oProfile)) return;
 
 $bHideProfileDetails = $this->Get('bHideProfileDetails');
 $bDisplayPromoImg = $this->Get('bDisplayPromoImg');
+$sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_lf";
 
 ?>
 
@@ -14,18 +15,18 @@ $bDisplayPromoImg = $this->Get('bDisplayPromoImg');
         if ($bDisplayPromoImg && is_object($oProfile->GetImageByType(2)))
     	{  ?>
             <div class="col-12 profile-image">
-                    <a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetUri();  ?>" class="">
+                    <a title="<?= $oProfile->GetDescShort(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
                             <img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImageByType(2)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
                     </a>
             </div><?
     	} elseif (is_object($oProfile->GetImage(0))) // profile has 1 or more image
     	{ 
-    	    if ($oProfile->GetImage(0)->GetHtml("_lf",'')) // try fetch large fixed-aspect image  
+    	    if ($oProfile->GetImage(0)->GetHtml($sImgSize) != false) // try fetch large fixed-aspect image  
     	    {
-    	        $img_url = $oProfile->GetImage(0)->GetUrl("_lf");
+    	        $img_url = $oProfile->GetImage(0)->GetUrl($sImgSize);
     	    } ?>
     		<div class="col-12 profile-image">
-        		<a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetUri();  ?>" class="">
+        		<a title="<?= $oProfile->GetDescShort(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
 				<img class="img-fluid rounded mb-3" src="<?= $img_url;  ?>" alt="<?= $oProfile->GetTitle() ?>" />
         		</a>
         	</div>
@@ -35,7 +36,7 @@ $bDisplayPromoImg = $this->Get('bDisplayPromoImg');
 
     	} elseif (is_object($oProfile->GetImageByType(1))) { ?>
             <div class="col-12 profile-image">
-                    <a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetUri();  ?>" class="">
+                    <a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
                             <img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImageByType(1)->GetUrl("");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
                     </a>
             </div><?
@@ -44,7 +45,7 @@ $bDisplayPromoImg = $this->Get('bDisplayPromoImg');
 
         <div class="col-lg-10 col-sm-12">
         <? if (!$bHideProfileDetails) { ?>
-       	    <h4><a href="<?= $oProfile->GetUri(); ?>" title="<?= $oProfile->GetTitle(); ?>" target="_new"><?= $oProfile->GetTitle(); ?></a></h4>
+       	    <h4><a href="<?= $oProfile->GetProfileUrl(); ?>" title="<?= $oProfile->GetDescShort(120); ?>" target="_new"><?= $oProfile->GetTitle(); ?></a></h4>
        	<? } ?>    
 
             <?php if ($oProfile->GetReviewCount() >= 1) { ?>

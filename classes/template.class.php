@@ -99,17 +99,6 @@ class Template {
 		
 		$this->sTemplateHTML = $this->LoadTemplateFromFile();
 		
-		/*
-		 * This is the old way, using simple paramterised html fragments 
-		 */ 
-		/*
-		$this->sTemplate = file_get_contents($this->GetTemplatePath());
-		$this->sTemplateHTML = $this->sTemplate;
-		foreach($this->data as $k => $v) {
-			$this->sTemplateHTML = preg_replace("/::$k::/",$v,$this->sTemplateHTML);
-		}
-		*/
-				
 	}
 	
 	

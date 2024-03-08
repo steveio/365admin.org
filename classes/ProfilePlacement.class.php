@@ -312,7 +312,7 @@ class PlacementProfile extends AbstractProfile {
   	
   	public function GetProfileUrl() {
   		global $_CONFIG;  		
-  		return $_CONFIG['url']."/".$_CONFIG['company_home']."/".$this->GetCompUrlName()."/".$this->GetUrlName();
+  		return $_CONFIG['url'].$_CONFIG['company_home']."/".$this->GetCompUrlName()."/".$this->GetUrlName();
   	}
 
   	public function GetUri()

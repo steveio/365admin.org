@@ -556,6 +556,7 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
            $oTemplate->Set("oProfile", $oPlacementProfile);
            $oTemplate->Set("displayRelatedProfile","COMPANY");
            $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
+           $oTemplate->Set("sImgSize", "_mf");
            $oTemplate->LoadTemplate("profile_summary.php");
            print $oTemplate->Render();
     } ?>
@@ -578,6 +579,7 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
 	   $oTemplate = new Template();
        $oTemplate->Set("oProfile", $oPlacementProfile);
        $oTemplate->Set("strCompanyLogoHtml", $strCompanyLogoHtml);
+       $oTemplate->Set("sImgSize", "_mf");
        $oTemplate->LoadTemplate("profile_summary.php");
        print $oTemplate->Render();
     } ?>

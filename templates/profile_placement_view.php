@@ -281,6 +281,7 @@ if (is_array($aRelatedProfile) && count($aRelatedProfile) >= 1)
 	{
 	   $oTemplate = new Template();
        $oTemplate->Set("oProfile", $oProfile);
+       $oTemplate->Set("sImgSize", "_mf");
        $oTemplate->LoadTemplate("profile_summary.php");
        print $oTemplate->Render();
     } ?>
