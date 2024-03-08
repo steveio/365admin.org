@@ -61,10 +61,25 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
             $oJsInclude->SetSrc("/includes/js/search_panel.js");
             $oHeader->SetJsInclude($oJsInclude);
             
+            $oCssInclude = new CssInclude();
+            $oCssInclude->SetHref('/css/jquery.rateyo.min.css');
+            $oCssInclude->SetMedia('screen');
+            $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
+            $oHeader->Reload();
+            
+            $oJsInclude = new JsInclude();
+            $oJsInclude->SetSrc("/includes/js/jquery.rateyo.min.js");
+            $oHeader->SetJsInclude($oJsInclude);
+            
             $oHeader->Reload();
 
 
-            $this->SetSearchResultPanel();
+            if ($this->oRequestRouter->IssetRequestUri(2))
+            {
+                $this->SetSearchResultPanel();
+            } else {
+                $this->SetSearchPanel();
+            }
 
             print $oHeader->Render();
             print $this->oSearchPanel->Render();
@@ -78,18 +93,19 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
         }
     }
 
-    public function SetSearchResultPanel()
+    /*
+     * Search Panel - Keywords, Destination (auto-complete), Activity
+     * 
+     * Submits (via AJAX) to /search-dispatch ( /webservices/searchPanelDispatch_ajax.php )
+     * 
+     */
+    public function SetSearchPanel()
     {
         $oSolrSearchPanel = new SolrSearchPanel;
         
         // clear any previous search
         SolrSearchPanelSearch::clearFromSession();
-        
-        //$fq = array();
-        //$fq['profile_type'] = "1";
-        //$fq['category_id'] = "7";
-        //$oSolrSearchPanel->setFilterQuery($fq);
-        
+
         $aFacetField = array();
         $aFacetField[] = array("country" => "country");
         $aFacetField[] = array("continent" => "continent");
@@ -104,6 +120,64 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
         $oSearchPanel->LoadTemplate("./search_panel.php");
         
         $this->oSearchPanel = $oSearchPanel;
+    }
+
+    /**
+     * Search Panel & Search Results
+     * 
+     * Submits via AJAX to SOLR webservice API 
+     * 
+     */
+    public function SetSearchResultPanel()
+    {
+        
+        /* have a look for any search params in session */
+        $oSolrSearchPanelSearch = SolrSearchPanelSearch::getFromSession();
+        
+        if (is_object($oSolrSearchPanelSearch)) {
+            $oSolrSearchPanelSearch->setFiltersByUri($sUri);
+            
+        if ($oSolrSearchPanelSearch->filterEnabled('activity')) {
+            $oSearchResultPanel->Set("FACET_ACTIVITY",$oSolrSearchPanelSearch->getFilterAsCheckbox('activity'));
+        }
+        
+        if (is_numeric($oSolrSearchPanelSearch->getDurationFromId)) {
+            //$oSearchResultPanel->Set("FACET_DURATION_FROM","<select id=''><option></option></select>");
+        }
+        
+        if (is_numeric($oSolrSearchPanelSearch->getDurationToId)) {
+            $oSearchResultPanel->Set("FACET_DURATION_FROM",$oSolrSearchPanelSearch->getFilterAsCheckbox('activity'));
+        }
+            
+        /*
+         $oSearchResultPanel->Set("FACET_COUNTRY",$sUri);
+         $oSearchResultPanel->Set("FACET_CONTINENT",$sUri);
+         */
+        }
+        
+        $strQuery = '';
+        $strProfileType = "(1 OR 0)"; // default: return company & placement profiles        
+        
+        $strQuery = $this->oRequestRouter->GetRequestUri(2);
+        $this->oRequestRouter->validateUriNamespaceIdentifier($strQuery);
+
+        $iSearchType = 1;
+        
+        $iRows = 24;
+        
+        $oSearchResultPanel = new Layout();
+        $oSearchResultPanel->Set("API_URL",API_URL);
+        $oSearchResultPanel->Set("SEARCH_QUERY",$strQuery);
+        $oSearchResultPanel->Set("SEARCH_TYPE",$iSearchType);
+        $oSearchResultPanel->Set("SEARCH_PROFILE_TYPE",$strProfileType);
+        $oSearchResultPanel->Set("SEARCH_ROWS",$iRows);
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PTITLE',$aPageOptions[ARTICLE_DISPLAY_OPT_PTITLE]);
+        $oSearchResultPanel->Set('ARTICLE_DISPLAY_OPT_PINTRO',$aPageOptions[ARTICLE_DISPLAY_OPT_PINTRO]);
+        $oSearchResultPanel->Set('HIDE_FILTERS',false);
+        
+        $oSearchResultPanel->LoadTemplate('search_result.php');
+        
+        $this->oSearchPanel = $oSearchResultPanel;
     }
 
     

@@ -30,13 +30,11 @@
 
   <h1>Search</h1>
  
-  <!-- 
   <div class="col-12 mb-3">
     <label for="search-panel-keywords" class="form-label">Keyword(s)</label>
     <input type="text" class="form-control" id="search-panel-keywords" name="search-panel-keywords" aria-describedby="search-panel-keywords-help" value="<?= $this->Get('SEARCH_KEYWORDS'); ?>">
     <div id="search-panel-keywords-help" class="form-text">Enter search keywords eg "Gap Year Australia" or "Volunteer with animals".</div>
   </div>
-   -->
 
   <div class="col-12 mb-3">
     <label for="search-panel-destination" class="form-label">Destination</label>

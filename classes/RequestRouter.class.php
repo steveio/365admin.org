@@ -67,6 +67,11 @@ class RequestRouter {
             
         }
     }
+
+    public function IssetRequestUri($index)
+    {
+        if (is_numeric($index) && isset($this->aRequestUri[$index])) return true;
+    }
     
     public function GetRequestUri($index = null)
     {

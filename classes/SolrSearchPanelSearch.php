@@ -74,7 +74,7 @@ class SolrSearchPanelSearch {
 	}
 	
 	public function setKeywords($sKeywords) {
-		$this->sKeywords = $sKeywords;
+		$this->sKeywords = preg_replace("/ /", "-", strtolower($sKeywords));
 	}	
 	
 	public function getKeywords() {
@@ -142,7 +142,7 @@ class SolrSearchPanelSearch {
 		$this->setActivity($oAct);
 		$this->setCountry($oCty);
 		$this->setContinent($oCtn);
-		//$this->setKeywords($aSearchParams['search-panel-keywords']);
+		$this->setKeywords($aSearchParams['search-panel-keywords']);
 	
 		$this->setForwardUrl();
 	}
@@ -178,30 +178,30 @@ class SolrSearchPanelSearch {
 		 *  { activity OR keywords } and  { country OR continent }
 		 *  { activity OR country OR continent } AND keywords
 		 */
+		if ($this->haveCountry() && $this->haveKeywords()) {
+		    return $this->sForwardUrl = "/country/".$this->getCountry()->url_name."/".$this->getKeywords();
+		}
+
+		if ($this->haveContinent() && $this->haveKeywords()) {
+		    return $this->sForwardUrl = "/continent/".$this->getContinent()->url_name."/".$this->getKeywords();
+		}
+
 		if ($this->haveActivity() && $this->haveCountry()) {
 			return $this->sForwardUrl = "/".$this->getActivity()->url_name."/".$this->getCountry()->url_name;;
 		}
 
-                if ($this->haveActivity() && $this->haveContinent()) {
-                        return $this->sForwardUrl = "/".$this->getActivity()->url_name."/".$this->getContinent()->url_name;;
-                }
-
+        if ($this->haveActivity() && $this->haveContinent()) {
+                return $this->sForwardUrl = "/".$this->getActivity()->url_name."/".$this->getContinent()->url_name;;
+        }
 
 		if ($this->haveCategory() && $this->haveCountry()) {
 			return $this->sForwardUrl = "/".$this->getCategory()->url_name."/".$this->getCountry()->url_name;;
 		}
 
-                if ($this->haveCategory() && $this->haveContinent()) {
-                        return $this->sForwardUrl = "/".$this->getCategory()->url_name."/".$this->getContinent()->url_name;;
-                }
+        if ($this->haveCategory() && $this->haveContinent()) {
+                return $this->sForwardUrl = "/".$this->getCategory()->url_name."/".$this->getContinent()->url_name;;
+        }
 
-		if ($this->haveCountry() && $this->haveKeywords()) {
-			return $this->sForwardUrl = "/country/".$this->getCountry()->url_name."/".$this->getKeywords();
-		}
-		
-		if ($this->haveContinent() && $this->haveKeywords()) {
-			return $this->sForwardUrl = "/continent/".$this->getContinent()->url_name."/".$this->getKeywords();
-		}
 		
 		
 		return $this->sForwardUrl = "/search/".$sQuery;

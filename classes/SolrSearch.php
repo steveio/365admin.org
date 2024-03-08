@@ -279,7 +279,7 @@ class SolrSearch {
 	
 		$this->setFilterQuery($fq);
 	
-		if (count($fields) < 1) $fields = array('profile_id','company_id','profile_type','duration_from','duration_to');
+		if (!is_array($fields) || count($fields) < 1) $fields = array('profile_id','company_id','profile_type','duration_from','duration_to');
 		
 		if (strpos($query,":") === FALSE) {
 			$query = 'text:'.$query. ' title:'.$query.'^4.0 desc_short: '.$query.'^2.0';
