@@ -301,7 +301,7 @@ class Search {
 
 		/* outer sql removes duplicates, retrieves full profile details, applies sort */
 		if ($t == "COMPANY") {
-			$sql = "SELECT distinct(s.id),c.title,c.prod_type,c.url_name,c.logo_url,c.url,c.desc_short FROM (".implode(" INTERSECT ",$sql).") s, ".$_CONFIG['company_table']." c WHERE s.id = c.id GROUP BY s.id, c.title,c.prod_type,c.url_name,c.logo_url,c.desc_short,c.url ORDER BY c.prod_type DESC, c.title ASC";
+			$sql = "SELECT distinct(s.id),c.title,c.prod_type,c.url_name,c.url,c.desc_short FROM (".implode(" INTERSECT ",$sql).") s, ".$_CONFIG['company_table']." c WHERE s.id = c.id GROUP BY s.id, c.title,c.prod_type,c.url_name,c.logo_url,c.desc_short,c.url ORDER BY c.prod_type DESC, c.title ASC";
 		} elseif ($t == "PLACEMENT") {
 			$sql = "SELECT distinct(p.id),p.title,p.url_name,p.desc_short FROM (".implode(" INTERSECT ",$sql).") s, placement p, ".$_CONFIG['company_table']." c WHERE s.id = p.id AND p.ad_active = 't' AND p.company_id = c.id GROUP BY p.id, p.title,p.url_name,p.desc_short";
 		}

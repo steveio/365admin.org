@@ -184,8 +184,7 @@ class Placement {
 				   ,p.title        
 				   ,p.desc_short   
 				   ,p.desc_long  
-				   ,p.company_id   
-				   ,c.logo_url
+				   ,p.company_id 
 				   ,c.title as company_name
 				   ,c.tel
 				   ,c.url as comp_url

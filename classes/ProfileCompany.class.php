@@ -28,15 +28,15 @@ class CompanyProfile extends AbstractProfile {
 	protected $location;
 	protected $state_id;
 	protected $country_id;
-	protected $logo_url;
-	protected $logo_banner_url;
-	protected $img_url1;
-	protected $img_url2;
-	protected $img_url3;
+	protected $logo_url;  // @deprecated
+	protected $logo_banner_url; // @deprecated
+	protected $img_url1; // @deprecated
+	protected $img_url2; // @deprecated
+	protected $img_url3; // @deprecated
 	protected $video;	
 	protected $keywords;
 	protected $active;
-	protected $homepage;
+	protected $homepage; // @deprecated
 	protected $prod_type;
 	protected $profile_quota;
 	protected $profile_filter_from_search;
@@ -321,6 +321,9 @@ class CompanyProfile extends AbstractProfile {
 		return $this->video;
 	}
 	
+	/*
+	 * @deprecated
+	 */
 	public function GetHomepageFl() {
 		return $this->homepage;
 	}
@@ -588,20 +591,14 @@ class CompanyProfile extends AbstractProfile {
 						,s.name as state_name
 						,c.country_id
 						,cty.name as country_name
-						,c.logo_url
-						,c.logo_banner_url
-						,c.img_url1
-						,c.img_url2
-						,c.img_url3
-						,c.img_url4
 						,c.video
 						,c.keywords
 						,c.active
-						,c.homepage
 						,c.prod_type
 						,c.profile_quota as profile_quota
 						,c.enq_opt
 						,c.prof_opt
+                        ,c.profile_filter_from_search
 						,c.status
 						,c.duration
 						,c.costs
@@ -693,10 +690,6 @@ class CompanyProfile extends AbstractProfile {
 		Validation::AddSlashes($c);
 	
 		if ($bTx) $db->query("BEGIN");
-				
-		/* @depreciated - set image/logo processing trigger */
-		$c['img_status'] = 1;
-		$c['logo_refresh_fl'] =  'F';
 
 		/* set approval status */
 		$c['status'] = ($bApproved) ? 1 : 0; // $bApproved is passed in by caller 		
@@ -999,15 +992,7 @@ class CompanyProfile extends AbstractProfile {
 					 ,desc_long
 					 ,job_info
 					 ,apply_url
-					 ,logo_url
-					 ,logo_banner_url
-					 ,img_url1
-					 ,img_url2
-					 ,img_url3
-					 ,img_url4
 					 ,video
-					 ,img_status
-					 ,logo_refresh_fl
 					 ,address
 					 ,location
 					 ,state_id
@@ -1039,15 +1024,7 @@ class CompanyProfile extends AbstractProfile {
 						,'".$p['desc_long']."'
 						,'".$p['job_info']."'
 						,'".$p['apply_url']."'
-						,'".$p['logo_url']."'
-						,'".$p['logo_banner_url']."'
-						,'".$p['img_url1']."'
-						,'".$p['img_url2']."'
-						,'".$p['img_url3']."'
-						,'".$p['img_url4']."'
 						,".$video_str."
-						,".$p['img_status']."
-						,'".$p['logo_refresh_fl']."'
 						,'".$p['address']."'
 						,'".$p['location']."'
 						,".$p['state_id']."
@@ -1086,10 +1063,10 @@ class CompanyProfile extends AbstractProfile {
 		
 		if (!is_array($p)) return false;
 
-		$sApproved = ($p['status'] == 1) ? ",status=1" : "";
-
-		$p['logo_refresh_fl'] = 'F'; /* @depreciated, removed from web form */
+		$sApproved = ($p['status'] == 1) ? ",status=1" : "status=0";
+		
 		$p['profile_filter_from_search'] = ($p['profile_filter_from_search'] == true) ? 't' : 'f';
+		$p['active'] = ($p['active'] == true) ? 't' : 'f';
 
 		if (trim($p['video']) > 1) {
 			$video_str = "'".htmlspecialchars_decode(trim($p['video']))."'";
@@ -1097,7 +1074,6 @@ class CompanyProfile extends AbstractProfile {
 			$video_str = "NULL";
 		}
 
-		
 		$sql = "
 			UPDATE company SET
 				profile_type = ".$p['profile_type']." 
@@ -1111,15 +1087,7 @@ class CompanyProfile extends AbstractProfile {
 				,desc_long = '".$p['desc_long']."'
 				,job_info = '".$p['job_info']."'
 				,apply_url = '".$p['apply_url']."'
-				,logo_url = '".$p['logo_url']."'
-				,logo_banner_url = '".$p['logo_banner_url']."'
-				,img_url1 = '".$p['img_url1']."'
-				,img_url2 = '".$p['img_url2']."'
-				,img_url3 = '".$p['img_url3']."'
-				,img_url4 = '".$p['img_url4']."'
 				,video = ".$video_str."
-				,img_status = ".$p['img_status']."
-				,logo_refresh_fl = '".$p['logo_refresh_fl']."'
 				,address = '".$p['address']."'
 				,location = '".$p['location']."'
 				,state_id = ".$p['state_id']."
@@ -1139,7 +1107,7 @@ class CompanyProfile extends AbstractProfile {
 				WHERE
 				 id = ".$p['id']."
 		";
-	
+
 		$db->query($sql);
 		
 		if ($db->getAffectedRows() == 1) {
@@ -1241,13 +1209,18 @@ class CompanyProfile extends AbstractProfile {
 		return true;
 
 	}
-	
+
+	/*
+	 * @deprecated
+	 */
 	public function SetImageProcessStatus($iStatus = 0) {
 		global $db,$_CONFIG;
 		$db->query("UPDATE ".$_CONFIG['company_table'] ." SET img_status = '".$iStatus."' WHERE id = ".$this->GetId());
 	}
 	
-
+    /*
+     * @deprecated
+     */
 	public function SetLogoProcessFlag($val = 'F') {
 		global $db,$_CONFIG;
 		$db->query("UPDATE ".$_CONFIG['company_table'] ." SET logo_refresh_fl = '".$val."' WHERE id = ".$this->GetId());
@@ -1266,7 +1239,7 @@ class CompanyProfile extends AbstractProfile {
 		{
 		  $select = "SELECT * ";
 		} else {
-		    $select = "SELECT id,title,desc_short,url,logo_url,prod_type,location,url_name ";
+		    $select = "SELECT id,title,desc_short,url,prod_type,location,url_name ";
 		}
 		switch(strtoupper($type)) {
 			case "ALL" :
@@ -1297,7 +1270,7 @@ class CompanyProfile extends AbstractProfile {
 				$sql = "$select FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") order by title asc;";
 				break;
 			case "ID" :
-				$sql = "SELECT id,title,desc_short,url,logo_url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).");";
+				$sql = "SELECT id,title,desc_short,url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).");";
 				break;
 			case "ID_SORTED" :
 				$sql = "$select FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") ORDER BY prod_type desc";
@@ -1306,16 +1279,16 @@ class CompanyProfile extends AbstractProfile {
 			    $sql = "$select FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.oid in (".implode(",",$id).") ORDER BY prod_type desc";
 			    break;
 			case "RECENT" :
-				$sql = "SELECT id,title,desc_short,url_name,logo_url,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." ORDER BY last_updated desc LIMIT 20";
+				$sql = "SELECT id,title,desc_short,url_name,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." ORDER BY last_updated desc LIMIT 20";
 				break;
 			case "RECENT_PAID_LISTING" :
-				$sql = "SELECT id,title,desc_short,url_name,logo_url,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." WHERE prod_type >= 1 AND prod_type <= 2 ORDER BY last_updated DESC LIMIT ".$limit;
+				$sql = "SELECT id,title,desc_short,url_name,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." WHERE prod_type >= 1 AND prod_type <= 2 ORDER BY last_updated DESC LIMIT ".$limit;
 				break;
 			case "HOMEPAGE_FEATURED" :
-				$sql = "SELECT c.id,c.title,c.desc_short,c.url_name,c.logo_url,c.url FROM ".$_CONFIG['company_table']." c, comp_website_hp_map m WHERE m.website_id = ".$_CONFIG['site_id']." AND m.company_id = c.id ORDER BY random() LIMIT ".$limit;
+				$sql = "SELECT c.id,c.title,c.desc_short,c.url_name,c,c.url FROM ".$_CONFIG['company_table']." c, comp_website_hp_map m WHERE m.website_id = ".$_CONFIG['site_id']." AND m.company_id = c.id ORDER BY random() LIMIT ".$limit;
 				break;			
 			case "SPONSORED" :
-				$sql = "SELECT c.id,c.title,c.desc_short, c.logo_url, c.url, c.url_name FROM company c, comp_website_hp_map m WHERE c.status = 1 AND c.id = m.company_id AND m.website_id = ".$_CONFIG['site_id']." order by random();";
+				$sql = "SELECT c.id,c.title,c.desc_short, c.url, c.url_name FROM company c, comp_website_hp_map m WHERE c.status = 1 AND c.id = m.company_id AND m.website_id = ".$_CONFIG['site_id']." order by random();";
 				break;
 				
 		}
@@ -1403,12 +1376,7 @@ class CompanyProfile extends AbstractProfile {
 	        'profile_url' => $this->GetProfileUrl(),
 	        'profile_uri' => "/company/".$this->GetUrlName(),
 	        "company_name" => $this->GetCompanyName(),
-	        "company_logo_url" => $aImageDetails['LOGO']['URL'],
 	        "company_profile_url" => $this->GetCompanyProfileUrl(),
-	        "logo_url" => $aImageDetails['LOGO']['URL'],
-	        "image_url_small" => $aImageDetails['SMALL']['URL'],
-	        "image_url_medium" => $aImageDetails['MEDIUM']['URL'],
-	        "image_url_large" => $aImageDetails['LARGE']['URL'],
 	        "country_txt" => '',
 	        "enquiry_url" => Enquiry::GetRequestUrl('GENERAL',$this->GetId(),PROFILE_COMPANY),
 	        "location" => $this->GetLocationLabel(),

@@ -377,7 +377,7 @@ class Company {
 		
 		global $_CONFIG,$db;
 		
-		$db->query("SELECT c.id,c.title,c.desc_short,c.url_name,c.logo_url,c.url FROM ".$_CONFIG['company_table']." c, comp_website_hp_map m WHERE m.website_id = ".$_CONFIG['site_id']." AND m.company_id = c.id ORDER BY random() LIMIT $limit");
+		$db->query("SELECT c.id,c.title,c.desc_short,c.url_name,c.url FROM ".$_CONFIG['company_table']." c, comp_website_hp_map m WHERE m.website_id = ".$_CONFIG['site_id']." AND m.company_id = c.id ORDER BY random() LIMIT $limit");
 		$aCompany = $db->getObjects();
 		foreach ($aCompany as $c) {
 			
@@ -429,7 +429,7 @@ class Company {
 		}
 		if ($type == "SPONSORED") {
 			
-			$this->db->query("SELECT c.id,c.title,c.desc_short, c.logo_url, c.url, c.url_name FROM company c, comp_website_hp_map m WHERE c.status = 1 AND c.id = m.company_id AND m.website_id = ".$_CONFIG['site_id']." order by random();");
+			$this->db->query("SELECT c.id,c.title,c.desc_short, c.url, c.url_name FROM company c, comp_website_hp_map m WHERE c.status = 1 AND c.id = m.company_id AND m.website_id = ".$_CONFIG['site_id']." order by random();");
 			$arr = $this->db->getObjects();
 						
 			$s = "<div id=\"sponsored_company\">";
