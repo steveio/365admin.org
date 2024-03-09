@@ -517,14 +517,7 @@ if (!is_numeric($oProfile->GetProfileQuota())) {
   </div>
   <div class="col-9">
     <span class="input_col">
-    	<?php
-    	if (isset($_POST['submit'])) {
-    		$profile_filter = $_POST['profile_filter_from_search'];
-    	} else {
-    		$profile_filter = $oProfile->GetProfileFilterFromSearch();
-    	}
-    	?>
-      <input type="checkbox" class="form-check-input" name="profile_filter_from_search" <? if ($profile_filter == 't') print "checked"; ?>>
+      <input type="checkbox" class="form-check-input" name="profile_filter_from_search" <? if ($oProfile->GetProfileFilterFromSearch() == 't') print "checked"; ?>>
     </span>
   </div>
 </div>

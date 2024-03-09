@@ -181,7 +181,6 @@ class PlacementProfile extends AbstractProfile {
 						".$with_oid."
 						,p.type as profile_type
 						,p.company_id
-						,c.logo_url
 						,c.title as company_name
 						,c.email as company_email
 						,c.tel
@@ -190,6 +189,7 @@ class PlacementProfile extends AbstractProfile {
 						,c.prod_type as listing_type
 						,c.prof_opt as comp_prof_opt
 						,c.enq_opt as comp_enq_opt
+                        ,c.active
                         ,c.profile_filter_from_search
 						,p.title
 						,p.url_name
@@ -405,6 +405,11 @@ class PlacementProfile extends AbstractProfile {
   	public function GetFilterFromSearch()
   	{
   	    return ($this->profile_filter_from_search == "t") ? true : false;
+  	}
+
+  	public function GetCompanyActive()
+  	{
+  	    return ($this->active == "f") ? true : false;
   	}
 
 	public function GetUrl() {
@@ -1002,7 +1007,6 @@ class PlacementProfile extends AbstractProfile {
     				   ,p.desc_long  
     				   ,p.company_id
                        ,c.id as company_id   
-    				   ,c.logo_url
     				   ,c.title as company_name
     				   ,c.tel
     				   ,c.url as comp_url
@@ -1026,7 +1030,6 @@ class PlacementProfile extends AbstractProfile {
                     ,p.title
                     ,p.desc_short
                     ,c.id as company_id
-                    ,c.logo_url
                     ,c.title as company_name
                     ,c.url_name as comp_url_name
                     ,p.location
@@ -1068,7 +1071,7 @@ class PlacementProfile extends AbstractProfile {
 			case "ID_LIST_SEARCH_RESULT" :
 			    if (!is_array($id) || count($id) < 1) return FALSE;
 			    $where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
-			    $where .= " AND c.profile_filter_from_search != 't' ";
+			    $where .= " AND c.active != 'f' AND c.profile_filter_from_search != 't' ";
 		        break;
 			case "ID_LIST" :
 				$where = "p.id IN (".implode(",",$id).") AND p.company_id = c.id ";
@@ -1140,7 +1143,6 @@ class PlacementProfile extends AbstractProfile {
         	    ,p.title
         	    ,p.desc_short
         	    ,c.id as company_id
-        	    ,c.logo_url
         	    ,c.title as company_name
         	    ,c.url_name as comp_url_name
         	    ,p.location
@@ -1300,7 +1302,6 @@ class PlacementProfile extends AbstractProfile {
 	        "profile_url" => "/company/".$this->GetCompUrlName()."/".$this->GetUrlName(),
 	        "profile_uri" => "/placement/".$this->GetUrlName(),
 	        "company_name" => $this->GetCompanyName(),
-	        "company_logo_url" => "",
 	        "company_profile_url" => $this->GetCompanyProfileUrl(),
 	        "company_profile_edit_url" => "/company/".$this->GetCompUrlName()."/edit",
 	        "image_url_small" => $aImageDetails['SMALL']['URL'],
@@ -1317,8 +1318,6 @@ class PlacementProfile extends AbstractProfile {
 	        "review_count" => $this->GetReviewCount(),
 	        "review_rating" => $this->GetRating()
 	    );
-	    
-	    $fields['company_logo_url'] = $this->GetCompanyLogoUrl();
 	    
 	    if (strlen($this->GetCountryTxt()) > 1) {
 	        $fields['country_txt'] = $this->GetCountryTxt();
