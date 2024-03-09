@@ -135,7 +135,7 @@ class DashboardController extends GenericController {
 		
 		/* company dashboard */
 		$this->oCompanyProfile = ProfileFactory::Get(PROFILE_COMPANY);
-		$this->oCompanyProfile->SetFromArray($this->oCompanyProfile->GetById($this->GetCompanyId()));
+		$this->oCompanyProfile->SetFromArray($this->oCompanyProfile->GetById($this->GetCompanyId(),"ARRAY"));
 		$this->oCompanyProfile->GetImages();
 
 	}

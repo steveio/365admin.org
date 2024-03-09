@@ -36,8 +36,6 @@ $oCProfile = $this->Get('oCProfile');
 	</div>
 </row>
 
-<?= $this->Get('PROFILE_QUOTA'); ?>
-
 <div class="row my-3">
 
 	<?php if ($this->Get('PROFILE_QUOTA') >= 1) { ?>			
