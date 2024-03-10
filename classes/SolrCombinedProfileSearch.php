@@ -54,12 +54,16 @@ class SolrCombinedProfileSearch extends SolrSearch {
 			                $this->fetched++;
 			                break;
 			            case 1:
+			                $this->aAllPlacementId[] = $doc->profile_id;
 			                if (!array_key_exists($doc->company_id, $aCompanyIdProcessed))
 			                {
+			                    /*
+			                     * If there are sufficient listings, show 1 result per brand
+			                     * 
+			                     */
 			                    $this->aPlacementId[] = $doc->profile_id;
-			                     $this->fetched++;
-			                    $aCompanyIdProcessed[$doc->company_id]++;
-			                    
+			                    $this->fetched++;
+			                    $aCompanyIdProcessed[$doc->company_id]++;			                    
 			                }
 			                break;
 			        }
@@ -68,8 +72,13 @@ class SolrCombinedProfileSearch extends SolrSearch {
 			        {
 			            break;
 			        }
-			            
 			    }
+			    
+			    if ($this->fetched < $this->getRowsToFetch())
+			    {
+			        unset($this->aPlacementId);
+			        $this->aPlacementId = array_slice($this->aAllPlacementId, 0, $this->getRowsToFetch());
+			    }			    
 			}
 
 			if (is_array($this->aPlacementId) && count($this->aPlacementId) >= 1)
