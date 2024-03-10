@@ -38,99 +38,97 @@ class SolrCombinedProfileSearch extends SolrSearch {
 
 			$this->fetched = 0;
 
-			while($this->fetched < $this->getRowsToFetch())
-			{
-			    $aCompanyIdProcessed = array();
+		    $aCompanyIdProcessed = array();
 
-			    foreach($this->resultset as $doc)
-			    {
+		    foreach($this->resultset as $doc)
+		    {
 
-			        $this->arrId[$doc->profile_type."_".$doc->profile_id] = $doc->score;
-			        
-			        switch($doc->profile_type)
-			        {
-			            case 0:
-			                $this->aCompanyId[] = $doc->profile_id;
-			                $this->fetched++;
-			                break;
-			            case 1:
-			                $this->aAllPlacementId[] = $doc->profile_id;
-			                if (!array_key_exists($doc->company_id, $aCompanyIdProcessed))
-			                {
-			                    /*
-			                     * If there are sufficient listings, show 1 result per brand
-			                     * 
-			                     */
-			                    $this->aPlacementId[] = $doc->profile_id;
-			                    $this->fetched++;
-			                    $aCompanyIdProcessed[$doc->company_id]++;			                    
-			                }
-			                break;
-			        }
+		        $this->arrId[$doc->profile_type."_".$doc->profile_id] = $doc->score;
+		        
+		        switch($doc->profile_type)
+		        {
+		            case 0:
+		                $this->aCompanyId[] = $doc->profile_id;
+		                $this->fetched++;
+		                break;
+		            case 1:
+		                $this->aPlacementId[] = $doc->profile_id;
+		                $this->fetched++;
+		                break;
+		        }
 
-			        if ($this->fetched == $this->getRowsToFetch())
-			        {
-			            break;
-			        }
-			    }
-			    
-			    if ($this->fetched < $this->getRowsToFetch())
-			    {
-			        unset($this->aPlacementId);
-			        $this->aPlacementId = array_slice($this->aAllPlacementId, 0, $this->getRowsToFetch());
-			    }			    
-			}
+		        if ($this->fetched == $this->getRowsToFetch())
+		        {
+		            break;
+		        }
+		        
+		    }
 
-			if (is_array($this->aPlacementId) && count($this->aPlacementId) >= 1)
-			{
-			    $this->aPlacement = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$this->aPlacementId, FETCHMODE__SUMMARY);			    
-			}
+		    /*
+		    print "Rows to Fetch: ".$this->getRowsToFetch();
+		    print ",Fetched: ".$this->fetched;
+		    print ",Total Placement: ".count($this->aPlacementId);
+		    print ",Total Company: ".count($this->aCompanyId);
+		    print_r("<pre>");
+		    print_r($aCompanyIdProcessed);
+		    print_r($this->aAllPlacementId);
+		    print_r($aPlacementId);
+		    print_r($this->resultset);
+		    print_r("</pre>");
+		    die();
+		    */
+		    
+		}
 
-			if (is_array($this->aCompanyId) && count($this->aCompanyId) >= 1)
-			{
-			    $this->aCompany = CompanyProfile::Get("ID_SORTED",$this->aCompanyId, FETCHMODE__SUMMARY);
-			}			
-			
-			$this->_aProfile = array();
+		if (is_array($this->aPlacementId) && count($this->aPlacementId) >= 1)
+		{
+		    $this->aPlacement = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$this->aPlacementId, FETCHMODE__SUMMARY);			    
+		}
 
-			foreach($this->arrId as $key => $score)
-			{
-			    $bits = explode("_", $key);
-			    $profile_type = $bits[0];
-			    $profile_id = $bits[1];
+		if (is_array($this->aCompanyId) && count($this->aCompanyId) >= 1)
+		{
+		    $this->aCompany = CompanyProfile::Get("ID_SORTED",$this->aCompanyId, FETCHMODE__SUMMARY);
+		}			
+		
+		$this->_aProfile = array();
 
-			    if ($profile_type == 0)
-			    {
-			        if (array_key_exists($profile_id, $this->aCompany))
-			        {
-                        $this->_aProfile[] = $this->aCompany[$profile_id];
-			        }
-			    } elseif ($profile_type == 1)
-			    {
-			        if (array_key_exists($profile_id, $this->aPlacement))
-			        {
-			            $this->_aProfile[] = $this->aPlacement[$profile_id];
-			        }
-			    }
-			}
+		foreach($this->arrId as $key => $score)
+		{
+		    $bits = explode("_", $key);
+		    $profile_type = $bits[0];
+		    $profile_id = $bits[1];
 
-			/*
-			print_r("<pre>");
-			print_r("Limit: ".$this->getRowsToFetch()."<br />");
-			print_r("Fetched: ".$this->fetched."<br />");
-			print_r("CompanyId: ".count($this->aCompanyId)."<br />");
-			print_r("PlacementId: ".count($this->aPlacementId)."<br />");
-			print_r("aCompany: ".count($aCompany)."<br />");
-			print_r("aPlacement: ".count($aPlacement)."<br />");
-			print_r($this->aPlacementId);
-			print_r($this->_aProfile);
-			print_r("</pre>");
-			die(__FILE__."::".__LINE__);
-			*/
+		    if ($profile_type == 0)
+		    {
+		        if (array_key_exists($profile_id, $this->aCompany))
+		        {
+                    $this->_aProfile[] = $this->aCompany[$profile_id];
+		        }
+		    } elseif ($profile_type == 1)
+		    {
+		        if (array_key_exists($profile_id, $this->aPlacement))
+		        {
+		            $this->_aProfile[] = $this->aPlacement[$profile_id];
+		        }
+		    }
+		}
 
-			$this->setFacetFieldResult();
-			$this->setFacetQueryResult();
-		}					
+		/*
+		print_r("<pre>");
+		print_r("Limit: ".$this->getRowsToFetch()."<br />");
+		print_r("Fetched: ".$this->fetched."<br />");
+		print_r("CompanyId: ".count($this->aCompanyId)."<br />");
+		print_r("PlacementId: ".count($this->aPlacementId)."<br />");
+		print_r("aCompany: ".count($aCompany)."<br />");
+		print_r("aPlacement: ".count($aPlacement)."<br />");
+		print_r($this->aPlacementId);
+		print_r($this->_aProfile);
+		print_r("</pre>");
+		die(__FILE__."::".__LINE__);
+		*/
+
+		$this->setFacetFieldResult();
+		$this->setFacetQueryResult();					
  		
 	}
 
