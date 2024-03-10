@@ -7,12 +7,12 @@
  *
  */
 
+
 /* retrieve company id from url */
 if (!isset($_REQUEST['q']) || strlen($_REQUEST['q']) < 1)
 {
   AppError::StopRedirect(BASE_URL,$sMsg = 'Error, invalid enquiry request.');
 }
-
 
 /* define which types of enquiry are available for each profile type */
 $aEnqBooking = array(PROFILE_VOLUNTEER,PROFILE_TOUR,PROFILE_COMPANY);
@@ -62,11 +62,10 @@ $aResponse = array();
 
 /* retrieve referring profile details */
 $oProfile = ProfileFactory::Get($oEnquiry->GetLinkTo());
-$aProfile = $oProfile->GetById($oEnquiry->GetLinkId(), $return = "ARRAY");
+$oProfile->GetById($oEnquiry->GetLinkId());
 
 
-if (!$aProfile) AppError::StopRedirect($sUrl = $_CONFIG['url'],$sMsg = 'Error, invalid enquiry request.');
-$oProfile->SetFromArray($aProfile);
+if (!is_object($oProfile)) AppError::StopRedirect($sUrl = $_CONFIG['url'],$sMsg = 'Error, invalid enquiry request.');
 
 
 
