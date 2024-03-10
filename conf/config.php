@@ -28,16 +28,18 @@ define('DEV',FALSE);
 define('TEST_MODE', false);
 define('TEST_EMAIL','steveedwards01@yahoo.co.uk');
 
+define('BLOCK_ADS', true);
+
 /* 0 = none, 1 = error, 2 = debug, 3 = verbose debug */
 define('LOG_PATH',"/www/vhosts/365admin.org/logs/365admin_app.log");
 define('LOG_LEVEL',3);
 
 define('HOSTNAME',"oneworld365.org");
-define('BASE_URL','http://admin.'.HOSTNAME);
+define('BASE_URL','https://admin.'.HOSTNAME);
 define('WEBSITE',HOSTNAME);
 define('ADMIN_SYSTEM_HOSTNAME', 'admin.oneworld365.org');
-define('ADMIN_SYSTEM',"http://".ADMIN_SYSTEM_HOSTNAME);
-define('API_URL','http://api.'.HOSTNAME);
+define('ADMIN_SYSTEM',"https://".ADMIN_SYSTEM_HOSTNAME);
+define('API_URL','https://api.'.HOSTNAME);
 define('CURRENT_SITE', ADMIN_SYSTEM);
 
 define('BASE_PATH','/www/vhosts/365admin.org/htdocs');
