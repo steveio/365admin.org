@@ -140,9 +140,9 @@ CMDs
     # pgsql as user=postgres, database=template1
     sudo -u postgres psql -U oneworld365_pgsql -d oneworld365
 
-export PGPASSWORD='1ndoN3s!4a'
+export PGPASSWORD=''
 
-export PGPASSWORD='tH3a1LAn6iA'
+export PGPASSWORD=''
 
 Maintenance
 
