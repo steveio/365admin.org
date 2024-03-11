@@ -138,7 +138,7 @@ class SolrIndexer {
 				    if (LOG) Logger::DB(1,JOBNAME,"ERROR: Filter from search id : ".$a['id']);
 				    // @todo - delete doc from SOLR index (purge handled by solr_reindex.sh)
 				    // set the last_indexed date
-				    $db->query("UPDATE company SET last_indexed_solr = now()::timestamp WHERE id ".$oCProfile->GetId());
+				    $db->query("UPDATE company SET last_indexed_solr = now()::timestamp WHERE id = ".$oCProfile->GetId());
 				    continue;
 				}
 				
