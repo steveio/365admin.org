@@ -13,9 +13,14 @@ class htmlUtils
     public function __construct() {}
     
 
-    public static function convertToPlainText($str)
+    public static function convertToPlainText($str, $htmlEntityDecode = true)
     {
-        return strip_tags(html_entity_decode($str, ENT_QUOTES, 'utf-8'));
+        if ($htmlEntityDecode)
+        {
+            return strip_tags(html_entity_decode($str, ENT_QUOTES, 'utf-8'));
+        } else {
+            return strip_tags($str);
+        }
     }
 
     public static function stripLinks($str) {

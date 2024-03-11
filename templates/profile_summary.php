@@ -15,33 +15,32 @@ $sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_l
         if ($bDisplayPromoImg && is_object($oProfile->GetImageByType(2)))
     	{  ?>
             <div class="col-12 profile-image">
-                    <a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
+                    <a title="<?= $oProfile->GetDescShortPlaintext(120, true) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
                             <img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImageByType(2)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
                     </a>
             </div><?
     	} elseif (is_object($oProfile->GetImage(0))) // profile has 1 or more image
     	{ 
-    	    if ($oProfile->GetImage(0)->GetHtml($sImgSize) != false) // try fetch large fixed-aspect image  
+    	    if ($oProfile->GetImage(0)->GetHtml($sImgSize) != false)  
     	    { ?>
-    	    	<a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class=""><?
-    	        $img_url = $oProfile->GetImage(0)->GetUrl($sImgSize); ?>
-    	        </a><?
-    	    } ?>
-    		<div class="col-12 profile-image">
-        		<a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
-				<img class="img-fluid rounded mb-3" src="<?= $img_url;  ?>" alt="<?= $oProfile->GetTitle() ?>" />
-        		</a>
-        	</div><?
+    	    	<div class="col-12 profile-image">
+    	    	<a title="<?= $oProfile->GetDescShortPlaintext(120, false) ?>" href="<?= $oProfile->GetProfileUrl();  ?>">
+    	    	<img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImage(0)->GetUrl($sImgSize);  ?>" alt="<?= $oProfile->GetTitle() ?>" />
+    	        </a>
+    	        </div><?
+    	    }
         	if (is_object($oProfile->GetImageByType(1))) 
         	{
         	?>
         	<div class="brand-overlay">
+        		<a title="<?= $oProfile->GetDescShortPlaintext(120, false) ?>" href="<?= $oProfile->GetProfileUrl();  ?>">
         		<?= $oProfile->GetImageByType(1)->GetHtml("_sm"); ?>
+        		</a>
         	</div><?
         	}
     	} elseif (is_object($oProfile->GetImageByType(1))) { ?>
             <div class="col-12 profile-image">
-                    <a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
+                    <a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetProfileUrl();  ?>">
                             <img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImageByType(1)->GetUrl("");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
                     </a>
             </div><?

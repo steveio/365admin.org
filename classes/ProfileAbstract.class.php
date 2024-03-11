@@ -117,9 +117,9 @@ abstract class AbstractProfile implements TemplateInterface {
 	 * @param int $trunc number of chars
 	 * @return string
 	 */
-	public function GetDescShortPlaintext($trunc = null)
+	public function GetDescShortPlaintext($trunc = null, $htmlEntityDecode = true)
 	{
-	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short));
+	    $str = htmlUtils::stripLinks(htmlUtils::convertToPlainText($this->desc_short, $htmlEntityDecode));
 	    if (is_numeric($trunc) && strlen($str) > $trunc)
 	    {
 	        return substr($str, 0, $trunc)."...";
