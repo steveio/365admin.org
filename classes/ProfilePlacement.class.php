@@ -34,10 +34,6 @@ class PlacementProfile extends AbstractProfile {
 	protected $url; /* more info url */
 	protected $apply_url; /* external apply/booking url, replaces enquiry form */
 	protected $email;
-	protected $img_url1;
-	protected $img_url2;
-	protected $img_url3;
-	protected $img_url4;
 	protected $video;
 	protected $keyword_exclude; /* word list to exlude from indexer */
 	protected $ad_active;
@@ -1006,18 +1002,16 @@ class PlacementProfile extends AbstractProfile {
     				   ,p.desc_short   
     				   ,p.desc_long  
     				   ,p.company_id
-                       ,c.id as company_id   
+                                   ,c.id as company_id   
     				   ,c.title as company_name
     				   ,c.tel
     				   ,c.url as comp_url
     				   ,c.url_name as comp_url_name   
+				   ,c.profile_filter_from_search
     				   ,p.location
     				   ,p.ad_active
     				   ,p.url
     				   ,p.email
-    				   ,p.img_url1
-    				   ,p.img_url2
-    				   ,p.img_url3
     				   ,to_char(p.added,'DD/MM/YYYY') as added_date
     				   ,to_char(p.last_updated,'DD/MM/YYYY') as updated_date";
 		} elseif ($fetchmode == FETCHMODE__SUMMARY) {
@@ -1032,6 +1026,7 @@ class PlacementProfile extends AbstractProfile {
                     ,c.id as company_id
                     ,c.title as company_name
                     ,c.url_name as comp_url_name
+		    ,c.profile_filter_from_search
                     ,p.location
                     ,p.ad_active
                     ,(SELECT count(*) from review r WHERE r.status = 1 AND r.link_to = 'PLACEMENT' and r.link_id = p.id) as num_review
