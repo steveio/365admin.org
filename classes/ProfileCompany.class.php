@@ -384,7 +384,7 @@ class CompanyProfile extends AbstractProfile {
 
 	public function GetFilterFromSearch()
 	{
-	    return $this->profile_filter_from_search;
+	    return ($this->profile_filter_from_search == 't') ? true : false;
 	}
 
 	public function GetProfileFilterFromSearch()
