@@ -569,14 +569,19 @@ class Enquiry {
 		Validation::Sanitize($a);
 
 		Validation::AddSlashes($a);
-
-		if (!$this->Validate($a,$aResponse)) return false;
-
-
+		
+		if (!$this->Validate($a,$aResponse))
+		{
+		    return false;
+		}
+		
 		/* check this isn't a duplicate submission */
 		$db->query("SELECT id FROM enquiry WHERE id = ".$this->GetId());
-		if ($db->getNumRows() == 1) return true;
-
+		if ($db->getNumRows() == 1)
+		{
+		    $aResponse['msg']['duplicate'] = "ERROR: enquiry has already been submitted.";
+		    return true;
+		}
 
 		if ($a['enquiry_type'] == "JOB_APP") {
 			if (!$this->ProcessCV($aResponse)) return false;
@@ -642,9 +647,9 @@ class Enquiry {
 		}
 	}
 
-	private function Validate($a,&$aResponse) {
-
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
+	private function Validate($a,&$aResponse) 
+	{
+	    $aResponse['msg'] = array();
 
 		if (strlen($a['name']) < 1) {
 			$aResponse['msg']['name'] = "Please enter your full name";
@@ -653,7 +658,6 @@ class Enquiry {
 		if (strlen($a['name']) > 44) {
 			$aResponse['msg']['name'] = "Your name should be less than 44 characters";
 		}
-
 
 		if (!is_numeric($a['country_id'])) {
 			$aResponse['msg']['country_id'] = "Please select your country";
@@ -680,19 +684,7 @@ class Enquiry {
 				
 			if (strlen($a['enquiry']) < 1) {
 				$aResponse['msg']['enquiry'] = "Please enter details of your enquiry";
-			}
-		
-			/*	
-			if ((strlen($a['grp_size']) > 4) || (!is_numeric($a['grp_size'])))  {
-				$aResponse['msg']['grp_size'] = "Group size should be numeric and less than 4 characters";
-			}			
-
-			if (strlen($a['budget']) > 119)  {
-				$aResponse['msg']['budget'] = "Budget should be less than 120 chars";
-			}
-			*/			
-			
-				
+			}				
 		}
 
 		if ($a['enquiry_type'] == "GENERAL") {
@@ -740,8 +732,7 @@ class Enquiry {
 				
 		}
 
-
-		if (isset($aResponse['msg']) && count($aResponse['msg']) < 1) {
+		if (count($aResponse['msg']) < 1) {
 			return true;
 		}
 

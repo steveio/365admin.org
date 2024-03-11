@@ -21,15 +21,6 @@ $aEnqBrochure = array(PROFILE_TOUR);
 $aEnqJob = array(PROFILE_JOB);
 
 
-
-if ($bProcessed)
-{
-   $oAffiliateArticle = new Article;
-   $oAffiliateArticle->Get($_CONFIG['site_id'],"/enquiry-sent-page");
-   $oAffiliateArticle->LoadTemplate("article_01.php");
-}
-
-
 $oEnquiry = new Enquiry();
 $t = new Template();
 
@@ -72,17 +63,25 @@ if (!is_object($oProfile)) AppError::StopRedirect($sUrl = $_CONFIG['url'],$sMsg 
 /* process an enquiry */
 if (isset($_POST['submit'])) {
 
-	$response = array();
-	
+	$response = array();	
 	
 	if ($oEnquiry->Process($_POST,$aResponse)) {
 		$oEnquiry->GetById($oEnquiry->GetId());
-		$bProcessed = true;
+		$bProcessed = true;		
 	}
+	
 } else { 
 	$oEnquiry->GetNextId();
 	$oEnquiry->SetFromArray($_POST);
 	$_REQUEST['q'] = base64_encode($oEnquiry->GetEnquiryType()."::".$oEnquiry->GetLinkId()."::".$oEnquiry->GetLinkTo()."::".$oEnquiry->GetId());
+}
+
+
+if ($bProcessed)
+{
+    $oAffiliateArticle = new Article;
+    $oAffiliateArticle->Get($_CONFIG['site_id'],"/enquiry-sent-page");
+    $oAffiliateArticle->LoadTemplate("article_01.php");
 }
 
 
