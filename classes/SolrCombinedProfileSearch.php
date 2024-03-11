@@ -32,57 +32,99 @@ class SolrCombinedProfileSearch extends SolrSearch {
 	    $this->aPlacement = array();
 	    $this->aCompany = array();
 
+	    $this->iRowsToParse = ($this->getRowsToFetch() * 2); // read ahead double page-size to fetch spread of brand 
+
 		if ($this->getNumFound() >= 1) {
 
 			$this->resultset = $this->getResultSet();
 
 			$this->fetched = 0;
+			$this->company = 0;
+			$this->placement = 0;
 
 		    $aCompanyIdProcessed = array();
 
 		    foreach($this->resultset as $doc)
 		    {
-
+		        // index of all result doc ids keyed on profile_type
 		        $this->arrId[$doc->profile_type."_".$doc->profile_id] = $doc->score;
-		        
+
+		        // array of seperate company & placement ids
 		        switch($doc->profile_type)
 		        {
 		            case 0:
 		                $this->aCompanyId[] = $doc->profile_id;
 		                $this->fetched++;
+		                $this->company++;
 		                break;
 		            case 1:
-		                $this->aPlacementId[] = $doc->profile_id;
+		                // placement id (grouped by company_id) 
+		                $this->aPlacementId[$doc->company_id][] = $doc->profile_id;
 		                $this->fetched++;
+		                $this->placement++;
 		                break;
 		        }
 
-		        if ($this->fetched == $this->getRowsToFetch())
+		        if ($this->fetched == $this->iRowsToParse)
 		        {
 		            break;
 		        }
-		        
-		    }
+		    }		    
+
+		    $aCompanyId = array_keys($this->aPlacementId);
+
+		    $aPlacementId = array();
+		    $idx = 0;
+		    $fetched = 0;
 
 		    /*
-		    print "Rows to Fetch: ".$this->getRowsToFetch();
-		    print ",Fetched: ".$this->fetched;
-		    print ",Total Placement: ".count($this->aPlacementId);
-		    print ",Total Company: ".count($this->aCompanyId);
-		    print_r("<pre>");
-		    print_r($aCompanyIdProcessed);
-		    print_r($this->aAllPlacementId);
-		    print_r($aPlacementId);
-		    print_r($this->resultset);
-		    print_r("</pre>");
-		    die();
-		    */
-		    
+		     * Iterate through each brand's set of placement ids,
+		     * returning one from each, until 
+		     *  - fetch limit reached 
+		     *  - or all returned placement ids processed 
+		     */
+		    while($fetched < $this->getRowsToFetch())
+		    {
+		        $comp_id = $aCompanyId[$idx];
+
+		        if (count($this->aPlacementId[$comp_id]) >= 1)
+		        {
+		            $aPlacementId[] = array_shift($this->aPlacementId[$comp_id]);
+		            $fetched++;
+		        } else {
+		            unset($aCompanyId[$idx]);
+		            $aCompanyId = array_values($aCompanyId);
+		            if (count(array_keys($aCompanyId)) < 1) break;
+		        }
+
+		        if ($idx >= count(array_keys($aCompanyId)) -1)
+		        {
+		            $idx = 0;
+		        } else {
+		          $idx++;
+		        }
+		    }
 		}
 
-		if (is_array($this->aPlacementId) && count($this->aPlacementId) >= 1)
+		/*
+	    print "Rows to Fetch: ".$this->getRowsToFetch();
+	    print "Rows to Parse: ".$this->iRowsToParse;
+	    print ",Fetched: ".$fetched;
+	    print ",Total Placement: ".$this->placement." ( From comps: ".count(array_keys($this->aPlacementId)).")";
+	    print ",Total Company: ".$this->company;
+	    print_r("<pre>");
+	    print_r($aPlacementId);
+	    print_r($this->_aProfile);
+	    print_r("</pre>");
+	    die();
+	    */
+		
+		/*
+		 * Fetch Company & Placement Profile Objects
+		 */
+		if (is_array($aPlacementId) && count($aPlacementId) >= 1)
 		{
-		    $this->aPlacement = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$this->aPlacementId, FETCHMODE__SUMMARY);			    
+		    $this->aPlacement = PlacementProfile::Get("ID_LIST_SEARCH_RESULT",$aPlacementId, FETCHMODE__SUMMARY);			    
 		}
 
 		if (is_array($this->aCompanyId) && count($this->aCompanyId) >= 1)
@@ -91,7 +133,15 @@ class SolrCombinedProfileSearch extends SolrSearch {
 		}			
 		
 		$this->_aProfile = array();
+		$fetched = 0;
 
+		/*
+		 * Re-index filtered (by brand) result set based on score (relevancy)
+		 * 
+		 * Combined Company Id + Placement Id should always yield sufficient rows for pagesize
+		 * Some profiles may appear across two pages 
+		 * 
+		 */
 		foreach($this->arrId as $key => $score)
 		{
 		    $bits = explode("_", $key);
@@ -103,33 +153,23 @@ class SolrCombinedProfileSearch extends SolrSearch {
 		        if (array_key_exists($profile_id, $this->aCompany))
 		        {
                     $this->_aProfile[] = $this->aCompany[$profile_id];
+                    $fetched++;
 		        }
 		    } elseif ($profile_type == 1)
 		    {
 		        if (array_key_exists($profile_id, $this->aPlacement))
 		        {
 		            $this->_aProfile[] = $this->aPlacement[$profile_id];
+		            $fetched++;
 		        }
 		    }
+		    
+		    if ($fetched == $this->getRowsToFetch()) break;
 		}
 
-		/*
-		print_r("<pre>");
-		print_r("Limit: ".$this->getRowsToFetch()."<br />");
-		print_r("Fetched: ".$this->fetched."<br />");
-		print_r("CompanyId: ".count($this->aCompanyId)."<br />");
-		print_r("PlacementId: ".count($this->aPlacementId)."<br />");
-		print_r("aCompany: ".count($aCompany)."<br />");
-		print_r("aPlacement: ".count($aPlacement)."<br />");
-		print_r($this->aPlacementId);
-		print_r($this->_aProfile);
-		print_r("</pre>");
-		die(__FILE__."::".__LINE__);
-		*/
 
 		$this->setFacetFieldResult();
-		$this->setFacetQueryResult();					
- 		
+		$this->setFacetQueryResult();
 	}
 
 	protected function _balancePlacementDistribution()
