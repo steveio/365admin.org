@@ -29,11 +29,14 @@ $sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_l
         		<a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
 				<img class="img-fluid rounded mb-3" src="<?= $img_url;  ?>" alt="<?= $oProfile->GetTitle() ?>" />
         		</a>
-        	</div>
-        	<div class="brand-overlay">
-        		<?= $strCompanyLogoHtmlSmall; ?>
         	</div><?
-
+        	if (is_object($oProfile->GetImageByType(1))) 
+        	{
+        	?>
+        	<div class="brand-overlay">
+        		<?= $oProfile->GetImageByType(1)->GetHtml("_sm"); ?>
+        	</div><?
+        	}
     	} elseif (is_object($oProfile->GetImageByType(1))) { ?>
             <div class="col-12 profile-image">
                     <a title="<?= $oProfile->GetTitle() ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
