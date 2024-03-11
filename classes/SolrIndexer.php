@@ -121,6 +121,7 @@ class SolrIndexer {
 				// get the company profile
 				$profile_type = CompanyProfile::GetTypeById($a['id']);
 				$oCProfile = ProfileFactory::Get($profile_type);
+
 				if (!is_object($oCProfile))
 				{
 					if (LOG) Logger::DB(1,JOBNAME,"ERROR: FAILED TO RESOLVE COMPANY TYPE id : ".$a['id']." type: ".$profile_type);
@@ -135,6 +136,9 @@ class SolrIndexer {
 
 				if ($oCProfile->GetFilterFromSearch()) {
 				    if (LOG) Logger::DB(1,JOBNAME,"ERROR: Filter from search id : ".$a['id']);
+				    // @todo - delete doc from SOLR index (purge handled by solr_reindex.sh)
+				    // set the last_indexed date
+				    $db->query("UPDATE company SET last_indexed_solr = now()::timestamp WHERE id ".$oCProfile->GetId());
 				    continue;
 				}
 				
@@ -337,6 +341,8 @@ class SolrIndexer {
 
 				if ($oProfile->GetFilterFromSearch()) {
 				    if (LOG) Logger::DB(1,JOBNAME,"ERROR: Filter from search id : ".$a['id']);
+
+				    $db->query("UPDATE profile_hdr SET last_indexed_solr = now()::timestamp WHERE id = ".$oProfile->GetId());
 				    continue;
 				}
 
