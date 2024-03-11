@@ -22,8 +22,10 @@ $sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_l
     	} elseif (is_object($oProfile->GetImage(0))) // profile has 1 or more image
     	{ 
     	    if ($oProfile->GetImage(0)->GetHtml($sImgSize) != false) // try fetch large fixed-aspect image  
-    	    {
-    	        $img_url = $oProfile->GetImage(0)->GetUrl($sImgSize);
+    	    { ?>
+    	    	<a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class=""><?
+    	        $img_url = $oProfile->GetImage(0)->GetUrl($sImgSize); ?>
+    	        </a><?
     	    } ?>
     		<div class="col-12 profile-image">
         		<a title="<?= $oProfile->GetDescShortPlaintext(120) ?>" href="<?= $oProfile->GetProfileUrl();  ?>" class="">
