@@ -408,6 +408,10 @@ abstract class AbstractProfile implements TemplateInterface {
 	public function GetImageByType($iType = PROFILE_IMAGE, $index = 0) {
 	    return $this->aImage[$iType][$index];
 	}
+
+	public function GetImagesByType($iType = PROFILE_IMAGE) {
+	    return $this->aImage[$iType];
+	}
 	
 	public function GetImages($iType = PROFILE_IMAGE) {
 
