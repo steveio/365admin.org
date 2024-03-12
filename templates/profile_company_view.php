@@ -1,8 +1,8 @@
 <?php 
 
 $oProfile = $this->Get("oProfile");
+$aPlacement = $this->Get("aPlacement");
 $oReviewTemplate = $this->Get("oReviewTemplate");
-
 
 ?>
 
@@ -519,9 +519,7 @@ print $oReviewTemplate->Render();
 
 
 
-<? 
-
-$aPlacement = $this->Get("aPlacement");
+<?
 
 if ($oProfile->GetListingType() >= BASIC_LISTING)
 {
@@ -540,14 +538,11 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
 	<h2><?= $strRelatedProfileTitle ?></h2>
 	
 	<div class="row my-3">
-	<?php 
-	
-	$strCompanyLogoHtml = '';
-	if (is_object($oProfile->GetCompanyLogo()))
-	{
-	   $strCompanyLogoHtml = $oProfile->GetCompanyLogo()->GetHtml('_sm');
-	}
-	$iLimit = 6;
+	<? 
+
+	$iLimit = 8;
+	$displayMore = (count($aPlacement) > $iLimit) ? true : false;
+
 	for($i=0;$i<$iLimit;$i++) 
 	{
 	   $oPlacementProfile = array_shift($aPlacement);
@@ -562,17 +557,17 @@ if (is_array($aPlacement) && count($aPlacement) >= 1)
     } ?>
 	</div>
 
-	<?php 
-	if (count($aPlacement) > $iLimit) 
+	<?
+	if ($displayMore)
 	{
 	?>
 	<div id="profile-list-btn" class="my-2">
 		<a href="#" class="btn btn-primary rounded-pill px-3" id="profile-list-viewall">View All Programs</a>
 	</div>
-
 	<div id="profile-list-more" class="row my-3" style="display: none;">
 	<?php 
-	for($i=$iLimit;$i<count($aPlacement);$i++) 
+	$count = count($aPlacement);
+	for($i=0;$i<$count;$i++) 
 	{
 	   $oPlacementProfile = array_shift($aPlacement);
 
