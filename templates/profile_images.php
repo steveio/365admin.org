@@ -12,15 +12,16 @@
 	<h2>Existing Images</h2>
 
 	<?
-	$aImage = $oProfile->GetImageByType();	
+	$aImage = $oProfile->GetImagesByType();	
+
 	if (is_array($aImage) && count($aImage) >= 1) {
 		foreach($aImage as $oImage) {
 			$type = ($oProfile->GetGeneralType() == PROFILE_COMPANY) ? "COMPANY" : "PLACEMENT";
 			?>
-			<div id="img_<?= $oImage->GetId() ?>" style="float: left; padding-right: 6px;">
+			<div id="img_<?= $oImage->GetId() ?>" class="col-3 my-3" >
 			<a class="p_small" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('<?= $type; ?>',<?= $oProfile->GetId(); ?>,<?= $oImage->GetId() ?>)">[REMOVE]</a>
 			<br />
-			<?= $oImage->GetHtml("_s","") ?>
+			<?= $oImage->GetHtml("_mf","") ?>
 			</div>
 			<?
 		}
