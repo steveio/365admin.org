@@ -13,17 +13,6 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 ?>
 
 
-<?php if ($aPageOptions[ARTICLE_DISPLAY_OPT_ADS] != "f") { ?>
-<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<script>
- (adsbygoogle = window.adsbygoogle || []).push({
-      google_ad_client: "ca-pub-9874604497476880",
-      enable_page_level_ads: true
- });
-</script> 
-<?php  } ?>
-
-
 <div class="container">
 <div class="align-items-center justify-content-center">
 

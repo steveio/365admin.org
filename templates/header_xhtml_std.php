@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<meta name="verify-v1" content="<?= $_CONFIG['meta-tag']; ?>" />
+<meta name="google-site-verification" content="lNJMDbpe5zfy_6ap1x7GMmPiu7cCTQ_fNQW0ToD7SSU" />
 <meta name="description" content="<?= $this->Get("DESCRIPTION"); ?>" />
 <meta name="keywords" content="<?= $this->Get("KEYWORDS"); ?>" />
 
@@ -24,22 +24,14 @@
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="theme-color" content="#ffffff">
 
-
 <?= $this->Get("CSS_GENERIC"); ?>
 <?= $this->Get("CSS_FONTS"); ?>
 
 <?= $this->Get("JS_INCLUDE"); ?>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9874604497476880" crossorigin="anonymous"></script>
+
 <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bca02abddd6040011604f41&product=inline-share-buttons' async='async'></script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-<?= $this->Get("JS_ONLOAD"); ?>
-
-});
-</script>
 
 
 </head>

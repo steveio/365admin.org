@@ -7,37 +7,6 @@
 <div class="container">
 <div class="align-items-center justify-content-center">
 
-
-<? if (!$oAuth->IsValidUser()) { ?>
-    <div class="row">
-            <div class="col-12">
-            <script type="text/javascript"><!--
-            google_ad_client = "ca-pub-9874604497476880";
-            /* Gap Year 365 */
-            google_ad_slot = "2273353061";
-            google_ad_width = 728;
-            google_ad_height = 90;
-            //-->
-            </script>
-            <script type="text/javascript"
-            src="//pagead2.googlesyndication.com/pagead/show_ads.js">
-            </script>
-            </div>
-
-            <div class="span8 adbanner_mob">
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- One World365 Mobile Banner Header -->
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:320px;height:100px"
-                 data-ad-client="ca-pub-9874604497476880"
-                 data-ad-slot="1198653468"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-            </div>
-    </div>
-<? } ?>
-
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
 	<? if ($oAuth->IsValidUser()) { ?>
 		<li class="nav-item"><a class="nav-link px-2 text-muted" href="/logout">Logout</a></li>
