@@ -33,6 +33,14 @@
 <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bca02abddd6040011604f41&product=inline-share-buttons' async='async'></script>
 <? } ?>
 
+<script type="text/javascript">
+$(document).ready(function(){
+
+<?= $this->Get("JS_ONLOAD"); ?>
+
+});
+</script>
+
 
 </head>
 
