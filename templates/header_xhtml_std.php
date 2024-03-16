@@ -31,7 +31,9 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9874604497476880" crossorigin="anonymous"></script>
 
+<? if (!$oAuth->IsValidUser()) { ?>
 <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bca02abddd6040011604f41&product=inline-share-buttons' async='async'></script>
+<? } ?>
 
 
 </head>
@@ -51,19 +53,6 @@
           <img src="<?= $this->Get("LOGO_URL"); ?>" alt="<?= $this->Get("TITLE"); ?>" border="0" />
         </a>
         </div>
-
-    	<? if (!$oAuth->IsValidUser()) { ?>
-        <div class="col-lg-8 col-sm-12 adbanner_mob">
-            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-            <!-- Mobile Banner -->
-            <ins class="adsbygoogle"
-                 data-ad-client="ca-pub-9874604497476880"
-                 data-ad-slot="1198653468"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-        <?php } ?>
     </div>        
 
 
