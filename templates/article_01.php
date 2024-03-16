@@ -40,8 +40,6 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	?>
     	</div>
     
-    	<?php } ?>
-    
     	<div class="my-3">
     	<h1><?= $oArticle->GetTitle(); ?></h1>
     	</div>
@@ -50,6 +48,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
     	<p class="lead"><?= $oArticle->GetDescShortPlaintext(); ?></p>
     	</div>
 
+	<? } ?>
       <?
         if ($aPageOptions[ARTICLE_DISPLAY_OPT_SEARCH_PANEL] != "f") {
             $oSearchResultPanel = $this->Get('oSearchResult');

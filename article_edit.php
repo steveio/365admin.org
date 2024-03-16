@@ -24,12 +24,19 @@ tinymce.init({
 tinymce.init({
         selector: '#desc_long',
         menubar: false,
-        toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link | table | numlist bullist | code",
-        plugins: "image link lists table code",
+        toolbar: "undo redo | blocks | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | image link template | table | numlist bullist | code",
+        plugins: "image link lists table code template",
         images_upload_url : '/image_upload.php',
         relative_urls : false,
         document_base_url : "https://www.oneworld365.org/",
-
+        templates: [
+            { title: 'Hero', description: 'Hero Left Align w/ Image', url: '/templates/tinymce/hero_left_align_with_image.html'  },
+            { title: 'Card', description: 'Featured Card', url: '/templates/tinymce/card_featured.html'  },
+            { title: 'Blog #1', description: 'Blog Layout #1', url: '/templates/tinymce/blog_01.html' },
+	    { title: 'Album', description: 'Gallery Layout 3x3', url: '/templates/tinymce/album.html' },
+            { title: 'Featured', description: 'Featured 3 cols with icons', url: '/templates/tinymce/featured_cols_with_icons.html'  },
+	    { title: 'Pricing', description: 'Pricing table', url: '/templates/tinymce/pricing.html'  }
+          ]
 });
 
 EOT;

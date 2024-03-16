@@ -246,13 +246,12 @@ a.article_title:hover {
     text-decoration: underline;
 }
 
-a.more-link:link { background:url(/images/chevron-grey.gif) 0 4px no-repeat !important; font-size:1em; color: #006699; font-weight:bold; padding-left:10px !important;}
-a.more-link:visited {background:url(/images/chevron-grey.gif) 0 4px no-repeat !important; font-size:1em; font-weight:bold; padding-left:10px !important;}
-a.more-link:hover { background:url(/images/chevron-grey.gif) 0 4px no-repeat !important;}
-a.more-link-country:link { background:url(/images/chevron-grey.gif) 0 4px no-repeat !important; font-size:1.5em; color: #006699; font-weight:bold; padding-left:10px !important;}
-a.more-link-country:visited {background:url(/images/chevron-grey.gif) 0 4px no-repeat !important; font-size:1.5em; color: #006699; font-weight:bold; padding-left:10px !important;}
-a.more-link-country:hover { background:url(/images/chevron-grey.gif) 0 4px no-repeat !important;}
 
+.bi {
+   font-size: 55px;
+   color: #558ab4;
+   background-color: white;
+}
 
 .nav_link {
     margin: 6px 0px 0px 0px;
