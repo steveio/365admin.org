@@ -11,15 +11,8 @@ if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedire
 
 $oImageBrowser = new ImageBrowser();
 
-$aCompany = $oImageBrowser->GetCompanyName();
 
-if (count($_REQUEST) == 0)
-{
-    $_REQUEST['company_name'] = "ALL";
-    $_REQUEST['origin_type'] = "ALL";
-} else {
-    //$aReport = $oLinkChecker->GetReport($_REQUEST);
-}
+$aReport = $oImageBrowser->GetReport($_REQUEST);
 
 
 /*
@@ -39,12 +32,11 @@ print $oHeader->Render();
 
 
 <form name="report_filter" enctype="multipart/form-data" action="" method="POST">
-
+<!-- 
 <div class="row my-3">
 
 	<div class="col-12">
         <h4>Filter: </h4>
-
 		<input type="hidden" name="filter_report" value="1" />
 
 	<div class="row my-3">
@@ -52,15 +44,14 @@ print $oHeader->Render();
         <label for="company_name">Company:</label>
         <select id="" class="form-select" name="company_name">
         	<option value="ALL">ALL</option><?
-        	foreach($aCompany as $aRow)
-        	{
-        	    $val = $aRow['company'];
+        	//foreach($aCompany as $aRow)
+        	//{
+        	//    $val = $aRow['company'];
         	?>
         	<option value="<?= $val; ?>" <?= ($_REQUEST['company_name'] == $val) ? "selected" : ""; ?>><?= $val; ?></option><?
-        	} ?>
+        	//} ?>
         </select>
 	</div>
-
 	<div class="col-6">
         <label for="origin_type">Link Type:</label>
         <select id="" class="form-select" name="origin_type">
@@ -99,6 +90,7 @@ print $oHeader->Render();
 	</div>
 	</div>
 </div>
+-->
 
 <div class="row my-3">
 
@@ -106,12 +98,12 @@ print $oHeader->Render();
     
 	<thead>
     	<tr>
-    	<th>Date</th>
-    	<th>Url</th>
-    	<th>HTTP Status</th>
-    	<th>Origin</th>	
-    	<th>Link Type</th>	
-	<th>Status</th>
+    	<th>Id</th>
+    	<th>Link To</th>
+    	<th>Title</th>
+    	<th>Type</th>	
+    	<th>Filename</th>
+    	<th>Preview</th>
     	</tr>
 	</thead>
 	
@@ -119,53 +111,31 @@ print $oHeader->Render();
     <?
     if (is_array($aReport))
     {
-        foreach($aReport as $aRow) { ?>
+        foreach($aReport as $aRow) { 
+        
+            if ($aRow['link_to'] == "") {
+                $aRow['link_to'] = "ARTICLE (Unsaved)";
+            }
+            
+            $img_o_url = "http://www.oneworld365.org".$aRow['filepath'].$aRow['id'].$aRow['ext'];
+            $img_mf_url = "http://www.oneworld365.org".$aRow['filepath'].$aRow['id']."_mf".$aRow['ext'];
+            $img_path = $aRow['filepath'].$aRow['id'].$aRow['ext'];
+            
+            if ($aRow['image_type'] == "IMAGE") 
+            {
+                $img_url = $img_mf_url;
+            } else {
+                $img_url = $img_o_url;
+            }
+
+            ?>
         	<tr> 
-        	<td class="col-1"><?= $aRow['report_date']; ?></td>
-        	<td class="col-5"><a href="<?= $aRow['url']; ?>" target="_new"><?= $aRow['url']; ?></a></td>
-        	<?php
-		$status = 1;
-        	$css_class = "";
-        	if (substr_count($aRow['http_status'], "200") >= 1)
-        	{
-		   $status = 0;
-        	   $css_class = "alert alert-success";
-        	} elseif (substr_count($aRow['http_status'], "30") >= 1)
-        	{
-        	    $css_class = "alert alert-warning";
-        	} else {
-        	    $css_class = "alert alert-danger";
-        	}
-        	?>
-		<?
-		if (trim($aRow['http_status']) == "") {
-			$aRow['http_status'] = "DNS / Connect";
-		}
-		?>
-        	<td class="col-1 <?= $css_class; ?>"><?= $aRow['http_status']; ?></td>
-        	<td class="5"><a href="<?= $aRow['origin_url']; ?>" target="_new"><?= $aRow['origin_url']; ?></a></td>
-        	<?php 
-
-        	switch($aRow['origin_type'])
-        	{
-        	    case LINK_ORIGIN_COMPANY_URL :
-        	        $sType = "COMPANY URL";
-        	        break;
-        	    case LINK_ORIGIN_COMPANY_APPLY :
-        	        $sType = "COMPANY APPLY";
-        	        break;
-        	    case LINK_ORIGIN_PLACEMENT_URL :
-        	        $sType = "PLACEMENT URL";
-        	        break;
-        	    case LINK_ORIGIN_PLACEMENT_APPLY :
-        	        $sType = "PLACEMENT APPLY";
-        	        break;        	        
-        	}
-
-        	?>
-        	<td class="col-1"><?= $sType; ?></td><?
-		$label = ($status == 0) ? "OK" : "ERROR"; ?>
-		<td class="<?= $css_class; ?>"><?= $label; ?></td>
+        	<td class=""><?= $aRow['img_id']; ?></td>
+			<td class=""><?= $aRow['link_to']; ?></td>
+			<td class=""><?= $aRow['title']; ?></td>
+			<td class=""><?= $aRow['image_type']; ?></td>
+			<td class=""><a href="<?= $img_url; ?>" target="_new"><?= $img_path; ?></a></td>
+			<td class=""><a href="<?= $img_url; ?>" target="_new"><img src="<?= $img_url; ?>" alt="" /></a></td>
         	</tr><?
         } 
     } ?>
@@ -183,7 +153,7 @@ $(document).ready(function() {
 
     $('#report').DataTable({
     	"pageLength": 500,
-    	"bSort" : true
+    	"bSort" : false
     });
 
 });
