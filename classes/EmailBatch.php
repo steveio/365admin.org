@@ -455,7 +455,7 @@ class EmailBatch {
         
         if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__);
         
-        sleep(15); // to prevent spam policy violation and/or memory spike when sending large email batches
+        sleep(3); // to prevent spam policy violation and/or memory spike when sending large email batches
         return EmailSender::SendMail($this->GetHtmlTemplatePath(), $this->GetTextTemplatePath(), $this->GetMsgParams(), $this->GetTo(), $this->GetSubject(), $this->GetFromAddr(), $this->GetReturnPath(),$this->GetAttachment());
         
     }

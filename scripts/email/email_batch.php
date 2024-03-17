@@ -35,6 +35,8 @@ include("/www/vhosts/365admin.org/htdocs/conf/config.php");
 
 require_once(ROOT_PATH."/classes/db_pgsql.class.php");
 require_once(ROOT_PATH."/classes/logger.php");
+require_once(ROOT_PATH."/conf/brand_config.php");
+require_once(ROOT_PATH."/classes/Brand.php");
 require_once(ROOT_PATH."/classes/file.class.php");
 require_once(ROOT_PATH."/classes/template.class.php");
 require_once(ROOT_PATH."/classes/enquiry.class.php");
@@ -59,6 +61,11 @@ require_once(ROOT_PATH."/classes/mimePart.php");
 
 
 
+
+if (!is_object($oBrand))
+{
+    $oBrand = new Brand($aBrandConfig[HOSTNAME]);
+}
 
 
 
