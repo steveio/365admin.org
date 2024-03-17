@@ -369,11 +369,11 @@ class Enquiry {
 		    $company_id = $aOptions['company_id'];
 
 		if ($aOptions['report_date_from'] != null) {
-		    $strStartDateSQL = " and e.date >= '".$aOptions['report_date_from']."'";
+		    $strStartDateSQL = " and e.date >= '".$aOptions['report_date_from']."'::date";
 		}
 		
 		if ($aOptions['report_date_to'] != null) {
-		    $strEndDateSQL = " and e.date <= '".$aOptions['report_date_to']."'";
+		    $strEndDateSQL = " and e.date <= ('".$aOptions['report_date_to']."'::date + '1 day'::interval)";
 		}
 
 		if (is_array($aOptions['report_status'])) {
@@ -482,7 +482,7 @@ class Enquiry {
 		,website w
 		WHERE
 		$sql_filter
-	    AND e.country = c.id
+	        AND e.country = c.id
 		AND e.site_id = w.id".
         $strStartDateSQL." ".
         $strEndDateSQL." ".
