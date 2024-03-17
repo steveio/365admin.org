@@ -98,11 +98,23 @@ if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
     
 }
 
-$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 year"))." - ".date("d-m-Y");
+$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y");
 $aDate = explode(" - ", $strDateRange);
-$aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
-$aOptions['report_date_to'] = preg_replace("/\//","-",$aDate[1]);
 
+$t = strtotime($aDate[0]);
+$startDate = date('Y-m-d',$t);
+
+$t = strtotime($aDate[1]);
+$endDate = date('Y-m-d',$t);
+
+
+$aOptions['report_date_from'] = $startDate;
+$aOptions['report_date_to'] = $endDate;
+
+
+//print_r("<pre>");
+//print_r($aOptions);
+//print_r("</pre>");
 
 $aEnquiry = $oEnquiry->GetAll($aOptions);
 
@@ -270,7 +282,7 @@ $(document).ready(function() {
 
     $('#report').DataTable({
     	"pageLength": 100,
-    	"bSort" : true
+    	"bSort" : false 
     });
 
 });
