@@ -30,11 +30,14 @@ tinymce.init({
         relative_urls : false,
         document_base_url : "https://www.oneworld365.org/",
         templates: [
-            { title: 'Hero', description: 'Hero Left Align w/ Image', url: '/templates/tinymce/hero_left_align_with_image.html'  },
-            { title: 'Card', description: 'Featured Card', url: '/templates/tinymce/card_featured.html'  },
+	    { title: 'Hero Centered', description: 'Hero Centered', url: '/templates/tinymce/hero_centered.html'  },
+	    { title: 'Hero Left Align Image', description: 'Hero left align image', url: '/templates/tinymce/hero_leftalign_image.html'  },
+            { title: 'Card Single', description: 'Featured Card', url: '/templates/tinymce/card_featured.html'  },
+	    { title: 'Card 3col Row', description: '3x Card in row', url: '/templates/tinymce/card_3col_row.html'  },
             { title: 'Blog #1', description: 'Blog Layout #1', url: '/templates/tinymce/blog_01.html' },
 	    { title: 'Album', description: 'Gallery Layout 3x3', url: '/templates/tinymce/album.html' },
-            { title: 'Featured', description: 'Featured 3 cols with icons', url: '/templates/tinymce/featured_cols_with_icons.html'  },
+	    { title: 'Feature Single', description: 'Single row feature w/ image', url: '/templates/tinymce/feature_single.html' },
+            { title: 'Feature Row', description: 'Featured 3 cols with icons', url: '/templates/tinymce/featured_cols_with_icons.html'  },
 	    { title: 'Pricing', description: 'Pricing table', url: '/templates/tinymce/pricing.html'  }
           ]
 });
