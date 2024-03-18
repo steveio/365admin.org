@@ -309,7 +309,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 			<div id="img_<?= $oImage->GetId() ?>" style="float: left; padding-right: 6px;">
 			<a class="p_small" title="Remove Image" href="javascript: void(null);" onclick="javascript: RemoveImage('ARTICLE',<?= $oArticle->GetId() ?>,<?= $oImage->GetId() ?>)">[REMOVE]</a>
 			<br />
-			<?= $oImage->GetHtml("_s",$oArticle->GetTitle()) ?>
+			<?= $oImage->GetHtml("_sf",$oArticle->GetTitle()) ?>
 			</div>
 			<?
 		}

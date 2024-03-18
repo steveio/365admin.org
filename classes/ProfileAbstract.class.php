@@ -253,8 +253,6 @@ abstract class AbstractProfile implements TemplateInterface {
             $a['SMALL']['URL'] = $this->GetImage(0)->GetUrl("_sf","");
             if ($this->GetImage(0)->GetHtml("_mf","")) {
                 $a['MEDIUM']['URL'] = $this->GetImage(0)->GetUrl("_mf","");
-            } elseif ($this->GetImage(0)->GetHtml("_m","")) {
-                $a['MEDIUM']['URL'] = $this->GetImage(0)->GetUrl("_m","");
             }
             if ($this->GetImage(0)->GetHtml("_lf","")) {
                 $a['LARGE']['URL'] = $this->GetImage(0)->GetUrl("_lf","");

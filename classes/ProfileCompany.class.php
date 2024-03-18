@@ -1342,7 +1342,6 @@ class CompanyProfile extends AbstractProfile {
 									
 		if (is_object($this->GetImage(0,LOGO_IMAGE))) {
 			$this->oTemplate->Set("IMG_SM_01",$this->GetImage(0,LOGO_IMAGE)->GetHtml("_sm",$this->GetTitle(),'',FALSE));
-			//$this->oTemplate->Set("IMG_M_01",$this->GetImage(0)->GetHtml("_m",""));
 		} else {
 			$this->oTemplate->Set("IMG_SM_01","");
 		}

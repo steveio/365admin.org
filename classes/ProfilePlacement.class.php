@@ -1259,10 +1259,8 @@ class PlacementProfile extends AbstractProfile {
 									
 		if (is_object($this->GetImage(0))) {
 			$this->oTemplate->Set("IMG_SM_01",$this->GetImage(0)->GetHtml("_sf",""));
-			if (!$this->GetImage(0)->GetHtml("_mf","")) {
-				$this->oTemplate->Set("IMG_M_01",$this->GetImage(0)->GetHtml("_m",""));
-			} else {
-				$this->oTemplate->Set("IMG_M_01",$this->GetImage(0)->GetHtml("_mf",""));
+			if ($this->GetImage(0)->GetHtml("_mf","")) {
+			    $this->oTemplate->Set("IMG_M_01",$this->GetImage(0)->GetHtml("_mf",""));
 			}			
 		} elseif (is_object($this->GetCompanyLogo())) {
 			$this->oTemplate->Set("IMG_SM_01",$this->GetCompanyLogo()->GetHtml("_sm",$this->GetTitle(),'',FALSE));

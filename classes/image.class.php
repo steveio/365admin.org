@@ -21,25 +21,14 @@ class ImageSize {
 	 * 
 	 */
 	public static function Get($size = '',$aspect = '',$type = "DIMENSIONS") {
-			
+
+	    /* f = fixed aspect ratio (landscape) */
 		$a = array(	
-					"_s" => array(
-									LANDSCAPE => "100x75",
-									PORTRAIT => "75x100",
-									),
-					"_sf" => array( /* fixed aspect ratio small (stretched) */
+					"_sf" => array( 
 									LANDSCAPE => "100x75"
-									),
-					"_m" => array(
-									LANDSCAPE => "240x180",
-									PORTRAIT => "180x240",
 									),
 					"_mf" => array(
 									LANDSCAPE => "240x180"
-									),
-					"_l" => array(
-									LANDSCAPE => "500x334",
-									PORTRAIT => "500x334",
 									),
 					"_lf" => array(
 									LANDSCAPE => "500x334"

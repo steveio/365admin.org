@@ -1286,7 +1286,7 @@ class Placement {
 			$s .= "<div id='rplacement_item_container'>";
 			$s .= "<b class=\"rtop\"><b class=\"r1\"></b> <b class=\"r2\"></b> <b class=\"r3\"></b> <b class=\"r4\"></b></b>";
 			$s .= "<div id=\"rplacement_item\">";
-			$s .= "<span id='rplacement_img'><a title='".$p->title ." : " . $p->company_name . " : ".$p->country ."' href=\"".$_CONFIG['url']."/company/".$p->comp_url_name."/".$p->url_name."\"><img src='http://www.oneworld365.org/images/client_image/img_".$p->img_thumb_id."_s".$p->img_thumb_ext."' alt=' ' border=''></a></span>";
+			$s .= "<span id='rplacement_img'><a title='".$p->title ." : " . $p->company_name . " : ".$p->country ."' href=\"".$_CONFIG['url']."/company/".$p->comp_url_name."/".$p->url_name."\"><img src='http://www.oneworld365.org/images/client_image/img_".$p->img_thumb_id."_sf".$p->img_thumb_ext."' alt=' ' border=''></a></span>";
 			
 			if (strlen($p->title) > 36) {
 				$p->title = $p->title." ";
