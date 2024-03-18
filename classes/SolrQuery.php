@@ -317,11 +317,17 @@ class SolrQuery {
 			$this->aFacetField[] = array("species" => "species");
 			$this->aFacetField[] = array("habitats" => "habitats");
 		}
-		/*
-		if (in_array($this->fq['country_id'],array(1,7,5,148,6,7,120,13,14,18,133,22,24,26,27,28,30,31,118,37,39,40,42,44,46,47,48,53,54,60,63,65,66,73,74,75,114,76)))
+
+		if (in_array($this->fq['activity_id'],array(312,27)))
 		{
-			$this->aFacetField[] = array("species" => "species");
-			$this->aFacetField[] = array("habitats" => "habitats");
+		    $this->aFacetField[] = array("state" => "state");
+		    $this->aFacetField[] = array("camp_activities" => "camp_activities");
+		}
+
+		/*
+		if (in_array($this->fq['activity_id'],array(21)))
+		{
+		    $this->aFacetField[] = array("camp-activity" => "camp-activity");
 		}
 		*/
 

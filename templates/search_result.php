@@ -26,8 +26,18 @@
 		<div class="row my-2">
 			<div id="facet-duration" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
 			<div id="facet-price" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+		</div>
+		<div class="row my-2">
 			<div id="facet-species" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
 			<div id="facet-habitats" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+		</div>
+		<div class="row my-2">
+			<div id="facet-species" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+			<div id="facet-habitats" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+		</div>
+		<div class="row my-2">
+			<div id="facet-state" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
+			<div id="facet-camp_activities" class="facet-col col-lg-4 col-md-6 col-sm-12"></div>
 		</div>
 
 		<div class="row my-3">

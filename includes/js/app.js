@@ -16,7 +16,7 @@ String.prototype.trunc =
 
 $(document).ready(function(){
 
-	var facetTypes = ['category','country','continent','activity','price','duration','species','habitats'];
+	var facetTypes = ['category','country','continent','activity','price','duration','species','habitats','state','camp_activities'];
 	
 	var profileData;
 	var rf; // refine search panel visibility
@@ -269,6 +269,14 @@ $(document).ready(function(){
 				  	case 'habitats' :
 				  		facet.title = 'Habitat';
 				  		facet.divName = 'facet-habitats';
+					  	break;
+				  	case 'state' :
+				  		facet.title = 'US State';
+				  		facet.divName = 'facet-state';
+					  	break;
+				  	case 'camp_activities' :
+				  		facet.title = 'Camp Activity';
+				  		facet.divName = 'facet-camp_activities';
 					  	break;
 				}
 				
