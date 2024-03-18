@@ -71,26 +71,28 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
                 <div class="row my-3">
 				<h3>Blog Articles</h3>
         	    <div class="col-sm-12 col-md-8 col-lg-8"><?
-        	        $limit = 5;
+        	        $limit = 6;
         	        for ($i=0;$i<$limit;$i++) {
                           $oArticle = array_shift($aArticle);
                     	  if (!is_object($oArticle)) continue;
                           $oArticle->SetAttachedImages();
                           $oArticle->initTemplate();
                           $oArticle->oTemplate->Set('CSS_CLASS_COL','col');
+                          $oArticle->oTemplate->Set('IMG_FORMAT','_lf');
             			  $oArticle->LoadTemplate("article_summary.php"); 
             			  print $oArticle->Render();
                         } ?>
                     </div>
         
         	   <div class="col-sm-12 col-md-3 col-lg-3 float-sm-none float-md-end float-lg-end"><?
-        	        $limit = 7;
+        	        $limit = 6;
         	        for ($i=0;$i<$limit;$i++) { 
                           $oArticle = array_shift($aArticle);
                     	  if (!is_object($oArticle)) continue;
                           $oArticle->SetAttachedImages(); 
                           $oArticle->initTemplate();
                           $oArticle->oTemplate->Set('CSS_CLASS_COL','col');
+                          $oArticle->oTemplate->Set('IMG_FORMAT','_mf');
                           $oArticle->LoadTemplate("article_summary.php");
             			  print $oArticle->Render();
                         } ?>

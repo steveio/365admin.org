@@ -324,6 +324,8 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 	    $query->setFields(array('profile_id', 'title'));
 	    $query->setStart(0);
+	    $query->addSort('score', $query::SORT_DESC);
+	    $query->addSort('last_updated', $query::SORT_DESC);
 	    $query->setRows($this->getRows());
 	    $query->createFilterQuery('profile_type')->setQuery('profile_type: 2');
 
@@ -337,13 +339,14 @@ class SolrMoreLikeSearch extends SolrSearch {
 
 	    // this executes the query and returns the result
 	    $request = $this->client->createRequest($query);
-	    
+
 	    /*
 	    print_r("<pre>");
 	    print_r($request);
 	    print_r("</pre>");
 	    die();
 	    */
+
 	    
 	    $requestInfo = (string)$request;
 
