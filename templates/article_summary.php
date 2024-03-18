@@ -12,7 +12,7 @@ $img_size = ($this->Get("IMG_FORMAT") == "") ? "" : "_lf";
 	<div class="col-sm-12 my-3">
     <? if (is_object($oArticle->GetImage(0))) { ?>
         <a title="<?= $oArticle->GetDescShortPlaintext(120); ?>" href="<?= $oArticle->GetUrl(); ?>">
-            <?= $oArticle->GetImage(0)->GetHtml($img_size,$oArticle->GetTitle()); ?>
+            <?= $oArticle->GetImage(0)->GetHtml($img_size,$oArticle->GetTitle(),"img-fluid img-blog rounded mb-3"); ?>
         </a>
     <? } else { 
         $html = $oArticle->GetDescFull();
@@ -21,7 +21,7 @@ $img_size = ($this->Get("IMG_FORMAT") == "") ? "" : "_lf";
         
         if (count($aImgUrl[0]) >= 1)
         {
-            print "<img src='".$aImgUrl[1][0]."' class='img-fluid rounded mb-3' style='width: 240px; height: 180px;' alt='' border='0' />";
+            print "<img src='".$aImgUrl[1][0]."' class='img-fluid img-blog rounded mb-3' alt='' border='0' />";
         }
     } ?>
 	</div>

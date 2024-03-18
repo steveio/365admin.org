@@ -317,17 +317,9 @@ a.article_title:hover {
    min-height: 220px;
 }
 
-.bgimage {
-  width:100%;
-  height:500px;
-  background: url('http://www.oneworld365.org/img/000/50/50488.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size:cover;
-  background-attachment: fixed;
-}
-.bgimage h5 {
-  color:white;
-  text-shadow:2px 2px #333;
-}
 
+.img-blog {
+	width: 100%;
+	height: 15vw;
+	object-fit: cover;
+}

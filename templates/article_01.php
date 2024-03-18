@@ -71,7 +71,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
                 <div class="row my-3">
 				<h3>Blog Articles</h3>
         	    <div class="col-sm-12 col-md-8 col-lg-8"><?
-        	        $limit = 6;
+        	        $limit = 4;
         	        for ($i=0;$i<$limit;$i++) {
                           $oArticle = array_shift($aArticle);
                     	  if (!is_object($oArticle)) continue;
