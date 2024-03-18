@@ -125,15 +125,17 @@ print $oHeader->Render();
                 $aRow['link_to'] = "ARTICLE (Unsaved)";
             }
             
-            $img_o_url = "http://www.oneworld365.org".$aRow['filepath'].$aRow['id'].$aRow['ext'];
+            $img_url = "http://www.oneworld365.org".$aRow['filepath'].$aRow['id'].$aRow['ext'];
+            $img_sf_url = "http://www.oneworld365.org".$aRow['filepath'].$aRow['id']."_sf".$aRow['ext'];
             $img_mf_url = "http://www.oneworld365.org".$aRow['filepath'].$aRow['id']."_mf".$aRow['ext'];
+            $img_lf_url = "http://www.oneworld365.org".$aRow['filepath'].$aRow['id']."_lf".$aRow['ext'];
             $img_path = $aRow['filepath'].$aRow['id'].$aRow['ext'];
             
             if ($aRow['image_type'] == "IMAGE") 
             {
-                $img_url = $img_mf_url;
+                $img_src = $img_mf_url;
             } else {
-                $img_url = $img_o_url;
+                $img_src = $img_o_url;
             }
 
             ?>
@@ -142,8 +144,10 @@ print $oHeader->Render();
 			<td class=""><?= $aRow['link_to']; ?></td>
 			<td class=""><a href="<?= $aRow['url']; ?>" target="_new"><?= $aRow['title']; ?></a></td>
 			<td class=""><?= $aRow['image_type']; ?></td>
-			<td class=""><a href="<?= $img_url; ?>" target="_new"><?= $img_path; ?></a></td>
-			<td class=""><a href="<?= $img_url; ?>" target="_new"><img src="<?= $img_url; ?>" alt="" /></a></td>
+			<td class=""><a href="<?= $img_url; ?>" target="_new"><?= $img_path; ?></a>
+				<br /><br />{ <a href="<?= $img_url; ?>" target="_new">full</a> | <a href="<?= $img_lf_url; ?>" target="_new">large</a> | <a href="<?= $img_mf_url; ?>" target="_new">med</a> }
+			</td>
+			<td class=""><a href="<?= $img_url; ?>" target="_new"><img src="<?= $img_src; ?>" alt="" /></a></td>
         	</tr><?
         } 
     } ?>
