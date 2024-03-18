@@ -2,6 +2,7 @@
 
 require_once("./classes/ImageBrowser.class.php");
 
+
 include_once("./includes/header.php");
 include_once("./includes/footer.php");
 
@@ -10,6 +11,18 @@ if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedire
 
 
 $oImageBrowser = new ImageBrowser();
+
+$aCompany = $oImageBrowser->GetCompanyName();
+$aPlacement = $oImageBrowser->GetPlacementName();
+
+$iPageSize = 300;
+$iPageSizePerSeg = 100;
+$iPageNum = isset($_REQUEST['page']) ? $_REQUEST['page'] : 1;
+$_REQUEST['page_size'] = $iPageSizePerSeg;
+
+$oPager = new PagedResultSet();
+$oPager->SetResultsPerPage($iPageSize);
+$oPager->GetByCount($oImageBrowser->GetCount(),"page");
 
 
 $aReport = $oImageBrowser->GetReport($_REQUEST);
@@ -32,57 +45,52 @@ print $oHeader->Render();
 
 
 <form name="report_filter" enctype="multipart/form-data" action="" method="POST">
-<!-- 
+
 <div class="row my-3">
 
 	<div class="col-12">
         <h4>Filter: </h4>
 		<input type="hidden" name="filter_report" value="1" />
 
-	<div class="row my-3">
-	<div class="col-6">
-        <label for="company_name">Company:</label>
-        <select id="" class="form-select" name="company_name">
-        	<option value="ALL">ALL</option><?
-        	//foreach($aCompany as $aRow)
-        	//{
-        	//    $val = $aRow['company'];
-        	?>
-        	<option value="<?= $val; ?>" <?= ($_REQUEST['company_name'] == $val) ? "selected" : ""; ?>><?= $val; ?></option><?
-        	//} ?>
-        </select>
-	</div>
-	<div class="col-6">
-        <label for="origin_type">Link Type:</label>
-        <select id="" class="form-select" name="origin_type">
-        	<option value="ALL">ALL</option>
-        	<option value="<?= LINK_ORIGIN_COMPANY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_COMPANY) ? "selected" : ""; ?>>Company</option>
-        	<option value="<?= LINK_ORIGIN_COMPANY_URL; ?>" <?= ($_REQUEST['origin_type'] == "0") ? "selected" : ""; ?>>Company : URL</option>
-        	<option value="<?= LINK_ORIGIN_COMPANY_APPLY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_COMPANY_APPLY) ? "selected" : ""; ?>>Company : APPLY URL</option>
-        	<option value="<?= LINK_ORIGIN_PLACEMENT; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT) ? "selected" : ""; ?>>Placement</option>
-        	<option value="<?= LINK_ORIGIN_PLACEMENT_URL; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_URL) ? "selected" : ""; ?>>Placement : URL</option>
-        	<option value="<?= LINK_ORIGIN_PLACEMENT_APPLY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_APPLY) ? "selected" : ""; ?>>Placement : APPLY URL</option>
-        </select>
-	</div>
-	</div>
 
 	<div class="row my-3">
-	<div class="col-6">
-        <label for="http_status">HTTP Status:</label>
-        <select id="" class="form-select" name="http_status">
-        	<option value="ALL">ALL</option>
-        	<option value="OK" <?= ($_REQUEST['http_status'] == "OK") ? "selected" : ""; ?>>OK</option>
-        	<option value="ERROR" <?= ($_REQUEST['http_status'] == "ERROR") ? "selected" : ""; ?>>Error</option><?
-        	
-        	foreach($aHttpStatus as $aRow)
+	<div class="col-12">
+        <label for="company">Company:</label>
+        <select id="" class="form-select" name="company_id">
+        	<option value="ALL">ALL</option><?
+        	foreach($aCompany as $aRow)
         	{
-        	    $val = $aRow['status'];
         	?>
-        	<option value="<?= $val; ?>" <?= ($_REQUEST['report_status'] == $val) ? "selected" : ""; ?>><?= $val; ?></option><?
+        	<option value="<?= $aRow['id'] ?>" <?= ($_REQUEST['company_id'] == $aRow['id']) ? "selected" : ""; ?>><?= $aRow['title']; ?></option><?
         	} ?>
         </select>
 	</div>
+	<div class="col-12">
+        <label for="placement">Placement:</label>
+        <select id="" class="form-select" name="placement_id">
+        	<option value="ALL">ALL</option><?
+        	foreach($aPlacement as $aRow)
+        	{
+        	?>
+        	<option value="<?= $aRow['id'] ?>" <?= ($_REQUEST['placement_id'] == $aRow['id']) ? "selected" : ""; ?>><?= $aRow['title']; ?></option><?
+        	} ?>
+        </select>
 	</div>
+
+	<!-- 
+	<div class="col-6">
+        <label for="origin_type">Linked To:</label>
+        <select id="" class="form-select" name="link_to">
+        	<option value="ALL">ALL</option>
+        	<option value="ARTICLE" <?= ($_REQUEST['link_to'] == 'ARTICLE') ? "selected" : ""; ?>>Article</option>
+        	<option value="COMPANY" <?= ($_REQUEST['link_to'] == 'COMPANY') ? "selected" : ""; ?>>Company</option>
+        	<option value="PLACEMENT" <?= ($_REQUEST['link_to'] == 'PLACEMENT') ? "selected" : ""; ?>>Placement</option>
+        </select>
+	</div>
+	 -->
+
+	</div>
+
 	<div class="row my-3">
 	<div class="col-1">
 		<button class="btn btn-primary rounded-pill px-3" type="button" name="report_filter" value="go" onClick="this.form.submit()">submit</button>
@@ -90,7 +98,7 @@ print $oHeader->Render();
 	</div>
 	</div>
 </div>
--->
+
 
 <div class="row my-3">
 
@@ -132,7 +140,7 @@ print $oHeader->Render();
         	<tr> 
         	<td class=""><?= $aRow['img_id']; ?></td>
 			<td class=""><?= $aRow['link_to']; ?></td>
-			<td class=""><?= $aRow['title']; ?></td>
+			<td class=""><a href="<?= $aRow['url']; ?>" target="_new"><?= $aRow['title']; ?></a></td>
 			<td class=""><?= $aRow['image_type']; ?></td>
 			<td class=""><a href="<?= $img_url; ?>" target="_new"><?= $img_path; ?></a></td>
 			<td class=""><a href="<?= $img_url; ?>" target="_new"><img src="<?= $img_url; ?>" alt="" /></a></td>
@@ -141,6 +149,13 @@ print $oHeader->Render();
     } ?>
     </tbody>
     </table>
+
+
+<div class="row">
+		<div id="pager" class="row pagination pagination-large pagination-centered">	
+		<?= $oPager->RenderHTML(); ?>
+		</div>
+</div>
 
 </form>
 
