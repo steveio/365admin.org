@@ -54,7 +54,12 @@ class ImageBrowser
         } elseif (is_numeric($aRequest['placement_id']))
         {
             return $this->GetReportByPlacementId($aRequest['placement_id']);
+        } elseif (strlen($aRequest['article_keyword']) > 1)
+        {
+            return $this->GetReportByArticleKeyword($aRequest['article_keyword']);
         }
+        
+
 
         $limit = $aRequest['page_size'];
 
@@ -233,7 +238,38 @@ class ImageBrowser
         
         return $aRows = $db->getRows();
     }
-    
+
+    public function GetReportByArticleKeyword($strKeyword)
+    {
+        global $db;
+
+        $sql = "
+                SELECT
+                m.img_id,
+                m.link_to,
+                m.link_id,
+                a.title,
+                (SELECT am.section_uri FROM article_map am WHERE a.id = am.article_id LIMIT 1) as url,
+                CASE
+                WHEN m.type = 0 THEN 'IMAGE'
+                WHEN m.type = 1 THEN 'LOGO'
+                WHEN m.type = 2 THEN 'PROMO'
+                END as image_type,
+                '/img/000/'||substring(i.id::text,1,2)||'/' as filepath,
+                i.*
+                FROM
+                image_map m
+                JOIN image i ON m.img_id = i.id
+                JOIN article a ON m.link_id = a.id
+                WHERE m.link_to = 'ARTICLE'
+                AND LOWER(a.title) LIKE '%".strtolower($strKeyword)."%'
+                ORDER BY a.id DESC";
+
+        $db->query($sql);
+        
+        return $aRows = $db->getRows();
+        
+    }
     
     public function GetCompanyName()
     {

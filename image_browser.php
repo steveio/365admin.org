@@ -76,6 +76,10 @@ print $oHeader->Render();
         	} ?>
         </select>
 	</div>
+	<div class="col-12">
+        <label for="placement">Article Title (Single Keyword):</label>
+        <input type="text" name="article_keyword" value="<?= $_REQUEST['article_keyword']; ?>" class="form-select" /> 
+	</div>
 
 	<!-- 
 	<div class="col-6">
