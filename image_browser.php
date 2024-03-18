@@ -135,7 +135,7 @@ print $oHeader->Render();
             {
                 $img_src = $img_mf_url;
             } else {
-                $img_src = $img_o_url;
+                $img_src = $img_url;
             }
 
             ?>
