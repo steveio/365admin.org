@@ -75,7 +75,7 @@ $db = new db($dsn,$debug = false);
 define("JOBNAME","EMAIL_BATCH");
 
 
-if (LOG) Logger::DB(1,JOBNAME,'STARTED PROCESSING');
+if (LOG) Logger::DB(3,JOBNAME,'STARTED PROCESSING');
 
 $oEmailBatch = new EmailBatch();
 
@@ -95,7 +95,7 @@ switch($mode)
         
 }
 
-if (LOG) Logger::DB(1,JOBNAME,'FINISHED PROCESSING');
+if (LOG) Logger::DB(3,JOBNAME,'FINISHED PROCESSING');
 
 
 ?>
