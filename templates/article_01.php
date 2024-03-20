@@ -116,6 +116,7 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
            $oArticle->initTemplate();
            $oArticle->oTemplate->Set('CSS_CLASS_COL','col-sm-12 col-md-4 col-lg-4');
            $oArticle->oTemplate->Set('bHidePublishedDate', true);
+           $oArticle->oTemplate->Set('IMG_FORMAT','_mf');
            $oArticle->LoadTemplate("article_summary.php");
            print $oArticle->Render();
         } ?>
