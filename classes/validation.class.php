@@ -437,11 +437,11 @@ class Validation {
 
 		if ($p['profile_type'] == PROFILE_VOLUNTEER_PROJECT) {
 
-		    if (($p[PROFILE_FIELD_VOLUNTEER_DURATION_FROM] == null) || ($p[PROFILE_FIELD_VOLUNTEER_DURATION_TO] == null)) {
+		    if (($p[PROFILE_FIELD_VOLUNTEER_DURATION_FROM] == 'null') || ($p[PROFILE_FIELD_VOLUNTEER_DURATION_TO] == 'null')) {
 		        $aResponse['msg'][PROFILE_FIELD_VOLUNTEER_DURATION_LABEL] = "Please enter program duration.";
 		    }
 
-		    if (($p[PROFILE_FIELD_VOLUNTEER_PRICE_FROM] == null) || ($p[PROFILE_FIELD_VOLUNTEER_PRICE_TO] == null)) {
+		    if (($p[PROFILE_FIELD_VOLUNTEER_PRICE_FROM] == 'null') || ($p[PROFILE_FIELD_VOLUNTEER_PRICE_TO] == 'null')) {
 		        $aResponse['msg'][PROFILE_FIELD_VOLUNTEER_PRICE_LABEL] = "Please enter approx program costs / fees.";
 		    }
 
@@ -502,23 +502,19 @@ class Validation {
 
 		if ($p['profile_type'] == PROFILE_SUMMERCAMP) {
 
-		    if (!is_numeric($p[PROFILE_FIELD_COMP_STATE_ID])) {
-		        $aResponse['msg'][PROFILE_FIELD_COMP_STATE_ID] = "Please specify camp US state.";
-		    }
-
 			$aCampType = Mapping::GetIdByKey($p,REFDATA_CAMP_TYPE_PREFIX);
 			if (count($aCampType) < 1) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_TYPE] = "Please specify camp type.";
 			}
 
-			if (($p[PROFILE_FIELD_SUMMERCAMP_DURATION_FROM] == null) || ($p[PROFILE_FIELD_SUMMERCAMP_DURATION_TO] == null)) {
+			if (($p[PROFILE_FIELD_SUMMERCAMP_DURATION_FROM] == 'null') || ($p[PROFILE_FIELD_SUMMERCAMP_DURATION_TO] == 'null')) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL] = "Please enter program duration.";
 			}
 
-			if (($p[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM] == null) || ($p[PROFILE_FIELD_SUMMERCAMP_PRICE_TO] == null)) {
+			if (($p[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM] == 'null') || ($p[PROFILE_FIELD_SUMMERCAMP_PRICE_TO] == 'null')) {
 			    $aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL] = "Please enter approx program costs / fees.";
 			}
-
+			
 			if (strlen($p[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES]) > 512) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_SEASON_DATES] = "Season dates must be less than 512 characters";
 			}
@@ -538,11 +534,11 @@ class Validation {
 
 		if ($p['profile_type'] == PROFILE_COURSES) {
 		    		    
-		    if (($p[PROFILE_FIELD_COURSES_DURATION_FROM] == null) || ($p[PROFILE_FIELD_COURSES_DURATION_TO] == null)) {
+		    if (($p[PROFILE_FIELD_COURSES_DURATION_FROM] == 'null') || ($p[PROFILE_FIELD_COURSES_DURATION_TO] == 'null')) {
 		        $aResponse['msg'][PROFILE_FIELD_COURSES_DURATION_LABEL] = "Please enter program duration.";
 		    }
 
-		    if (($p[PROFILE_FIELD_COURSES_PRICE_FROM] == null) || ($p[PROFILE_FIELD_COURSES_PRICE_TO] == null)) {
+		    if (($p[PROFILE_FIELD_COURSES_PRICE_FROM] == 'null') || ($p[PROFILE_FIELD_COURSES_PRICE_TO] == 'null')) {
 		        $aResponse['msg'][PROFILE_FIELD_COURSES_PRICE_LABEL] = "Please enter approx program costs / fees.";
 		    }
 		    

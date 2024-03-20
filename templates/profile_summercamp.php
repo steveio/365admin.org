@@ -27,6 +27,31 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 	</span>
 </div>
 
+<div class="row formgroup my-2">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL]) > 1 ? "color:red;" : ""; ?>">Program Duration<span class="red"> *</span></label></span>
+	<span class="input_col">
+	<div class="row">
+	<div class="col-4">from: <?= $this->Get('DURATION_FROM'); ?></div>
+	<div class="col-4">to: <?= $this->Get('DURATION_TO'); ?></div>
+	<br /><span class="p_small grey">Program durations eg. 1 week to 4 weeks </span>
+	</div>
+	</span>
+</div>
+
+<div class="row formgroup my-2">
+	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL; ?>" style="<?= (strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL]) > 1) ? "" : ""; ?>">Program Fees<span class="red"> *</span></label></span>
+	<span class="input_col">
+	<div class="row">
+	<div class="col-4">from: <?= $this->Get('PRICE_FROM'); ?></div>
+	<div class="col-4">to: <?= $this->Get('PRICE_TO'); ?></div>
+	<div class="col-4">&nbsp;<?= $this->Get('CURRENCY'); ?></div>
+	<br /><span class="p_small grey">Approx program tuition fees</span>
+	</div>
+	</span>
+</div>
+
+
+
 <div class="row my-2">
     <div class="col-6">
     	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL]) > 1 ? "color:red;" : ""; ?>">Age Range</label></span>
@@ -46,29 +71,6 @@ $oProfile = $this->Get('COMPANY_PROFILE');
     	</div>
     	</span>
     </div>    
-</div>
-
-<div class="row formgroup my-2">
-	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL]) > 1 ? "color:red;" : ""; ?>">Program Duration<span class="red"> *</span></label></span>
-	<span class="input_col">
-	<div class="row">
-	<div class="col-4">from: <?= $this->Get('DURATION_FROM'); ?></div>
-	<div class="col-4">to: <?= $this->Get('DURATION_TO'); ?></div>
-	<br /><span class="p_small grey">Program durations eg. 1 week to 4 weeks </span>
-	</div>
-	</span>
-</div>
-
-<div class="row formgroup my-2">
-	<span class="label_col"><label for="<?= PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL; ?>" style="<?= (strlen($response['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL]) > 1) ? "" : ""; ?>">Program Fees</label></span>
-	<span class="input_col">
-	<div class="row">
-	<div class="col-4">from: <?= $this->Get('PRICE_FROM'); ?></div>
-	<div class="col-4">to: <?= $this->Get('PRICE_TO'); ?></div>
-	<div class="col-4">&nbsp;<?= $this->Get('CURRENCY'); ?></div>
-	<br /><span class="p_small grey">Approx program tuition fees</span>
-	</div>
-	</span>
 </div>
 
 

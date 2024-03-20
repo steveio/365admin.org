@@ -75,85 +75,86 @@ $oProfile = $this->Get('COMPANY_PROFILE');
 	</span>
 </div>
 
-<div class="row formgroup my-2">
-    <span class="label_col my-2">
-            <label style="margin: 0; <?= strlen($response['msg'][PROFILE_FIELD_COURSES_COURSES]) > 1 ? "color:red;" : ""; ?>">Courses Offered</label>
-    </span>
-    <span class="input_col">
-    <?
-            $oColumnSort = new ColumnSort;
-            $oColumnSort->SetElements($this->Get('COURSES_LIST'));
-            $oColumnSort->SetCols(1);
-            $aElements = $oColumnSort->Sort();
-    ?>
-
-    <div class="row">
-        <div class="">
-                <ul class='select_list'>
-                <?php
-                foreach($aElements[1] as $idx => $val) {
-                        print $val;
-                }
-                ?>
-                </ul>
+<div class="row my-2">    
+    
+    <div class="col-3 formgroup my-2">
+        <div class="label_col my-2">
+                <label class="<?= strlen($response['msg'][PROFILE_FIELD_COURSES_COURSE_TYPE]) > 1 ? "color:red;" : ""; ?>">Course Type(s)</label>
         </div>
-    </div>
-    </span>
-</div>
-
-
-<div class="row formgroup my-2">
-    <span class="label_col my-2">
-            <label style="margin: 0; <?= strlen($response['msg'][PROFILE_FIELD_COURSES_COURSE_TYPE]) > 1 ? "color:red;" : ""; ?>">Course Type(s)</label>
-    </span>
-    <span class="input_col">
-    <?
-            $oColumnSort = new ColumnSort;
-            $oColumnSort->SetElements($this->Get('COURSE_TYPE_LIST'));
-            $oColumnSort->SetCols(1);
-            $aElements = $oColumnSort->Sort();
-    ?>
-
-    <div class="row">
-        <div class="">
-                <ul class='select_list'>
-                <?php
-                foreach($aElements[1] as $idx => $val) {
-                        print $val;
-                }
-                ?>
-                </ul>
+        <span class="input_col">
+        <?
+                $oColumnSort = new ColumnSort;
+                $oColumnSort->SetElements($this->Get('COURSE_TYPE_LIST'));
+                $oColumnSort->SetCols(1);
+                $aElements = $oColumnSort->Sort();
+        ?>
+    
+        <div class="row">
+            <div class="">
+                    <ul class='select_list'>
+                    <?php
+                    foreach($aElements[1] as $idx => $val) {
+                            print $val;
+                    }
+                    ?>
+                    </ul>
+            </div>
         </div>
+        </span>
     </div>
-    </span>
-</div>
-
-
-<div class="row formgroup my-2">
-    <span class="label_col">
-            <label style="margin: 0; <?= strlen($response['msg'][PROFILE_FIELD_COURSES_ACCOMODATION]) > 1 ? "color:red;" : ""; ?>">Accomodation Options</label>
-    </span>
-    <span class="input_col">
-    <?
-            $oColumnSort = new ColumnSort;
-            $oColumnSort->SetElements($this->Get('ACCOMODATION_LIST'));
-            $oColumnSort->SetCols(1);
-            $aElements = $oColumnSort->Sort();
-    ?>
-    <div class="row">
-        <div class="">
-                <ul class='select_list'>
-                <?php
-                foreach($aElements[1] as $idx => $val) {
-                        print $val;
-                }
-                ?>
-                </ul>
+    
+    <div class="col-3 formgroup my-2">
+        <div class="label_col my-2">
+                <label class="<?= strlen($response['msg'][PROFILE_FIELD_COURSES_COURSES]) > 1 ? "color:red;" : ""; ?>">Other Study / Vocational Courses</label>
         </div>
+        <span class="input_col">
+        <?
+                $oColumnSort = new ColumnSort;
+                $oColumnSort->SetElements($this->Get('COURSES_LIST'));
+                $oColumnSort->SetCols(1);
+                $aElements = $oColumnSort->Sort();
+        ?>
+    
+        <div class="row">
+            <div class="">
+                    <ul class='select_list'>
+                    <?php
+                    foreach($aElements[1] as $idx => $val) {
+                            print $val;
+                    }
+                    ?>
+                    </ul>
+            </div>
+        </div>
+        </span>
     </div>
-    </span>
-</div>
+    
+    <div class="col-3 formgroup my-2">
+        <div class="label_col my-2">
+                <label style="margin: 0; <?= strlen($response['msg'][PROFILE_FIELD_COURSES_ACCOMODATION]) > 1 ? "color:red;" : ""; ?>">Accomodation Options</label>
+        </div>
+        <span class="input_col">
+        <?
+                $oColumnSort = new ColumnSort;
+                $oColumnSort->SetElements($this->Get('ACCOMODATION_LIST'));
+                $oColumnSort->SetCols(1);
+                $aElements = $oColumnSort->Sort();
+        ?>
+        <div class="row">
+            <div class="">
+                    <ul class='select_list'>
+                    <?php
+                    foreach($aElements[1] as $idx => $val) {
+                            print $val;
+                    }
+                    ?>
+                    </ul>
+            </div>
+        </div>
+        </span>
+    </div>
 
+</div>
 
 <div class="row formgroup my-2">
 	<span class="label_col"><label for="<?= PROFILE_FIELD_COURSES_START_DATES; ?>" style="<?= strlen($response['msg'][PROFILE_FIELD_COURSES_START_DATES]) > 1 ? "color:red;" : ""; ?>">Start Dates</label></span>
