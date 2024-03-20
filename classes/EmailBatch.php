@@ -20,8 +20,6 @@ class EmailBatch {
         
         if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__);
         
-        //if (LOG) Logger::DB(3,JOBNAME,'EmailBatch->ProcessAll()');
-        
         /*
          * Email jobs to be batch processed are registered here...
          *
@@ -109,17 +107,12 @@ class EmailBatch {
      *
      */
     public function ProcessEnquiryEmail() {
-        
-        if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__);
-        
+
         global $db,$_CONFIG;
-        
-        //if (LOG) Logger::DB(3,JOBNAME,'EmailBatch->ProcessEnquiryEmail()');
         
         $this->SetHtmlTemplatePath($_CONFIG['root_path'].$_CONFIG['template_home']."/enquiry_html.php");
         $this->SetTextTemplatePath($_CONFIG['root_path'].$_CONFIG['template_home']."/enquiry_txt.php");
-        
-        
+
         $oEnquiry = new Enquiry();
         
         /*
@@ -130,7 +123,7 @@ class EmailBatch {
         
         if (!$aId) return false;
         
-        if (LOG) Logger::DB(3,JOBNAME,'EmailBatch->ProcessEnquiryEmail() found '.count($aId)." pending enquiry emails to send");
+        if (LOG) Logger::DB(1,JOBNAME,'EmailBatch->ProcessEnquiryEmail() found '.count($aId)." pending enquiry email");
         
         foreach($aId as $id) {
             
@@ -172,43 +165,37 @@ class EmailBatch {
                     "PROFILE_TYPE_LABEL" => strtolower($oProfile->GetTypeLabel()),
                     "PROFILE_NAME" => $oProfile->GetTitle(),
                     "GENERIC" => "
-											<tr><td><b>date:</b></td> <td>".$oEnquiry->GetDate()."</td></tr>
-											<tr><td><b>from:</b></td> <td>".htmlentities($oEnquiry->GetName())."</td></tr>
-											<tr><td><b>country:</b></td> <td>".$oEnquiry->GetCountryName()."</td></tr>
-											<tr><td><b>email:</b></td> <td>".$oEnquiry->GetEmail()."</td></tr>
-											<tr><td><b>tel:</b></td> <td>".$oEnquiry->GetTel()."</td></tr>
-											",
+								<tr><td><b>date:</b></td> <td>".$oEnquiry->GetDate()."</td></tr>
+								<tr><td><b>from:</b></td> <td>".htmlentities($oEnquiry->GetName())."</td></tr>
+								<tr><td><b>country:</b></td> <td>".$oEnquiry->GetCountryName()."</td></tr>
+								<tr><td><b>email:</b></td> <td>".$oEnquiry->GetEmail()."</td></tr>
+								<tr><td><b>tel:</b></td> <td>".$oEnquiry->GetTel()."</td></tr>
+								",
                     "GENERIC_TXT" => "date: ".$oEnquiry->GetDate()."
-	from: ".$oEnquiry->GetName()."
-	country: ".$oEnquiry->GetCountryName()."
-	email: ".$oEnquiry->GetEmail()."
-	tel: ".$oEnquiry->GetTel(),
+                	from: ".$oEnquiry->GetName()."
+                	country: ".$oEnquiry->GetCountryName()."
+                	email: ".$oEnquiry->GetEmail()."
+                	tel: ".$oEnquiry->GetTel(),
                     "ENQUIRY" => "",
                     "BOOKING" => "",
                     "BROCHURE" => "",
-                    "JOB_APP" => "",
-                    
+                    "JOB_APP" => "",                    
                     "ENQUIRY_TXT" => "",
                     "BOOKING_TXT" => "",
                     "BROCHURE_TXT" => "",
                     "JOB_APP_TXT" => ""
-                    
-                    
                 );
                 
                 /* enquiry type specific fields */
-                
-                
                 if ($oEnquiry->GetEnquiryType() == "BOOKING") {
                     $aParams['BOOKING'] = "<tr><td><b>group size:</b></td> <td>".$oEnquiry->GetGroupSize() ."</td></tr>
-		<tr><td><b>budget:</b></td> <td>".$oEnquiry->GetBudget()."</td></tr>
-		<tr><td><b>est departure date:</b></td> <td>".$oEnquiry->GetDeptDate()."</td></tr>
-		<tr><td><b>enquiry:</b></td> <td>".htmlentities($oEnquiry->GetEnquiry())."</td></tr>";
+                		<tr><td><b>budget:</b></td> <td>".$oEnquiry->GetBudget()."</td></tr>
+                		<tr><td><b>est departure date:</b></td> <td>".$oEnquiry->GetDeptDate()."</td></tr>
+                		<tr><td><b>enquiry:</b></td> <td>".htmlentities($oEnquiry->GetEnquiry())."</td></tr>";
                     $aParams['BOOKING_TXT'] = "group size: ".$oEnquiry->GetGroupSize() ."
-	budget: ".$oEnquiry->GetBudget()."
-	est departure date: ".$oEnquiry->GetDeptDate()."
-	enquiry: ".$oEnquiry->GetEnquiry();
-                    
+                    	budget: ".$oEnquiry->GetBudget()."
+                    	est departure date: ".$oEnquiry->GetDeptDate()."
+                    	enquiry: ".$oEnquiry->GetEnquiry();                    
                 }
                 
                 if ($oEnquiry->GetEnquiryType() == "GENERAL") {
@@ -223,11 +210,11 @@ class EmailBatch {
                 
                 if ($oEnquiry->GetEnquiryType() == "JOB_APP") {
                     $aParams['JOB_APP'] = "<tr><td><b>application letter:</b></td> <td>".htmlentities($oEnquiry->GetApplyLetter())."</td></tr>
-	<tr><td><b>experience:</b></td> <td>".$oEnquiry->GetExperience()."</td></tr><tr><td><b>date of birth:</b></td> <td>".$oEnquiry->GetDOB()."</td></tr>";
+                    	<tr><td><b>experience:</b></td> <td>".$oEnquiry->GetExperience()."</td></tr><tr><td><b>date of birth:</b></td> <td>".$oEnquiry->GetDOB()."</td></tr>";
                     $aParams['JOB_APP_TXT'] = "application letter: ".$oEnquiry->GetApplyLetter()."
-	experience: ".$oEnquiry->GetExperience()."
-	date of birth: ".$oEnquiry->GetDOB();
-                    
+                    	experience: ".$oEnquiry->GetExperience()."
+                    	date of birth: ".$oEnquiry->GetDOB();
+            
                     /* process cv attachment */
                     $db->query("SELECT name,size,ext,mime FROM cv WHERE enquiry_id = ".$oEnquiry->GetId());
                     
@@ -253,9 +240,7 @@ class EmailBatch {
                     
                     
                 }
-                
-                
-                
+
                 if ($oProfile->GetLinkTo() == "COMPANY") {
                     $aParams['MSG_TXT'] = "This is a new enquiry for ".$oProfile->GetTitle()." from ".$_CONFIG['site_title'].".";
                     $aParams['MSG_HTML'] = "<p>".$aParams['MSG_TXT']."</p>";
@@ -264,13 +249,14 @@ class EmailBatch {
                     $aParams['MSG_HTML'] = "<p>".$aParams['MSG_TXT']."</p>";
                     
                 }
-                
-                
-                
+
                 $this->SetMsgParams($aParams);
-                
+
                 if ($this->Process()) {
                     $db->query("UPDATE enquiry SET status = 2, processed = now()::timestamp WHERE id = ".$oEnquiry->GetId());
+
+                    if (LOG) Logger::DB(1,JOBNAME,'EmailBatch->ProcessEnquiryEmail() EMAIL SENT:  to:'.$this->GetTo().', from: '.$oEnquiry->GetEmail().', msg type: '.$oEnquiry->GetEnquiryType());
+
                     $this->UnsetAttachment();
                 }
                 
@@ -309,7 +295,7 @@ class EmailBatch {
         $aId = $oEnquiry->GetByStatus(2,$_CONFIG['site_id'], $bForUpdate = true);        
         if (!$aId) return false;
 
-        if (LOG) Logger::DB(3,JOBNAME,'EmailBatch->ProcessEnquiryAutoResponseEmail() found '.count($aId).' enquiries pending auto-response email');
+        if (LOG) Logger::DB(1,JOBNAME,'EmailBatch->ProcessEnquiryAutoResponseEmail() found '.count($aId).' enquiries pending auto-response email');
 
         $aEmailAddress = array(); // only send 1 enquiry auto-response per sender email address
 
