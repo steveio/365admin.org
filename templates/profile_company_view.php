@@ -479,6 +479,198 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 <? } ?>
 
 
+<? if ($oProfile->GetProfileType() == PROFILE_COURSES) { ?>
+<div class="row">
+
+	<h2>Language School / Courses Info</h2>
+
+	<div class="row my-3">
+    	<? if (method_exists($oProfile, 'GetDurationFromLabel') && $oProfile->GetDurationFromLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Program Duration: </h3> 
+    		<?= $oProfile->GetDurationFromLabel() ?> - <?= $oProfile->GetDurationToLabel() ?>
+		</div>
+    	<? } ?>
+
+    	<? if (method_exists($oProfile, 'GetPriceFromLabel') && $oProfile->GetPriceFromLabel() != "") { ?>
+    	<div class="col-6">
+    		<h3>Program Approx Costs / Fees: </h3> 
+    		<?= $oProfile->GetPriceFromLabel(); ?> - <?= $oProfile->GetPriceToLabel(); ?> <?= $oProfile->GetCurrencyLabel(); ?>
+    	</div>
+    	<? } ?>
+    </div>
+	
+    <div class="row my-3">
+    	<b>Langages</b>
+    	<div class="row my-3">
+    		<?
+    		$oLanguages = new Refdata(REFDATA_LANGUAGES);
+			$oColumnSort = new ColumnSort;
+			$oColumnSort->SetElements($oLanguages->GetCheckboxList(REFDATA_LANGUAGES_PREFIX,$oProfile->GetLanguages(),''));
+			$oColumnSort->SetCols(3);
+			$aElements = $oColumnSort->Sort();
+    		?>
+    
+    		<div class="row">
+    			<div class="col-3">
+    				<ul class='select_list'>
+    				<?php
+    				foreach($aElements[1] as $idx => $val) {
+    					print $val;
+    				}
+    				?>
+    				</ul>
+    			</div>
+    			<div class="col-3">
+    				<ul class='select_list'>
+    				<?php
+    				foreach($aElements[2] as $idx => $val) {
+    					print $val;
+    				}
+    				?>
+    				</ul>
+    			</div>
+    			<div class="col-3">
+    				<ul class='select_list'>
+    				<?php
+    				foreach($aElements[3] as $idx => $val) {
+    					print $val;
+    				}
+    				?>
+    				</ul>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+
+	<div class="row my-3">
+
+    	<div class="col-sm-12 col-md-3 col-lg-3 my-3">
+        	<b>Course Types</b>
+        	<div class="col-12 my-3">
+        		<?
+        		    $oCourseType = new Refdata(REFDATA_COURSE_TYPE);
+            		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+        		    $aRoles = $oCourseType->GetCheckboxList(REFDATA_COURSE_TYPE_PREFIX,$oProfile->GetCourseType(),'');
+        		?>
+        
+        		<div class="row">
+        			<div class="">
+        				<ul class='select_list'>
+        				<?php
+        				foreach($aRoles as $idx => $val) {
+        					print $val;
+        				}
+        				?>
+        				</ul>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+
+
+        <div class="col-sm-12 col-md-3 col-lg-3 my-3">
+        	<b>Other Study / Vocational Courses</b>
+        	<div class="col-12 my-3">
+        		<?
+        		    $oCourses = new Refdata(REFDATA_COURSES);
+            		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+        		    $aRoles = $oCourses->GetCheckboxList(REFDATA_COURSES_PREFIX,$oProfile->GetCourses(),'');
+        		?>
+        
+        		<div class="row">
+        			<div class="">
+        				<ul class='select_list'>
+        				<?php
+        				foreach($aRoles as $idx => $val) {
+        					print $val;
+        				}
+        				?>
+        				</ul>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+
+    	<div class="col-sm-12 col-md-3 col-lg-3 my-3">
+        	<b>Accomodation Options</b>
+        	<div class="row my-3">
+        		<?
+        		    $oAccomodation = new Refdata(REFDATA_ACCOMODATION);
+            		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
+        		    $aRoles = $oAccomodation->GetCheckboxList(REFDATA_ACCOMODATION_PREFIX,$oProfile->GetAccomodation(),'');
+        		?>
+        
+        		<div class="row">
+        			<div class="">
+        				<ul class='select_list'>
+        				<?php
+        				foreach($aRoles as $idx => $val) {
+        					print $val;
+        				}
+        				?>
+        				</ul>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+	
+	</div>
+
+
+   	<div class="row my-3">
+
+    	<div class="col">
+    	<? if ($oProfile->GetStartDates() != "") { ?>
+    		<h3>Start Dates / Term Times: </h3>
+    		<?= $oProfile->GetStartDates() ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetQualification() != "") { ?>
+    		<h3>Qualification / Certification / Awards: </h3>
+    		<?= $oProfile->GetQualification() ?>
+    	<? } ?>
+    	</div>
+   	
+   	</div>
+
+   	<div class="row my-3">
+
+    	<div class="col">
+    	<? if ($oProfile->GetRequirements() != "") { ?>
+    		<h3>Requirements: </h3>
+    		<?= $oProfile->GetRequirements() ?>
+    	<? } ?>
+    	</div>
+
+    	<div class="col">
+    	<? if ($oProfile->GetPreparation() != "") { ?>
+    		<h3>Preparation / Course Guidelines: </h3>
+    		<?= $oProfile->GetPreparation() ?>
+    	<? } ?>
+    	</div>
+   	
+   	</div>
+
+   	<div class="row my-3">
+
+    	<div class="col">
+    	<? if ($oProfile->GetHowToApply() != "") { ?>
+    		<h3>How to Apply: </h3>
+    		<?= $oProfile->GetHowToApply() ?>
+    	<? } ?>
+    	</div>
+
+   	</div>
+
+
+</div>
+<? } ?>
+
+
 <div id="buttons" class="buttons row my-5">
 <div class="booking-enquiry my-3">
 <h2>Contact / Enquiry</h2>

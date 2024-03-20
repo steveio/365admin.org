@@ -17,11 +17,11 @@ $aBrandConfig  = array(
         		    'site_info' => 'Work, Volunteer, Teach, Travel, Intern & Learn Worldwide',
 					'default_placement_profile_type_id' => PROFILE_PLACEMENT,
 					'default_company_profile_type_id' => PROFILE_COMPANY,
-					'available_company_profile_type_id' => array(PROFILE_VOLUNTEER_PROJECT,PROFILE_COMPANY),
+		            'available_company_profile_type_id' => array(PROFILE_VOLUNTEER_PROJECT,PROFILE_COMPANY, PROFILE_COURSES, PROFILE_TEACHING, PROFILE_SUMMERCAMP, PROFILE_SEASONALJOBS),
         			'default_categories' => array(),
 					'default_activities' => array(),
 					'default_countries' => array(),
-					'site_categories' => array(0,2,3,4,6,7),
+					'site_categories' => array(0,2,3,4,6,7,8,11,12),
 					'company_title' => 'Company / Organisation',
 					'placement_title' => 'Placement',
 					'display_cat_act_cty' => TRUE,
@@ -29,3 +29,4 @@ $aBrandConfig  = array(
 					'company_base_url' => '/company'
 				)
 );
+

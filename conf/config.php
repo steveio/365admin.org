@@ -68,6 +68,7 @@ define("PROFILE_SUMMERCAMP",5); // company profile
 define("PROFILE_VOLUNTEER_PROJECT",6); // company profile
 define("PROFILE_SEASONALJOBS",7); // company profile
 define("PROFILE_TEACHING",8); // company profile
+define("PROFILE_COURSES",9); // company profile
 
 
 // general content type id - used to fetch related content and by  SOLR for indexing
@@ -89,7 +90,7 @@ define("CONTENT_TYPE_DESTINATION", "DESTINATION");
 
 /* Fetch full or summary details only */
 define("FETCHMODE__FULL",0);
-define("FETCHMODE__SUMMARY",1);
+define("FETCHMODE__ SUMMARY",1);
 
 
 /* listing types */

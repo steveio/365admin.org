@@ -39,19 +39,14 @@ class Validation {
 
 	}
 
-
 	public static function AddSlashes(&$input,$db_escape = true) {
-
-		if (DEBUG) Logger::Msg(get_class()."::".__FUNCTION__."()");
-
 
 		if (is_array($input)) {
 			foreach($input as $k => $v) {
 				if (is_string($v)) {
 					$input[$k] = addslashes($v);
-                                        if ($db_escape)
-                                        	$input[$k] = pg_escape_string($input[$k]);
-
+                    if ($db_escape)
+                    	$input[$k] = pg_escape_string($input[$k]);
 				}
 			}
 		} elseif (is_string($input)) {
@@ -442,6 +437,14 @@ class Validation {
 
 		if ($p['profile_type'] == PROFILE_VOLUNTEER_PROJECT) {
 
+		    if (($p[PROFILE_FIELD_VOLUNTEER_DURATION_FROM] == null) || ($p[PROFILE_FIELD_VOLUNTEER_DURATION_TO] == null)) {
+		        $aResponse['msg'][PROFILE_FIELD_VOLUNTEER_DURATION_LABEL] = "Please enter program duration.";
+		    }
+
+		    if (($p[PROFILE_FIELD_VOLUNTEER_PRICE_FROM] == null) || ($p[PROFILE_FIELD_VOLUNTEER_PRICE_TO] == null)) {
+		        $aResponse['msg'][PROFILE_FIELD_VOLUNTEER_PRICE_LABEL] = "Please enter approx program costs / fees.";
+		    }
+
 			if (strlen($p[PROFILE_FIELD_VOLUNTEER_FOUNDED]) > 32) {
 				$aResponse['msg'][PROFILE_FIELD_VOLUNTEER_FOUNDED] = "Founded must be less than 32 characters";
 			}
@@ -508,29 +511,13 @@ class Validation {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_TYPE] = "Please specify camp type.";
 			}
 
-			/*
-			if (!is_numeric($p['sc_camp_gender'])) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER] = "Please select camp gender.";
-			}
-
-			if (!is_numeric($p['sc_camper_age_from']) || !is_numeric($p['sc_camper_age_to'])) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL] = "Please select camp age range.";
-			}
-			*/
-
-			if (($p['sc_duration_from_id'] == 'null') || ($p['sc_duration_to_id'] == 'null')) {
+			if (($p[PROFILE_FIELD_SUMMERCAMP_DURATION_FROM] == null) || ($p[PROFILE_FIELD_SUMMERCAMP_DURATION_TO] == null)) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL] = "Please enter program duration.";
 			}
 
-
-		    /*
-			if (!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM]) ||
-				!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_PRICE_TO]) ||
-				!is_numeric($p[PROFILE_FIELD_SUMMERCAMP_CURRENCY])
-			) {
-				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL] = "Please enter approx program / tuition fees.";
+			if (($p[PROFILE_FIELD_SUMMERCAMP_PRICE_FROM] == null) || ($p[PROFILE_FIELD_SUMMERCAMP_PRICE_TO] == null)) {
+			    $aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL] = "Please enter approx program costs / fees.";
 			}
-			*/
 
 			if (strlen($p[PROFILE_FIELD_SUMMERCAMP_SEASON_DATES]) > 512) {
 				$aResponse['msg'][PROFILE_FIELD_SUMMERCAMP_SEASON_DATES] = "Season dates must be less than 512 characters";
@@ -549,8 +536,33 @@ class Validation {
 
 		}
 
+		if ($p['profile_type'] == PROFILE_COURSES) {
+		    		    
+		    if (($p[PROFILE_FIELD_COURSES_DURATION_FROM] == null) || ($p[PROFILE_FIELD_COURSES_DURATION_TO] == null)) {
+		        $aResponse['msg'][PROFILE_FIELD_COURSES_DURATION_LABEL] = "Please enter program duration.";
+		    }
 
-
+		    if (($p[PROFILE_FIELD_COURSES_PRICE_FROM] == null) || ($p[PROFILE_FIELD_COURSES_PRICE_TO] == null)) {
+		        $aResponse['msg'][PROFILE_FIELD_COURSES_PRICE_LABEL] = "Please enter approx program costs / fees.";
+		    }
+		    
+		    if (strlen($p[PROFILE_FIELD_COURSES_START_DATES]) > 512) {
+		        $aResponse['msg'][PROFILE_FIELD_COURSES_START_DATES] = "Start dates must be less than 512 characters";
+		    }
+		    if (strlen($p[PROFILE_FIELD_COURSES_QUALIFICATION]) > 512) {
+		        $aResponse['msg'][PROFILE_FIELD_COURSES_QUALIFICATION] = "Qualification must be less than 512 characters";
+		    }
+		    if (strlen($p[PROFILE_FIELD_COURSES_PREPARATION]) > 512) {
+		        $aResponse['msg'][PROFILE_FIELD_COURSES_PREPARATION] = "Preparation must be less than 512 characters";
+		    }
+		    if (strlen($p[PROFILE_FIELD_COURSES_REQUIREMENTS]) > 512) {
+		        $aResponse['msg'][PROFILE_FIELD_COURSES_REQUIREMENTS] = "Requirements must be less than 512 characters";
+		    }
+		    if (strlen($p[PROFILE_FIELD_COURSES_HOW_TO_APPLY]) > 512) {
+		        $aResponse['msg'][PROFILE_FIELD_COURSES_HOW_TO_APPLY] = "How to apply must be less than 512 characters";
+		    }
+		    
+		}
 
 		if (is_array($aResponse['msg']) && (count($aResponse['msg']))) {
 			return false;

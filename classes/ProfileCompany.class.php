@@ -631,10 +631,7 @@ class CompanyProfile extends AbstractProfile {
 						,c.prof_opt
                         ,c.profile_filter_from_search
 						,c.status
-						,c.duration
-						,c.costs
 						,c.job_info
-						--,c.keyword_exclude
 						,CASE
 							WHEN (select 1 from euser u where u.company_id = c.id limit 1)=1 THEN 1
 							ELSE 0
@@ -652,7 +649,7 @@ class CompanyProfile extends AbstractProfile {
 					WHERE
 						c.id = $id
 				";
-						
+
 			$db->query($sSql);
 			
 			if ($db->getNumRows() == 1) {
@@ -707,7 +704,7 @@ class CompanyProfile extends AbstractProfile {
 	 * @param boolean approved - flag to indicate profile approval status
 	 * 
 	*/
-	public function DoAddUpdate($c,&$aResponse,$bRedirect = true,$bApproved,$bTx = true) {
+	public function DoAddUpdate(&$c,&$aResponse,$bRedirect = true,$bApproved,$bTx = true) {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
@@ -717,7 +714,7 @@ class CompanyProfile extends AbstractProfile {
 		/* validate the submitted params */
 		if (!Validation::ValidateCompany($c,$aResponse)) return false;
 	
-		/* Sanitize & Escape Company Params */
+		/* Sanitize & DB Escape Params */
 		Validation::AddSlashes($c);
 	
 		if ($bTx) $db->query("BEGIN");

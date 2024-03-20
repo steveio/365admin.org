@@ -131,6 +131,7 @@ require_once(BASE_PATH."/classes/ProfileSummerCamp.php");
 require_once(BASE_PATH."/classes/ProfileVolunteerTravelProject.php");
 require_once(BASE_PATH."/classes/ProfileSeasonalJobsEmployer.php");
 require_once(BASE_PATH."/classes/ProfileTeachingProject.php");
+require_once(BASE_PATH."/classes/ProfileCourses.php");
 require_once(BASE_PATH."/classes/ArchiveManager.php");
 
 // associated (linked) content

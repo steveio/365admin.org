@@ -518,7 +518,7 @@ class PlacementProfile extends AbstractProfile {
 	}
 	
 
-	public function DoAddUpdate($p,&$aResponse) {
+	public function DoAddUpdate(&$p,&$aResponse) {
 
 		global $db, $oAuth,$_CONFIG;
 		

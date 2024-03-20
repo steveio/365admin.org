@@ -34,6 +34,7 @@ class CompanyProfileController extends ProfileController {
 	private $oSeasonalJobsForm; // seasonal jobs employer specific form elements
 	private $oVolunteerProjectForm; // volunteer travel project form elements
 	private $oTeachingProjectForm; // teaching project travel project form elements
+	private $oCoursesForm;
 
 	private $oTabbedPanel;
 
@@ -288,7 +289,7 @@ class CompanyProfileController extends ProfileController {
 		$this->SetSeasonalJobsForm(new Template);
 		$this->SetTeachingProjectForm(new Template);
 		$this->SetVolunteerProjectForm(new Template);
-
+		$this->SetCoursesForm(new Template);
 
 		$oJsInclude = new JsInclude();
 		$oJsInclude->SetSrc("/includes/js/tinymce/js/tinymce/tinymce.min.js");
@@ -348,7 +349,6 @@ EOT;
 
 
 		/* set default profile type based on saved profile or brand default */
-
 
 
 		// id of default profile_type for this brand
@@ -443,6 +443,7 @@ EOT;
 		$this->SetSeasonalJobsFormElements();
 		$this->SetTeachingProjectFormElements();
 		$this->SetVolunteerProjectFormElements();
+		$this->SetCoursesFormElements();
 
 		// inject profile type specific form elements into overall page template
 		$this->GetForm()->Set('EXTENDED_FIELDSET_GENERAL_PROFILE', $this->GetGeneralProfileForm()->Render());
@@ -450,7 +451,9 @@ EOT;
 		$this->GetForm()->Set('EXTENDED_FIELDSET_SEASONALJOBS', $this->GetSeasonalJobsForm()->Render());
 		$this->GetForm()->Set('EXTENDED_FIELDSET_VOLUNTEER_PROJECT', $this->GetVolunteerProjectForm()->Render());
 		$this->GetForm()->Set('EXTENDED_FIELDSET_TEACHING_PROJECT', $this->GetTeachingProjectForm()->Render());
-
+		$this->GetForm()->Set('EXTENDED_FIELDSET_COURSES', $this->GetCoursesForm()->Render());
+		
+		
 		// general template parameters
 		$this->GetForm()->Set('STEP_TITLE',$step_title = '');
 		$this->GetForm()->Set('VALID',$this->Valid());
@@ -964,7 +967,128 @@ EOT;
 
 	}
 
+	protected function SetCoursesFormElements() {
+	    
+	    global $oSession;
+	    
+	    // duration_from / duration_to
+	    $oDuration = new Refdata(REFDATA_DURATION);
+	    $oDuration->SetOrderBySql(' id ASC');
+	    $oDuration->SetElementName(PROFILE_FIELD_COURSES_DURATION_FROM);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $selected = $_REQUEST[PROFILE_FIELD_COURSES_DURATION_FROM];
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $selected = $this->GetProfile()->GetDurationFromId();
+	    }
+	    $this->GetCoursesForm()->Set('DURATION_FROM',$oDuration->GetDDlist($selected));
+	    
+	    $oDuration = new Refdata(REFDATA_DURATION);
+	    $oDuration->SetOrderBySql(' id ASC');
+	    $oDuration->SetElementName(PROFILE_FIELD_COURSES_DURATION_TO);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $selected = $_REQUEST[PROFILE_FIELD_COURSES_DURATION_TO];
+	    } elseif ($this->GetProfile() instanceof TeachingProjectProfile) {
+	        $selected = $this->GetProfile()->GetDurationToId();
+	    }
+	    $this->GetCoursesForm()->Set('DURATION_TO',$oDuration->GetDDlist($selected));
+	    
+	    // price_from, price_to
+	    $oPriceFrom = new Refdata(REFDATA_APPROX_COST);
+	    $oPriceFrom->SetOrderBySql(' sort_order ASC');
+	    $oPriceFrom->SetElementName(PROFILE_FIELD_COURSES_PRICE_FROM);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $selected = $_REQUEST[PROFILE_FIELD_COURSES_PRICE_FROM];
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $selected = $this->GetProfile()->GetPriceFromId();
+	    }
+	    $this->GetCoursesForm()->Set('PRICE_FROM',$oPriceFrom->GetDDlist($selected));
+	    
+	    $oPriceTo = new Refdata(REFDATA_APPROX_COST);
+	    $oPriceTo->SetOrderBySql(' sort_order ASC');
+	    $oPriceTo->SetElementName(PROFILE_FIELD_COURSES_PRICE_TO);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $selected = $_REQUEST[PROFILE_FIELD_COURSES_PRICE_TO];
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $selected = $this->GetProfile()->GetPriceToId();
+	    }
+	    $this->GetCoursesForm()->Set('PRICE_TO',$oPriceTo->GetDDlist($selected));
+	    
+	    // currency
+	    $oCurrency = new Refdata(REFDATA_CURRENCY);
+	    $oCurrency->SetOrderBySql(' id ASC');
+	    $oCurrency->SetElementName(PROFILE_FIELD_COURSES_CURRENCY);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $selected = $_REQUEST[PROFILE_FIELD_COURSES_CURRENCY];
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $selected = $this->GetProfile()->GetCurrencyId();
+	    }
+	    $this->GetCoursesForm()->Set('CURRENCY',$oCurrency->GetDDlist($selected, $no_default = TRUE));
 
+
+	    $oLanguages = new Refdata(REFDATA_LANGUAGES);
+	    $oLanguages->SetOrderBySql(' value ASC');
+	    $oLanguages->SetElementId(PROFILE_FIELD_COURSES_LANGUAGES);
+	    $oLanguages->SetElementName(PROFILE_FIELD_COURSES_LANGUAGES);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_LANGUAGES_PREFIX);
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $aSelected = $this->GetProfile()->GetLanguages();
+	    }
+	    $this->GetCoursesForm()->Set('LANGUAGES_LIST',$oLanguages->GetCheckboxList(REFDATA_LANGUAGES_PREFIX,$aSelected));
+
+	    
+	    $oCourses = new Refdata(REFDATA_COURSES);
+	    $oCourses->SetOrderBySql(' value ASC');
+	    $oCourses->SetElementId(PROFILE_FIELD_COURSES_COURSES);
+	    $oCourses->SetElementName(PROFILE_FIELD_COURSES_COURSES);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_COURSES_PREFIX);
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $aSelected = $this->GetProfile()->GetCourses();
+	    }
+	    $this->GetCoursesForm()->Set('COURSES_LIST',$oCourses->GetCheckboxList(REFDATA_COURSES_PREFIX,$aSelected));
+
+	    
+	    $oCourseType = new Refdata(REFDATA_COURSE_TYPE);
+	    $oCourseType->SetOrderBySql(' value ASC');
+	    $oCourseType->SetElementId(PROFILE_FIELD_COURSES_COURSE_TYPE);
+	    $oCourseType->SetElementName(PROFILE_FIELD_COURSES_COURSE_TYPE);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_COURSE_TYPE_PREFIX);
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $aSelected = $this->GetProfile()->GetCourseType();
+	    }
+	    $this->GetCoursesForm()->Set('COURSE_TYPE_LIST',$oCourseType->GetCheckboxList(REFDATA_COURSE_TYPE_PREFIX,$aSelected));
+	    
+
+	    $oAccomodation = new Refdata(REFDATA_ACCOMODATION);
+	    $oAccomodation->SetOrderBySql(' value ASC');
+	    $oAccomodation->SetElementId(PROFILE_FIELD_COURSES_ACCOMODATION);
+	    $oAccomodation->SetElementName(PROFILE_FIELD_COURSES_ACCOMODATION);
+	    $selected = '';
+	    if (isset($_REQUEST['submit'])) {
+	        $aSelected = Mapping::GetIdByKey($_REQUEST,REFDATA_ACCOMODATION_PREFIX);
+	    } elseif ($this->GetProfile() instanceof CoursesProfile) {
+	        $aSelected = $this->GetProfile()->GetAccomodation();
+	    }
+	    $this->GetCoursesForm()->Set('ACCOMODATION_LIST',$oAccomodation->GetCheckboxList(REFDATA_ACCOMODATION_PREFIX,$aSelected));
+
+	    $this->GetCoursesForm()->Set('VALIDATION_ERRORS',$this->GetValidationErrors());
+	    $this->GetCoursesForm()->Set('COMPANY_PROFILE',$this->GetProfile());
+	    
+	    $this->GetCoursesForm()->LoadTemplate("profile_courses.php");
+	    
+	}
+
+	
 	/* populate HTML form element values from company profile attributes */
 	protected function SetFormValuesFromCompanyProfile() {
 
@@ -1521,6 +1645,13 @@ EOT;
 		$this->oTeachingProjectForm = $oTemplate;
 	}
 
+	protected function GetCoursesForm() {
+	    return $this->oCoursesForm;
+	}
+	
+	protected function SetCoursesForm($oTemplate) {
+	    $this->oCoursesForm = $oTemplate;
+	}
 
 	private function SetTabbedPanel() {
 

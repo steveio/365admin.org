@@ -33,6 +33,9 @@ class ProfileFactory {
 			case PROFILE_TEACHING :
 				return $oProfile = new TeachingProjectProfile();
 				break;
+			case PROFILE_COURSES :
+			    return $oProfile = new CoursesProfile();
+			    break;
 		}
 
 	}

@@ -793,8 +793,8 @@ abstract class AbstractProfile implements TemplateInterface {
 			$oDuration->GetByType();
 			$this->SetDurationRefdataObject($oDuration);
 		}
-		
-		return $this->GetDurationRefdataObject()->GetValueById($this->duration_to_id);
+
+		return $this->GetDurationRefdataObject()->GetValueById($this->duration_to_id);		
 	}
 
 	public function SetDurationFrom($i) {

@@ -21,7 +21,8 @@ $(document).ready(function(){
 								'profile_type_<?= PROFILE_SUMMERCAMP; ?>',
 								'profile_type_<?= PROFILE_SEASONALJOBS; ?>',
 								'profile_type_<?= PROFILE_VOLUNTEER_PROJECT; ?>',
-								'profile_type_<?= PROFILE_TEACHING; ?>'
+								'profile_type_<?= PROFILE_TEACHING; ?>',
+								'profile_type_<?= PROFILE_COURSES; ?>'
 							);
 
     idx = $("#<?= PROFILE_FIELD_COMP_PROFILE_TYPE_ID; ?>").val();
@@ -185,9 +186,8 @@ $(document).ready(function(){
 
 <div class="row my-2">
   <div class="col">
-  <span><img src="/images/icon_info.png" alt="" border="0" style="vertical-align: middle;" /></span>
   <span class="p_small grey">Enter details about your <?= strtolower($this->Get('COMPANY_TITLE')); ?>.
-  Add original content, don't duplicate your website.
+  Add helpful original content, don't duplicate your website.
   </span>
   </div>
 </div>
@@ -350,6 +350,14 @@ $visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display
 ?>
 <div id="profile_type_<?= PROFILE_TEACHING; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
   <?= $this->Get('EXTENDED_FIELDSET_TEACHING_PROJECT'); ?>
+</div>
+
+<?php
+$panel_key = 'profile_type_'.PROFILE_COURSES;
+$visibility = ($this->Get('PROFILE_ACTIVE_PANEL') == $panel_key) ? "" : "display: none;";
+?>
+<div id="profile_type_<?= PROFILE_COURSES; ?>" class="row formgroup my-2" style="<?= $visibility; ?>">
+  <?= $this->Get('EXTENDED_FIELDSET_COURSES'); ?>
 </div>
 
 
