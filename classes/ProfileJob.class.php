@@ -7,6 +7,23 @@
  */
 
 
+// placement job profile
+define('PROFILE_FIELD_PLACEMENT_JOB_REFERENCE','reference');
+define('PROFILE_FIELD_PLACEMENT_JOB_DURATION_LABEL','job_duration_label');
+define('PROFILE_FIELD_PLACEMENT_JOB_DURATION_FROM','job_duration_from_id');
+define('PROFILE_FIELD_PLACEMENT_JOB_DURATION_TO','job_duration_to_id');
+define('PROFILE_FIELD_PLACEMENT_JOB_START_DT','job_start_date'); // actually these 2date fields are divided into month / year
+define('PROFILE_FIELD_PLACEMENT_JOB_CLOSING_DATE','close_date');
+define('PROFILE_FIELD_PLACEMENT_JOB_START_DT_MULTIPLE','start_dt_multiple');
+define('PROFILE_FIELD_PLACEMENT_JOB_CONTRACT_TYPE','contract_type');
+define('PROFILE_FIELD_PLACEMENT_JOB_SALARY','job_salary');
+define('PROFILE_FIELD_PLACEMENT_JOB_BENEFITS','job_benefits');
+define('PROFILE_FIELD_PLACEMENT_JOB_EXPERIENCE','experience');
+define('PROFILE_FIELD_PLACEMENT_JOB_OPTIONS','job_options');
+
+
+
+
 
 class JobProfile extends PlacementProfile {
 

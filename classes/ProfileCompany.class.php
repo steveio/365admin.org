@@ -4,6 +4,37 @@
 define("CK_EDITOR_PROFILE_INTRO_DT","2012-12-29");
 
 
+/* Company profile field id's */
+define('PROFILE_FIELD_COMP_PROFILE_TYPE_ID','profile_type');
+define('PROFILE_FIELD_COMP_TITLE','title');
+define('PROFILE_FIELD_COMP_DESC_SHORT','desc_short');
+define('PROFILE_FIELD_COMP_DESC_LONG','desc_long');
+define('PROFILE_FIELD_COMP_URL','url');
+define('PROFILE_FIELD_COMP_EMAIL','email');
+define('PROFILE_FIELD_COMP_APPLY_URL','apply_url');
+define('PROFILE_FIELD_COMP_ADDRESS','address');
+define('PROFILE_FIELD_COMP_COUNTRY_ID','country_id');
+define('PROFILE_FIELD_COMP_STATE_ID','state_id');
+define('PROFILE_FIELD_COMP_LOCATION','location');
+define('PROFILE_FIELD_COMP_TELEPHONE','tel');
+
+/* Company profile - admin options */
+define('PROFILE_FIELD_COMP_PROD_TYPE','prod_type');
+define('PROFILE_FIELD_COMP_LISTING_TYPE','listing_type');
+define('PROFILE_FIELD_COMP_LISTING_START_DATE','listing_start_date');
+define('PROFILE_FIELD_COMP_PROFILE_QUOTA','profile_quota');
+define('PROFILE_FIELD_COMP_PROFILE_OPTIONS','prof_opt');
+define('PROFILE_FIELD_COMP_ENQUIRY_OPTIONS','enq_opt');
+
+
+/* Extended profile - general company profile */
+define('PROFILE_FIELD_COMP_GENERAL_PLACEMENT_INFO','job_info');
+define('PROFILE_FIELD_COMP_GENERAL_DURATION','duration');
+define('PROFILE_FIELD_COMP_GENERAL_COSTS','costs');
+
+
+
+
 /*
  * Company Profile
  * 

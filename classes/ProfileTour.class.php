@@ -7,6 +7,25 @@
  */
 
 
+// placement tour profile
+define('PROFILE_FIELD_PLACEMENT_TOUR_CODE','code');
+define('PROFILE_FIELD_PLACEMENT_ITINERY','itinery');
+define('PROFILE_FIELD_PLACEMENT_TOUR_PRICE','tour_price');
+define('PROFILE_FIELD_PLACEMENT_START_DATES','dates');
+define('PROFILE_FIELD_PLACEMENT_TOUR_REQUIREMENTS','tour_requirements');
+define('PROFILE_FIELD_PLACEMENT_TOUR_TRAVEL','tour_travel_transport');
+define('PROFILE_FIELD_PLACEMENT_TOUR_MEALS','tour_meals');
+define('PROFILE_FIELD_PLACEMENT_TOUR_ACCOM','tour_accom');
+define('PROFILE_FIELD_PLACEMENT_TOUR_DURATION_FROM','tour_duration_from_id');
+define('PROFILE_FIELD_PLACEMENT_TOUR_DURATION_TO','tour_duration_to_id');
+define('PROFILE_FIELD_PLACEMENT_TOUR_DURATION_LABEL','tour_duration_label');
+define('PROFILE_FIELD_PLACEMENT_TOUR_PRICE_FROM','tour_price_from_id');
+define('PROFILE_FIELD_PLACEMENT_TOUR_PRICE_TO','tour_price_to_id');
+define('PROFILE_FIELD_PLACEMENT_TOUR_PRICE_LABEL','tour_price_label');
+define('PROFILE_FIELD_PLACEMENT_TOUR_CURRENCY','tour_currency_id');
+define('PROFILE_FIELD_PLACEMENT_GROUP_SIZE','group_size_id');
+
+
 
 class TourProfile extends PlacementProfile {
 

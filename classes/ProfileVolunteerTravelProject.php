@@ -1,6 +1,26 @@
 <?
 
 
+/* Extended profile - volunteer travel project */
+define('PROFILE_FIELD_VOLUNTEER_DURATION_FROM','vp_duration_from_id');
+define('PROFILE_FIELD_VOLUNTEER_DURATION_TO','vp_duration_to_id');
+define('PROFILE_FIELD_VOLUNTEER_DURATION_LABEL','vp_duration_label');
+define('PROFILE_FIELD_VOLUNTEER_PRICE_FROM','vp_price_from_id');
+define('PROFILE_FIELD_VOLUNTEER_PRICE_TO','vp_price_to_id');
+define('PROFILE_FIELD_VOLUNTEER_PRICE_LABEL','vp_price_label');
+define('PROFILE_FIELD_VOLUNTEER_CURRENCY','vp_currency_id');
+define('PROFILE_FIELD_VOLUNTEER_FOUNDED','vp_founded');
+define('PROFILE_FIELD_VOLUNTEER_NO_PLACEMENTS','vp_no_placements');
+define('PROFILE_FIELD_VOLUNTEER_ORG_TYPE','vp_org_type');
+define('PROFILE_FIELD_VOLUNTEER_AWARDS','vp_awards');
+define('PROFILE_FIELD_VOLUNTEER_FUNDING','vp_funding');
+define('PROFILE_FIELD_VOLUNTEER_SUPPORT','vp_support');
+define('PROFILE_FIELD_VOLUNTEER_SAFETY','vp_safety');
+define('PROFILE_FIELD_VOLUNTEER_SPECIES','vp_species');
+define('PROFILE_FIELD_VOLUNTEER_HABITATS','vp_habitats');
+
+
+
 class VolunteerTravelProjectProfile extends CompanyProfile {
 
 	const PROFILE_TABLE_NAME = "profile_volunteer_project";

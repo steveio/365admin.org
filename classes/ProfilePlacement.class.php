@@ -3,6 +3,21 @@
 define("CK_EDITOR_PROFILE_INTRO_DT","2013-01-03");
 
 
+/* Common Placement form field id's */
+define('PROFILE_FIELD_PLACEMENT_TITLE','title');
+define('PROFILE_FIELD_PLACEMENT_COMP_ID','company_id');
+define('PROFILE_FIELD_PLACEMENT_DESC_SHORT','desc_short');
+define('PROFILE_FIELD_PLACEMENT_PROFILE_TYPE_ID','profile_type');
+define('PROFILE_FIELD_PLACEMENT_LOCATION','location');
+define('PROFILE_FIELD_PLACEMENT_DESC_LONG','desc_long');
+define('PROFILE_FIELD_PLACEMENT_URL','url');
+define('PROFILE_FIELD_PLACEMENT_EMAIL','email');
+define('PROFILE_FIELD_PLACEMENT_APPLY_URL','apply_url');
+define('PROFILE_FIELD_PLACEMENT_KEYWORD_EXCLUDE','keyword_exclude');
+define('PROFILE_FIELD_PLACEMENT_ACTIVE','ad_active');
+
+
+
 /*
  * 
  * Base Placement Profile - derived classes (General,Tour,Job) extend this class

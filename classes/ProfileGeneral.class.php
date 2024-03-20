@@ -1,5 +1,20 @@
 <?
 
+// general placement fields
+define('PROFILE_FIELD_PLACEMENT_DURATION_FROM','duration_from_id');
+define('PROFILE_FIELD_PLACEMENT_DURATION_TO','duration_to_id');
+define('PROFILE_FIELD_PLACEMENT_DURATION_LABEL','duration_label'); // validation key only
+define('PROFILE_FIELD_PLACEMENT_START_DATES_TXT','start_dates');
+define('PROFILE_FIELD_PLACEMENT_BENEFITS','benefits');
+define('PROFILE_FIELD_PLACEMENT_REQUIREMENTS','requirements');
+define('PROFILE_FIELD_PLACEMENT_PRICE_LABEL','price_label'); // validation key only
+define('PROFILE_FIELD_PLACEMENT_PRICE_FROM','price_from_id');
+define('PROFILE_FIELD_PLACEMENT_PRICE_TO','price_to_id');
+define('PROFILE_FIELD_PLACEMENT_CURRENCY','currency_id');
+
+
+
+
 /*
  * General (placement) Profile Class
  * 

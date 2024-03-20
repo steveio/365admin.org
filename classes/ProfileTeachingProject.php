@@ -1,6 +1,20 @@
 <?php
 
 
+/* Extended profile - teaching jobs / courses */
+define('PROFILE_FIELD_TEACHING_DURATION_FROM','tp_duration_from_id');
+define('PROFILE_FIELD_TEACHING_DURATION_TO','tp_duration_to_id');
+define('PROFILE_FIELD_TEACHING_DURATION_LABEL','tp_duration_label');
+define('PROFILE_FIELD_TEACHING_NO_TEACHERS','tp_no_teachers');
+define('PROFILE_FIELD_TEACHING_CLASS_SIZE','tp_class_size');
+define('PROFILE_FIELD_TEACHING_DURATION','tp_duration');
+define('PROFILE_FIELD_TEACHING_SALARY','tp_salary');
+define('PROFILE_FIELD_TEACHING_BENEFITS','tp_benefits');
+define('PROFILE_FIELD_TEACHING_QUALIFICATIONS','tp_qualifications');
+define('PROFILE_FIELD_TEACHING_REQUIREMENTS','tp_requirements');
+define('PROFILE_FIELD_TEACHING_HOW_TO_APPLY','tp_how_to_apply');
+
+
 
 class TeachingProjectProfile extends CompanyProfile {
 	

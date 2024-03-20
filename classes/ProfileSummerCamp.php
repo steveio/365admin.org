@@ -1,5 +1,30 @@
 <?php
 
+/* Extended profile - summer camp field id's */
+define('PROFILE_FIELD_SUMMERCAMP_DURATION_FROM','sc_duration_from_id');
+define('PROFILE_FIELD_SUMMERCAMP_DURATION_TO','sc_duration_to_id');
+define('PROFILE_FIELD_SUMMERCAMP_DURATION_LABEL','sc_duration_label');
+define('PROFILE_FIELD_SUMMERCAMP_NO_STAFF','sc_no_staff');
+define('PROFILE_FIELD_SUMMERCAMP_STAFF_GENDER','sc_staff_gender');
+define('PROFILE_FIELD_SUMMERCAMP_STAFF_ORIGIN','sc_staff_origin');
+define('PROFILE_FIELD_SUMMERCAMP_SEASON_DATES','sc_season_dates');
+define('PROFILE_FIELD_SUMMERCAMP_REQUIREMENTS','sc_requirements');
+define('PROFILE_FIELD_SUMMERCAMP_HOW_TO_APPLY','sc_how_to_apply');
+define('PROFILE_FIELD_SUMMERCAMP_CAMP_TYPE','sc_camp_type');
+define('PROFILE_FIELD_SUMMERCAMP_CAMP_JOB_TYPE','sc_camp_job_type');
+define('PROFILE_FIELD_SUMMERCAMP_CAMP_ACTIVITY','sc_camp_activity');
+define('PROFILE_FIELD_SUMMERCAMP_CAMP_GENDER','sc_camp_gender');
+define('PROFILE_FIELD_SUMMERCAMP_CAMP_RELIGION','sc_camp_religion');
+define('PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_FROM','sc_camper_age_from');
+define('PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_TO','sc_camper_age_to');
+define('PROFILE_FIELD_SUMMERCAMP_CAMPER_AGE_LABEL','sc_camper_label');
+define('PROFILE_FIELD_SUMMERCAMP_PRICE_FROM','sc_price_from_id');
+define('PROFILE_FIELD_SUMMERCAMP_PRICE_TO','sc_price_to_id');
+define('PROFILE_FIELD_SUMMERCAMP_PRICE_LABEL','sc_price_label');
+define('PROFILE_FIELD_SUMMERCAMP_CURRENCY','sc_currency_id');
+
+
+
 
 
 class SummerCampProfile extends CompanyProfile {

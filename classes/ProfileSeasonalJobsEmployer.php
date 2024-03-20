@@ -1,5 +1,18 @@
 <?
 
+/* Extended profile - seasonal jobs field id's */
+define('PROFILE_FIELD_SEASONALJOBS_DURATION_FROM','sj_duration_from_id');
+define('PROFILE_FIELD_SEASONALJOBS_DURATION_TO','sj_duration_to_id');
+define('PROFILE_FIELD_SEASONALJOBS_DURATION_LABEL','sj_duration_label');
+define('PROFILE_FIELD_SEASONALJOBS_JOB_TYPES','sj_job_types');
+define('PROFILE_FIELD_SEASONALJOBS_PAY','sj_pay');
+define('PROFILE_FIELD_SEASONALJOBS_BENEFITS','sj_benefits');
+define('PROFILE_FIELD_SEASONALJOBS_NO_STAFF','sj_no_staff');
+define('PROFILE_FIELD_SEASONALJOBS_HOW_TO_APPLY','sj_how_to_apply');
+define('PROFILE_FIELD_SEASONALJOBS_REQUIREMENTS','sj_requirements');
+
+
+
 class SeasonalJobEmployerProfile extends CompanyProfile {
 
 	
