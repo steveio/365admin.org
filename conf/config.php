@@ -1,7 +1,7 @@
 <?php
 
 
-ini_set('display_errors',1);
+ini_set('display_errors',0);
 ini_set('log_errors', 1);
 ini_set('error_log', '/www/vhosts/365admin.org/logs/365admin_error.log');
 error_reporting(E_ALL & ~E_NOTICE & ~ E_STRICT);
@@ -26,20 +26,20 @@ define('DEBUG',false);
 define('DEV',FALSE);
 
 define('TEST_MODE', false);
-define('TEST_EMAIL','steveedwards01@yahoo.co.uk');
+define('TEST_EMAIL','');
 
 define('BLOCK_ADS', true);
 
-/* 0 = none, 1 = error, 2 = debug, 3 = verbose debug */
+/* 0 = none, 1 = error / messages, 2 = debug, 3 = verbose debug */
 define('LOG_PATH',"/www/vhosts/365admin.org/logs/365admin_app.log");
-define('LOG_LEVEL',3);
+define('LOG_LEVEL',1);
 
 define('HOSTNAME',"oneworld365.org");
-define('BASE_URL','https://admin.'.HOSTNAME);
+define('BASE_URL','http://admin.'.HOSTNAME);
 define('WEBSITE',HOSTNAME);
 define('ADMIN_SYSTEM_HOSTNAME', 'admin.oneworld365.org');
-define('ADMIN_SYSTEM',"https://".ADMIN_SYSTEM_HOSTNAME);
-define('API_URL','https://api.'.HOSTNAME);
+define('ADMIN_SYSTEM',"http://".ADMIN_SYSTEM_HOSTNAME);
+define('API_URL','http://api.'.HOSTNAME);
 define('CURRENT_SITE', ADMIN_SYSTEM);
 
 define('BASE_PATH','/www/vhosts/365admin.org/htdocs');
@@ -111,67 +111,8 @@ define("DEFAULT_PROFILE_OPT",'11100000');
 define("DEFAULT_ENQUIRY_OPT",'10000000');
 
 
-/* request route mappings */
-define('ROUTE_NEW','new');
-define('ROUTE_UPDATE','update');
-define('ROUTE_EDIT','edit');
-define('ROUTE_DELETE','delete');
-define('ROUTE_DASHBOARD','dashboard');
-define('ROUTE_ERROR','error');
-define('ROUTE_SEARCH','search');
-define('ROUTE_LOGIN','login');
-define('ROUTE_PASSWD','password');
-define('ROUTE_REGISTRATION','registration');
-define('ROUTE_COMPANY','company');
-define('ROUTE_PLACEMENT','placement');
-define('ROUTE_CONFIRMATION','confirmation');
-define('ROUTE_CONTACT','contact');
-define('ROUTE_MAILSHOT','mailshot');
-
 define('LISTING_REQUEST_NEW','NEW');
 define('LISTING_REQUEST_UPDATE','EDIT');
-
-
-/* refdata type mappings 
- * @todo - add a dynamic loader to read these from DB 
- */
-define('REFDATA_US_STATE',0);
-define('REFDATA_CAMP_TYPE',1);
-define('REFDATA_CAMP_JOB_TYPE',2);
-define('REFDATA_ACTIVITY',3);
-define('REFDATA_INT_RANGE',4);
-define('REFDATA_DURATION',5);
-define('REFDATA_ORG_SUBTYPE',6);
-define('REFDATA_BONDING',7);
-define('REFDATA_STAFF_ORIGIN',8);
-define('REFDATA_GENDER',9);
-define('REFDATA_APPROX_COST',10);
-define('REFDATA_HABITATS',11);
-define('REFDATA_SPECIES',12);
-define('REFDATA_ACCOMODATION',13);
-define('REFDATA_MEALS',14);
-define('REFDATA_TRAVEL_TRANSPORT',15);
-define('REFDATA_ADVENTURE_SPORTS',16);
-define('REFDATA_ORG_PROJECT_TYPE',17);
-define('REFDATA_CURRENCY',18);
-define('REFDATA_JOB_OPTIONS',19);
-define('REFDATA_INT_SMALL_RANGE',20);
-define('REFDATA_JOB_CONTRACT_TYPE',21);
-define('REFDATA_US_REGION',22);
-define('REFDATA_AGE_RANGE',23);
-define('REFDATA_RELIGION',24);
-define('REFDATA_CAMP_GENDER',25);
-
-/* multiple choice refdata form element prefixes */
-define('REFDATA_ACTIVITY_PREFIX','CA_');
-define('REFDATA_CAMP_TYPE_PREFIX','CT_');
-define('REFDATA_CAMP_JOB_TYPE_PREFIX','JT_');
-define('REFDATA_SPECIES_PREFIX','SP_');
-define('REFDATA_HABITATS_PREFIX','HA_');
-define('REFDATA_TRAVEL_TRANSPORT_PREFIX','TT_');
-define('REFDATA_ACCOMODATION_PREFIX','AC_');
-define('REFDATA_MEALS_PREFIX','ML_');
-define('REFDATA_JOB_OPTIONS_PREFIX','JO_');
 
 
 /* Company profile field id's */

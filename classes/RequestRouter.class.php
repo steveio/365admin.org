@@ -4,6 +4,24 @@ define("HEADER_HTTP_404", "HTTP/1.0 404 Not Found");
 define("HEADER_HTTP_500", "HTTP/1.0 500 Internal Server Error");
 
 
+/* request route mappings */
+define('ROUTE_NEW','new');
+define('ROUTE_UPDATE','update');
+define('ROUTE_EDIT','edit');
+define('ROUTE_DELETE','delete');
+define('ROUTE_DASHBOARD','dashboard');
+define('ROUTE_ERROR','error');
+define('ROUTE_SEARCH','search');
+define('ROUTE_LOGIN','login');
+define('ROUTE_PASSWD','password');
+define('ROUTE_REGISTRATION','registration');
+define('ROUTE_COMPANY','company');
+define('ROUTE_PLACEMENT','placement');
+define('ROUTE_CONFIRMATION','confirmation');
+define('ROUTE_CONTACT','contact');
+define('ROUTE_MAILSHOT','mailshot');
+
+
 /*
  * RequestRouter -
  * 

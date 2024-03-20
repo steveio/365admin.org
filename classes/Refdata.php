@@ -1,5 +1,7 @@
 <?php
 
+
+
 /*
  * Refdata system is a key => value store for abitrary lists
  * 
@@ -7,6 +9,8 @@
  */
 
 
+/* refdata type mappings
+ */
 define('REFDATA_US_STATE',0);
 define('REFDATA_CAMP_TYPE',1);
 define('REFDATA_CAMP_JOB_TYPE',2);
@@ -29,6 +33,22 @@ define('REFDATA_CURRENCY',18);
 define('REFDATA_JOB_OPTIONS',19);
 define('REFDATA_INT_SMALL_RANGE',20);
 define('REFDATA_JOB_CONTRACT_TYPE',21);
+define('REFDATA_US_REGION',22);
+define('REFDATA_AGE_RANGE',23);
+define('REFDATA_RELIGION',24);
+define('REFDATA_CAMP_GENDER',25);
+define('REFDATA_COURSES',26);
+
+/* multiple choice refdata form element prefixes */
+define('REFDATA_ACTIVITY_PREFIX','CA_');
+define('REFDATA_CAMP_TYPE_PREFIX','CT_');
+define('REFDATA_CAMP_JOB_TYPE_PREFIX','JT_');
+define('REFDATA_SPECIES_PREFIX','SP_');
+define('REFDATA_HABITATS_PREFIX','HA_');
+define('REFDATA_TRAVEL_TRANSPORT_PREFIX','TT_');
+define('REFDATA_ACCOMODATION_PREFIX','AC_');
+define('REFDATA_MEALS_PREFIX','ML_');
+define('REFDATA_JOB_OPTIONS_PREFIX','JO_');
 
 
 define('REFDATA_OPTION_CHECKBOXES_DISABLED','CHECKBOXES_DISABLED');
