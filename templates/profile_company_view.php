@@ -629,9 +629,9 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
     	</div>
 
     	<div class="col">
-    	<? if ($oProfile->GetQualification() != "") { ?>
+    	<? if ($oProfile->GetQualifications() != "") { ?>
     		<h3>Qualification / Certification / Awards: </h3>
-    		<?= $oProfile->GetQualification() ?>
+    		<?= $oProfile->GetQualifications() ?>
     	<? } ?>
     	</div>
    	

@@ -141,14 +141,16 @@ abstract class AbstractProfile implements TemplateInterface {
 
 	/*
 	 * Return type of profile 0 = PROFILE_COMPANY, 1 = PROFILE_PLACEMENT
-	*
+	 * @todo -read config from DB table profile_types
 	*/
 	public function GetGeneralType() {
 		if (in_array($this->GetType(),array(PROFILE_COMPANY,
 				PROFILE_SUMMERCAMP,
 				PROFILE_VOLUNTEER_PROJECT,
 				PROFILE_SEASONALJOBS,
-				PROFILE_TEACHING))) {
+				PROFILE_TEACHING,
+		        PROFILE_COURSES
+		))) {
 			return PROFILE_COMPANY;
 		}
 		if (in_array($this->GetType(),array(PROFILE_PLACEMENT,

@@ -111,7 +111,7 @@ class CoursesProfile extends CompanyProfile {
 							";
 	}	
 	
-	public function DoAddUpdate($c,&$aResponse,$bRedirect = false,$bApproved = true, $tx = TRUE) {
+	public function DoAddUpdate(&$c,&$aResponse,$bRedirect = false,$bApproved = true, $tx = TRUE) {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
@@ -253,7 +253,7 @@ class CoursesProfile extends CompanyProfile {
 	    $_POST[PROFILE_FIELD_COURSES_CURRENCY] = $this->GetCurrencyId();
 	    $_POST[PROFILE_FIELD_COURSES_START_DATES] = $this->GetStartDates();
 	    $_POST[PROFILE_FIELD_COURSES_REQUIREMENTS] = $this->GetRequirements();
-	    $_POST[PROFILE_FIELD_COURSES_QUALIFICATION] = $this->GetQualification();
+	    $_POST[PROFILE_FIELD_COURSES_QUALIFICATION] = $this->GetQualifications();
 	    $_POST[PROFILE_FIELD_COURSES_PREPARATION] = $this->GetPreparation();
 	    $_POST[PROFILE_FIELD_COURSES_HOW_TO_APPLY] = $this->GetHowToApply();
 	    
@@ -267,7 +267,7 @@ class CoursesProfile extends CompanyProfile {
 		return $this->requirements;
 	}
 
-	public function GetQualification() {
+	public function GetQualifications() {
 	    return $this->qualification;
 	}
 

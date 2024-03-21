@@ -4,14 +4,6 @@ print $oHeader->Render();
 
 <div class="container">
 <div class="align-items-center justify-content-center">
-<?php
-
-// DISPLAY SPONSORED COMPANY INFO
-
-$oCompany = new Company($db);
-$aComp = $oCompany->GetFeaturedComp($type = "BOTH");
-
-?>
 
 <div class="row">
 <?

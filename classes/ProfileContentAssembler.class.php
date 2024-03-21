@@ -62,11 +62,13 @@ class ProfileContentAssembler extends AbstractContentAssembler {
         $oHeader->SetTitle($title);
         $oHeader->SetDesc($desc_short);
         $oHeader->SetKeywords("");
-
+        
         unset($this->oProfile);
         $this->oProfile = $oProfile = ProfileFactory::Get($aRes['type']);
+
         $this->oProfile->SetType($aRes['type']);
 
+        
         // fetch full profile
         $this->oProfile->GetById($aRes['id']);
 
