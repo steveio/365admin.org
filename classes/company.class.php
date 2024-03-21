@@ -211,16 +211,16 @@ class Company {
 				$sql = "$select FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") order by title asc;";
 				break;
 			case "ID" :
-				$sql = "SELECT id,title,desc_short,url,logo_url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).");";
+				$sql = "SELECT id,title,desc_short,url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).");";
 				break;
 			case "ID_SORTED" :
-				$sql = "SELECT id,title,desc_short,url,logo_url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") ORDER BY prod_type desc";
+				$sql = "SELECT id,title,desc_short,url,prod_type,location,url_name FROM ".$_CONFIG['company_table']." c WHERE c.status = 1 AND c.id in (".implode(",",$id).") ORDER BY prod_type desc";
 				break;
 			case "RECENT" :
-				$sql = "SELECT id,title,desc_short,url_name,logo_url,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." ORDER BY last_updated desc LIMIT 20";
+				$sql = "SELECT id,title,desc_short,url_name,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." ORDER BY last_updated desc LIMIT 20";
 				break;
 			case "RECENT_PAID_LISTING" :
-				$sql = "SELECT id,title,desc_short,url_name,logo_url,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." WHERE prod_type >= 1 AND prod_type <= 2 ORDER BY last_updated DESC LIMIT ".$limit;
+				$sql = "SELECT id,title,desc_short,url_name,status, to_char(added,'DD/MM/YYYY') as added_date, to_char(last_updated,'DD/MM/YYYY') as updated_date FROM ".$_CONFIG['company_table']." WHERE prod_type >= 1 AND prod_type <= 2 ORDER BY last_updated DESC LIMIT ".$limit;
 				break;
 				
 		}
@@ -403,7 +403,7 @@ class Company {
 		global $_CONFIG;
 		
 		if ($type == "ENHANCED") {
-			$this->db->query("SELECT id,title,location,desc_short,url,logo_url, url_name FROM ".$_CONFIG['company_table']." WHERE status = 1 AND prod_type = ".ENHANCED_LISTING." order by random() limit 9;");
+			$this->db->query("SELECT id,title,location,desc_short,url,url_name FROM ".$_CONFIG['company_table']." WHERE status = 1 AND prod_type = ".ENHANCED_LISTING." order by random() limit 9;");
 			$arr = $this->db->getObjects();
 			
 			
@@ -450,7 +450,9 @@ class Company {
 	}
 
 	
-	
+	/*
+         * @deprecated - not in current use 
+         */	
 	function renderCompanySearchResult($aCompany,$iTotalSearchResult,$aOffset,$hdrTxt = "") {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -491,6 +493,9 @@ class Company {
 		return $r;
 	}
 
+	/*
+	 * @deprecated
+	 */
 	function renderCompanySearchResultList($aCompany,$iTotalSearchResult,$aOffset,$hdrTxt = "") {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
@@ -565,7 +570,7 @@ class Company {
 		
 		$limit = ($limit >= 1) ? " LIMIT ".$limit : "";
 
-		$sql = "SELECT id,title,desc_short,url_name,logo_url,prod_type FROM ".$_CONFIG['company_table']." WHERE ".$where." ORDER BY random() ".$limit;
+		$sql = "SELECT id,title,desc_short,url_name,prod_type FROM ".$_CONFIG['company_table']." WHERE ".$where." ORDER BY random() ".$limit;
 		
 		$db->query($sql);
 		
