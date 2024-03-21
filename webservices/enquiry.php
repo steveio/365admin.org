@@ -386,7 +386,7 @@ if (isset($aResponse['msg']) && count($aResponse['msg']) >= 1) {
 			<? } ?>
 		</div>
 		<h3><?= $oProfile->GetTitle(); ?></h3>
-		<p><?= $oProfile->GetDescShort(); ?></p>
+		<p><?= $oProfile->GetDescShortPlaintext(); ?></p>
 		<a class="btn btn-primary" href="<?= $oProfile->GetProfileUrl(); ?>" title="Back to <?= $oProfile->GetTitle(); ?>">Back to <?= $oProfile->GetTitle(); ?></a>
 		
 					
