@@ -72,6 +72,7 @@ require_once($_CONFIG['root_path']."/classes/ProfileSummerCamp.php");
 require_once($_CONFIG['root_path']."/classes/ProfileVolunteerTravelProject.php");
 require_once($_CONFIG['root_path']."/classes/ProfileTeachingProject.php");
 require_once($_CONFIG['root_path']."/classes/ProfileSeasonalJobsEmployer.php");
+require_once($_CONFIG['root_path']."/classes/ProfileCourses.php");
 require_once($_CONFIG['root_path']."/classes/Refdata.php");
 
 
