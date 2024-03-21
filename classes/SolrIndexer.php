@@ -182,21 +182,22 @@ class SolrIndexer {
 				if ((
 						($oCProfile instanceof SummerCampProfile) ||
 						($oCProfile instanceof SeasonalJobEmployerProfile) ||
-						($oCProfile instanceof VolunteerTravelProjectProfile)
+						($oCProfile instanceof VolunteerTravelProjectProfile) ||
+				        ($oCProfile instanceof CoursesProfile)
 				)  && (is_numeric($oCProfile->GetDurationFromId())))
 				{
 					// index durations in weeks
 					$oSolrDocument->duration_from = $this->aDuration2DaysMapping[$oCProfile->GetDurationFromId()];
 					$oSolrDocument->duration_to = $this->aDuration2DaysMapping[$oCProfile->GetDurationToId()];
-						
 				}
-		
-				if ((
-						($oCProfile instanceof SummerCampProfile) ||
-						($oCProfile instanceof VolunteerTravelProjectProfile)
+
+				if (
+						($oCProfile instanceof SummerCampProfile ||
+						($oCProfile instanceof VolunteerTravelProjectProfile) ||
+				        ($oCProfile instanceof CoursesProfile)
 				)  && (is_numeric($oCProfile->GetCurrencyId())))
 				{
-		
+
 					$oCProfile->SetCostsRefdataObject($this->oPrice);
 					$oCProfile->SetCurrencyRefdataObject($this->oCurrency);
 						
@@ -211,7 +212,6 @@ class SolrIndexer {
 					   $oSolrDocument->price_from = $fromPrice * $ratetousd;
 					   $oSolrDocument->price_to = $toPrice * $ratetousd;
 					}
-						
 				}
 					
 					
@@ -251,7 +251,22 @@ class SolrIndexer {
 					$oSolrDocument->text .= $oCProfile->GetRequirements()." ";
 					$oSolrDocument->text .= $oCProfile->GetHowToApply()." ";
 				}
-					
+
+				
+				if ($profile_type == PROFILE_COURSES) {
+				    
+				    $oSolrDocument->text .= $oCProfile->GetStartDates()." ";
+				    $oSolrDocument->text .= $oCProfile->GetRequirements()." ";
+				    $oSolrDocument->text .= $oCProfile->GetQualifications()." ";
+				    $oSolrDocument->text .= $oCProfile->GetPreparation()." ";
+				    $oSolrDocument->text .= $oCProfile->GetHowToApply()." ";
+
+				    $oSolrDocument->courses = $oCProfile->GetLanguagesLabels();
+				    $oSolrDocument->courses .= $oCProfile->GetCoursesLabels();
+				    $oSolrDocument->courses_type .= $oCProfile->GetCourseTypeLabels();
+				    $oSolrDocument->accomodation .= $oCProfile->GetAccomodationLabels();
+				}
+
 				if ($profile_type == PROFILE_COMPANY) {
 						
 					$oSolrDocument->text .= SolrIndexer::cleanText($oCProfile->GetDuration())." ";
