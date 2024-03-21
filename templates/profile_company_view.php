@@ -49,7 +49,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
 		}
 		?>
 		<?php 
-		if (count($oProfile->GetCountryArray()) >= 1) {
+		if (is_array($oProfile->GetCountryArray()) && count($oProfile->GetCountryArray()) >= 1) {
 		    $strCountryLabel = (count($oProfile->GetCountryArray()) == 1) ? "Country: " : "Countries: ";
 		    if (count($oProfile->GetCountryArray()) > 3) { ?>
 		    <b>Location: </b> Multiple Destinations<br/><?
