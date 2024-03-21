@@ -107,7 +107,7 @@ class VolunteerTravelProjectProfile extends CompanyProfile {
 	
 	
 	
-	public function DoAddUpdate($c,&$aResponse,$bRedirect = false,$bApproved = true, $tx = TRUE) {
+	public function DoAddUpdate(&$c,&$aResponse,$bRedirect = false,$bApproved = true, $tx = TRUE) {
 		
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
 		
