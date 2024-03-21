@@ -1,6 +1,10 @@
 <?php
 
 
+/* Fetch full or summary details only */
+define("FETCHMODE__FULL",0);
+define("FETCHMODE__SUMMARY",1);
+
 
 define("CONTENT__ARTICLE",0);
 define("CONTENT__SECTION",1);
