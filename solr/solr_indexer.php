@@ -227,7 +227,7 @@ if (in_array($type,array("ALL", "COMPANY"))) {
 	}
 	
 	if (is_array($aId) && count($aId) >= 1) {
-		if (LOG) Logger::DB(2,JOBNAME,'FOUND '.count($aId).' COMPANY');
+		if (LOG) Logger::DB(1,JOBNAME,'FOUND '.count($aId).' COMPANY');
 		$oSolrIndexer = new SolrIndexer();
 		$oSolrIndexer->debug = $debug;
 		$oSolrIndexer->setId($aId);
@@ -258,6 +258,7 @@ if (in_array($type,array("ALL", "PLACEMENT"))) {
         }
 
 	if (is_array($aId) && count($aId) >= 1) {
+	    if (LOG) Logger::DB(1,JOBNAME,'FOUND '.count($aId).' PLACEMENT');
 		$oSolrIndexer = new SolrIndexer;
 		$oSolrIndexer->debug = $debug;
 		$oSolrIndexer->setId($aId);
@@ -294,6 +295,7 @@ if (in_array($type,array("ALL", "ARTICLE"))) {
 
 	if (is_array($aId) && count($aId) >= 1) {
 		
+	    if (LOG) Logger::DB(1,JOBNAME,'FOUND '.count($aId).' ARTICLE');
 		$oSolrIndexer = new SolrIndexer;
 		$oSolrIndexer->debug = $debug;
 		$oSolrIndexer->setId($aId);
