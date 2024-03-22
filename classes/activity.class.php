@@ -367,7 +367,7 @@ class Activity {
 		$oNs = new NameService();
 		$sUrlName = $oNs->GetUrlName($sName,'activity','name');
 
-		$result = $db->query("INSERT INTO activity (id,name,url_name,description) VALUES (".$iId.",'".addslashes(ucfirst(strtolower($sName)))."','".$sUrlName."','".addslashes($sDescription)."');");
+		$result = $db->query("INSERT INTO activity (id,name,url_name,description,icon) VALUES (".$iId.",'".addslashes(ucfirst(strtolower($sName)))."','".$sUrlName."','".addslashes($sDescription)."');");
 
 		if (!$result) return false;
 

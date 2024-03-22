@@ -58,11 +58,12 @@ $oCssInclude->SetHref('/includes/js/datatables/css/jquery.dataTables.min.css');
 $oCssInclude->SetMedia('screen');
 $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
 
+/*
 $oCssInclude = new CssInclude();
 $oCssInclude->SetHref('/assets/icons-1.11.3/font/bootstrap-icons.css');
 $oCssInclude->SetMedia('screen');
 $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
-
+*/
 
 
 require_once("./classes/navigation.class.php");

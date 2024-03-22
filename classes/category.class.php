@@ -205,18 +205,17 @@ class Category {
 		
 	}
 	
-	public function GetDDList($sName = "category_id") {
-		
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-		
+	public function GetDDList($sName = "category_id", $id = null) {
+	    
 		$aCategories = $this->GetAll();
 		
-		$sStr = "<select name='".$sName."'  class='ddlist'>";
+		$sStr = "<select name='".$sName."'  class='form-select'>";
 		
 		$sStr .= "<option value='null'>select</option>";
 		
-		foreach ($aCategories as $aCategory) {	
-			$sStr .= "<option value='".$aCategory['id']."'>".$aCategory['name']."</option>";
+		foreach ($aCategories as $aCategory) {
+		    $selected = ($aCategory['id'] == $id) ? "selected" : "";
+			$sStr .= "<option value='".$aCategory['id']."' ".$selected.">".$aCategory['name']."</option>";
 		}
 
 		$sStr .= "</select>";
