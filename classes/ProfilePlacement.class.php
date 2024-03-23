@@ -200,8 +200,7 @@ class PlacementProfile extends AbstractProfile {
 						,c.prod_type as listing_type
 						,c.prof_opt as comp_prof_opt
 						,c.enq_opt as comp_enq_opt
-                        			,c.active
-                        			,c.profile_filter_from_search
+            			,c.profile_filter_from_search
 						,p.title
 						,p.url_name
 						,p.desc_short

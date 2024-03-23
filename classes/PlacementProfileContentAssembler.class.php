@@ -107,7 +107,7 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
             if ($oCompanyProfile->HasEnquiryOption(ENQUIRY_BOOKING)) 
             {
                 /* if apply/booking url is specified, button should redirect to external site */
-                if (strlen($this->oProfile->GetApplyUrl()) > 1) 
+                if (strlen($this->oProfile->GetApplyUrl()) > 1 && $this->oProfile->GetFilterFromSearch() != true) 
                 {
                     /* button links to external apply/booking page */
                     $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\" href=\"#\" onclick=\"javascript: goExternal('". $this->oProfile->GetApplyUrl() ."');\" title=\"Apply Online\" >Apply Online</a>";
@@ -115,22 +115,17 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
                     /* use our apply/booking enquiry form */
                     $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\" href=\"". $aEnquiryUrl['BOOKING']."\" title=\"Book this placement\">Booking Enquiry</a>";
                 }
-			} 
-		}
+            } else {
+                $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\" href=\"". $aEnquiryUrl['GENERAL']."\" title=\"Book this placement\">Make an Enquiry</a>";
+            }
+		} 
 
-		if (in_array($this->oProfile->GetProfileType(), array(PROFILE_VOLUNTEER,PROFILE_TOUR)) && ! $oCompanyProfile->HasEnquiryOption(ENQUIRY_BOOKING)) 
-		{
-		    if ($oCompanyProfile->HasEnquiryOption(ENQUIRY_GENERAL)) 
-		    {
-                $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\" href=\"". $aEnquiryUrl['GENERAL']."\" title=\"Make an enquiry\">Enquiry</a>";
-    		}
-    	}
 
     	if (in_array($this->oProfile->GetProfileType(), array(PROFILE_JOB))) 
     	{
     	    if ($oCompanyProfile->HasEnquiryOption(ENQUIRY_JOB_APP)) 
     	    {
-    	        if (strlen($this->oProfile->GetApplyUrl()) > 1) 
+    	        if (strlen($this->oProfile->GetApplyUrl()) > 1 && $this->oProfile->GetFilterFromSearch() != true) 
     	        {
     				/* button links to external apply page */
     	            $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\" target=\"_blank\"  href=\"". $this->oProfile->GetApplyUrl()."\" onclick=\"javascript: goExternal('".$this->oProfile->GetApplyUrl()."');\" title=\"Apply Online\">Apply Online</a>";
@@ -140,7 +135,7 @@ class PlacementProfileContentAssembler extends ProfileContentAssembler {
     		}
     	}
 
-    	if (strlen($this->oProfile->GetUrl()) > 1 && $this->oProfile->GetUrl() != "http://") 
+    	if (strlen($this->oProfile->GetUrl()) > 1 && $this->oProfile->GetUrl() != "http://" && $this->oProfile->GetFilterFromSearch() != true) 
     	{
     	    $this->aEnquiryButtonHtml['WEBSITE'] = "<a class=\"".$cssClass."\" href=\"#\" onclick=\"javascript: goExternal('". $this->oProfile->GetUrl()."');\">Visit Website</a>";
         }

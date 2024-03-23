@@ -19,6 +19,7 @@ class ProfileContentAssembler extends AbstractContentAssembler {
     {
         parent::__construct();
 
+        $this->aEnquiryButtonHtml = array();
         $this->LoadDependencies(); // include CSS / JS common to all view profile screens
     }
 

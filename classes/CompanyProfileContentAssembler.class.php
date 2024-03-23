@@ -110,29 +110,28 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
     {
         $cssClass = "btn btn-primary rounded-pill px-3";
 
-        if (strlen($this->oProfile->GetUrl()) > 1 && $this->oProfile->GetUrl() != "http://") {
-            $this->aEnquiryButtonHtml['WEBSITE'] = "<a class=\"".$cssClass."\" href=\"".$this->oProfile->GetUrl()."\" target=\"_new\" title=\"Visit Website\" target=\"_blank\">Visit Website</a>";
-        }
-        
-        if (strlen($this->oProfile->GetApplyUrl()) > 1) {
-            $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\"  href=\"".$this->oProfile->GetApplyUrl()."\" title=\"Apply Online\" target=\"_blank\">Apply Online</a>";
-        }
-        if (strlen(trim($this->oProfile->GetEmail())) > 1) {
-            if ($this->oProfile->HasEnquiryOption(ENQUIRY_BOOKING) && (strlen($this->oProfile->GetApplyUrl()) < 1)) {
-                
-                $this->aEnquiryButtonHtml['BOOKING'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('BOOKING',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Booking Enquiry\">Booking Enquiry</a>";
-                
+        if ($this->oProfile->GetListingType() >=  BASIC_LISTING )
+        {
+            if (strlen($this->oProfile->GetUrl()) > 1 && $this->oProfile->GetUrl() != "http://" && $this->oProfile->GetFilterFromSearch() != true) {
+                $this->aEnquiryButtonHtml['WEBSITE'] = "<a class=\"".$cssClass."\" href=\"".$this->oProfile->GetUrl()."\" target=\"_new\" title=\"Visit Website\" target=\"_blank\">Visit Website</a>";
             }
-            if ($this->oProfile->HasEnquiryOption(ENQUIRY_GENERAL) && !$this->oProfile->HasEnquiryOption(ENQUIRY_BOOKING)) {
+    
+            if (strlen($this->oProfile->GetApplyUrl()) > 1 && $this->oProfile->GetFilterFromSearch() != true) {
+                $this->aEnquiryButtonHtml['APPLY'] = "<a class=\"".$cssClass."\"  href=\"".$this->oProfile->GetApplyUrl()."\" title=\"Apply Online\" target=\"_blank\">Apply Online</a>";
+            }
+        }
+
+        if (strlen(trim($this->oProfile->GetEmail())) > 1) {
+            if ($this->oProfile->HasEnquiryOption(ENQUIRY_BOOKING) && !isset($this->aEnquiryButtonHtml['APPLY'])) {
+
+                $this->aEnquiryButtonHtml['BOOKING'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('BOOKING',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Booking Enquiry\">Booking Enquiry</a>";                
+            }
+            if ($this->oProfile->HasEnquiryOption(ENQUIRY_GENERAL) && !$this->oProfile->HasEnquiryOption(ENQUIRY_BOOKING) || $this->oProfile->GetListingType() < BASIC_LISTING ) {
                 $this->aEnquiryButtonHtml['ENQUIRY'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('GENERAL',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Make an Enquiry\">Enquiry</a>";
             }
             if ($this->oProfile->HasEnquiryOption(ENQUIRY_JOB_APP)) {
                 $this->aEnquiryButtonHtml['JOB_APP'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('JOB_APP',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Apply Online\" target=\"_blank\">Apply</a>";
             }
-        }
-        if($this->oProfile->GetListingType() < BASIC_LISTING) {
-            $this->aEnquiryButtonHtml = array();
-            $this->aEnquiryButtonHtml['ENQUIRY'] = $this->aEnquiryButtonHtml['ENQUIRY'] = "<a class=\"".$cssClass."\"  href=\"".Enquiry::GetRequestUrl('GENERAL',$this->oProfile->GetId(),PROFILE_COMPANY)."\" title=\"Make an Enquiry\">Enquiry</a>";
         }
     }
     
