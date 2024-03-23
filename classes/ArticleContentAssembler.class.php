@@ -111,8 +111,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->oArticle->SetAttachedArticleId();
             }
 
-	         $this->iTotalMatchedArticle = count($this->oArticle->GetAttachedArticleId());
-
+            $this->iTotalMatchedArticle = count($this->oArticle->GetAttachedArticleId());
 
             if (is_numeric($oTemplateCfg->fetch_limit))
             {
@@ -126,7 +125,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             {
                 $this->aAttachedArticle = $this->oArticle->oArticleCollection->Get();
             }
-            
+
             if ($this->oContentMapping->GetDisplayOptSearchPanel())
             {
                 $this->SetSearchResultPanel($this->oContentMapping->GetOptions());
@@ -140,7 +139,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
 
             // fetch related blog articles ( there are 0 attached articles )
             if ($this->oContentMapping->GetDisplayOptBlogArticle())
-            {                
+            {
                 // search keywords specified, fetch blog articles related to these 
                 if (strlen($this->oContentMapping->GetSearchKeywords()) > 1)
                 {
@@ -198,7 +197,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $this->oTemplate->Set("oArticle",$this->oArticle);
         
         $this->oTemplate->Set("iTotalMatchedArticle",$this->iTotalMatchedArticle); // number matched articles (excluding pagination)
-	$this->oTemplate->Set("iPageSize", $this->iPageSize);
+	    $this->oTemplate->Set("iPageSize", $this->iPageSize);
         $this->oTemplate->Set("aPageOptions", $this->oContentMapping->GetOptions());
 
         $this->oTemplate->Set("oSearchResult", $this->oSearchResultPanel);

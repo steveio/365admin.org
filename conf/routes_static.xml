@@ -69,6 +69,10 @@
 		<callback>$this->ProcessDestinationPageRequest()</callback>
 	</route>
 	<route>
+		<url>/activity</url>
+		<callback>$this->ProcessDestinationPageRequest()</callback>
+	</route>
+	<route>
 		<url>/country</url>
 		<callback>$this->ProcessDestinationPageRequest()</callback>
 	</route>

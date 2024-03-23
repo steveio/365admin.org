@@ -104,6 +104,7 @@ require_once(BASE_PATH."/classes/TemplateList.class.php");
 require_once(BASE_PATH."/classes/ContentMapping.class.php");
 require_once(BASE_PATH."/classes/AbstractContentAssembler.class.php");
 require_once(BASE_PATH."/classes/ArticleContentAssembler.class.php");
+require_once(BASE_PATH."/classes/TravelContentAssembler.class.php");
 require_once(BASE_PATH."/classes/SearchResultContentAssembler.class.php");
 require_once(BASE_PATH."/classes/ProfileContentAssembler.class.php");
 require_once(BASE_PATH."/classes/CompanyProfileContentAssembler.class.php");

@@ -42,7 +42,24 @@ class RequestRouter {
     protected $aStaticRoute = array(); // key/value array of static (url -> php script) route mappings
     protected $aStaticCallback = array();  // key/value array of callback route (url -> $class->method() ) mappings
 
-    public function __Construct() {} 
+    protected $sArticleAssemblerClass;
+
+    public function __Construct() 
+    {
+        
+        $this->SetArticleAssemblerClass("ArticleContentAssembler");
+
+    } 
+
+    public function SetArticleAssemblerClass($sClassName)
+    {
+        $this->sArticleAssemblerClass = $sClassName;
+    }
+
+    public function GetArticleAssemblerClass()
+    {
+        return $this->sArticleAssemblerClass;
+    }
 
     public function Route($aRequestUri)
     {
@@ -409,6 +426,8 @@ class RequestRouter {
         {
             if (!isset($this->aRequestUri[2]) || $this->aRequestUri[2] == "")
             {
+                $this->SetArticleAssemblerClass("TravelContentAssembler");
+
                 return false; // /travel page is an article menu page
             }
         }
@@ -462,7 +481,7 @@ class RequestRouter {
 
         try {
             
-            $oContentAssembler = new ArticleContentAssembler();
+            $oContentAssembler = new $this->sArticleAssemblerClass();
             $oContentAssembler->SetRequestRouter($this);
 
             // 1.  Extract Article Path from URI (Published Articles)

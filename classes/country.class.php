@@ -533,6 +533,36 @@ class Country {
 	    }
 	}
 
+	public function GetByContinent()
+	{
+	    global $db;
+	    
+	    $sql = "SELECT 
+					c.id as country_id
+                    ,c.url_name as country_url_name 
+                    ,c.name as country_name
+                    ,cn.id as continent_id
+                    ,cn.name as continent_name
+                    ,cn.url_name as continent_url_name
+				FROM
+					country c
+                    ,continent cn
+                WHERE
+                    c.continent_id = cn.id
+				ORDER BY
+					cn.name ASC, c.name ASC;";
+	    
+	    $db->query($sql);
+	    
+	    $aRows = $db->getRows();
+	    $arr = array();
+	    foreach($aRows as $row)
+	    {
+	        $arr[$row['continent_name']][] = $row;
+	    }
+	    return $arr;
+	}
+	
 }
 
 ?>

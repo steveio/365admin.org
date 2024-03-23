@@ -246,25 +246,22 @@ abstract class AbstractContentAssembler {
         $oSolrSearch->setStart($start);
         
         $oSolrSearch->setSiteId("0");
+
         $oSolrSearch->search($oSolrQuery->getQuery(),$oSolrQuery->getFilterQuery(),$oSolrQuery->getSort());
 
         $oSolrSearch->processResult();
-
-         /*
-         print_r("<pre>");
-         print_r($oSolrQuery);
-         print_r($oSolrSearch);
-         print_r("</pre>");
-         die();
-         */
         
         $aId = $oSolrSearch->getId();
-
+        
+        
         if (is_array($aId) && count($aId) > 1)
         {
             foreach($aId as $id) {
                 
                 $oArticle = new Article;
+                $oArticle->SetFetchAttachedProfile(false);
+                $oArticle->SetFetchAttachedArticle(false);
+                $oArticle->SetFetchAttachedTo(false);
                 $oArticle->SetFetchMode(FETCHMODE__SUMMARY);
                 $oArticle->GetById($id);
                 if (!is_numeric($oArticle->GetId())) continue;
@@ -272,5 +269,5 @@ abstract class AbstractContentAssembler {
             }
         }
    }
-    
+
 }

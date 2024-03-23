@@ -311,6 +311,39 @@ class Activity {
 
 	}
 
+	public function GetByCategory()
+	{
+	    global $db;
+
+	    $sql = "SELECT a.id as activity_id
+                    ,a.name as activity_name
+                    ,a.url_name as activity_url_name
+                    ,a.description
+                    ,c.id as category_id
+                    ,c.url_name as category_url_name 
+                    ,c.name as category_name
+                FROM
+                    activity a
+                    ,cat_act_map m
+                    ,category c
+                WHERE 
+                a.id = m.activity_id
+                AND m.category_id = c.id
+                ORDER BY 
+                c.name ASC, a.name ASC
+                ;";
+	    
+	    $db->query($sql);
+
+	    $aRows = $db->getRows();
+	    $arr = array();
+	    foreach($aRows as $row)
+	    {
+	        $arr[$row['category_name']][] = $row; 
+	    }
+	    return $arr;
+	}
+
 	public function Update($iId,$sName,$sUrlName,$sDesc,$sImgUrl,$iCategoryId = null) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
