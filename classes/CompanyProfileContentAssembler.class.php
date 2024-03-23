@@ -61,7 +61,7 @@ class CompanyProfileContentAssembler extends ProfileContentAssembler {
 
             $this->GetEnquiryButtonHtml();
 
-            if ($this->oProfile->GetListingType() > BASIC_LISTING) 
+            if ($this->oProfile->GetListingType() >= BASIC_LISTING) 
             {
                 $this->GetPlacements();
                 $this->oTemplate->Set("displayRelatedProfile","COMPANY");
