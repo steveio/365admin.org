@@ -139,35 +139,6 @@ $_CONFIG['placement_table'] = "profile_hdr";
 $db = new db($dsn,false);
 
 
-define('REFDATA_US_STATE',0);
-define('REFDATA_CAMP_TYPE',1);
-define('REFDATA_CAMP_JOB_TYPE',2);
-define('REFDATA_ACTIVITY',3);
-define('REFDATA_INT_RANGE',4);
-define('REFDATA_DURATION',5);
-define('REFDATA_ORG_SUBTYPE',6);
-define('REFDATA_BONDING',7);
-define('REFDATA_STAFF_ORIGIN',8);
-define('REFDATA_GENDER',9);
-define('REFDATA_APPROX_COST',10);
-define('REFDATA_HABITATS',11);
-define('REFDATA_SPECIES',12);
-define('REFDATA_ACCOMODATION',13);
-define('REFDATA_MEALS',14);
-define('REFDATA_TRAVEL_TRANSPORT',15);
-define('REFDATA_ADVENTURE_SPORTS',16);
-define('REFDATA_ORG_PROJECT_TYPE',17);
-define('REFDATA_CURRENCY',18);
-define('REFDATA_JOB_OPTIONS',19);
-define('REFDATA_INT_SMALL_RANGE',20);
-define('REFDATA_JOB_CONTRACT_TYPE',21);
-define('REFDATA_US_REGION',22);
-define('REFDATA_AGE_RANGE',23);
-define('REFDATA_RELIGION',24);
-define('REFDATA_CAMP_GENDER',25);
-
-
-
 $mode = (strlen($argv[1]) > 1) ? $argv[1] : $_GET['mode'];
 if (strlen($mode) < 1) die("ERROR : Mode (ALL || DELTA || SINGLE) must be supplied");
 
@@ -278,19 +249,22 @@ if (in_array($type,array("ALL", "ARTICLE"))) {
 
         if (LOG) Logger::DB(2,JOBNAME,'BEGIN PROCESSING ARTICLES');
 
-	require_once($_CONFIG['root_path']."/classes/link.class.php");
-	require_once($_CONFIG['root_path']."/classes/article.class.php");
+    	require_once($_CONFIG['root_path']."/classes/link.class.php");
+    	require_once($_CONFIG['root_path']."/classes/article.class.php");
 
         if ($mode == "SINGLE") {
                 $aId = array($id => array("id" => $id, 'type' => "2"));
         } else {
 	
-		$oArticle = new Article();
-		$aFilter = array("URI" => "%");
-		if (strtoupper($mode) == "DELTA") {
-			$aFilter['LAST_INDEXED'] = TRUE;
-		}
-		$aId = $oArticle->GetAll($aFilter,$fields = "a.id",$fetch = FALSE);
+    		$oArticle = new Article();
+    		$aFilter = array("URI" => "%");
+    		if (strtoupper($mode) == "DELTA") {
+    			$aFilter['LAST_INDEXED'] = TRUE;
+    		}
+    
+    		$aFilter['WEBSITE_ID'] = $oBrand->GetWebsiteId();
+    
+    		$aId = $oArticle->GetAll($aFilter,$fields = "a.id",$fetch = FALSE);
         }
 
 	if (is_array($aId) && count($aId) >= 1) {

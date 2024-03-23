@@ -346,7 +346,7 @@ class SolrIndexer {
 				$oProfile = ProfileFactory::Get($a['type']);
 				$oProfile->GetById($a['id']);
 		
-				if (LOG) Logger::DB(3,JOBNAME,"PROCESSING PLACEMENT id: ".$a['id']." (".$idx." of ".$total_placements.")");
+				if (LOG) Logger::DB(2,JOBNAME,"PROCESSING PLACEMENT id: ".$a['id']." (".$idx." of ".$total_placements.")");
 		
 		
 				if (!is_numeric($oProfile->GetId())) {
@@ -623,8 +623,7 @@ class SolrIndexer {
 	
 					// set the last_indexed date
 					$db->query("UPDATE article SET last_indexed_solr = now()::timestamp WHERE id IN (".implode(",",$aIdBatch).")");
-	
-	
+
 					if (LOG) Logger::DB(2,JOBNAME,'SOLR QUERY EXECUTED OK status: '.$result->getStatus() .", time: ".$result->getQueryTime());
 	
 					unset($update);
