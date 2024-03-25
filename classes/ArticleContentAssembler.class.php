@@ -118,15 +118,15 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $startIndex = ($iPage == 1) ? 0 : ($iPage * $oTemplateCfg->fetch_limit);
                 $endIndex = $startIndex + $oTemplateCfg->fetch_limit -1;
                 $this->oArticle->PaginateAttachedArticleId($startIndex, $endIndex);
-	        $this->iPageSize = $oTemplateCfg->fetch_limit -1;
+    	        $this->iPageSize = $oTemplateCfg->fetch_limit -1;
             }
 
             if (count($this->oArticle->GetAttachedArticleId()) >= 1)
             {
-		if($oTemplateCfg->is_collection)
-		{
-			$this->oArticle->SetAttachedArticle(false);
-		}
+        		if($oTemplateCfg->is_collection)
+        		{
+        			$this->oArticle->SetAttachedArticle(false);
+        		}
                 $this->aAttachedArticle = $this->oArticle->oArticleCollection->Get();
             }
 
@@ -144,9 +144,29 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             // fetch related blog articles ( there are 0 attached articles )
             if ($this->oContentMapping->GetDisplayOptBlogArticle())
             {
-                // search keywords specified, fetch blog articles related to these 
-                if (strlen($this->oContentMapping->GetSearchKeywords()) > 1)
+                if ($this->oRequestRouter->GetRequestUri() == "/")
                 {
+
+                    $oTemplateCfg->fetch_limit = 14;
+
+                    $oArticle = new Article();
+                    $oArticle->SetAttachedArticleId($id = 6288); // latest from /blog
+                    $iTotalMatchedArticle = count($oArticle->GetAttachedArticleId());
+                    if (is_numeric($oTemplateCfg->fetch_limit))
+                    {
+                        $startIndex = ($iPage == 1) ? 0 : ($iPage * $oTemplateCfg->fetch_limit);
+                        $endIndex = $startIndex + $oTemplateCfg->fetch_limit -1;
+                        $oArticle->PaginateAttachedArticleId($startIndex, $endIndex);
+                        $this->iPageSize = $oTemplateCfg->fetch_limit -1;
+                    }
+                    
+                    $oArticle->SetAttachedArticle(false);
+                    $this->aArticle = $oArticle->oArticleCollection->Get();
+                    
+                     
+                } elseif (strlen($this->oContentMapping->GetSearchKeywords()) > 1)
+                {
+                    // search keywords specified, fetch blog articles related to these
                     $strQuery = $this->oContentMapping->GetSearchKeywords();
                     
                     $this->SolrQuery($strQuery, $profile_type = 2, $rows = 25, $start = 0);
