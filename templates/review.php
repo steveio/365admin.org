@@ -26,7 +26,7 @@
 				}
 				if (count($aReview) == 0) { ?>
 					<div class="row my-3">
-					<p>There are no reviews, click 'Add a review' to submit one </p>
+					<p><div class="icon_lg"><img src="/images/chat-right-text.svg" width="32px" height="32px" /></div>There are no reviews, click 'Add a review' to submit one </p>
 					</div>
 				<?php 
 				} ?>
