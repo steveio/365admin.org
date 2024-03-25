@@ -323,3 +323,10 @@ a.article_title:hover {
 	height: 15vw;
 	object-fit: cover;
 }
+
+.icon_lg {
+	display: block;
+	width: 64px;
+	height: 64px;
+
+}

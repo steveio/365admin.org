@@ -180,7 +180,7 @@ if (isset($_REQUEST['save'])) {
 							);
 
 	if ($oArticle->Save($aResponse)) {
-		$aResponse['msg'] = "SUCCESS : Article saved OK";
+		$aResponse['msg'] .= "<button class=\"btn btn-success rounded-pill px-3\" type=\"button\" onclick=\"javascript: window.open('".$oArticle->GetUrl()."');\" name=\"new\">SUCCESS : Article saved OK</button>";
 		$aResponse['status'] = "success";
 		$_REQUEST['id'] = $oArticle->GetId();
 		$_SESSION['id'] = $oArticle->GetId();
