@@ -17,6 +17,10 @@ $oArticle = new Article();
 
 $oArticle->SetFetchMode(FETCHMODE__SUMMARY);
 
+$oArticle->SetFetchAttachedArticle(false);
+$oArticle->SetFetchAttachedProfile(false);
+
+
 $oWebsite = new Website($db);
 $sWebSiteListHTML = $oWebsite->GetSiteSelectList(array());
 
@@ -34,7 +38,6 @@ if (count($aMappingId) >= 1) {
 if (isset($_REQUEST['publish'])) {
 
 	$oArticle->SetId($_REQUEST['article_id']);
-
 	$oArticle->Publish($_REQUEST,$aResponse);
 
 }
