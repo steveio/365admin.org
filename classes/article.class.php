@@ -1295,7 +1295,7 @@ class Content  implements TemplateInterface {
 		$this->iAttachedArticleFetchLimit = $iLimit;
 	}
 	
-	private function GetAttachedArticleFetchLimit() {
+	public function GetAttachedArticleFetchLimit() {
 		return $this->iAttachedArticleFetchLimit;
 	}
 

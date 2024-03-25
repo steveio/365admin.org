@@ -118,11 +118,15 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $startIndex = ($iPage == 1) ? 0 : ($iPage * $oTemplateCfg->fetch_limit);
                 $endIndex = $startIndex + $oTemplateCfg->fetch_limit -1;
                 $this->oArticle->PaginateAttachedArticleId($startIndex, $endIndex);
-		        $this->iPageSize = $oTemplateCfg->fetch_limit -1;
+	        $this->iPageSize = $oTemplateCfg->fetch_limit -1;
             }
 
             if (count($this->oArticle->GetAttachedArticleId()) >= 1)
             {
+		if($oTemplateCfg->is_collection)
+		{
+			$this->oArticle->SetAttachedArticle(false);
+		}
                 $this->aAttachedArticle = $this->oArticle->oArticleCollection->Get();
             }
 
