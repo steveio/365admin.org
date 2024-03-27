@@ -1350,7 +1350,9 @@ EOT;
 			if ($this->GetMode() == self::MODE_EDIT) {
 
 				// setup user notification success msg
-				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_ADD_COMPANY, "SUCCESS - updated profile");
+			    $msg = "<button class=\"btn btn-success rounded-pill px-3\" type=\"button\" onclick=\"javascript: window.open('".$this->GetProfile()->GetProfileUrl()."');\" name=\"new\">SUCCESS : Updated profile</button>";
+
+			    $oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_ADD_COMPANY, $msg);
 				$oSession->GetMVCController()->GetCurrentRoute()->SetMessage($oMessage);
 				$oSession->Save();
 

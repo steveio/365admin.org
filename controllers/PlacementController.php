@@ -325,7 +325,8 @@ class PlacementController extends ProfileController {
 				Logger::DB(2,get_class($this)."::".__FUNCTION__."()","OK: ".$this->GetPlacementId());
 
 				// setup user notification success msg				
-				$msg = "SUCCESS - Updated Profile <br /><a href='/".ROUTE_DASHBOARD."' title='Return to Dashboard'>Click here</a> to return to dashboard";
+				$msg = "<button class=\"btn btn-success rounded-pill px-3\" type=\"button\" onclick=\"javascript: window.open('".$this->GetProfile()->GetProfileUrl()."');\" name=\"new\">SUCCESS : Updated profile</button>";
+
 				$oMessage = new Message(MESSAGE_TYPE_SUCCESS, MESSAGE_ID_EDIT_PROFILE, $msg);
 				$this->SetMessage($oMessage);
 				
@@ -1089,10 +1090,14 @@ EOT;
 	    }
 	}
 	
-	private function GetPlacementUrlName() {
+	public function GetPlacementUrlName() {
 		return $this->placement_url_name;
 	}
 
+	public function GetCompanyUrlName() {
+	    return $this->company_url_name;
+	}
+	
 	/* 
 	 * oMVCController routes and are stored in session -
 	 * clear all data attributes from this instance
