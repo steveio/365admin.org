@@ -19,8 +19,8 @@ $iPageSize = $this->Get('iPageSize');
 <div class="row">
 	<div class="pull-right image">
 	<?
-	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_l",'')) {
-		print $oArticle->GetImage(0)->GetHtml("_l",$oArticle->GetTitle());
+	if (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_lf",'')) {
+		print $oArticle->GetImage(0)->GetHtml("_lf",$oArticle->GetTitle());
 	} elseif (is_object($oArticle->GetImage(0)) && $oArticle->GetImage(0)->GetHtml("_mf",'')) {
 		print $oArticle->GetImage(0)->GetHtml("_mf",$oArticle->GetTitle());
 	}
@@ -54,7 +54,7 @@ $iPageSize = $this->Get('iPageSize');
             
                 <? if (is_object($oArticle->GetImage(0))) { ?>
                     <a title="<?= $oArticle->GetTitle() ?>" href="<?= $oArticle->GetUrl() ?>">
-                        <?= $oArticle->GetImage(0)->GetHtml("_l",$oArticle->GetTitle(),"card-img-top"); ?>
+                        <?= $oArticle->GetImage(0)->GetHtml("_lf",$oArticle->GetTitle(),"card-img-top"); ?>
                     </a>
                 <? } else { 
                     // try to grab an image from article body text

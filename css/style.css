@@ -325,8 +325,15 @@ a.article_title:hover {
 }
 
 .icon_lg {
-	display: block;
 	width: 64px;
 	height: 64px;
 
 }
+
+.icon-large {
+	color: #558ab4;
+        width: 128px;
+        height: 128px;
+
+}
+
