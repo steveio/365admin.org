@@ -217,9 +217,9 @@ class PlacementProfile extends AbstractProfile {
 						,p.video1 as video
 						,p.ad_active
 						,p.added_by
-						,to_char(p.added,'DD/MM/YYYY') as added_date
-				   		,to_char(p.last_updated,'DD/MM/YYYY HH:MM') as last_updated
-						,to_char(p.last_indexed_solr,'DD/MM/YYYY HH:MM') as last_indexed_solr
+						,to_char(p.added,'DD/MM/YYYY HH24:MM') as added_date
+				   		,to_char(p.last_updated,'DD/MM/YYYY HH24:MM') as last_updated
+						,to_char(p.last_indexed_solr,'DD/MM/YYYY HH24:MM') as last_indexed_solr
 						$this->sSubTypeFields
 					FROM
 						".$_CONFIG['placement_table']." p

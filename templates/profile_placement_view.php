@@ -263,14 +263,6 @@ $aRelatedArticle = $this->Get('aRelatedArticle');
 </div>
 
 
-<div class="row my-3">
-	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
-<?php 
-print $oReviewTemplate->Render();
-?>
-</div>
-
-
 <? if ($oAuth->oUser->isAdmin) { ?>
 <div class="row my-3 alert alert-primary d-flex align-items-center" role="alert">
   <div class="row">
@@ -281,6 +273,14 @@ print $oReviewTemplate->Render();
   </div>
 </div>
 <? } ?>
+
+
+<div class="row my-3">
+	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>
+<?php 
+print $oReviewTemplate->Render();
+?>
+</div>
 
 
 <?

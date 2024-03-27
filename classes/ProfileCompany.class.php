@@ -636,9 +636,9 @@ class CompanyProfile extends AbstractProfile {
 							WHEN (select 1 from euser u where u.company_id = c.id limit 1)=1 THEN 1
 							ELSE 0
 						END as user_act_exists
-						,to_char(c.added,'DD/MM/YYYY') as added_date
-						,to_char(c.last_updated,'DD/MM/YYYY HH:MM') as last_updated
-						,to_char(c.last_indexed_solr,'DD/MM/YYYY HH:MM') as last_indexed_solr
+						,to_char(c.added,'DD/MM/YYYY HH24:MM') as added_date
+						,to_char(c.last_updated,'DD/MM/YYYY HH24:MM') as last_updated
+						,to_char(c.last_indexed_solr,'DD/MM/YYYY HH24:MM') as last_indexed_solr
 						$this->sSubTypeFields
 					FROM
 						".$_CONFIG['company_table']." c
