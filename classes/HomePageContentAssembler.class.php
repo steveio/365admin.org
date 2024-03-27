@@ -107,10 +107,6 @@ class HomepageContentAssembler extends ArticleContentAssembler {
     protected function Render()
     {
         global $oHeader, $oFooter, $oBrand;
-
-        $oJsInclude = new JsInclude();
-        $oJsInclude->SetSrc("/includes/js/autocomplete/jquery-ui.min.js");
-        $oHeader->SetJsInclude($oJsInclude);
         
         $oJsInclude = new JsInclude();
         $oJsInclude->SetSrc("/includes/js/search_panel.js");

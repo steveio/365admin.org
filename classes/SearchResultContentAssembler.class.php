@@ -54,10 +54,6 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
         try {
 
             $oJsInclude = new JsInclude();
-            $oJsInclude->SetSrc("/includes/js/autocomplete/jquery-ui.min.js");
-            $oHeader->SetJsInclude($oJsInclude);
-
-            $oJsInclude = new JsInclude();
             $oJsInclude->SetSrc("/includes/js/search_panel.js");
             $oHeader->SetJsInclude($oJsInclude);
             
