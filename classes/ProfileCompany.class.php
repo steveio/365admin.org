@@ -637,9 +637,8 @@ class CompanyProfile extends AbstractProfile {
 							ELSE 0
 						END as user_act_exists
 						,to_char(c.added,'DD/MM/YYYY') as added_date
-						,to_char(c.last_updated,'DD/MM/YYYY') as last_updated
-						,to_char(c.last_indexed,'DD/MM/YYYY') as last_indexed
-						,to_char(c.last_indexed_solr,'DD/MM/YYYY') as last_indexed_solr
+						,to_char(c.last_updated,'DD/MM/YYYY HH:MM') as last_updated
+						,to_char(c.last_indexed_solr,'DD/MM/YYYY HH:MM') as last_indexed_solr
 						$this->sSubTypeFields
 					FROM
 						".$_CONFIG['company_table']." c

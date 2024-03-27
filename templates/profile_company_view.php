@@ -685,6 +685,17 @@ if (is_array($aEnquiryButtonHtml))
 </div>
 </div>
 
+<? if ($oAuth->oUser->isAdmin) { ?>
+<div class="row my-3 alert alert-primary d-flex align-items-center" role="alert">
+  <div class="row">
+  <h3>Admin</h3>
+	<div class="col-3">Added: <?= $oProfile->GetAddedDate(); ?></div>
+   	<div class="col-3">Last Updated: <?= $oProfile->GetLastUpdated(); ?></div>
+   	<div class="col-3">Last Indexed: <?= $oProfile->GetLastIndexedSolr(); ?></div> 
+  </div>
+</div>
+<? } ?>
+
 
 <div class="row my-3">
 	<h2><?= $oProfile->GetCompanyName(); ?> Reviews</h2>

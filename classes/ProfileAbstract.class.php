@@ -32,7 +32,7 @@ abstract class AbstractProfile implements TemplateInterface {
 	protected $added_by;
 	protected $added_date;
 	protected $last_updated;
-	protected $last_indexed;
+	protected $last_indexed; // @deprecated
 	protected $last_indexed_solr;
 
 	protected $aImage; /* an array of objects associated with this profile */
@@ -204,8 +204,8 @@ abstract class AbstractProfile implements TemplateInterface {
 		return $this->added_by;
 	}
 	
-	public function GetAdded() {
-		return $this->added;
+	public function GetAddedDate() {
+		return $this->added_date;
 	}
 	
 	public function GetLastUpdated() {

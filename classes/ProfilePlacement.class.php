@@ -218,9 +218,8 @@ class PlacementProfile extends AbstractProfile {
 						,p.ad_active
 						,p.added_by
 						,to_char(p.added,'DD/MM/YYYY') as added_date
-				   		,to_char(p.last_updated,'DD/MM/YYYY') as last_updated
-						,p.last_indexed
-						,p.last_indexed_solr
+				   		,to_char(p.last_updated,'DD/MM/YYYY HH:MM') as last_updated
+						,to_char(p.last_indexed_solr,'DD/MM/YYYY HH:MM') as last_indexed_solr
 						$this->sSubTypeFields
 					FROM
 						".$_CONFIG['placement_table']." p
@@ -480,7 +479,7 @@ class PlacementProfile extends AbstractProfile {
 	public function GetAdDuration() {
 		return $this->ad_duration;
 	}
-
+	
 	public function IsAdActiveDisplayInSearch()
 	{
 	    global $db;
