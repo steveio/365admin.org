@@ -93,8 +93,6 @@ if ($mode == "search") { /* search for articles published to uri and return a re
 	$oArticleCollection->GetBySectionId($website_id,$uri,$getAttachedObj = false,$bUnpublished);
 	
 	if ($oArticleCollection->Count() < 1) {
-	    $oMessage = new Message(MESSAGE_TYPE_404_NOTFOUND, NULL, "No articles found matching uri: ".$uri."<br />Try again with a pattern match eg %".$uri);
-	    $oSession->SetMessage($oMessage);
 	    $aResponse['retVal'] = true;
 	    $aResponse['status'] = "error";
 	    $aResponse['msg'] = "No articles found";
