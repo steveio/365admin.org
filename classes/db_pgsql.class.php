@@ -106,10 +106,7 @@ class db {
 	// get first cell
 	function getFirstCell($query) {
 
-		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-	
-		if(DEBUG) Logger::Msg("<span style='font-size: 11px;'>".$query."</span>");
-
+	    if(DEBUG) Logger::Msg($query);
 
 		if(strlen($query = trim($query))) {
 			if($result = pg_exec($this->db, $query)) {
@@ -129,19 +126,19 @@ class db {
 	// execute a query
 	function query($query) {
 
-		if(DEBUG) Logger::Msg("<span style='font-size: 11px;'>".$query."</span>");
+		if(DEBUG) Logger::Msg($query);
 
 		if(strlen($query = trim($query))) {
-			if($this->last_result = pg_exec($this->db, $query)) {
+		    $this->last_result = pg_exec($this->db, $query);
+		    if($this->last_result) {
 				return true;
 			} else {
 			    ob_start();
 			    debug_print_backtrace();
 			    $trace = ob_get_contents();
 			    ob_end_clean();
-				//print $query;
 				$this->last_result = false;
-				Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$query."\n".$trace);
+				Logger::DB(1,get_class($this)."::".__FUNCTION__."()",pg_last_error($this->db)."\n".$query."\n".$trace);
 				return false;
 			}
 		} else {
