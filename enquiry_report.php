@@ -98,7 +98,12 @@ if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
     
 }
 
-$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y");
+if ($oAuth->oUser->isAdmin)
+{
+    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y");
+} else {
+    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 year"))." - ".date("d-m-Y");
+}
 $aDate = explode(" - ", $strDateRange);
 
 $t = strtotime($aDate[0]);
@@ -111,10 +116,6 @@ $endDate = date('Y-m-d',$t);
 $aOptions['report_date_from'] = $startDate;
 $aOptions['report_date_to'] = $endDate;
 
-
-//print_r("<pre>");
-//print_r($aOptions);
-//print_r("</pre>");
 
 $aEnquiry = $oEnquiry->GetAll($aOptions);
 
@@ -142,8 +143,10 @@ print $oHeader->Render();
 	<div class="col-6">
         <label for="daterange">By Status:</label>
 	<?
-	if (!isset($_REQUEST['report_status']))  {
+	if ($oAuth->oUser->isAdmin && !isset($_REQUEST['report_status']))  {
 		$_REQUEST['report_status'] = 0;
+	} else {
+	    $_REQUEST['report_status'] = "ALL";
 	}
 	?>
         <select id="" name="report_status">
@@ -186,6 +189,8 @@ print $oHeader->Render();
 
 <?php if (isset($_REQUEST['report_filter'])) { ?>
 
+
+<?php if ($oAuth->oUser->isAdmin) { ?>
 <div class="row">
 <div style="clear: both;">
     <div style="float: right;">
@@ -198,6 +203,7 @@ print $oHeader->Render();
     </div>
 </div>
 </div>
+<?php } ?>
 
 
 <div class="row my-3">

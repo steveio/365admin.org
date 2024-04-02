@@ -5,7 +5,7 @@ include_once("./includes/header.php");
 include_once("./includes/footer.php");
 
 
-if (!$oAuth->oUser->isValidUser || !$oAuth->oUser->isAdmin) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
+if (!$oAuth->oUser->isValidUser) AppError::StopRedirect($sUrl = $_CONFIG['url']."/login",$sMsg = "ERROR : You must be authenticated.  Please login to continue.");
 
 
 
@@ -13,6 +13,9 @@ $oReview = new Review();
 
 if ($oAuth->oUser->isAdmin) {
 
+    $oCompany = new Company($db);
+    $d['company_select_ddlist'] = $oCompany->getCompanyNameDropDown($_REQUEST['p_company'],null,'p_company',true);
+    
 	$aApprove = array();
 	$aReject  = array();
 
@@ -63,11 +66,27 @@ if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
 
 if (!isset($_REQUEST['report_all']))
 {
-    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 month"))." - ".date("d-m-Y");
+    if ($oAuth->oUser->isAdmin)
+    {
+        $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y");
+    } else {
+        $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-5 year"))." - ".date("d-m-Y");
+    }
     $aDate = explode(" - ", $strDateRange);
     $aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
     $aOptions['report_date_to'] = preg_replace("/\//","-",$aDate[1]);
 }
+
+/* filtering by company */
+$company_id = NULL;
+if (!$oAuth->oUser->isAdmin) {
+    $company_id = $oAuth->oUser->company_id; /* non admin can see only their own enquiries */
+} elseif (is_numeric($_REQUEST['p_company'])) {
+    $company_id = $_REQUEST['p_company']; /* admin is viewing report filtered by company */
+}
+
+$aOptions['company_id'] = $company_id;
+
 
 $aReport = $oReview->GetReport($aOptions);
 
@@ -101,17 +120,29 @@ print $oHeader->Render();
         	<option value="1" <?= ($_REQUEST['report_status'] == "1") ? "selected" : ""; ?>>APPROVED</option>
         	<option value="2"<?= ($_REQUEST['report_status'] == "2") ? "selected" : ""; ?>>REJECTED</option>
         </select>
-		<button class="btn btn-primary rounded-pill px-3" type="button" name="report_filter" value="go" onClick="this.form.submit()">submit</button>
 	</div>
 </div>
 	
+<div class="row my-3">
+	<div class="col-8">
+    <? if ($oAuth->oUser->isAdmin) {  ?>
+    	<label for="daterange">By Company:</label><?= $d['company_select_ddlist']; ?>
+    <? } ?>
+    </div>
+</div>
+
+<button class="btn btn-primary rounded-pill px-3" type="button" name="report_filter" value="go" onClick="this.form.submit()">submit</button>
+
 <? if (strlen($strMessage) >= 1) { ?>
     <div class="alert alert-success" role="alert">
     <?= $strMessage; ?>
     </div>
 <?php } ?>
 
-
+<?php 
+if ($oAuth->oUser->isAdmin) 
+{
+?>
 <div class="row">
 <div style="clear: both;">
     <div style="float: right;">
@@ -124,7 +155,9 @@ print $oHeader->Render();
 	</div>
 </div>
 </div>
-
+<?php 
+}
+?>
 
 
 <div class="row my-3">
@@ -142,10 +175,17 @@ print $oHeader->Render();
         	<th><?= $key; ?></th><? 
         } 
     } ?>
+    <?php 
+    if ($oAuth->oUser->isAdmin) 
+    {
+    ?>
     	<th>edit</th>
     	<th>approve</th>
     	<th>reject</th>
-    	<th>bulk</th>	
+    	<th>bulk</th>
+    <?php 
+    }
+    ?>	
     	</tr>
 	</thead>
 	
@@ -160,11 +200,17 @@ print $oHeader->Render();
             { ?>
         		<td id="<?= $key; ?>" valign="top"><?= $value; ?></td><? 
             } ?>
+            <?php 
+            if ($oAuth->oUser->isAdmin) 
+            {
+            ?>
         	<td width="20px"><a href="../edit_review/?&id=<?= $aRow['post_id'] ?>" target="_new">edit</a></td>
         	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this review?');" name="enq_<?= $aRow['post_id'] ?>_approve" value="approve" /></td>
         	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this review?');" name="enq_<?= $aRow['post_id'] ?>_reject" value="reject" /></td>
         	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $aRow['post_id'] ?>" name="enq_<?= $aRow['post_id'] ?>" value="approve" /></td>
-        
+        	<?php 
+            }
+        	?>
         	</tr><?
         } 
     } ?>

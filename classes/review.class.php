@@ -295,7 +295,7 @@ class Review {
 	public function GetReport($aOptions)
 	{
 
-	    global $db;
+	    global $db, $oAuth;
 
 	    if ($aOptions['report_date_from'] != null) {
 	        $strStartDateSQL = " and r.date > '".$aOptions['report_date_from']."'";
@@ -308,82 +308,161 @@ class Review {
 	    if (isset($aOptions['report_status'])) {
 	        $strStatusSQL = " and r.status = ".$aOptions['report_status'];
 	    }
+	   
+	    if ($oAuth->oUser->isAdmin) {
+            
+	        $bDisplayArticleResult = true;
+	        
+	        if (is_numeric($aOptions['company_id']))
+	        {
+	            $strCompanySQL = "and c.id = ".$aOptions['company_id'];
+	            $bDisplayArticleResult = false;
+	        }
+
+	        if ($bDisplayArticleResult)
+	        {
+    	        $sArticleSQL = "
+                	    select
+                        r.link_to ||'<br />'||a.title||'<br />'||'<a href=\"http://www.oneworld365.org'||m.section_uri||'\">'||m.section_uri||'</a>' as posted_to 
+                	    ,r.id as post_id
+                	    ,r.title ||'<br />'||r.review as post_details
+                        ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
+                	    ,r.date::date as post_date
+                        ,case 
+                            when r.status = 0 then 'PENDING'
+                            when r.status = 1 then 'APPROVED'
+                            when r.status = 2 then 'REJECTED'
+                        end as post_status 
+                	    from
+                	    review r
+                	    ,article a
+                	    ,article_map m
+                	    where
+                        1=1
+                	    and r.link_to = 'ARTICLE'
+                	    and r.link_id = a.id
+                	    and a.id = m.article_id
+                        ".$strStartDateSQL."
+                        ".$strEndDateSQL."
+                        ".$strStatusSQL."
+                	    UNION
+                    ";
+	        } else {
+	            $sArticleSQL = "";
+	        }
+	        
+    	    $sql = "
+                select * from 
+                (
+                    ".$sArticleSQL."
+            	    select
+                    r.link_to ||'<br />'||c.title||'<br /><a href=\"http://www.oneworld365.org/company/'||c.url_name||'\" target=_new>/company/'||c.url_name||'</a>' as posted_to 
+            	    ,r.id as post_id
+            	    ,r.title||'<br />'||r.review as post_details
+                    ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
+                    ,r.date::date as post_date
+                    ,case 
+                        when r.status = 0 then 'PENDING'
+                        when r.status = 1 then 'APPROVED'
+                        when r.status = 2 then 'REJECTED'
+                    end as post_status 
+            	    from
+            	    review r
+            	    ,company c
+            	    where
+                    1=1
+            	    and r.link_to = 'COMPANY'
+            	    and r.link_id = c.id
+                    ".$strCompanySQL."
+                    ".$strStartDateSQL."
+                    ".$strEndDateSQL."
+                    ".$strStatusSQL."
+            	    UNION
+            	    select
+                    r.link_to ||' '||p.title||' '||'/'||c.url_name ||'/'|| p.url_name as posted_to
+            	    ,r.id as post_id
+            	    ,r.title||'<br />'||r.review as post_text
+                    ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
+                    ,r.date::date as post_date
+                    ,case 
+                        when r.status = 0 then 'PENDING'
+                        when r.status = 1 then 'APPROVED'
+                        when r.status = 2 then 'REJECTED'
+                    end as post_status 
+            	    from
+            	    review r
+            	    ,profile_hdr p
+            	    ,company c
+            	    where
+                    1=1
+            	    and r.link_to = 'PLACEMENT'
+            	    and r.link_id = p.id
+            	    and p.company_id = c.id
+                    ".$strCompanySQL."
+                    ".$strStartDateSQL."
+                    ".$strEndDateSQL."
+                    ".$strStatusSQL."
+                ) q1
+                order by q1.post_date desc
+                ";
+
+	    } else {
 	    
-	    $sql = "
-        select * from 
-        (
-    	    select
-            r.link_to ||'<br />'||a.title||'<br />'||'<a href=\"http://www.oneworld365.org'||m.section_uri||'\">'||m.section_uri||'</a>' as posted_to 
-    	    ,r.id as post_id
-    	    ,r.title ||'<br />'||r.review as post_details
-            ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
-    	    ,r.date::date as post_date
-            ,case 
-                when r.status = 0 then 'PENDING'
-                when r.status = 1 then 'APPROVED'
-                when r.status = 2 then 'REJECTED'
-            end as post_status 
-    	    from
-    	    review r
-    	    ,article a
-    	    ,article_map m
-    	    where
-            1=1
-    	    and r.link_to = 'ARTICLE'
-    	    and r.link_id = a.id
-    	    and a.id = m.article_id
-            ".$strStartDateSQL."
-            ".$strEndDateSQL."
-            ".$strStatusSQL."
-    	    UNION
-    	    select
-            r.link_to ||'<br />'||c.title||'<br /><a href=\"http://www.oneworld365.org/company/'||c.url_name||'\" target=_new>/company/'||c.url_name||'</a>' as posted_to 
-    	    ,r.id as post_id
-    	    ,r.title||'<br />'||r.review as post_details
-            ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
-            ,r.date::date as post_date
-            ,case 
-                when r.status = 0 then 'PENDING'
-                when r.status = 1 then 'APPROVED'
-                when r.status = 2 then 'REJECTED'
-            end as post_status 
-    	    from
-    	    review r
-    	    ,company c
-    	    where
-            1=1
-    	    and r.link_to = 'COMPANY'
-    	    and r.link_id = c.id
-            ".$strStartDateSQL."
-            ".$strEndDateSQL."
-            ".$strStatusSQL."
-    	    UNION
-    	    select
-            r.link_to ||' '||p.title||' '||'/'||c.url_name ||'/'|| p.url_name as posted_to
-    	    ,r.id as post_id
-    	    ,r.title||'<br />'||r.review as post_text
-            ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
-            ,r.date::date as post_date
-            ,case 
-                when r.status = 0 then 'PENDING'
-                when r.status = 1 then 'APPROVED'
-                when r.status = 2 then 'REJECTED'
-            end as post_status 
-    	    from
-    	    review r
-    	    ,profile_hdr p
-    	    ,company c
-    	    where
-            1=1
-    	    and r.link_to = 'PLACEMENT'
-    	    and r.link_id = p.id
-    	    and p.company_id = c.id
-            ".$strStartDateSQL."
-            ".$strEndDateSQL."
-            ".$strStatusSQL."
-        ) q1
-        order by q1.post_date desc
-        ";
+	        $sql = "
+                select * from
+                (
+            	    select
+                    r.link_to ||'<br />'||c.title||'<br /><a href=\"http://www.oneworld365.org/company/'||c.url_name||'\" target=_new>/company/'||c.url_name||'</a>' as posted_to
+            	    ,r.id as post_id
+            	    ,r.title||'<br />'||r.review as post_details
+                    ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
+                    ,r.date::date as post_date
+                    ,case
+                        when r.status = 0 then 'PENDING'
+                        when r.status = 1 then 'APPROVED'
+                        when r.status = 2 then 'REJECTED'
+                    end as post_status
+            	    from
+            	    review r
+            	    ,company c
+            	    where
+                    1=1
+            	    and r.link_to = 'COMPANY'
+            	    and r.link_id = c.id
+                    and c.id = ".$oAuth->oUser->company_id."
+                    ".$strStartDateSQL."
+                    ".$strEndDateSQL."
+                    ".$strStatusSQL."
+            	    UNION
+            	    select
+                    r.link_to ||' '||p.title||' '||'/'||c.url_name ||'/'|| p.url_name as posted_to
+            	    ,r.id as post_id
+            	    ,r.title||'<br />'||r.review as post_text
+                    ,r.name ||'<br />'||r.email||'<br />'||r.ip_addr as posted_by
+                    ,r.date::date as post_date
+                    ,case
+                        when r.status = 0 then 'PENDING'
+                        when r.status = 1 then 'APPROVED'
+                        when r.status = 2 then 'REJECTED'
+                    end as post_status
+            	    from
+            	    review r
+            	    ,profile_hdr p
+            	    ,company c
+            	    where
+                    1=1
+            	    and r.link_to = 'PLACEMENT'
+            	    and r.link_id = p.id
+            	    and p.company_id = c.id
+                    and c.id = ".$oAuth->oUser->company_id."
+                    ".$strStartDateSQL."
+                    ".$strEndDateSQL."
+                    ".$strStatusSQL."
+                ) q1
+                order by q1.post_date desc
+                ";
+
+	    }
 
 	    $db->query($sql);
 
