@@ -19,7 +19,7 @@ $sImgSize = (strlen($this->Get('sImgSize')) >= 1) ? $this->Get('sImgSize') : "_l
                             <img class="img-fluid rounded mb-3" src="<?= $oProfile->GetImageByType(2)->GetUrl("_mf");  ?>" alt="<?= $oProfile->GetTitle() ?>" />
                     </a>
             </div><?
-    	} elseif (is_object($oProfile->GetImage(0))) // profile has 1 or more image
+        } elseif ($oProfile->GetGeneralType() == PROFILE_PLACEMENT && is_object($oProfile->GetImage(0))) // profile has 1 or more image
     	{ 
     	    if ($oProfile->GetImage(0)->GetHtml($sImgSize) != false)  
     	    { ?>
