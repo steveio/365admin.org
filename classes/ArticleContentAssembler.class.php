@@ -173,8 +173,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                     $this->aArticle = $this->aRelatedArticle;
 
                 } else {
-                    // Default: Fetch articles via SOLR MLT 
-                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog");
+                    // Default: Fetch related articles via SOLR MLT (exclude /blog) 
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog", true);
                     $this->aArticle = $this->aRelatedArticle;
                 }
             }
