@@ -68,6 +68,7 @@ class RequestRouter {
         try {            
 
             $this->SetRequestUri($aRequestUri);
+            $this->CheckUrlRedirectMap();
             $this->RouteMapMVC();
             $this->RouteMapStatic();            
 
@@ -101,6 +102,14 @@ class RequestRouter {
             }
             
         }
+    }
+
+    public function CheckUrlRedirectMap()
+    {
+        global $_CONFIG;
+
+        /* check for redirect entry in url_map table */
+        NameService::GetUrlMapping($this->GetRequestUri(null),$fwd = TRUE, $_CONFIG['site_id']);
     }
 
     public function IssetRequestUri($index)
