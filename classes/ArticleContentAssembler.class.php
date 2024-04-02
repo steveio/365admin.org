@@ -144,7 +144,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             // fetch related blog articles ( there are 0 attached articles )
             if ($this->oContentMapping->GetDisplayOptBlogArticle())
             {
-                if ($this->oRequestRouter->GetRequestUri() == "/")
+                if ($this->oRequestRouter->GetRequestUri() == "/") // homepage
                 {
 
                     $oTemplateCfg->fetch_limit = 14;
@@ -184,7 +184,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->aRelatedArticle = array();
                 if ($this->oContentMapping->GetDisplayOptBlogArticle())
                 {
-                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, "blog", true);
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, $this->oContentMapping->GetSectionUri());
                 } else {
                     $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
                 }
