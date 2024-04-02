@@ -184,7 +184,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->aRelatedArticle = array();
                 if ($this->oContentMapping->GetDisplayOptBlogArticle())
                 {
-                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, $this->oContentMapping->GetSectionUri());
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, 'blog', true);
                 } else {
                     $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
                 }
