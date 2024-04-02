@@ -287,8 +287,7 @@ class SolrIndexer {
 		
 						// set the last_indexed date
 						$db->query("UPDATE company SET last_indexed_solr = now()::timestamp WHERE id IN (".implode(",",$aIdBatch).")");
-						
-		
+
 						if (LOG) Logger::DB(2,JOBNAME,'SOLR QUERY EXECUTED OK status: '.$result->getStatus() .", time: ".$result->getQueryTime());
 		
 						unset($update);
@@ -309,6 +308,18 @@ class SolrIndexer {
 				unset($oCProfile);
 	
 			}
+
+			if (count($aIdBatch) >= 1)
+			{
+			    $update->addCommit();
+			    $result = $client->update($update);
+			    $commitIdx = 0;
+			    // set the last_indexed date
+			    $db->query("UPDATE company SET last_indexed_solr = now()::timestamp WHERE id IN (".implode(",",$aIdBatch).")");
+
+			    if (LOG) Logger::DB(2,JOBNAME,'SOLR QUERY EXECUTED OK status: '.$result->getStatus() .", time: ".$result->getQueryTime());
+			}
+
 		}
 		
 		if (LOG) Logger::DB(2,JOBNAME,'FINISHED PROCESSING COMPANY PROFILES ('.$idx.' of '.$total_company.')');
@@ -482,6 +493,17 @@ class SolrIndexer {
 				unset($aProfile);
 			
 					
+			}
+			
+			if (count($aIdBatch) >= 1)
+			{
+			    $update->addCommit();
+			    $result = $client->update($update);
+			    $commitIdx = 0;
+			    // set the last_indexed date
+			    $db->query("UPDATE profile_hdr SET last_indexed_solr = now()::timestamp WHERE id IN (".implode(",",$aIdBatch).")");
+			    
+			    if (LOG) Logger::DB(2,JOBNAME,'SOLR QUERY EXECUTED OK status: '.$result->getStatus() .", time: ".$result->getQueryTime());
 			}
 		}
 		
