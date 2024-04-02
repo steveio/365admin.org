@@ -173,8 +173,8 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                     $this->aArticle = $this->aRelatedArticle;
 
                 } else {
-                    // Default: Fetch related articles via SOLR MLT (exclude /blog) 
-                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog", true);
+                    // Default: Fetch related articles via SOLR MLT 
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 12, "blog");
                     $this->aArticle = $this->aRelatedArticle;
                 }
             }
@@ -182,7 +182,12 @@ class ArticleContentAssembler extends AbstractContentAssembler {
             if ($this->oContentMapping->GetDisplayOptRelatedArticle())
             {
                 $this->aRelatedArticle = array();
-                $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
+                if ($this->oContentMapping->GetDisplayOptBlogArticle())
+                {
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6, "blog", true);
+                } else {
+                    $this->GetRelatedArticle($this->oArticle->GetId(), $limit = 6);
+                }
             }
             
             if ($this->oContentMapping->GetDisplayOptRelatedProfile())
