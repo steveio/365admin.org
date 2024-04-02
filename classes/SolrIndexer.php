@@ -280,7 +280,7 @@ class SolrIndexer {
 				try {	
 					$update->addDocument($oSolrDocument);
 		
-					if (($commitIdx == $commitEvery) || ($idx == $total_company)) {
+					if (($commitIdx >= $commitEvery) || ($idx == $total_company)) {
 						$update->addCommit();
 						$result = $client->update($update);
 						$commitIdx = 0;
@@ -467,7 +467,7 @@ class SolrIndexer {
 				try {			
 					$update->addDocument($oSolrDocument);
 					
-					if (($commitIdx == $commitEvery) || ($idx == $total_placements)) {
+					if (($commitIdx >= $commitEvery) || ($idx == $total_placements)) {
 						$update->addCommit();
 						$result = $client->update($update);
 						$commitIdx = 0;
@@ -484,10 +484,10 @@ class SolrIndexer {
 					} else {
 						$commitIdx++;
 					}
-                                } catch (Exception $e) {
-                                        if (LOG) Logger::DB(1,JOBNAME,'EXCEPTION: '.$e->getMessage());
-                                        if (LOG) Logger::DB(1,JOBNAME,Logger::var_dump_ret($oSolrDocument));
-                                }
+                } catch (Exception $e) {
+                        if (LOG) Logger::DB(1,JOBNAME,'EXCEPTION: '.$e->getMessage());
+                        if (LOG) Logger::DB(1,JOBNAME,Logger::var_dump_ret($oSolrDocument));
+                }
 	
 	
 				unset($aProfile);
