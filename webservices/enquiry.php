@@ -51,12 +51,15 @@ if (!is_numeric($oEnquiry->GetLinkId())) AppError::StopRedirect($sUrl = $_CONFIG
 
 $aResponse = array();
 
-/* retrieve referring profile details */
-$oProfile = ProfileFactory::Get($oEnquiry->GetLinkTo());
-$oProfile->GetById($oEnquiry->GetLinkId());
-
-
-if (!is_object($oProfile)) AppError::StopRedirect($sUrl = $_CONFIG['url'],$sMsg = 'Error, invalid enquiry request.');
+try {
+    /* retrieve referring profile details */
+    $oProfile = ProfileFactory::Get($oEnquiry->GetLinkTo());
+    $oProfile->GetById($oEnquiry->GetLinkId());
+} catch (Exception $e) {
+    Http::Header(404);
+    Http::Redirect("/");
+    die();
+}
 
 
 
