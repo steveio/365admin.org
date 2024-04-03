@@ -61,6 +61,14 @@ if ($oAuth->oUser->isAdmin) {
 $aOptions = array();
 $aOptions['report_date_from'] = "";
 $aOptions['report_date_to'] = "";
+
+if (!$oAuth->oUser->isAdmin && !isset($_REQUEST['report_status']))
+{
+    $_REQUEST['report_status'] = 1;
+    $_REQUEST['report_all'] = true;
+}
+
+
 if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
     $aOptions['report_status'] = $_REQUEST['report_status'];
 
@@ -110,7 +118,7 @@ print $oHeader->Render();
         <label for="daterange">Date range:</label>
         <input type="text" name="daterange" value="<?= $strDateRange; ?>" />
         
-        <label for="daterange">Select all:</label>
+        <label for="daterange">or View all:</label>
         <input type="checkbox" id="" name="report_all" <?= (isset($_REQUEST['report_all'])) ? "checked" : ""; ?>/>
         
         <label for="daterange">By status:</label>

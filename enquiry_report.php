@@ -82,11 +82,8 @@ if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
         case 0 : // pending
             $aOptions['report_status'] = array(0);
             break;
-        case 1 : // approved
-            $aOptions['report_status'] = array(1);
-            break;
-        case 2 : // sent (including auto-response codes)
-            $aOptions['report_status'] = array(2,5,7);
+        case 2 : // approved & sent (including auto-response codes)
+            $aOptions['report_status'] = array(1,2,5,7);
             break;
         case 3 : // rejected
             $aOptions['report_status'] = array(3);
@@ -142,18 +139,10 @@ print $oHeader->Render();
 
 	<div class="col-6">
         <label for="daterange">By Status:</label>
-	<?
-	if ($oAuth->oUser->isAdmin && !isset($_REQUEST['report_status']))  {
-		$_REQUEST['report_status'] = 0;
-	} else {
-	    $_REQUEST['report_status'] = "ALL";
-	}
-	?>
         <select id="" name="report_status">
         	<option value="ALL" <?= ($_REQUEST['report_status'] == "ALL") ? "selected" : ""; ?>>ALL</option>
         	<option value="0" <?= ($_REQUEST['report_status'] == "0") ? "selected" : ""; ?>>PENDING</option>
-        	<option value="1" <?= ($_REQUEST['report_status'] == "1") ? "selected" : ""; ?>>APPROVED</option>
-        	<option value="2"<?= ($_REQUEST['report_status'] == "2") ? "selected" : ""; ?>>SENT</option>
+        	<option value="2"<?= ($_REQUEST['report_status'] == "2") ? "selected" : ""; ?>>APPROVED (SENT)</option>
         	<option value="3"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>REJECTED</option>
         	<option value="4"<?= ($_REQUEST['report_status'] == "3") ? "selected" : ""; ?>>FAILED</option>
         </select>
@@ -186,8 +175,6 @@ print $oHeader->Render();
 <?php } ?>
 
 
-
-<?php if (isset($_REQUEST['report_filter'])) { ?>
 
 
 <?php if ($oAuth->oUser->isAdmin) { ?>
@@ -295,7 +282,6 @@ $(document).ready(function() {
 
 </script>
 
-<?php } // end display report?>
 
 </div>
 </div>
