@@ -74,6 +74,8 @@ class RequestRouter {
 
         } catch (NotFoundException $e) {  // 404 not found error
 
+            Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
+
             $oMessage = new Message(MESSAGE_TYPE_WARNING,0, $e->getMessage());
             $oSession->SetMessage($oMessage);
             $oSession->Save();
@@ -96,7 +98,7 @@ class RequestRouter {
                 $oSession->SetMessage($oMessage);
                 $oSession->Save();
                 
-                Http::Header(500);
+                Http::Header(HEADER_HTTP_500);
                 Http::Redirect("/");
 
             }
@@ -138,7 +140,7 @@ class RequestRouter {
 
             if (!$this->validateUri($this->strRequestUri))
             {
-                throw new Exception("Invalid URL syntax or lenght: ".$this->strRequestUri);
+                throw new Exception("Invalid URL syntax or length: ".$this->strRequestUri);
             }
 
         } else {
@@ -585,7 +587,7 @@ class RequestRouter {
     public function validateUriNamespaceIdentifier($str)
     {
         if (!preg_match('/[a-zA-Z0-9_\-\/]+/',$str) || strlen($str) > 120 )
-            throw new Exception("ERROR: invalid URI segment");
+            throw new NotFoundException("ERROR: invalid URI segment: ".$str);
         
         return true;
     }
