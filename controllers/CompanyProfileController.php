@@ -142,7 +142,7 @@ class CompanyProfileController extends ProfileController {
 				$this->mode = self::MODE_EDIT;
 				return true;
 			default :
-			    throw new Exception(ERROR_404_INVALID_REQUEST.implode("/",$this->aRequestArray));
+			    throw new NotFoundException(ERROR_404_INVALID_REQUEST.implode("/",$this->aRequestArray));
 		}
 
 	}
@@ -163,7 +163,7 @@ class CompanyProfileController extends ProfileController {
 	private function RequestDelete() {
 
 	    if (!Validation::ValidUriNamespaceIdentifier($this->aRequestArray[2])) {
-	        throw new Exception(ERROR_COMPANY_PROFILE_INVALID_URL.$this->aRequestArray[2]);
+	        throw new NotFoundException(ERROR_COMPANY_PROFILE_INVALID_URL.implode("/",$this->aRequestArray));
 		}
 
 		if (strtolower($this->aRequestArray[3]) == ROUTE_DELETE) {
@@ -176,7 +176,7 @@ class CompanyProfileController extends ProfileController {
 	private function RequestEdit() {
 
 	    if (!Validation::ValidUriNamespaceIdentifier($this->aRequestArray[2])) {
-	        throw new Exception(ERROR_COMPANY_PROFILE_INVALID_URL.$this->aRequestArray[2]);
+	        throw new NotFoundException(ERROR_COMPANY_PROFILE_INVALID_URL.implode("/",$this->aRequestArray));
 		}
 
 		if (strtolower($this->aRequestArray[3]) == ROUTE_EDIT) {
