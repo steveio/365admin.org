@@ -10,7 +10,9 @@
  * 
  * 
  */
-
+define("LINK_ORIGIN_EMAIL", 20);
+define("LINK_ORIGIN_EMAIL_COMPANY", 5);
+define("LINK_ORIGIN_EMAIL_PLACEMENT", 6);
 define("LINK_ORIGIN_COMPANY", 10);
 define("LINK_ORIGIN_COMPANY_URL", 0);
 define("LINK_ORIGIN_COMPANY_APPLY", 1);
@@ -254,6 +256,11 @@ class LinkChecker
     {
         global $db;
 
+        if ($aRequest['origin_type'] == LINK_ORIGIN_EMAIL)
+        {
+            return $this->GetReportEmail();            
+        }
+
         $sql_constraint = "WHERE 1=1 ";
 
         if (is_array($aRequest) && count($aRequest) >= 1)
@@ -318,6 +325,36 @@ class LinkChecker
         
         $db->query($sql);
 
+        return $db->getRows();
+    }
+    
+    public function GetReportEmail()
+    {
+        global $db;
+
+        $sql = "
+                SELECT to_char(now()::timestamp,'YY-MM-DD') as report_date,* FROM (
+                SELECT 
+                '' as url, 
+                'MISSING_EMAIL' as http_status,
+                '/company/'||c.url_name as origin_url,
+                5 as origin_type 
+                FROM company c 
+                WHERE c.email = ''
+                UNION 
+                SELECT 
+                '' as url, 
+                'MISSING_EMAIL' as http_status,
+                '/company/'||c.url_name||'/'||p.url_name as origin_url,
+                6 as origin_type 
+                FROM company c, profile_hdr p 
+                WHERE p.email = ''
+                AND p.company_id = c.id
+                ) Q1
+                ORDER BY origin_url ASC";
+
+        $db->query($sql);
+        
         return $db->getRows();
     }
     

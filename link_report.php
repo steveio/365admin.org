@@ -64,7 +64,7 @@ print $oHeader->Render();
 	</div>
 
 	<div class="col-6">
-        <label for="origin_type">Link Type:</label>
+        <label for="origin_type">Contact / Link Type:</label>
         <select id="" class="form-select" name="origin_type">
         	<option value="ALL">ALL</option>
         	<option value="<?= LINK_ORIGIN_COMPANY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_COMPANY) ? "selected" : ""; ?>>Company</option>
@@ -73,6 +73,7 @@ print $oHeader->Render();
         	<option value="<?= LINK_ORIGIN_PLACEMENT; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT) ? "selected" : ""; ?>>Placement</option>
         	<option value="<?= LINK_ORIGIN_PLACEMENT_URL; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_URL) ? "selected" : ""; ?>>Placement : URL</option>
         	<option value="<?= LINK_ORIGIN_PLACEMENT_APPLY; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_PLACEMENT_APPLY) ? "selected" : ""; ?>>Placement : APPLY URL</option>
+        	<option value="<?= LINK_ORIGIN_EMAIL; ?>" <?= ($_REQUEST['origin_type'] == LINK_ORIGIN_EMAIL) ? "selected" : ""; ?>>Email</option>
         </select>
 	</div>
 	</div>
@@ -112,8 +113,8 @@ print $oHeader->Render();
     	<th>Url</th>
     	<th>HTTP Status</th>
     	<th>Origin</th>	
-    	<th>Link Type</th>	
-	<th>Status</th>
+    	<th>Type</th>	
+		<th>Status</th>
     	</tr>
 	</thead>
 	
@@ -162,6 +163,12 @@ print $oHeader->Render();
         	    case LINK_ORIGIN_PLACEMENT_APPLY :
         	        $sType = "PLACEMENT APPLY";
         	        break;        	        
+        	    case LINK_ORIGIN_EMAIL_PLACEMENT :
+        	        $sType = "PLACEMENT EMAIL";
+        	        break;
+        	    case LINK_ORIGIN_EMAIL_COMPANY :
+        	        $sType = "COMPANY EMAIL";
+        	        break;
         	}
 
         	?>
