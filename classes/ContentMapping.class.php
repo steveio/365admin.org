@@ -55,6 +55,7 @@ class ContentMapping {
                     ,m.article_id
                     ,m.website_id
                     ,m.section_uri
+                    ,o.article_map_oid
                     ,o.* 
                 FROM
                     ".DB__ARTICLE_MAP_TBL." m
@@ -81,31 +82,48 @@ class ContentMapping {
 
     public function SetContentPubOpts($aRow)
     {
+        if (!is_numeric($aRow['article_map_oid'])) 
+        {
 
-        $opts = array();
-        $opts[ARTICLE_DISPLAY_OPT_SEARCH_PANEL] = ($aRow['opt_placement'] == NULL) ? "f" : $aRow['opt_placement'];
-        $opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "f" : $aRow['opt_article'];
-        $opts[ARTICLE_DISPLAY_OPT_BLOG] = ($aRow['opt_blog'] == NULL) ? "f" : $aRow['opt_blog'];
-        $opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "f" : $aRow['opt_profile'];
-        $opts[ARTICLE_DISPLAY_OPT_REVIEW] = ($aRow['opt_review'] == NULL) ? "f" : $aRow['opt_review'];
-        $opts[ARTICLE_DISPLAY_OPT_SOCIAL] = ($aRow['opt_social'] == NULL) ? "f" : $aRow['opt_social'];
-        $opts[ARTICLE_DISPLAY_OPT_PARENT_TABS] = ($aRow['opt_ptab'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_FEATURED_PROJECT] = ($aRow['opt_fproject'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_ADS] = ($aRow['opt_ads'] == NULL) ? "f" : $aRow['opt_ads'];
-        $opts[ARTICLE_DISPLAY_OPT_IMG] = ($aRow['opt_img'] == NULL) ? "f" : $aRow['opt_img'];
-        $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER] = ($aRow['opt_txtalignh'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY] = ($aRow['opt_txtalignb'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER] = ($aRow['opt_txtalignf'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_ATTACHED] = ($aRow['opt_attached'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_PATH] = ($aRow['opt_path'] == 't') ? 't' : 'f';
-        $opts[ARTICLE_DISPLAY_OPT_PTITLE] = stripslashes($aRow['p_title']);
-        $opts[ARTICLE_DISPLAY_OPT_OTITLE] = stripslashes($aRow['o_title']);
-        $opts[ARTICLE_DISPLAY_OPT_NTITLE] = stripslashes($aRow['n_title']);
-        $opts[ARTICLE_DISPLAY_OPT_PINTRO] = stripslashes($aRow['p_intro']);
-        $opts[ARTICLE_DISPLAY_OPT_OINTRO] = stripslashes($aRow['o_intro']);        
-        $opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = ($aRow['template_id'] == null) ? CONTENT_DEFAULT_RESULT_TEMPLATE : $aRow['template_id'];
-        $opts[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] = ($aRow['sc_id'] == null) ? ARTICLE_SEARCH_URL : $aRow['sc_id'];
-        $opts[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD] = stripslashes($aRow['search_keywords']);
+            $opts = array();
+            $opts[ARTICLE_DISPLAY_OPT_SEARCH_PANEL] = "f";
+            $opts[ARTICLE_DISPLAY_OPT_ARTICLE] = "t";
+            $opts[ARTICLE_DISPLAY_OPT_BLOG] = "f";
+            $opts[ARTICLE_DISPLAY_OPT_PROFILE] = "t";
+            $opts[ARTICLE_DISPLAY_OPT_REVIEW] = "t";
+            $opts[ARTICLE_DISPLAY_OPT_SOCIAL] = "t";
+            $opts[ARTICLE_DISPLAY_OPT_PARENT_TABS] = "f";
+            $opts[ARTICLE_DISPLAY_OPT_FEATURED_PROJECT] = "t";
+            $opts[ARTICLE_DISPLAY_OPT_ADS] = "t";
+            $opts[ARTICLE_DISPLAY_OPT_IMG] = "t";
+            
+        } else {
+        
+            $opts = array();
+            $opts[ARTICLE_DISPLAY_OPT_SEARCH_PANEL] = ($aRow['opt_placement'] == NULL) ? "f" : $aRow['opt_placement'];
+            $opts[ARTICLE_DISPLAY_OPT_ARTICLE] = ($aRow['opt_article'] == NULL) ? "f" : $aRow['opt_article'];
+            $opts[ARTICLE_DISPLAY_OPT_BLOG] = ($aRow['opt_blog'] == NULL) ? "f" : $aRow['opt_blog'];
+            $opts[ARTICLE_DISPLAY_OPT_PROFILE] = ($aRow['opt_profile'] == NULL) ? "f" : $aRow['opt_profile'];
+            $opts[ARTICLE_DISPLAY_OPT_REVIEW] = ($aRow['opt_review'] == NULL) ? "f" : $aRow['opt_review'];
+            $opts[ARTICLE_DISPLAY_OPT_SOCIAL] = ($aRow['opt_social'] == NULL) ? "f" : $aRow['opt_social'];
+            $opts[ARTICLE_DISPLAY_OPT_PARENT_TABS] = ($aRow['opt_ptab'] == 't') ? 't' : 'f';
+            $opts[ARTICLE_DISPLAY_OPT_FEATURED_PROJECT] = ($aRow['opt_fproject'] == 't') ? 't' : 'f';
+            $opts[ARTICLE_DISPLAY_OPT_ADS] = ($aRow['opt_ads'] == NULL) ? "f" : $aRow['opt_ads'];
+            $opts[ARTICLE_DISPLAY_OPT_IMG] = ($aRow['opt_img'] == NULL) ? "f" : $aRow['opt_img'];
+            $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_HEADER] = ($aRow['opt_txtalignh'] == 't') ? 't' : 'f';
+            $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_BODY] = ($aRow['opt_txtalignb'] == 't') ? 't' : 'f';
+            $opts[ARTICLE_DISPLAY_OPT_BODY_TEXT_ALIGNMENT_FOOTER] = ($aRow['opt_txtalignf'] == 't') ? 't' : 'f';
+            $opts[ARTICLE_DISPLAY_OPT_ATTACHED] = ($aRow['opt_attached'] == 't') ? 't' : 'f';
+            $opts[ARTICLE_DISPLAY_OPT_PATH] = ($aRow['opt_path'] == 't') ? 't' : 'f';
+            $opts[ARTICLE_DISPLAY_OPT_PTITLE] = stripslashes($aRow['p_title']);
+            $opts[ARTICLE_DISPLAY_OPT_OTITLE] = stripslashes($aRow['o_title']);
+            $opts[ARTICLE_DISPLAY_OPT_NTITLE] = stripslashes($aRow['n_title']);
+            $opts[ARTICLE_DISPLAY_OPT_PINTRO] = stripslashes($aRow['p_intro']);
+            $opts[ARTICLE_DISPLAY_OPT_OINTRO] = stripslashes($aRow['o_intro']);        
+            $opts[ARTICLE_DISPLAY_OPT_TEMPLATE_ID] = ($aRow['template_id'] == null) ? CONTENT_DEFAULT_RESULT_TEMPLATE : $aRow['template_id'];
+            $opts[ARTICLE_DISPLAY_OPT_SEARCH_CONFIG] = ($aRow['sc_id'] == null) ? ARTICLE_SEARCH_URL : $aRow['sc_id'];
+            $opts[ARTICLE_DISPLAY_OPT_SEARCH_KEYWORD] = stripslashes($aRow['search_keywords']);
+        }
 
         $this->SetOptionsFromArray($opts);
         
