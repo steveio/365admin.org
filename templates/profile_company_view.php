@@ -692,7 +692,14 @@ if (is_array($aEnquiryButtonHtml))
 	<div class="col-3">Added: <?= $oProfile->GetAddedDate(); ?></div>
    	<div class="col-3">Last Updated: <?= $oProfile->GetLastUpdated(); ?></div>
    	<div class="col-3">Last Indexed: <?= $oProfile->GetLastIndexedSolr(); ?></div> 
+	<div class="col-3 float-end alert alert-danger" role="alert">
+    <button class="btn btn-danger rounded-pill px-3" type="button" onclick="deleteProfile('<?= ADMIN_SYSTEM."/company/".$oProfile->GetUrlName() ?>/delete'); return false;">Delete Profile</button>
+	</div>
+
   </div>
+
+
+
 </div>
 <? } ?>
 

@@ -203,31 +203,21 @@ class ArchiveManager {
 			$sql = "DELETE FROM profile_job_archive WHERE p_hdr_id = ".$this->GetObjectId().";";
 		}
 		
-		print $sql."\n";
-
 		$db->query($sql);
 
 		$sql = "DELETE FROM profile_hdr_archive WHERE id = ".$this->GetObjectId().";";
-
-		print $sql."\n";
 
 		$db->query($sql);
 
 		$sql = "DELETE FROM prod_cat_map_archive WHERE prod_id = ".$this->GetObjectId().";";
 
-		print $sql."\n";
-
 		$db->query($sql);
 		
 		$sql = "DELETE FROM prod_act_map_archive WHERE prod_id = ".$this->GetObjectId().";";
 
-		print $sql."\n";
-
 		$db->query($sql);
 		
 		$sql = "DELETE FROM prod_country_map_archive WHERE prod_id = ".$this->GetObjectId().";";
-
-		print $sql."\n";
 
 		$db->query($sql);
 	
@@ -540,6 +530,10 @@ class ArchiveManager {
 		} elseif ($this->GetProfileType() == PROFILE_TEACHING) {
 
 			$sql = "INSERT INTO profile_teaching_archive ( SELECT * FROM profile_teaching WHERE company_id = ".$this->GetObjectId()." );";
+		
+		} elseif ($this->GetProfileType() == PROFILE_COURSES) {
+		    
+		    $sql = "INSERT INTO profile_courses_archive ( SELECT * FROM profile_courses WHERE company_id = ".$this->GetObjectId()." );";
 		}
 		
 		if (strlen($sql) > 1) {
@@ -573,7 +567,12 @@ class ArchiveManager {
 		} elseif ($this->GetProfileType() == PROFILE_TEACHING) {
 
 			$sql = "DELETE FROM profile_teaching WHERE company_id = ".$this->GetObjectId().";";
+		
+		} elseif ($this->GetProfileType() == PROFILE_COURSES) {
+		    
+		    $sql = "DELETE FROM profile_courses WHERE company_id = ".$this->GetObjectId().";";
 		}
+		
 			
 		if (strlen($sql) > 1) {
 			

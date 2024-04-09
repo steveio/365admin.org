@@ -210,11 +210,10 @@ function ArticleSearch(mode,aid,template) {
 
 function deleteProfile(url)
 {
-	console.log(url);
-
 	var text = 'This will delete (archive) company and all placements - you can restore it later if necessary.  Are you sure?';
+
 	if (confirm(text) == true) {
-		//window.location = url;
+		window.location = url;
 	}
 
 	return false;
