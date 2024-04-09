@@ -74,16 +74,20 @@ class RequestRouter {
 
         } catch (NotFoundException $e) {  // 404 not found error
 
-            Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
+            if (!in_array($this->GetRequestUri(1),array("/includes","/css")))
+            {
+                Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
+    
+                $oMessage = new Message(MESSAGE_TYPE_WARNING,0, $e->getMessage());
+                $oSession->SetMessage($oMessage);
+                $oSession->Save();
+                
+                Http::Header(404);
+                require_once("404.php");
+                die();
 
-            $oMessage = new Message(MESSAGE_TYPE_WARNING,0, $e->getMessage());
-            $oSession->SetMessage($oMessage);
-            $oSession->Save();
-            
-            Http::Header(404);
-            require_once("404.php");
-            die();
-
+            }
+                
         } catch (Exception $e)
         {
             Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());

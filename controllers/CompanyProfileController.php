@@ -249,12 +249,12 @@ class CompanyProfileController extends ProfileController {
 	private function GetCompanyIdFromUrl() {
 
 		global $db;
-
+		
 		$oCompanyProfile = new CompanyProfile();
 		
 		$aRes = $oCompanyProfile->GetByUrlName($this->GetCompanyUrlName());
 		
-		if (!is_numeric($aRes['id'])) throw new Exception(ERROR_COMPANY_PROFILE_NOT_FOUND.$this->GetCompanyUrlName());
+		if (!is_numeric($aRes['id'])) throw new NotFoundException(ERROR_COMPANY_PROFILE_NOT_FOUND.$this->GetCompanyUrlName());
 		
 		$this->oProfile = ProfileFactory::Get($aRes['type']);
 
