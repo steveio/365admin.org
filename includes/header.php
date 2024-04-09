@@ -13,7 +13,7 @@ $oHeader->SetLogoUrl($oBrand->GetLogoUrl());
 /* Load the generic (site wide) Javascript includes */
 
 $oJsInclude = new JsInclude();
-$oJsInclude->SetSrc("/includes/js/generic.js");
+$oJsInclude->SetSrc("/includes/js/generic.js?ts=".date("Ymd"));
 $oHeader->SetJsInclude($oJsInclude);
 
 
