@@ -78,13 +78,7 @@ class MVCController{
 			}
 
 		} catch (NotFoundException $e) {
-
-			if ($this->bExceptionOnNotFound)
-			{
-			    throw $e;
-			}			
-			return false;
-
+		    throw $e;
 		} catch (InvalidSessionException $e) {
 			throw new InvalidSessionException($e->getMessage());
 		} catch (Exception $e) {

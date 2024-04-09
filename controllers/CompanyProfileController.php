@@ -53,7 +53,8 @@ class CompanyProfileController extends ProfileController {
 	public function Process() {
 
 		global $oSession;
-		
+
+
 		if (!$this->SetMode()) // determine request type ( VIEW || ADD || EDIT )
 		{
 		    $this->bPassThrough = true;		    
@@ -121,7 +122,9 @@ class CompanyProfileController extends ProfileController {
 		if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
 		    (strlen($this->aRequestArray[2]) > 1) &&
 		    (strlen($this->aRequestArray[3]) > 1) &&
-		    ($this->aRequestArray[3] != "edit"))
+		    ($this->aRequestArray[3] != "edit") && 
+		    ($this->aRequestArray[3] != "delete") 
+		    )
 		{
 		    return false;
 		}
@@ -230,7 +233,7 @@ class CompanyProfileController extends ProfileController {
 
 	    try {
 
-            $oContentAssembler = new CompanyProfileContentAssembler();
+	        $oContentAssembler = new CompanyProfileContentAssembler();
 	        $oContentAssembler->GetByPath($this->GetCompanyUrlName());
 	        
 	    } catch (Exception $e) {

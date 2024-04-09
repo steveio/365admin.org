@@ -81,7 +81,8 @@ class RequestRouter {
             $oSession->Save();
             
             Http::Header(404);
-            Http::Redirect("/");
+            require_once("404.php");
+            die();
 
         } catch (Exception $e)
         {
@@ -290,10 +291,8 @@ class RequestRouter {
                     $oSession->SetMVCController($this->oMVCController);
             }
             
-            $this->oMVCController->SetExceptionOnNotFound(FALSE);
             $this->oMVCController->SetRequestUri($this->GetRequestUri(1));
             $this->oMVCController->Process();
-            
             
             $oSession->Save();
 
