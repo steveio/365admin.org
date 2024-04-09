@@ -193,7 +193,6 @@ class PlacementController extends ProfileController {
 			
 			/* users can only edit/delete placements associated to their organisation */
 			case self::MODE_EDIT :
-			case self::MODE_VIEW :
 			case self::MODE_DELETE :
 				
 				if ($oAuth->oUser->isAdmin) return TRUE; // admin can edit/delete any profile

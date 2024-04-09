@@ -200,21 +200,17 @@ class CompanyProfileController extends ProfileController {
 
 		global $oAuth,$oSession;
 
-
 		// these should always be set correctly, for logged in and public users
 		if (($oSession->GetListingType() == NULL) || ($oSession->GetMVCController() == NULL)) {
 			throw new InvalidSessionException(ERROR_INVALID_SESSION);
 		}
 
 		switch($this->GetMode()) {
-			case self::MODE_ADD :
+		    case self::MODE_ADD :
 				break;
 			case self::MODE_EDIT :
-			case self::MODE_VIEW :
-			case self::MODE_DELETE :
 				if (!$oAuth->ValidSession()) {
-					$request_array = Request::GetUri("ARRAY");
-					Http::Redirect("/".ROUTE_LOGIN.implode("/",$request_array));
+					Http::Redirect("/".ROUTE_LOGIN);
 				}
 
 				if ($oAuth->oUser->isAdmin) return TRUE; // admin can edit any profile
@@ -223,10 +219,14 @@ class CompanyProfileController extends ProfileController {
 					throw new Exception(ERROR_COMPANY_PROFILE_PERMISSIONS_FAIL." user_id: ".$oAuth->oUser->GetId().", requested_comp_id: ".$this->GetCompanyId());
 				}
 				break;
+			case self::MODE_DELETE :
+			    if (!$oAuth->oUser->isAdmin) {
+			        throw new Exception(ERROR_COMPANY_PROFILE_PERMISSIONS_FAIL." DELETE : admin only, user_id: ".$oAuth->oUser->GetId().", requested_comp_id: ".$this->GetCompanyId());
+			    }
+			    break;
 		}
 
 		return TRUE;
-
 	}
 
 	public function ViewProfile() {
