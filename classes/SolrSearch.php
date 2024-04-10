@@ -47,7 +47,7 @@ class SolrSearch {
 	}
 
 	public static function SolrQueryCharSafe($str) {
-		return preg_replace("/[\/-]/"," ",$str);
+		return preg_replace("/[\/ ]/"," ",$str);
 	}
 	
 	public function setStart($idx) {

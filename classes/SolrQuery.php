@@ -264,8 +264,8 @@ class SolrQuery {
 			// in order of match probability
 			$arrIdentifier = array("activity","country","continent","category");
 
-			foreach($arrIdentifier as $strIdentifierKeyword)
 			{
+			foreach($arrIdentifier as $strIdentifierKeyword)
 				if ($bMatched) continue;
 
 				try {
@@ -280,12 +280,12 @@ class SolrQuery {
 			  } catch (Exception $e) {}
 			}
 
-			$arrProcessedKeywords[] = str_replace("-"," ",$strKeyword);
+			$arrProcessedKeywords[] = $strKeyword;
 		}
-
+		
 		// setup keyword query string
-		$this->query = SolrSearch::SolrQueryCharSafe(implode(" ",$arrProcessedKeywords));
-		$this->query = $this->filterQueryKeywords($this->query);
+
+		$this->query = SolrSearch::SolrQueryCharSafe(implode(" ", $arrProcessedKeywords));
 	}
 
 	/**

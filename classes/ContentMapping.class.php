@@ -333,14 +333,16 @@ class ContentMapping {
         
     private function ProcessSearchKeywords($keywords)
     {
+        
         // search query from keywords (specified in article publisher)
         $aBits = explode(",",trim($keywords));
+        
         $aQuery = array();
         foreach($aBits as $str)
         {
-            $aQuery[] = trim(preg_replace("/ /","-", $str));
+            $aQuery[] = urlencode(strtolower(trim($str)));
         }
-        return implode("",$aQuery);
+        return implode("/",$aQuery);
     }
     
 }
