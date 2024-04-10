@@ -145,7 +145,7 @@ class RequestRouter {
 
             if (!$this->validateUri($this->strRequestUri))
             {
-                throw new Exception("Invalid URL syntax or length: ".$this->strRequestUri);
+                throw new NotFoundException($this->strRequestUri);
             }
 
         } else {
@@ -156,7 +156,10 @@ class RequestRouter {
 
     public function validateUri($str)
     {
-        // valid domain specific URL chars & length check
+        // reject filename with extension
+        if (preg_match("/\.[a-zA-Z]{2,4}$/",$str)) return false;
+        
+        // valid (permitted) URL chars & length check
         if (preg_match('/[a-zA-Z0-9_\-\/]+/',$str) || strlen($str) > 256 )
         {
             return true;
