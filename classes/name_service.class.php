@@ -78,35 +78,34 @@ class NameService {
 
 	}
 
-	public static function lookupNameSpaceIdentifierByUrlName($sUri) {
+	public static function lookupNameSpaceIdentifierArray($aKeyword) {
 	    
 	    global $db;
 	    
-	    $sql = "
-                    select * from(
-                    select * from (
-                    SELECT id,'category' as type, name,url_name FROM category
-                    UNION
-                    SELECT id,'activity' as type, name,url_name FROM activity
-                    UNION
-                    SELECT id,'country' as type, name,url_name FROM country
-                    UNION
-                    SELECT id,'continent' as type, name,url_name FROM continent
-                    ) q1 ORDER BY url_name ASC
-                    ) q2 WHERE url_name = '".strtolower($sUri)."'
-                    ";
+        $sql = "    SELECT * FROM (
+                        SELECT * FROM (
+                            SELECT id,'category' as type, name,url_name FROM category
+                            UNION
+                            SELECT id,'activity' as type, name,url_name FROM activity
+                            UNION
+                            SELECT id,'country' as type, name,url_name FROM country
+                            UNION
+                            SELECT id,'continent' as type, name,url_name FROM continent
+                        ) q1 ORDER BY url_name ASC
+                    ) q2 WHERE url_name IN (".implode(",",$aKeyword).")
+                ";
 
 	    $db->query($sql);
-	    $response = array();
-	    if ($db->getNumRows() == 1) {
-	        $aRes = $db->getRow();
-	        $response['id'] = $aRes['id'];
-	        $response['name'] = $aRes['name'];
-	        $response['type'] = $aRes['type'];
-	    } else {
-	        throw new Exception("Namespace Identifier DB Lookup Failed : ".$sql);
+	    $aResult = array();
+	    if ($db->getNumRows() >= 1) {
+	        $aRows = $db->getRows();
+	        foreach($aRows as $aRow)
+	        {
+	           $aResult[$aRow['url_name']] = array("id" => $aRow['id'],"name" => $aRow['name'],"type" => $aRow['type'],"url_name" => $aRow['url_name']);
+	        }
 	    }
-	    return $response;
+
+	    return $aResult;
 	}
 	
 	public static function lookupNameSpaceIdentifier($tbl,$uri) {

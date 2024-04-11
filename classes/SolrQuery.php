@@ -259,19 +259,17 @@ class SolrQuery {
 			if (strlen($strKeyword) < 1) continue;
 			if (in_array($strKeyword,$arrKeywordException)) continue;
 
-			try {
+			$aKeyword[] = "'".$strKeyword."'";
 
-			    $result = NameService::lookupNameSpaceIdentifierByUrlName($strKeyword);
-
-			    if (isset($result['id']) && is_numeric($result['id']))
-    			{
-    			    $this->fq[$result['type'].'_id'] = $result['id'];
-    			}
-
-		    } catch (Exception $e) {}
-
-			$arrProcessedKeywords[] = $strKeyword;
+			$arrProcessedKeywords[] = $strKeyword;			
 		}
+
+	    $aResult = NameService::lookupNameSpaceIdentifierArray($aKeyword);
+
+	    foreach($aResult as $key => $aRow)
+	    {
+	        $this->fq[$aRow['type'].'_id'] = $aRow['id'];
+	    }
 
 		// setup keyword query string
 		$this->query = SolrSearch::SolrQueryCharSafe(implode(" ", $arrProcessedKeywords));
