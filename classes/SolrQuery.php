@@ -259,32 +259,21 @@ class SolrQuery {
 			if (strlen($strKeyword) < 1) continue;
 			if (in_array($strKeyword,$arrKeywordException)) continue;
 
-			$bMatched = false;
+			try {
 
-			// in order of match probability
-			$arrIdentifier = array("activity","country","continent","category");
+			    $result = NameService::lookupNameSpaceIdentifierByUrlName($strKeyword);
 
-			{
-			foreach($arrIdentifier as $strIdentifierKeyword)
-				if ($bMatched) continue;
+			    if (isset($result['id']) && is_numeric($result['id']))
+    			{
+    			    $this->fq[$result['type'].'_id'] = $result['id'];
+    			}
 
-				try {
-
-			    $result = NameService::lookupNameSpaceIdentifier($strIdentifierKeyword,$strKeyword);
-			    if (is_numeric($result['id']))
-					{
-			    	$this->fq[$strIdentifierKeyword.'_id'] = $result['id'];
-						$bMatched = true;
-					}
-
-			  } catch (Exception $e) {}
-			}
+		    } catch (Exception $e) {}
 
 			$arrProcessedKeywords[] = $strKeyword;
 		}
-		
-		// setup keyword query string
 
+		// setup keyword query string
 		$this->query = SolrSearch::SolrQueryCharSafe(implode(" ", $arrProcessedKeywords));
 	}
 

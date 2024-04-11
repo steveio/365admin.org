@@ -78,11 +78,42 @@ class NameService {
 
 	}
 
+	public static function lookupNameSpaceIdentifierByUrlName($sUri) {
+	    
+	    global $db;
+	    
+	    $sql = "
+                    select * from(
+                    select * from (
+                    SELECT id,'category' as type, name,url_name FROM category
+                    UNION
+                    SELECT id,'activity' as type, name,url_name FROM activity
+                    UNION
+                    SELECT id,'country' as type, name,url_name FROM country
+                    UNION
+                    SELECT id,'continent' as type, name,url_name FROM continent
+                    ) q1 ORDER BY url_name ASC
+                    ) q2 WHERE url_name = '".strtolower($sUri)."'
+                    ";
+
+	    $db->query($sql);
+	    $response = array();
+	    if ($db->getNumRows() == 1) {
+	        $aRes = $db->getRow();
+	        $response['id'] = $aRes['id'];
+	        $response['name'] = $aRes['name'];
+	        $response['type'] = $aRes['type'];
+	    } else {
+	        throw new Exception("Namespace Identifier DB Lookup Failed : ".$sql);
+	    }
+	    return $response;
+	}
+	
 	public static function lookupNameSpaceIdentifier($tbl,$uri) {
 	
 		global $db;
 	
-		$sql = "SELECT id,name,url_name FROM ".$tbl." WHERE url_name = '".$uri."'";
+		print $sql = "SELECT id,name,url_name FROM ".$tbl." WHERE url_name = '".$uri."'";
 		$db->query($sql);
 		$response = array();
 		if ($db->getNumRows() == 1) {
