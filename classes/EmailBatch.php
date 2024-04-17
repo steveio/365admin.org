@@ -26,7 +26,8 @@ class EmailBatch {
          */
         $this->ProcessEnquiryEmail();
         
-        $this->ProcessEnquiryAutoResponseEmail();
+	// * disabled 17-04-2024 testing SPF, DKIM, DMARC
+        //$this->ProcessEnquiryAutoResponseEmail();
         
         $this->ProcessSend2FriendEmail();
         
