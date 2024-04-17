@@ -74,7 +74,8 @@ class RequestRouter {
 
         } catch (NotFoundException $e) {  // 404 not found error
 
-            Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
+            // * disabled 17-04-2024 
+            //Logger::DB(1,get_class($this)."::".__FUNCTION__."()",$e->getMessage());
 
             Http::Header(404);
             require_once("404.php");
