@@ -1,6 +1,6 @@
 Filesystem              1K-blocks     Used Available Use% Mounted on
-/dev/mapper/centos-root 165107712 21517836 143589876  14% /
-03/08/24 02:00:01
+/dev/mapper/centos-root 165107712 21084336 144023376  13% /
+04/17/24 02:00:01
 find / -xdev  -size +499999c -exec ls -lc {} \; -o -fstype nfs -prune -o -name cdrom\* -prune -print 2> /dev/null | gawk
       999,925 apache   Mar 05 16:42 /www/vhosts/oneworld365.org/htdocs/img/000/54/54628.jpg
       999,925 apache   Mar 05 16:42 /www/vhosts/oneworld365.org/htdocs/img/000/54/54395.jpg
