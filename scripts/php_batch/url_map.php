@@ -20,7 +20,6 @@ if (!is_object($oBrand))
 
 $db = new db($dsn,$debug = false);
 
-
 /*
 $sql = "select * from article_map where section_uri like '/jobs/%' order by section_uri ASC";
 
@@ -49,7 +48,6 @@ foreach($aRows as $row)
     
 }
 */
-
 
 $sql = "select oid,* from article_map where section_uri like '/seasonal-jobs-working-holidays/%' order by section_uri ASC";
 

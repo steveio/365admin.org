@@ -6,6 +6,7 @@ require_once(BASE_PATH."/classes/logger.php");
 
 $dsn = array("dbhost" => "localhost","dbuser" => "", "dbpass" => "","dbname" => "","dbport" => "5432");
 
+
 $db = new db($dsn,$debug = false);
 
 $sql = "select a.id, m.section_uri, a.full_desc from article a, article_map m where a.id = m.article_id order by last_updated desc";
