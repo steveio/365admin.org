@@ -1402,6 +1402,8 @@ class Content  implements TemplateInterface {
 		
 		global $db;
 		
+		if (!is_numeric($this->GetId())) return false;
+
 		$db->query("DELETE FROM ".DB__ARTICLE_MAP_TBL." WHERE article_id = ".$this->GetId());
 		
 	}
