@@ -274,7 +274,7 @@ class Image {
 	}
 	
 	
-	public function GetPath($sSize = "", $bMakePath = false) {
+	public function GetPath($sSize = "", $bMakePath = true) {
 		
 		$sPath = IMG_BASE_PATH . $this->GetPartition();		
 		if (!file_exists($sPath) && $bMakePath) {
