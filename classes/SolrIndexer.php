@@ -263,7 +263,7 @@ class SolrIndexer {
 
 				    $oSolrDocument->courses = $oCProfile->GetLanguagesLabels();
 				    $oSolrDocument->courses .= $oCProfile->GetCoursesLabels();
-				    $oSolrDocument->courses_type .= $oCProfile->GetCourseTypeLabels();
+				    $oSolrDocument->course_type .= $oCProfile->GetCourseTypeLabels();
 				    $oSolrDocument->accomodation .= $oCProfile->GetAccomodationLabels();
 				}
 
@@ -274,12 +274,12 @@ class SolrIndexer {
 					$oSolrDocument->text .= SolrIndexer::cleanText($oCProfile->GetPlacementInfo())." ";
 		
 				}
-				
+		
 				if ($this->debug) var_dump($oSolrDocument);
 
 				try {	
 					$update->addDocument($oSolrDocument);
-		
+	
 					if (($commitIdx >= $commitEvery) || ($idx == $total_company)) {
 						$update->addCommit();
 						$result = $client->update($update);
@@ -298,6 +298,7 @@ class SolrIndexer {
 					} else {
 						$commitIdx++;
 					}
+
                                 } catch (Exception $e) {
                                         if (LOG) Logger::DB(1,JOBNAME,'EXCEPTION: '.$e->getMessage());
                                         if (LOG) Logger::DB(1,JOBNAME,Logger::var_dump_ret($oSolrDocument));
