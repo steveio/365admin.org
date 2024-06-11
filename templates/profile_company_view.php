@@ -505,6 +505,7 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
     	<div class="row my-3">
     		<?
     		$oLanguages = new Refdata(REFDATA_LANGUAGES);
+    		$oLanguages->SetDisplaySelectedOnly(true);
 			$oColumnSort = new ColumnSort;
 			$oColumnSort->SetElements($oLanguages->GetCheckboxList(REFDATA_LANGUAGES_PREFIX,$oProfile->GetLanguages(),''));
 			$oColumnSort->SetCols(3);
@@ -521,6 +522,10 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
     				?>
     				</ul>
     			</div>
+    			<?
+    			if (is_array($aElements[2]) && count($aElements[2]) >= 1)
+    			{
+    			?>
     			<div class="col-3">
     				<ul class='select_list'>
     				<?php
@@ -530,6 +535,11 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
     				?>
     				</ul>
     			</div>
+    			<?
+    			}
+    			if (is_array($aElements[3]) && count($aElements[3]) >= 1)
+    			{
+    			?>
     			<div class="col-3">
     				<ul class='select_list'>
     				<?php
@@ -539,22 +549,26 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
     				?>
     				</ul>
     			</div>
+    			<?
+    			}
+    			?>
     		</div>
     	</div>
     </div>
 
 
 	<div class="row my-3">
-
+	
+		<?
+        $oCourseType = new Refdata(REFDATA_COURSE_TYPE);
+        $oCourseType->SetDisplaySelectedOnly(true);
+        $aRoles = $oCourseType->GetCheckboxList(REFDATA_COURSE_TYPE_PREFIX,$oProfile->GetCourseType(),'');
+        if (is_array($aRoles) && count($aRoles) >= 1)
+        {
+		?>
     	<div class="col-sm-12 col-md-3 col-lg-3 my-3">
         	<b>Course Types</b>
-        	<div class="col-12 my-3">
-        		<?
-        		    $oCourseType = new Refdata(REFDATA_COURSE_TYPE);
-            		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
-        		    $aRoles = $oCourseType->GetCheckboxList(REFDATA_COURSE_TYPE_PREFIX,$oProfile->GetCourseType(),'');
-        		?>
-        
+        	<div class="col-12 my-3">        
         		<div class="row">
         			<div class="">
         				<ul class='select_list'>
@@ -568,22 +582,27 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
         		</div>
         	</div>
         </div>
+        <?
+        }
+        ?>
 
+		<?
+	    $oCourses = new Refdata(REFDATA_COURSES);
+	    $oCourses->SetDisplaySelectedOnly(true);
+	    $aCourses = $oCourses->GetCheckboxList(REFDATA_COURSES_PREFIX,$oProfile->GetCourses(),'');
+	    
+	    if (is_array($aCourses) && count($aCourses) >= 1)
+	    {
+		?>
 
         <div class="col-sm-12 col-md-3 col-lg-3 my-3">
         	<b>Other Study / Vocational Courses</b>
-        	<div class="col-12 my-3">
-        		<?
-        		    $oCourses = new Refdata(REFDATA_COURSES);
-            		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
-        		    $aRoles = $oCourses->GetCheckboxList(REFDATA_COURSES_PREFIX,$oProfile->GetCourses(),'');
-        		?>
-        
+        	<div class="col-12 my-3">        
         		<div class="row">
         			<div class="">
         				<ul class='select_list'>
         				<?php
-        				foreach($aRoles as $idx => $val) {
+        				foreach($aCourses as $idx => $val) {
         					print $val;
         				}
         				?>
@@ -592,21 +611,25 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
         		</div>
         	</div>
         </div>
+        <?
+	    }
+        ?>
 
+		<?
+	    $oAccomodation = new Refdata(REFDATA_ACCOMODATION);
+	    $oAccomodation->SetDisplaySelectedOnly(true);
+	    $aAccomodation = $oAccomodation->GetCheckboxList(REFDATA_ACCOMODATION_PREFIX,$oProfile->GetAccomodation(),'');
+	    if (is_array($aAccomodation) && count($aAccomodation) >= 1)
+	    {
+        ?>
     	<div class="col-sm-12 col-md-3 col-lg-3 my-3">
         	<b>Accomodation Options</b>
-        	<div class="row my-3">
-        		<?
-        		    $oAccomodation = new Refdata(REFDATA_ACCOMODATION);
-            		//$oCampActivity->SetOption(REFDATA_OPTION_CHECKBOXES_DISABLED, TRUE);
-        		    $aRoles = $oAccomodation->GetCheckboxList(REFDATA_ACCOMODATION_PREFIX,$oProfile->GetAccomodation(),'');
-        		?>
-        
+        	<div class="row my-3">        
         		<div class="row">
         			<div class="">
         				<ul class='select_list'>
         				<?php
-        				foreach($aRoles as $idx => $val) {
+        				foreach($aAccomodation as $idx => $val) {
         					print $val;
         				}
         				?>
@@ -615,6 +638,9 @@ $oReviewTemplate = $this->Get("oReviewTemplate");
         		</div>
         	</div>
         </div>
+        <?
+	    }
+        ?>
 	
 	</div>
 

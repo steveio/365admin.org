@@ -71,6 +71,7 @@ class Refdata {
 	
 	private $order_by_sql;
 	private $limit_sql;
+	private $bDisplaySelectedOnly; // return only selected options
 	
 	public function __Construct($type_id) {
 		
@@ -81,6 +82,7 @@ class Refdata {
 		
 		$this->order_by_sql = " value ASC";
 		$this->limit_sql = '';
+		$this->bDisplaySelectedOnly = false;
 	}
 
 	/**
@@ -222,6 +224,10 @@ class Refdata {
 		return $oSelect->GetHtml();
 	}
 
+	public function SetDisplaySelectedOnly($bool)
+	{
+	    $this->bDisplaySelectedOnly = $bool;
+	}
 	
 	public function GetCheckboxList($prefix, $aSelected, $input_css = "select_list", $ul_css = "select_list", $li_css = "select_list_element", $label_css = "select_list") {
 		
@@ -235,10 +241,15 @@ class Refdata {
 			} else {
 				$checked = '';
 			}
-			
+ 
 			$disabled = ($this->GetOption(REFDATA_OPTION_CHECKBOXES_DISABLED) == TRUE) ? "disabled" : "" ;
-			
-			$aElements[] = "<li class='".$li_css."'><input class='".$input_css."' type='checkbox' name='".$prefix . $id."' $checked  $disabled /> <label class='".$label_css."'>".$value ."</label></li>\n";
+
+			if ($this->bDisplaySelectedOnly && $checked == "checked")
+			{			
+                $aElements[] = "<li class='".$li_css."'><input class='".$input_css."' type='checkbox' name='".$prefix . $id."' $checked  $disabled /> <label class='".$label_css."'>".$value ."</label></li>\n";
+			} elseif (!$this->bDisplaySelectedOnly) {
+			    $aElements[] = "<li class='".$li_css."'><input class='".$input_css."' type='checkbox' name='".$prefix . $id."' $checked  $disabled /> <label class='".$label_css."'>".$value ."</label></li>\n";
+			}
 		}
 
 		return $aElements;
