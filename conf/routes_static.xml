@@ -21,6 +21,10 @@
 		<filename>activity_admin.php</filename>
 	</route>
 	<route>
+		<url>/refdata-admin</url>
+		<filename>refdata_admin.php</filename>
+	</route>
+	<route>
 		<url>/review</url>
 		<filename>/webservices/review_ajax.php</filename>
 	</route>	

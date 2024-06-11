@@ -64,6 +64,7 @@ class Refdata {
 	
 	private $id;
 	private $name;
+
 	private $css_class;
 	
 	private $aValues;
@@ -83,6 +84,69 @@ class Refdata {
 		$this->order_by_sql = " value ASC";
 		$this->limit_sql = '';
 		$this->bDisplaySelectedOnly = false;
+	}
+
+	public function SetId($id)
+	{
+	    if (is_numeric($id)) {
+	        $this->id = $id;	    
+	    }
+	}
+
+	public function SetName($name)
+	{
+	    $this->name = $name;
+	}
+
+	public function SetType($type)
+	{
+	    $this->type_id = $type;
+	}
+
+	public function Insert()
+	{
+	    global $db;
+	    
+	    $db->query("SELECT 1 from refdata_type WHERE id = ".$this->type_id);
+	    
+	    if ($db->getAffectedRows() != 1)
+	    {
+	        return false;
+	    }
+
+	    $insert_id = $db->getFirstCell("SELECT max(id)+1 from refdata");
+	    
+	    if (!is_numeric($insert_id)) return false;
+
+	    $sql = "INSERT INTO refdata (id,value,type) VALUES (".$insert_id.",'".addslashes($this->name)."',".$this->type_id.")";
+	    
+	    $db->query($sql);
+	    
+	    if ($db->getAffectedRows() == 1)
+	    {
+	        return true;
+	    }
+	}
+	
+	public function Update()
+	{
+        global $db;
+        
+        $db->query("SELECT 1 from refdata WHERE id = ".$this->id);
+
+        if ($db->getAffectedRows() != 1)
+        {
+            return false;
+        }
+
+        $sql = "UPDATE refdata SET value='".addslashes($this->name)."' WHERE id = ".$this->id;
+        
+        $db->query($sql);
+        
+        if ($db->getAffectedRows() == 1)
+        {
+            return true;
+        }
 	}
 
 	/**
@@ -140,7 +204,24 @@ class Refdata {
 			return $this->aOptions[$key];
 		}
 	}
-
+	
+	public function GetById($id) {
+	    
+	    global $db;
+	    
+	    if (!is_numeric($id)) return false;
+	    
+	    $sql = "SELECT id,value FROM refdata WHERE id = ".$id;
+	    
+	    $db->query($sql);
+	    
+	    if ($db->getNumRows() == 1) {
+	        return $db->getRow();    
+	    }
+	    
+	    return false;
+	}
+	
 	/* return all refdata values of a specific type */
 	public function GetByType() {
 		

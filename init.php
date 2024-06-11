@@ -69,6 +69,7 @@ require_once(BASE_PATH."/classes/activity.class.php");
 require_once(BASE_PATH."/classes/country.class.php");
 require_once(BASE_PATH."/classes/continent.class.php");
 require_once(BASE_PATH."/classes/Refdata.php");
+require_once(BASE_PATH."/classes/RefdataType.class.php");
 require_once(BASE_PATH."/classes/website.class.php");
 require_once(BASE_PATH."/classes/mapping.class.php");
 require_once(BASE_PATH."/classes/logger.php");
