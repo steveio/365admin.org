@@ -15,6 +15,7 @@ class Header extends Layout {
    private $sKeywords;
    private $sUrl;
    private $sVerifyTag;
+   private $sJSONLD;
 
    private $logo_url;
    
@@ -69,6 +70,14 @@ class Header extends Layout {
 		return $this->sDesc;
    }
 
+   public function SetJSONLD($sJSONLD) {
+       $this->sJSONLD = $sJSONLD;
+   }
+   
+   public function GetJSONLD() {
+       return $this->sJSONLD;
+   }
+   
    public function SetUrl($sUrl) {
        $this->sUrl = $sUrl;
    }
@@ -171,6 +180,7 @@ class Header extends Layout {
 										"LOGO_URL" => $this->GetLogoUrl(),
 										"DESCRIPTION" => $this->GetDesc(),
 										"KEYWORDS" => $this->GetKeywords(),
+		                                "JSONLD" => $this->GetJSONLD(),
 		                                "URL" => $this->GetUrl(),
 										"JS_INCLUDE" => $this->GetJsInclude(),
 										"JS_ONLOAD" => $this->GetJsOnload(),

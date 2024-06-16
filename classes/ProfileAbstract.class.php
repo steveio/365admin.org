@@ -683,7 +683,7 @@ abstract class AbstractProfile implements TemplateInterface {
 	    return $this->currency_id;
 	}
 	
-	public function GetCurrencyLabel() {
+	public function GetCurrencyLabel($ISO4217 = false) {
 	    
 	    if (!is_object($this->GetCurrencyRefdataObject()))
 	    {
@@ -692,11 +692,19 @@ abstract class AbstractProfile implements TemplateInterface {
 	        $this->SetCurrencyRefdataObject($oCurrency);
 	    }
 
-	    if ($bShort)
+	    if ($ISO4217)
 	    {
-	       $strSymbol = $this->GetCurrencyRefdataObject()->GetValueById($this->currency_id);
-	       $aBits = explode(" ",$strSymbol);
-	       return $aBits[0];
+	        if ($this->currency_id == 292)
+	        {
+	            return "USD";
+	        } elseif ($this->currency_id == 290)
+	        {
+	            return "GBP";
+	        } elseif ($this->currency_id == 291)
+	        {
+	            return "EUR";
+	        }
+            
 	    } else {
 	       return $this->GetCurrencyRefdataObject()->GetValueById($this->currency_id);
 	    }

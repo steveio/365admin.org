@@ -1350,6 +1350,76 @@ class PlacementProfile extends AbstractProfile {
 	    return $fields;
 	}
 	
+	public function GetJSONLD()
+	{	    
+
+	    $title = $this->GetTitle();
+	    $description = trim(htmlUtils::convertToPlainText($this->GetDescShort(160)));
+	    $bookingurl = $this->GetApplyUrl();
+	    $provider = $this->GetCompanyName();
+	    $provider_url = $this->GetCompanyProfileUrl();
+	    $price = $this->GetPriceFromLabel();
+	    $currency = $this->GetCurrencyLabel($ISO4217 = true);
+	    
+	    if (count($this->GetActivityTxtArray()) >= 1) {
+	        $i = 0;
+	        foreach($this->GetActivityTxtArray() as $strActivity)
+	        {
+	            $activity .= "\"".$strActivity."\"";
+	            if ($i < count($this->GetActivityArray()) -1) $activity = $activity.",";
+	            $i++;
+	        }
+	    }	    
+	    
+	    if (count($this->GetCountryTxtArray()) >= 1) {
+	        $i = 0;
+	        $destination = "";
+	        foreach($this->GetCountryTxtArray() as $strCountry)
+	        {
+	            $destination .= "\"@type\": \"Country\",";
+	            $destination .= "\"name\": \"".$strCountry."\"";
+	            
+	            if ($i < count($this->GetCountryArray()) -1) $destination = $destination.",";
+	            $i++;
+	        }
+	    }
+
+	    $strJSON_LD = <<<EOF
+{
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    "name": "$title;",
+    "description": "$description",
+    "provider": "$provider",
+    "touristType": [
+      $activity
+    ],
+    "offers": {
+      "@type": "Offer",
+      "name": "$title",
+      "description": "$description",
+      "price": "$price",
+      "priceCurrency": "$currency",
+      "url": "$bookingurl",
+      "offeredBy": {
+        "@type": "Organization",
+        "name": "$provider",
+        "url": "$provider_url"
+      }
+    },
+    "itinerary": [
+      {
+        $destination
+      }
+    ]
+
+}
+EOF;
+
+      return $strJSON_LD;
+
+	}
+
 };
 
 

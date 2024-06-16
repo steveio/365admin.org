@@ -1417,7 +1417,13 @@ class CompanyProfile extends AbstractProfile {
 	    
 	    return $fields;
 	}
-	
+
+	public function GetJSONLD()
+	{
+	   $json_ld = "";
+	   
+	   return json_ld;
+	}
 	
 }
 
