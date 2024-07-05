@@ -259,6 +259,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
         $oHeader->SetDesc($this->oArticle->GetDescShortPlaintext($trunc = 160));
         $oHeader->SetKeywords(implode(",",$aKeywords));
         $oHeader->SetUrl($oBrand->GetWebsiteUrl().$this->oRequestRouter->GetRequestUri());
+        $oHeader->SetJSONLD($this->oArticle->GetJSONLD());
         
         $oHeader->Reload();
     }

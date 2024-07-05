@@ -174,6 +174,9 @@ if (isset($_REQUEST['save'])) {
 								,"full_desc" => $_POST['desc_long']
 								,"meta_desc" => $_POST['meta_desc']
 								,"meta_keywords" => $_POST['meta_keywords']
+                                ,"meta_article_type_id" => $_POST['meta_article_type_id']
+                        	    ,"meta_synopsis" => $_POST['meta_synopsis']
+                        	    ,"meta_author" => $_POST['meta_author']
 								,"created_by" => $oAuth->oUser->id
 								,"published_status" => 0 /* DRAFT */
 								),"SET", $escape_chars = FALSE /* Save()->Santitize() does escaping */
@@ -185,6 +188,8 @@ if (isset($_REQUEST['save'])) {
 		$_REQUEST['id'] = $oArticle->GetId();
 		$_SESSION['id'] = $oArticle->GetId();
 		$_SESSION['link_to'] = "ARTICLE";
+	} else {
+	    $aResponse['status'] = "error";
 	}
 }
 
@@ -263,12 +268,34 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
 
 <div class="row my-3">
 	<div class="col">
+		<span class="label_col"><label for="meta_article_type_id" class="f_label" style="<?= strlen($response['msg']['meta_article_type_id']) > 1 ? "color:red;" : ""; ?>">Article Type</label></span>
+	        <span class="input_col"><?= $oArticle->GetArticleTypeDDList(); ?></span>
+	</div>
+	<div class="col">
 		<span class="label_col"><label for="meta_desc" class="f_label" style="<?= strlen($response['msg']['meta_desc']) > 1 ? "color:red;" : ""; ?>">Meta Desc</label></span>
-	        <span class="input_col"><input type="text" id="meta_desc" class="form-control" maxlength="254" style="width: 400px;" name="meta_desc" value="<?= $oArticle->GetMetaDesc(); ?>" /></span>
+	    <span class="input_col"><input type="text" id="meta_desc" class="form-control" maxlength="254" style="width: 400px;" name="meta_desc" value="<?= $oArticle->GetMetaDesc(); ?>" /></span>
+	</div>
+</div>
+
+
+<div class="row my-3">
+	<div class="col">
+		<span class="label_col"><label for="meta_synopsis" class="f_label" style="<?= strlen($response['msg']['meta_synopsis']) > 1 ? "color:red;" : ""; ?>">Synopsis / Summary</label></span>
+		<span class="input_col"><textarea id="meta_synopsis" name="meta_synopsis" class="form-control" /><?= stripslashes($_POST['meta_synopsis']); ?></textarea></span>
+		
 	</div>
 	<div class="col">
 		<span class="label_col"><label for="meta_keywords" class="f_label" style="<?= strlen($response['msg']['meta_keywords']) > 1 ? "color:red;" : ""; ?>">Meta Keywords</label></span>
 		<span class="input_col"><input type="text" id="meta_keywords" class="form-control"  maxlength="254" style="width: 400px;" name="meta_keywords" value="<?= $oArticle->GetMetaKeywords(); ?>" /></span>
+	</div>
+</div>
+
+<div class="row my-3">
+	<div class="col">
+		<span class="label_col"><label for="meta_author" class="f_label" style="<?= strlen($response['msg']['meta_author']) > 1 ? "color:red;" : ""; ?>">Author / Publisher / Agency</label></span>
+        <span class="input_col"><input type="text" id="meta_author" class="form-control" maxlength="254" style="width: 400px;" name="meta_author" value="<?= $oArticle->GetMetaAuthor(); ?>" /></span>
+	</div>
+	<div class="col">
 	</div>
 </div>
 

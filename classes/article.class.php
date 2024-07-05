@@ -99,6 +99,9 @@ class Content  implements TemplateInterface {
 	private $full_desc;
 	private $meta_desc;
 	private $meta_keywords;
+	private $meta_article_type_id;
+	private $meta_synopsis;
+	private $meta_author;
 	private $created_by;
 	private $created_date;
 	private $published_status;
@@ -272,6 +275,30 @@ class Content  implements TemplateInterface {
 	
 	public function SetMetaKeywords($sMetaKeywords) {
 		$this->meta_keywords = $sMetaKeywords;
+	}
+
+	public function GetMetaArticleTypeId() {
+	    return is_numeric($this->meta_article_type_id) ? $this->meta_article_type_id : 'NULL';
+	}
+	
+	public function SetMetaArticleTypeId($iTypeId) {
+	    $this->meta_article_type_id = $iTypeId;
+	}
+
+	public function GetMetaSynopsis() {
+	    return $this->meta_synopsis;
+	}
+	
+	public function SetMetaSynopsis($sMetaSynopsis) {
+	    $this->meta_synopsis = $sMetaSynopsis;
+	}
+
+	public function GetMetaAuthor() {
+	    return $this->meta_author;
+	}
+	
+	public function SetMetAuthor($sMetaAuthor) {
+	    $this->meta_author = $sMetaAuthor;
 	}
 	
   	public function GetDescShort($trunc = 0) {
@@ -822,7 +849,7 @@ class Content  implements TemplateInterface {
 	 * 
 	 */
 	public function Save(&$response) {
-
+	    
 		if (!$this->Validate($response)) return false;
 		
 		if (!is_numeric($this->GetId())) {
@@ -864,7 +891,23 @@ class Content  implements TemplateInterface {
 		//}
 		
 		if (strlen($this->GetDescShort()) > 1999) {
-			$aResponse['msg'] = "ERROR: Short Description must be less than 254 characters";
+			$aResponse['msg'] = "ERROR: Short Description must be less than 1999 characters";
+		}
+
+		if (strlen($this->GetMetaKeywords()) > 255) {
+		    $aResponse['msg'] = "ERROR: Meta Keywords must be less than 255 characters";
+		}
+
+		if (strlen($this->GetMetaDesc()) > 255) {
+		    $aResponse['msg'] = "ERROR: Meta Description must be less than 255 characters";
+		}
+
+		if (strlen($this->GetMetaSynopsis()) > 255) {
+		    $aResponse['msg'] = "ERROR: Meta Synopsis must be less than 255 characters";
+		}
+
+		if (strlen($this->GetMetaAuthor()) > 127) {
+		    $aResponse['msg'] = "ERROR: Meta Author must be less than 127 characters";
 		}
 		
 		
@@ -887,6 +930,9 @@ class Content  implements TemplateInterface {
 									,full_desc
 									,meta_desc
 									,meta_keywords
+                                    ,meta_article_type_id
+                                    ,meta_synopsis
+                                    ,meta_author
 									,created_by
 									,created_date
 									,last_updated
@@ -899,7 +945,10 @@ class Content  implements TemplateInterface {
 									,'".pg_escape_string($this->GetDescShort())."'
 									,'".pg_escape_string($this->GetDescFull())."'
 									,'".pg_escape_string($this->GetMetaDesc())."'
-									,'".pg_escape_string($this->GetMetaKeywords())."'
+                                    ,'".pg_escape_string($this->GetMetaKeywords())."'
+                                    ,".$this->GetMetaArticleTypeId()."
+                                    ,'".pg_escape_string($this->GetMetaSynopsis())."'
+                                    ,'".pg_escape_string($this->GetMetaAuthor())."'
 									,".$this->GetCreatedBy()."
 									,now()::timestamp
 									,now()::timestamp
@@ -912,6 +961,7 @@ class Content  implements TemplateInterface {
 		
 		if (!$db->getAffectedRows() == 1) {
 			$response['save_error'] = "There was a problem adding the ".$this->GetTypeLabel().".";
+			$response['save_error'] .= $db->last_error();
 			return false;
 		}
 		
@@ -933,6 +983,9 @@ class Content  implements TemplateInterface {
                                                         ,full_desc = '".pg_escape_string($this->GetDescFull())."'
                                                         ,meta_desc = '".pg_escape_string($this->GetMetaDesc())."'
                                                         ,meta_keywords = '".pg_escape_string($this->GetMetaKeywords())."'
+                                                        ,meta_article_type_id = ".$this->GetMetaArticleTypeId()."
+                                                        ,meta_synopsis = '".pg_escape_string($this->GetMetaSynopsis())."'
+                                                        ,meta_author = '".pg_escape_string($this->GetMetaAuthor())."'
                                                         ,last_updated = now()::timestamp
                                                         ,last_indexed_solr = now() - interval '1 hour'
                                                 WHERE id = ".$this->GetId().";
@@ -942,7 +995,8 @@ class Content  implements TemplateInterface {
 		$db->query($sql);
  
 		if (!$db->getAffectedRows() == 1) {
-			$response['save_error'] = "There was a problem adding the ".$this->GetTypeLabel().".";
+			$response['save_error'] = "There was a DB save problem updating the ".$this->GetTypeLabel().".";
+			$response['save_error'] .= $db->last_error();
 			return false;
 		}
 		
@@ -1591,7 +1645,84 @@ class Content  implements TemplateInterface {
 			}
 		}
 	}	
-	
+
+	public function GetJSONLD()
+	{
+	    
+	    $title = $this->GetTitle();
+	    $description = trim(htmlUtils::convertToPlainText($this->GetDescShort(160)));
+	    
+	    $strJSON_LD = <<<EOF
+{
+    "@context": "https://schema.org/",
+    "@type": "BlogPosting",
+    "@id": "https://dataliberate.com/2019/05/14/library-metadata-evolution-final-mile/#BlogPosting",
+    "mainEntityOfPage": "https://dataliberate.com/2019/05/14/library-metadata-evolution-final-mile/",
+    "headline": "Library Metadata Evolution: The Final Mile",
+    "name": "Library Metadata Evolution: The Final Mile",
+    "description": "When Schema.org arrived on the scene I thought we might have arrived at the point where library metadata  could finally blossom; adding value outside of library systems to help library curated resources become first class citizens, and hence results, in the global web we all inhabit.  But as yet it has not happened.",
+    "datePublished": "2019-05-14",
+    "dateModified": "2019-05-14",
+    "author": {
+        "@type": "Organization",
+        "@id": "https://www.oneworld365.org",
+        "name": "One World 365",
+        "image": {
+            "@type": "ImageObject",
+            "@id": "http://www.oneworld365.org/images/oneworld365_logo_small.png",
+            "url": "http://www.oneworld365.org/images/oneworld365_logo_small.png",
+            "height": "87",
+            "width": "240"
+        }
+    },
+    "publisher": {
+        "@type": "Organization",
+        "@id": "https://dataliberate.com",
+        "name": "Data Liberate",
+        "logo": {
+            "@type": "ImageObject",
+            "@id": "https://dataliberate.com/wp-content/uploads/2011/12/Data_Liberate_Logo-200.png",
+            "url": "https://dataliberate.com/wp-content/uploads/2011/12/Data_Liberate_Logo-200.png",
+            "width": "600",
+            "height": "60"
+        }
+    },
+    "image": {
+        "@type": "ImageObject",
+        "@id": "https://dataliberate.com/wp-content/uploads/2019/05/Metadata_Evolution_the_Final_Mile.jpg",
+        "url": "https://dataliberate.com/wp-content/uploads/2019/05/Metadata_Evolution_the_Final_Mile.jpg",
+        "height": "362",
+        "width": "388"
+    },
+    "url": "https://dataliberate.com/2019/05/14/library-metadata-evolution-final-mile/",
+    "isPartOf": {
+        "@type" : "Blog",
+         "@id": "https://dataliberate.com/blog/",
+         "name": "Data Liberate Blog",
+         "publisher": {
+             "@type": "Organization",
+             "@id": "https://dataliberate.com",
+             "name": "Data Liberate"
+         }
+     }
+}
+
+EOF;
+	    
+	    return $strJSON_LD;
+	    
+	}
+
+	public function GetArticleTypeDDList()
+	{
+	    $oRefdata = Refdata::GetInstance(REFDATA_ARTICLE_TYPE);
+	    $oRefdata->SetName('meta_article_type_id');
+	    $oRefdata->SetOrderBySql(' id ASC');
+	    $oRefdata->GetByType();
+	    
+	    return $oRefdata->GetDDlist($selected_id = $this->GetMetaArticleTypeId(), $no_default = FALSE, $css_class = 'form-select');
+	    	    
+	}
 }
 
 

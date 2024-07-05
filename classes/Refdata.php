@@ -40,6 +40,7 @@ define('REFDATA_CAMP_GENDER',25);
 define('REFDATA_LANGUAGES',26);
 define('REFDATA_COURSE_TYPE',27);
 define('REFDATA_COURSES',28);
+define('REFDATA_ARTICLE_TYPE',29);
 
 /* multiple choice refdata form element prefixes */
 define('REFDATA_ACTIVITY_PREFIX','CA_');
@@ -64,6 +65,7 @@ class Refdata {
 	
 	private $id;
 	private $name;
+	private $desc;
 
 	private $css_class;
 	
@@ -80,6 +82,8 @@ class Refdata {
 		$this->aOptions = array();
 		
 		$this->type_id = $type_id;
+		
+		$this->GetRefdataTypeById($type_id);
 		
 		$this->order_by_sql = " value ASC";
 		$this->limit_sql = '';
@@ -98,6 +102,11 @@ class Refdata {
 	    $this->name = $name;
 	}
 
+	public function SetDesc($desc)
+	{
+	    $this->desc = $desc;
+	}
+	
 	public function SetType($type)
 	{
 	    $this->type_id = $type;
@@ -203,6 +212,27 @@ class Refdata {
 		if (array_key_exists($key, $this->aOptions)) {
 			return $this->aOptions[$key];
 		}
+	}
+
+	public function GetRefdataTypeById($id) {
+	    
+	    global $db;
+	    
+	    if (!is_numeric($id)) return false;
+	    
+	    $sql = "SELECT id,name,description FROM refdata_type WHERE id = ".$id;
+	    
+	    $db->query($sql);
+	    
+	    if ($db->getNumRows() == 1) {
+	        $aRow = $db->getRow();
+	        $this->SetId($id);
+	        $this->SetName($aRow['name']);
+	        $this->SetDesc($aRow['description']);
+	        
+	    }
+	    
+	    return false;
 	}
 	
 	public function GetById($id) {
