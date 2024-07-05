@@ -1651,59 +1651,57 @@ class Content  implements TemplateInterface {
 	    
 	    $title = $this->GetTitle();
 	    $description = trim(htmlUtils::convertToPlainText($this->GetDescShort(160)));
+	    $url =  $this->GetUrl();
+	    $datePublished = $this->GetPublishedDate();
+	    $dateModified = $this->GetLastUpdated();
+
+	    if (strlen($this->GetMetaAuthor()) > 1)
+	    {
+	        $strAuthorJSON = '"author": {';
+	        $strAuthorJSON .= '"@type": "Person",';
+	        $strAuthorJSON .= '"name": "'.$this->GetMetaAuthor().'"';
+	        $strAuthorJSON .= '},';
+	    }
+	    
+	    if (is_object($this->GetImage(0))) {
+	        $img_url = $this->GetImage(0)->GetUrl();
+	        $strIMGJSON = '"image": {';
+	        $strIMGJSON .= '"@type": "ImageObject",';
+	        $strIMGJSON .= '"url": "'.$img_url.'"';
+	        $strIMGJSON .= '},';
+	    } 
+	    
+	    $oArticleType = Refdata::GetInstance(REFDATA_ARTICLE_TYPE);
+	    $oArticleType->GetByType();
+	    $article_type = $oArticleType->GetValueById($this->GetMetaArticleTypeId());
+	    $abstract .= $this->GetMetaSynopsis();
 	    
 	    $strJSON_LD = <<<EOF
 {
     "@context": "https://schema.org/",
     "@type": "BlogPosting",
-    "@id": "https://dataliberate.com/2019/05/14/library-metadata-evolution-final-mile/#BlogPosting",
-    "mainEntityOfPage": "https://dataliberate.com/2019/05/14/library-metadata-evolution-final-mile/",
-    "headline": "Library Metadata Evolution: The Final Mile",
-    "name": "Library Metadata Evolution: The Final Mile",
-    "description": "When Schema.org arrived on the scene I thought we might have arrived at the point where library metadata  could finally blossom; adding value outside of library systems to help library curated resources become first class citizens, and hence results, in the global web we all inhabit.  But as yet it has not happened.",
-    "datePublished": "2019-05-14",
-    "dateModified": "2019-05-14",
-    "author": {
+    "headline": "$title",
+    "name": "$article_type",
+    "description": "$description",
+    "url": "$url",
+    "abstract": "$abstract",
+    "datePublished": "$datePublished",
+    "dateModified": "$dateModified",
+    $strAuthorJSON
+    "publisher": {
         "@type": "Organization",
         "@id": "https://www.oneworld365.org",
         "name": "One World 365",
-        "image": {
-            "@type": "ImageObject",
-            "@id": "http://www.oneworld365.org/images/oneworld365_logo_small.png",
-            "url": "http://www.oneworld365.org/images/oneworld365_logo_small.png",
-            "height": "87",
-            "width": "240"
-        }
-    },
-    "publisher": {
-        "@type": "Organization",
-        "@id": "https://dataliberate.com",
-        "name": "Data Liberate",
         "logo": {
             "@type": "ImageObject",
-            "@id": "https://dataliberate.com/wp-content/uploads/2011/12/Data_Liberate_Logo-200.png",
-            "url": "https://dataliberate.com/wp-content/uploads/2011/12/Data_Liberate_Logo-200.png",
-            "width": "600",
-            "height": "60"
+            "url": "http://www.oneworld365.org/images/oneworld365_logo_small.png"
         }
     },
-    "image": {
-        "@type": "ImageObject",
-        "@id": "https://dataliberate.com/wp-content/uploads/2019/05/Metadata_Evolution_the_Final_Mile.jpg",
-        "url": "https://dataliberate.com/wp-content/uploads/2019/05/Metadata_Evolution_the_Final_Mile.jpg",
-        "height": "362",
-        "width": "388"
-    },
-    "url": "https://dataliberate.com/2019/05/14/library-metadata-evolution-final-mile/",
+    $strIMGJSON
     "isPartOf": {
         "@type" : "Blog",
-         "@id": "https://dataliberate.com/blog/",
-         "name": "Data Liberate Blog",
-         "publisher": {
-             "@type": "Organization",
-             "@id": "https://dataliberate.com",
-             "name": "Data Liberate"
-         }
+         "@id": "https://www.oneworld365.org/blog/",
+         "name": "One World 365 Travel Blog"
      }
 }
 
