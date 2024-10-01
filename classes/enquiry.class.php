@@ -726,9 +726,6 @@ class Enquiry {
 				$aResponse['msg']['apply_letter'] = "Please provide an application covering letter";
 			}
 				
-			if (strlen($a['experience']) < 1) {
-				$aResponse['msg']['experience'] = "Please enter details of relevant experience";
-			}
 				
 		}
 
