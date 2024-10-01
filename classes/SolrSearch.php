@@ -150,11 +150,10 @@ class SolrSearch {
 				
 		if (count($this->getFacetField()) >= 1 ) {
 			
-			
 			foreach($this->getFacetField() as $facetField) {
 				foreach($facetField as $key => $field) {
 					$facet = $this->resultset->getFacetSet()->getFacet($key);
-
+					
 					/*
 					 * Filter the returned facets 
 					 * 
@@ -164,12 +163,15 @@ class SolrSearch {
 							$facet = $this->filterCountryByContinentId($facet,$this->getFilterQueryByKey('continent_id'));
 						} elseif ($key == "country" && $this->filterQueryKeyExists("continent")  && in_array('country',$aFilter)) {
 							$facet = $this->filterCountryByContinentName($facet,$this->getFilterQueryByKey('continent'));
-						} elseif ($key == "activity"  && in_array('activity',$aFilter)) {
+						}
+						
+						elseif ($key == "activity"  && in_array('activity',$aFilter)) {
 							//$facet = $this->filterActivityByWebsiteId($facet);
 							if (isset($this->aFilterQuery['activity_id'])) {
 								$facet = $this->filterActivityFacetList($facet,$this->getFilterQueryByKey('activity_id'));
 							} elseif (isset($this->aFilterQuery['category_id']) && is_numeric($this->aFilterQuery['category_id'])) {
-								$facet = $this->filterActivityFacetList($facet,$this->getFilterQueryByKey('category_id'),"CATEGORY");
+							    // @deprecated 10/24 : let SOLR choose most relevant activities, ignore website activity to category mappings
+								//$facet = $this->filterActivityFacetList($facet,$this->getFilterQueryByKey('category_id'),"CATEGORY");
 							} elseif (isset($this->aFilterQuery['category'])) {
 								$facet = $this->filterActivityFacetList($facet,$this->getFilterQueryByKey('category'),"CATEGORY");
 							}
@@ -519,9 +521,10 @@ class SolrSearch {
 	}
 
 	/**
-	 * Filter activity facet list by category id
-	 * @param unknown $facet
-	 * @param unknown $id
+	 * Filter facet set list by related parent id
+	 *  eg activity by category id, country by continent id
+	 * @param array $facet
+	 * @param int $id
 	 * @param string $key
 	 * @return boolean|unknown|unknown[]
 	 */
