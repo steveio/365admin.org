@@ -76,9 +76,9 @@ if (!isset($_REQUEST['report_all']))
 {
     if ($oAuth->oUser->isAdmin)
     {
-        $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y");
+        $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y",strtotime("+1 day"));
     } else {
-        $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-5 year"))." - ".date("d-m-Y");
+        $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-5 year"))." - ".date("d-m-Y",strtotime("+1 day"));
     }
     $aDate = explode(" - ", $strDateRange);
     $aOptions['report_date_from'] = preg_replace("/\//","-",$aDate[0]);
