@@ -97,9 +97,9 @@ if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
 
 if ($oAuth->oUser->isAdmin)
 {
-    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y");
+    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y",strtotime("+1 day"));
 } else {
-    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 year"))." - ".date("d-m-Y");
+    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 year"))." - ".date("d-m-Y",strtotime("+1 day"));
 }
 $aDate = explode(" - ", $strDateRange);
 
