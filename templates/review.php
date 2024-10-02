@@ -20,7 +20,6 @@
 						<div class="span12" style="font-size: 0.8em;">
 							By: <?= $oReview->GetName(); ?><br /> 
 							Nationality: <?= html_entity_decode($oReview->GetNationality()); ?><br /> 
-							Age: <?= $oReview->GetAge(); ?><br />
 						</div>
 					</div><?php 
 				}
@@ -49,7 +48,6 @@
     					<div class="col-12" style="font-size: 0.8em;">
     						By: <?= $oReview->GetName(); ?><br /> 
     						Nationality: <?= html_entity_decode($oReview->GetNationality()); ?><br /> 
-    						Age: <?= $oReview->GetAge(); ?><br />
     					</div>
     				</div><?php 
     			 } ?>
@@ -105,30 +103,10 @@
 				</div>
 
     		  	<div class="row form-group my-2">
-    		
         		  	<div class="col-6">
         				<label for="review-nationality">Nationality:</label>
         				<input type="text" id="review-nationality" name="review-nationality"  maxlength="32" class="form-control" />
-        			</div>
-    			
-        		  	<div class="col-3">
-        				<label for="review-age">Age:</label>
-        				<select id="review-age" name="review-age" class="form-select">
-        					<option value="NULL"></option>
-        					<?php for ($i=14;$i<100;$i++) { ?>
-        						<option value="<?= $i; ?>"><?= $i ?></option>
-        					<?php } ?>
-        				</select>
-        			</div>
-    		
-        		  	<div class="col-3">
-        				<label for="review-gender">Gender:</label>
-        				<select id="review-gender" name="review-gender" class="form-select">
-        					<option value="NULL"></option>
-        					<option value="M">Male</option>
-        					<option value="F">Female</option>
-        				</select>
-        			</div>
+        			</div>    			
 				</div>
 				
     		  	<div class="row form-group my-2">

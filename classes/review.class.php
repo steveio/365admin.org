@@ -15,9 +15,11 @@ class Review {
 	private $type; // review or comment
 	private $name;
 	private $email;
-	
+
+	/* @deprecated : removed 02/10
 	private $age;
 	private $gender;
+	*/
 	private $nationality;
 	private $title;
 	private $review;
