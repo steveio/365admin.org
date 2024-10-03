@@ -109,11 +109,33 @@ function SearchAPI() {
         return false;
     }
 
-	var match = 0; /* default = fuzzy "like" matching */
+	var exact = 0; /* default = fuzzy "like" matching */
 	if ($('#search_exact').is(':checked')) {
-		match = 1; /* exact "=" equal matching */
+		exact = 1; /* exact "=" equal matching */
+	}
+
+	var stype;
+	if ($('#search_name').is(':checked')) {
+		stype = 1; // by name
+	} else {
+		stype = 0; // by URL
+	}
+
+	var ctype = 000;
+
+	if ($('#search_company').is(':checked')) {
+		ctype = ctype + 1;
+	}
+	if ($('#search_placement').is(':checked')) {
+		ctype = ctype + 10;
+	}
+	if ($('#search_article').is(':checked')) {
+		ctype = ctype + 100;
 	}
 	
+	ctype= padToThree(ctype);
+
+		
 	var filterDate = 0;
 	var fromDate;
 	var toDate;
@@ -133,8 +155,8 @@ function SearchAPI() {
 
 
     var url = "/webservices/searchAPI_ajax.php";
-    var pars = '&exp='+exp+'&match='+match+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
-
+    var pars = '&stype='+stype+'&exp='+exp+'&ctype='+ctype+'&exact='+exact+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
+    
 	$.getJSON(url, pars, function(data){
 
         $('#search_msg').html('<div class="alert alert-'+data.status+'" role="alert">'+data.msg+'</div>');
@@ -152,6 +174,11 @@ function SearchAPI() {
 
     
     return false;
+}
+
+function padToThree(number) {
+	  if (number<=999) { number = ("000"+number).slice(-3); }
+	  return number;
 }
 
 function ArticleSearch(mode,aid,template) {

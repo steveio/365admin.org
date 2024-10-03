@@ -72,6 +72,7 @@ class Company {
 	    global $_CONFIG;
 
 	    $url_name = addslashes($uri);
+
 	    if ($fuzzy)
 	    {
 	        $operator = "like";
@@ -80,6 +81,7 @@ class Company {
 	    }
 	    
         $sql = "SELECT
+                'COMPANY' as content_type,
                 c.id,
                 c.title,
                 '/company/'||c.url_name as url_name,
@@ -107,40 +109,47 @@ class Company {
 	    }
 
 	}	
-	
+
 
 	function GetByKeyword($sKeyword, $fuzzy = true) {
 	    
-	    if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
-	    
 	    global $_CONFIG;
 
-	    // try an exact match
-	    $sql = "SELECT id, title, url_name, desc_short, last_updated 
-				FROM ".$_CONFIG['company_table']."
-				WHERE UPPER(name) = '".strtoupper($sKeyword)."'";
-	    
-	    $this->db->query($sql);
-	    
-	    if ($this->db->getNumRows() == 1)
+
+	    if ($fuzzy)
 	    {
-	       return $this->db->getObject();
+	        $operator = "like";
+	    } else {
+	        $operator = "=";
 	    }
-
-	    if (!$fuzzy) return false;
-
-	    // try a fuzzy match
-	    $sql = "SELECT id, title, url_name, desc_short, last_updated 
-				FROM ".$_CONFIG['company_table']."
-				WHERE UPPER(name) ILIKE '%".strtoupper($sKeyword)."'%";
-
+	    
+	    $sql = "SELECT
+                'COMPANY' as content_type,
+                c.id,
+                c.title,
+                '/company/'||c.url_name as url_name,
+                c.desc_short,
+                c.added,
+                c.last_updated,
+                CASE prod_type
+                    WHEN 0 THEN 'FREE'
+                    WHEN 1 THEN 'BASIC'
+                    WHEN 2 THEN 'ADVANCED'
+                    WHEN 3 THEN 'SPONSORED'
+                    END as listing,
+                (select count(*) from profile_hdr p where p.company_id = c.id) as num_profile
+                FROM company c
+                WHERE UPPER(title) ".$operator." '".strtoupper($sKeyword)."'
+                ORDER BY
+                c.title asc;
+                ";
+	    
 	    $this->db->query($sql);
-
+	    
 	    if ($this->db->getNumRows() >= 1)
 	    {
 	        return $this->db->getObjects();
 	    }
-	    
 	}
 	
 	

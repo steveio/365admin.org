@@ -22,25 +22,30 @@
 <div class='row my-3'>
 
 	<div class="row my-3">
-		Search Url:
+		Search:
 		<input type="text" id="search_phrase" name="search_phrase" class="form-control" value="<?= $_REQUEST['search_phrase'] ?>" />
 	</row>
 	<div class="row">
 		<div class="col-12">
+			URL: <input type="checkbox" id="search_url" name="search_url" checked />
+			Name: <input type="checkbox" id="search_name" name="search_name" />
+    	</div>
+		<div class="col-12">		
+    		Company <input type="checkbox" id="search_company" name="search_company" checked />
+    		Placement <input type="checkbox" id="search_placement" name="search_placement" checked />
+    		Article <input type="checkbox" id="search_article" name="search_article" checked />
+		</div>
+		<div class="col-12">
     		Exact? <input type="checkbox" id="search_exact" name="search_exact" />
-		<?php 
-		$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 month"))." - ".date("d-m-Y");
-		?>
+		
+    		<?php 
+    		$strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 month"))." - ".date("d-m-Y");
+    		?>
         	<label for="daterange">Date range:</label>
         	<input type="checkbox" id="filter_date" name="filter_date" />
-        	    <input type="text" id="daterange" name="daterange" value="<?= $strDateRange; ?>" />
+        	<input type="text" id="daterange" name="daterange" value="<?= $strDateRange; ?>" />
+
 		</div>
-		<!-- 
-		<div class="col-3">
-    		Projects <input type="checkbox" id="search_exact" name="filter_project" />
-    		Orgs <input type="checkbox" id="search_exact" name="filter_org" />
-		-->
-    	</div>
         <div class="row my-3">
                 <div class="col-3">
                         <button class="btn btn-primary rounded-pill px-3" type="button" onclick="javascript: SearchAPI(); return false;" name="article_search">Search</button>
@@ -73,6 +78,15 @@
 
 $(document).ready(function() {
 
+	$('input[name="search_name"]').click(function() {
+		$('input[name="search_url"]').prop('checked', false);
+	});
+
+	$('input[name="search_url"]').click(function() {
+		$('input[name="search_name"]').prop('checked', false);
+	});
+
+	
     $(function() {
       $('input[name="daterange"]').daterangepicker({
         opens: 'left',

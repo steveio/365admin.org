@@ -41,6 +41,7 @@ class Placement {
 	    }
 	    
 	    $sql = "SELECT
+                'PLACEMENT' as content_type,
                 p.id,
                 p.title,
                 '/company/'||c.url_name||'/'||p.url_name as url_name,
@@ -63,6 +64,50 @@ class Placement {
                 p.title asc;
                 ";
 	    
+	    $this->db->query($sql);
+	    
+	    if ($this->db->getNumRows() >= 1)
+	    {
+	        return $this->db->getObjects();
+	    }
+	}
+
+	function GetByKeyword($keyword, $fuzzy = false) {
+	    
+	    global $_CONFIG;
+	    
+	    $url_name = addslashes($uri);
+	    if ($fuzzy)
+	    {
+	        $operator = "like";
+	    } else {
+	        $operator = "=";
+	    }
+	    
+	    $sql = "SELECT
+                'PLACEMENT' as content_type,
+                p.id,
+                p.title,
+                '/company/'||c.url_name||'/'||p.url_name as url_name,
+                '/company/'||c.url_name as comp_url_name,
+                p.desc_short,
+                p.added,
+                p.last_updated,
+                CASE c.prod_type
+                    WHEN 0 THEN 'FREE'
+                    WHEN 1 THEN 'BASIC'
+                    WHEN 2 THEN 'ADVANCED'
+                    WHEN 3 THEN 'SPONSORED'
+                    END as listing,
+                '' as num_profile,
+                c.title as comp_title
+                FROM profile_hdr p, company c
+                WHERE p.company_id = c.id
+                AND UPPER(p.title) ".$operator." '".strtoupper($keyword)."'
+                ORDER BY
+                p.title asc;
+                ";
+
 	    $this->db->query($sql);
 	    
 	    if ($this->db->getNumRows() >= 1)
