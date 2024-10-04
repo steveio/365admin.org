@@ -14,6 +14,7 @@
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/about-us" title="About">About</a></li>
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/disclaimer" title="Disclaimer">Disclaimer</a></li>
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/privacy" title="Privacy">Privacy Policy</a></li>
+        <li class="nav-item"><a class="nav-link px-2 text-muted" href="/search" title="Search">Search</a></li>
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/company/a-z" title="Company A-Z">Company A-Z</a></li>
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/advertising" title="Advertise">Advertise</a></li>
         <li class="nav-item"><a class="nav-link px-2 text-muted" href="/press" title="Press">Press</a></li>

@@ -105,7 +105,7 @@ function SearchAPI() {
     var exp = escapePercent(document.getElementById('search_phrase').value);
 
     if (exp == "") {
-        alert('Please enter valid keywords, url (relative path) or pattern');
+        alert('Please enter valid keyword(s)');
         return false;
     }
 
@@ -168,6 +168,38 @@ function SearchAPI() {
     
     return false;
 }
+
+
+function SearchDispatch() {
+
+	var key;
+	var activity = $('#search-panel-activity').find(":selected").val();
+	var destination = $('#search-panel-destination').find(":selected").val();
+	
+	if (activity != 'NULL') {
+		key = activity;
+	} else if (destination != 'NULL') {
+		key = destination;
+	} else {
+		alert('Please specify either activity or destination');
+	}
+	
+    var url = "/search-router";
+    var pars = '&key='+key;
+    
+	$.getJSON(url, pars, function(data){
+
+	    if (data.retVal == 1) {
+	    	var url = data.html;
+			window.location = url;
+	    }
+
+	    return false;
+	});
+
+    return false;
+}
+
 
 function padToThree(number) {
 	  if (number<=999) { number = ("000"+number).slice(-3); }
@@ -279,108 +311,6 @@ function setProfilePanelState(panel_id) {
 				
 }
 
-/* @depreciated - use jquery cookie instead */
-function createCookie(name,value,days) {
-        if (days) {
-                var date = new Date();
-                date.setTime(date.getTime()+(days*24*60*60*1000));
-                var expires = "; expires="+date.toGMTString();
-        }
-        else var expires = "";
-        document.cookie = name+"="+value+expires+"; path=/";
-} 
-/* @depreciated - use jquery cookie instead */
-function readCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
-                var c = ca[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-        }
-        return null;
-}
-/* @depreciated - use jquery cookie instea */
-function eraseCookie(name) {
-        createCookie(name,"",-1);
-} 
-
-/* @depreciated - use jquery .show() .hide() instead */
-function setLightSwitch(e,state) {
-
-        if (document.getElementById) {
-                // this is the way the standards work
-                if(document.getElementById(e) != null) {
-                        if(state == 0) {
-                                document.getElementById(e).style.visibility = "hidden";
-                                document.getElementById(e).style.display = "none";
-                        } else {
-                                document.getElementById(e).style.visibility = "visible";
-                                document.getElementById(e).style.display = "";
-                        }
-                }
-        } else if (document.all) {
-                // this is the way old msie versions work
-                if(document.all[e] != null ) {
-                        if(state == 0) {
-                                document.all[e].style.visibility = "hidden";
-                                document.all[e].style.display = "none";
-                        } else {
-                                document.all[e].style.visibility = "visible";
-                                document.all[e].style.display = "";
-                        }
-                }
-        } else if (document.layers) {
-                // this is the way nn4 works
-                if(state == 0) {
-                        if(document.layers[e].visibility != "hidden") {
-                                document.layers[e].visibility = "hidden";
-                        } else {
-                                document.layers[e].visibility = "visible";
-                        }
-                }
-        }
-}
-
-/*
- * @deprecated - links embedded as inline content 		 
- */
-function AttachLink(url,link_to,link_id) {
-
-    var link_title = document.getElementById('link_title').value;
-    var link_url = document.getElementById('link_url').value;
-
-    var url = url +"/attach_link_ajax.php";
-    var pars = '&m=ADD&link_to='+link_to+'&link_to_id='+link_id+'&link_title='+link_title+'&link_url='+link_url;
-
-    console.log("attach link");
-    
-	$.getJSON(url, pars, function(data){
-		if (data.retVal == 1) {
-			$('#link_msg').html('<span class="red">'+data.msg+'</span>');
-			$('#link_result').html(data.html);
-		}
-		return false;
-	});
-}
-
-/*
- * @deprecated - links embedded as inline content 		 
- */
-function RemoveLink(url,link_id,link_to_id) {
-
-        var url = url +"/attach_link_ajax.php";
-        var pars = '&m=DEL&link_id='+link_id+'&link_to_id='+link_to_id+'&link_to=ARTICLE';
-
-        $.getJSON(url, pars, function(data){
-		if (data.retVal == 1) {
-			$('#link_msg').html('<span class="red">'+data.msg+'</span>');
-			$('#link_result').html(data.html);
-		}
-		return false;	
-        });
-}
-
 
 function RemoveImage(link_type,link_id,image_id) {
 
@@ -401,31 +331,3 @@ function RemoveImage(link_type,link_id,image_id) {
                 return false;
         });
 }
-
-/*
- * @deprecated - no longer referenced
- */
-function doProjectSearchRequest(host) {
-	var url = host + '/project_search_ajax.php';
-	var aid = document.project_search.s_activity_id.value.toUpperCase();
-	var ctn = document.project_search.s_continent_id.value.toUpperCase();
-	var cty = document.project_search.s_country_id.value.toUpperCase();
-	
-	if ((aid == "NULL") && (ctn == "NULL") && (cty == "NULL")) return false;
-	
-	var pars = '&aid='+aid+'&ctn='+ctn+'&cty='+cty;
-
-	$.getJSON(url, pars, function(data){
-
-                if (data.retVal == 1) {
-			//alert(data.act);
-			//alert(data.ctn);
-			//alert(data.cty);
-        		$('#act_ddlist').html(data.act);
-		        $('#ctn_ddlist').html(data.ctn);
-		        $('#cty_ddlist').html(data.cty);
-		}
-	});
-}
-
-

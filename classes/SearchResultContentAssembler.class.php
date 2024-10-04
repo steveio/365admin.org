@@ -53,41 +53,20 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
 
         try {
 
-            $oJsInclude = new JsInclude();
-            $oJsInclude->SetSrc("/includes/js/search_panel.js");
-            $oHeader->SetJsInclude($oJsInclude);
-            
-            $oCssInclude = new CssInclude();
-            $oCssInclude->SetHref('/css/jquery.rateyo.min.css');
-            $oCssInclude->SetMedia('screen');
-            $oHeader->SetCssInclude("CSS_GENERIC", $oCssInclude);
-            $oHeader->Reload();
-            
-            $oJsInclude = new JsInclude();
-            $oJsInclude->SetSrc("/includes/js/jquery.rateyo.min.js");
-            $oHeader->SetJsInclude($oJsInclude);
-            
-            $oHeader->Reload();
 
-
-            if ($this->oRequestRouter->IssetRequestUri(2))
-            {
-                $this->SetSearchResultPanel();
-            } else {
-                $this->SetSearchPanel();
-            }
+            $this->SetSearchPanel();
 
             print $oHeader->Render();
             print $this->oSearchPanel->Render();
             print $oFooter->Render();
 
-            
             die();
 
         } catch (Exception $e) {
             throw $e;
         }
     }
+
 
     /*
      * Search Panel - Keywords, Destination (auto-complete), Activity
@@ -99,19 +78,8 @@ class SearchResultContentAssembler extends AbstractContentAssembler {
     {
         $oSolrSearchPanel = new SolrSearchPanel;
         
-        // clear any previous search
-        SolrSearchPanelSearch::clearFromSession();
-
-        $aFacetField = array();
-        $aFacetField[] = array("country" => "country");
-        $aFacetField[] = array("continent" => "continent");
-        $aFacetField[] = array("activity" => "activity");
-        $oSolrSearchPanel->setFacetField($aFacetField);
-        $oSolrSearchPanel->setup($_CONFIG['site_id']);
-        
         $oSearchPanel = new Template;
         $oSearchPanel->Set('HOSTNAME',$_CONFIG['url']);
-        $oSearchPanel->Set('ACTIVITY_LIST',Activity::getActivitySelectList());
         
         $oSearchPanel->LoadTemplate("./search_panel.php");
         

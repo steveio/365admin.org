@@ -601,6 +601,26 @@ class Activity {
 	    return $aActivity;
 	}
 
+	public static function getActivityByCategoryList()
+	{
+	    global $db;
+	    
+	    $sql = "select
+                        c.id as cid,
+                        c.name as cname,
+                        a.id as aid,
+                        a.name as aname
+                        from
+                        category c
+                        left join cat_act_map m on m.category_id = c.id
+                        left outer join activity a on m.activity_id = a.id
+                        order by c.id, a.name";
+	    
+	    $db->query($sql);
+	    
+	    return $aResult = $db->getRows();
+	}
+	
 	public function GetByName($sName) {
 	    
 	    global $db;

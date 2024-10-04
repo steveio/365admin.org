@@ -6,6 +6,9 @@
 	<th scope="col">Title</th>
 	<th scope="col">Company</th>
 	<th scope="col">Url</th>
+	<th scope="col">Added</th>
+	<th scope="col">Updated</th>
+	<th scope="col">&nbsp;</th>
 	<th scope="col">&nbsp;</th>
 </tr>
 </thead>
@@ -25,9 +28,14 @@ if ((is_array($aResult)) && (count($aResult) >= 1)) {
 		<td valign="top"><?= $oResult->title; ?></td>
 		<td valign="top"><?= $oResult->company; ?></td>
 		<td valign="top"><a href="<?= $this->Get('WEBSITE_URL') . $oResult->url ?>"><?= $oResult->url; ?></td>
+		<td valign="top"><?= $oResult->added; ?></td>
+		<td valign="top"><?= $oResult->last_updated; ?></td>
 		<td>
 			<a class="btn btn-primary rounded-pill px-3" role="button" href="<?= $this->Get('WEBSITE_URL') . $oResult->url ?>" title="View">View</a>
 		</td>		
+		<td>
+			<a class="btn btn-primary rounded-pill px-3" role="button"  href="<?= $oResult->url ?>/edit" title="Edit">Edit</a>
+		</td>
 	</tr>
 <? 
 	}

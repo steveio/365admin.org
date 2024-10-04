@@ -92,10 +92,10 @@
 		<url>/link-report</url>
 		<filename>link_report.php</filename>
 	</route>
-        <route>
-                <url>/image-browser</url>
-                <filename>image_browser.php</filename>
-        </route>
+    <route>
+            <url>/image-browser</url>
+            <filename>image_browser.php</filename>
+    </route>
 	<route>
 		<url>/search</url>
 		<callback>$this->ProcessSearchResultPageRequest()</callback>

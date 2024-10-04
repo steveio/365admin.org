@@ -240,9 +240,15 @@ function searchSQL($term, $exact, $ctype, $filterDate, $fromDate, $toDate)
 
 function prepareResponse()
 {
-    global $aResult, $aResponse;
+    global $aResult, $aResponse, $oAuth;
+  
+    if(is_object($oAuth) && $oAuth->oUser->isAdmin)
+    {
+        $template = "search_result_list_profile_admin.php";
+    } else {
+        $template = "search_result_list_profile.php";
+    }
     
-    $template = "search_result_list_profile.php";
 
     $oTemplate = new Template();
     $oTemplate->Set("RESULT_ARRAY",$aResult);

@@ -6,10 +6,6 @@
 
 $(document).ready(function(){
 
-	$("#search-panel-destination").autocomplete({
-		source: "/search-dispatch",
-		minLength: 1
-	});
 
 	var doSearchDispatch = function(action,changed,selected) {
 		
