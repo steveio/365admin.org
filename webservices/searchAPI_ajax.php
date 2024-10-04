@@ -48,7 +48,6 @@ $aResponse = array();
 $aResponse['retVal'] = false;
 $aResponse['msg'] = "";
 
-$stype = $_GET['stype'];
 $exp = $_GET['exp'];
 $ctype = $_GET['ctype'];
 $exact = $_GET['exact'];
@@ -77,11 +76,11 @@ if(!is_numeric($ctype)) {
 }
 
 
-search($stype, $exp, $exact, $ctype,  $filterDate, $fromDate, $toDate);
+search($exp, $exact, $ctype,  $filterDate, $fromDate, $toDate);
 
 
 
-function search($stype, $uri, $exact, $ctype, $filterDate, $fromDate, $toDate)
+function search($uri, $exact, $ctype, $filterDate, $fromDate, $toDate)
 {
     global $aResult, $aResponse;
 
@@ -91,18 +90,25 @@ function search($stype, $uri, $exact, $ctype, $filterDate, $fromDate, $toDate)
         $bUnpublished = true;
     }*/
 
-    $aResult = searchSQL($uri, $stype, $exact, $ctype);
+    $aResult = searchSQL($uri, $exact, $ctype);
     prepareResponse();
     sendResponse($aResponse);
 }
 
 
-function searchSQL($term, $stype, $exact, $ctype)
+function searchSQL($term, $exact, $ctype)
 {
     global $db;
     
     $term = strtoupper($term);
 
+    if (preg_match("/^\//", $term))
+    {
+        $stype = 0; // URL
+    } else {
+        $stype = 1; // Keyword(s)
+    }
+    
     if ($exact)
     {
         $operator = " = ";

@@ -26,10 +26,6 @@
 		<input type="text" id="search_phrase" name="search_phrase" class="form-control" value="<?= $_REQUEST['search_phrase'] ?>" />
 	</row>
 	<div class="row">
-		<div class="col-12">
-			URL: <input type="checkbox" id="search_url" name="search_url" checked />
-			Name: <input type="checkbox" id="search_name" name="search_name" />
-    	</div>
 		<div class="col-12">		
     		Company <input type="checkbox" id="search_company" name="search_company" checked />
     		Placement <input type="checkbox" id="search_placement" name="search_placement" checked />
@@ -77,15 +73,6 @@
 <script>
 
 $(document).ready(function() {
-
-	$('input[name="search_name"]').click(function() {
-		$('input[name="search_url"]').prop('checked', false);
-	});
-
-	$('input[name="search_url"]').click(function() {
-		$('input[name="search_name"]').prop('checked', false);
-	});
-
 	
     $(function() {
       $('input[name="daterange"]').daterangepicker({

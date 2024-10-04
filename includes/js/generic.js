@@ -114,13 +114,6 @@ function SearchAPI() {
 		exact = 1; /* exact "=" equal matching */
 	}
 
-	var stype;
-	if ($('#search_name').is(':checked')) {
-		stype = 1; // by name
-	} else {
-		stype = 0; // by URL
-	}
-
 	var ctype = 000;
 
 	if ($('#search_company').is(':checked')) {
@@ -155,7 +148,7 @@ function SearchAPI() {
 
 
     var url = "/webservices/searchAPI_ajax.php";
-    var pars = '&stype='+stype+'&exp='+exp+'&ctype='+ctype+'&exact='+exact+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
+    var pars = '&exp='+exp+'&ctype='+ctype+'&exact='+exact+'&filterDate='+filterDate+'&fromDate='+fromDate+'&toDate='+toDate;
     
 	$.getJSON(url, pars, function(data){
 
