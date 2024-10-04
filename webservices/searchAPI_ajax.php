@@ -84,19 +84,19 @@ function search($uri, $exact, $ctype, $filterDate, $fromDate, $toDate)
 {
     global $aResult, $aResponse;
 
-    /*
+    /* @todo - search unpublished article
     if ($uri == "UNPUBLISHED")
     {
         $bUnpublished = true;
     }*/
 
-    $aResult = searchSQL($uri, $exact, $ctype);
+    $aResult = searchSQL($uri, $exact, $ctype, $filterDate, $fromDate, $toDate);
     prepareResponse();
     sendResponse($aResponse);
 }
 
 
-function searchSQL($term, $exact, $ctype)
+function searchSQL($term, $exact, $ctype, $filterDate, $fromDate, $toDate)
 {
     global $db;
     
@@ -120,6 +120,17 @@ function searchSQL($term, $exact, $ctype)
         } elseif ($stype == 1) {
             $term = "%".$term."%";
         }
+    }
+    
+    $strCompanyDateSQL = "";
+    $strPlacementDateSQL = "";
+    $strArticleDateSQL = "";
+
+    if ($filterDate == 1)
+    {
+        $strCompanyDateSQL = "and c.added >= '".$fromDate."' and c.added <= '".$toDate."' ";
+        $strPlacementDateSQL = "and p.added >= '".$fromDate."' and p.added <= '".$toDate."' ";
+        $strArticleDateSQL = "and published_date >= '".$fromDate."' and published_date <= '".$toDate."' ";
     }
 
     $aCtype = str_split($ctype);
@@ -156,7 +167,8 @@ function searchSQL($term, $exact, $ctype)
 		from
 		company c
 		where 
-        ".$strSQLWhereCompany."        
+        ".$strSQLWhereCompany."
+        ".$strCompanyDateSQL."
         and c.last_updated is not null
 		order by c.last_updated desc limit 50 )
         ";
@@ -183,6 +195,7 @@ function searchSQL($term, $exact, $ctype)
 		company c
 		where 
         ".$strSQLWherePlacement." 
+        ".$strPlacementDateSQL."
         and p.company_id = c.id
 		and p.last_updated is not null
 		order by last_updated desc limit 50 )
@@ -209,7 +222,7 @@ function searchSQL($term, $exact, $ctype)
 		article a left outer join article_map m on a.id = m.article_id
 		where 
         ".$strSqlWhereArticle."
-        and published_date is not null
+        ".$strArticleDateSQL."
 		order by published_date desc limit 50 )
         ";        
     }
