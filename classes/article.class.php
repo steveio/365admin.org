@@ -465,7 +465,21 @@ class Content  implements TemplateInterface {
 	public function GetSectionUri() {
 	    return $this->section_uri;
 	}
-	
+
+	public function GetIdByUri($uri)
+	{
+	    global $db;
+        
+	    $sql = "select a.id from article a, article_map m where m.section_uri = '".$uri."' and m.website_id = 0 and m.article_id = a.id";
+        $db->query($sql);
+        if ($db->getNumRows() == 1)
+        {
+            $row = $db->getRow();
+            
+            return $row['id'];
+        }
+	}
+
 	public function GetAll($aFilter = array(),$fields = '',$fetch = TRUE) {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");

@@ -494,8 +494,31 @@ class RequestRouter {
             $oContentAssembler = new $this->sArticleAssemblerClass();
             $oContentAssembler->SetRequestRouter($this);
 
-            // 1.  Extract Article Path from URI (Published Articles)
-            if (count($this->GetRequestArray()) >= 2 && $this->GetRequestUri(1) != "/article") // Array ( [0] => [1] => url-path
+            $lastUriSeg = $this->GetRequestUri(count($this->GetRequestArray()) -1);
+
+            if ($lastUriSeg == "/edit")
+            {
+                $uri = "";
+                for($i=1;$i<count($this->GetRequestArray()) -1;$i++)
+                {
+                    $uri .= $this->GetRequestUri($i);
+                }
+                
+                $oArticle = new Article();
+                $id = $oArticle->GetIdByUri($uri);
+                
+                if (is_numeric($id))
+                {
+                    http://admin.oneworld365.org/article-editor?&id=11066
+                    $redirect_url = ADMIN_SYSTEM."/article-editor?&id=".$id;
+
+                    Http::Redirect($redirect_url);
+                    
+                } else {
+                    throw new NotFoundException("Article not found : ".$this->GetRequestUri(1));
+                }
+                die();
+            } else if (count($this->GetRequestArray()) >= 2) // Array ( [0] => [1] => url-path
             {
                 $oContentAssembler->GetByPath($this->GetRequestUri());
                 
