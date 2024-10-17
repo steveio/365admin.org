@@ -198,6 +198,18 @@ class Enquiry {
 	public function GetPlacementUrlName() {
 		return $this->placement_url_name;
 	}
+
+	public function GetDeliveryTo() {
+		return $this->delivery_to;
+	}
+
+	public function GetDeliveryStatus() {
+		return $this->delivery_status;
+	}
+
+	public function GetDeliveryLogMsg() {
+		return $this->delivery_log;
+	}
 	
 	public function SetStatus($id,$iStatus) {
 
@@ -421,12 +433,14 @@ class Enquiry {
 			/* no company filter - return all enquiries */
 			$sql_filter_company = " e.link_to = '0' ";
 			$join = " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON comp.id = e.link_id ";
+			$join .= " LEFT OUTER JOIN enquiry_delivery d ON e.id = d.enquiry_id";
 			$join_fields = "comp.title as company_name,comp.url_name as company_url_name,comp.id as company_id, comp.email as company_email ";
 			$aCompEnquiry = $this->GetEnquiryResults($join, $join_fields, $sql_filter_company, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 
 			$sql_filter_placement = " e.link_to = '1' ";
 			$join = " LEFT OUTER JOIN ".$_CONFIG['profile_hdr_table']." p ON p.id = e.link_id ";
 			$join .= " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON p.company_id = comp.id ";
+			$join .= " LEFT OUTER JOIN enquiry_delivery d ON e.id = d.enquiry_id";
 			$join_fields = "p.title as placement_name,p.url_name as placement_url_name,p.company_id, comp.title as company_name, comp.url_name as company_url_name, comp.email as company_email ";
 			$aPlacementEnquiry = $this->GetEnquiryResults($join, $join_fields,$sql_filter_placement, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 			
@@ -481,6 +495,7 @@ class Enquiry {
 		,w.name as site_name
 		,c.name as country_name
 		,".$join_field_sql."
+                ,d.to_email as delivery_to,d.status as delivery_status,d.log_msg as delivery_log
 		FROM
 		enquiry e ".$join."
 		,country c

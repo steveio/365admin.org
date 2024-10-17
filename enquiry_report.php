@@ -207,6 +207,7 @@ print $oHeader->Render();
 	<th>country</th>
 	<th>enquiry</th>
 	<th>status</th>
+	<th>delivery</th>
 <?php if ($oAuth->oUser->isAdmin) { ?>
 	<th>approve</th>
 	<th>reject</th>
@@ -227,6 +228,8 @@ print $oHeader->Render();
 			<br/>
 			<? } ?>
 			<a class="" href="http://www.oneworld365.org/company/<?= $oEnquiry->GetCompanyUrlName(); ?>" title="<?= $oEnquiry->GetCompanyName(); ?>"><?= $oEnquiry->GetCompanyName(); ?></a>
+			<br />
+			(<?= $oEnquiry->GetCompanyEmail() ?>)
 		</td>
 		<td width="" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().") <br />".$oEnquiry->GetIpAddr() ?></td>
 		<td width="" valign="top"><?= $oEnquiry->GetCountryName() ?></td>
@@ -241,6 +244,13 @@ print $oHeader->Render();
 
 		</td>
 		<td width="" valign="top"><?= $oEnquiry->GetShortStatusLabel() ?></td>
+		<td width="" valign="top">
+		<? if (strlen($oEnquiry->GetDeliveryStatus()) > 1) { ?>
+			To: <?= $oEnquiry->GetDeliveryTo(); ?><br />
+			Status: <?= strtoupper($oEnquiry->GetDeliveryStatus()); ?><br />
+			Log Msg: <?= $oEnquiry->GetDeliveryLogMsg(); ?>
+		<? } ?>
+		</td>
 <?php if ($oAuth->oUser->isAdmin) { ?>
     	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_approve" value="approve" /></td>
     	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_reject" value="reject" /></td>
