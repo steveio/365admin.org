@@ -471,7 +471,7 @@ class EmailBatch {
         $oEnquiry = new Enquiry();
         $to_email_enq = $oEnquiry->GetToEmailByEnquiryId($iEnquiryId);
 
-        $sCmd = "cat /var/log/maillog | grep status ";
+        $sCmd = "tac /var/log/maillog | grep ".$to_email_enq." | grep status | head -1 ";
 
         $aOut = array();
 
