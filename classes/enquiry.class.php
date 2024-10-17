@@ -39,6 +39,7 @@ class Enquiry {
 
 	private $company_name;
 	private $company_url_name;
+	private $company_email;
 	private $placement_name;
 	private $placement_url_name;
 	
@@ -181,6 +182,10 @@ class Enquiry {
 	public function GetCompanyName() {
 		return $this->company_name;
 	}
+
+        public function GetCompanyEmail() {
+                return $this->company_email;
+        }
 	
 	public function GetCompanyUrlName() {
 		return $this->company_url_name;
@@ -416,13 +421,13 @@ class Enquiry {
 			/* no company filter - return all enquiries */
 			$sql_filter_company = " e.link_to = '0' ";
 			$join = " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON comp.id = e.link_id ";
-			$join_fields = "comp.title as company_name,comp.url_name as company_url_name,comp.id as company_id ";
+			$join_fields = "comp.title as company_name,comp.url_name as company_url_name,comp.id as company_id, comp.email as company_email ";
 			$aCompEnquiry = $this->GetEnquiryResults($join, $join_fields, $sql_filter_company, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 
 			$sql_filter_placement = " e.link_to = '1' ";
 			$join = " LEFT OUTER JOIN ".$_CONFIG['profile_hdr_table']." p ON p.id = e.link_id ";
 			$join .= " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON p.company_id = comp.id ";
-			$join_fields = "p.title as placement_name,p.url_name as placement_url_name,p.company_id, comp.title as company_name, comp.url_name as company_url_name ";
+			$join_fields = "p.title as placement_name,p.url_name as placement_url_name,p.company_id, comp.title as company_name, comp.url_name as company_url_name, comp.email as company_email ";
 			$aPlacementEnquiry = $this->GetEnquiryResults($join, $join_fields,$sql_filter_placement, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 			
 		}
@@ -847,6 +852,29 @@ class Enquiry {
 
 	}
 
+
+
+	public function GetToEmailByEnquiryId($id)
+	{
+	    global $db;
+	    
+	    $sql = "SELECT
+                CASE
+                  WHEN link_to = '0' THEN (SELECT email FROM company where id = link_id)
+                  WHEN link_to = '1' THEN (SELECT c.email FROM company c, profile_hdr p where p.id = link_id and p.company_id = c.id)
+                END as email
+                FROM
+                (
+                SELECT 
+                link_to,
+                link_id
+                FROM enquiry
+                WHERE id = ".$id."
+                ) q1
+                ";
+	    
+	    return $db->getFirstCell($sql);
+	}
 
 }
 
