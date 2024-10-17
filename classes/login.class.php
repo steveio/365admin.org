@@ -188,7 +188,7 @@ class Login {
 		
 		global $db;
 		
-		$db->query("SELECT id, uname, pass, email FROM euser WHERE email = '".$sEmail."'");
+		$db->query("SELECT id, uname, email FROM euser WHERE email = '".$sEmail."'");
 		
 		if ($db->getNumRows() != 1) return false;
 		
@@ -202,7 +202,7 @@ class Login {
 	
 		if (!is_numeric($id)) return array();
 		
-		$db->query("SELECT uname, pass, email FROM euser WHERE company_id = '".$id."'");
+		$db->query("SELECT uname, email FROM euser WHERE company_id = '".$id."'");
 	
 		if ($db->getNumRows() != 1) return false;
 	
