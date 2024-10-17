@@ -253,6 +253,7 @@ class EmailBatch {
 
                 $this->SetMsgParams($aParams);
 
+
                 if ($this->Process()) {
                     $db->query("UPDATE enquiry SET status = 2, processed = now()::timestamp WHERE id = ".$oEnquiry->GetId());
 
@@ -471,18 +472,27 @@ class EmailBatch {
         $oEnquiry = new Enquiry();
         $to_email_enq = $oEnquiry->GetToEmailByEnquiryId($iEnquiryId);
 
+	if (strlen($to_email_enq) < 1) return false;
+
         $sCmd = "tac /var/log/maillog | grep ".$to_email_enq." | grep status | head -1 ";
 
         $aOut = array();
 
         exec($sCmd,$aOut);
 
+	/*
+        print_r("<pre>");
+        print_r($sCmd);
+        print_r($aOut);
+	print_r(count($aOut));
+        print_r("<pre>");
+	*/
+
         if (count($aOut) < 1) return false;
 
         // extract log msg for enquiry
-        for($i=count($aOut);$i>0;$i--)
+        for($i=0;$i<=count($aOut); $i++)
         {
-
             $log_msg = $aOut[$i];
             $aBits = explode(" ",$log_msg);
 
@@ -507,7 +517,7 @@ class EmailBatch {
 
                 $log_msg = pg_escape_string($log_msg);
 
-                $sql = "INSERT INTO enquiry_delivery (enquiry_id,to_email,status,log_msg) VALUES (".$iEnquiryId.",'".$to_email_log."','".$status_str."','".$log_msg."')";
+         	$sql = "INSERT INTO enquiry_delivery (enquiry_id,to_email,status,log_msg) VALUES (".$iEnquiryId.",'".$to_email_log."','".$status_str."','".$log_msg."')";
 
                 $db->query($sql);
 
