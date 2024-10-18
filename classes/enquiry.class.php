@@ -252,6 +252,19 @@ class Enquiry {
 	}
 
 	public function GetShortStatusLabel() {
+
+	    switch($this->GetDeliveryStatus()) {
+		case "sent" :
+		    return "Delivered";
+		    break;
+		case "deferred" : 
+		    return "Deferred";
+		    break;
+		case "bounced" :
+		    return "Bounced";
+		    break;
+	    }
+
 	    switch($this->status) {
 	        case 0 :
 	            return "Pending";

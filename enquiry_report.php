@@ -97,7 +97,7 @@ if (isset($_REQUEST['report_status']) && $_REQUEST['report_status'] != "ALL")
 
 if ($oAuth->oUser->isAdmin)
 {
-    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 months"))." - ".date("d-m-Y",strtotime("+1 day"));
+    $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-1 months"))." - ".date("d-m-Y",strtotime("+1 day"));
 } else {
     $strDateRange = isset($_REQUEST['daterange']) ? $_REQUEST['daterange'] : date("d-m-Y",strtotime("-3 year"))." - ".date("d-m-Y",strtotime("+1 day"));
 }
@@ -181,12 +181,13 @@ print $oHeader->Render();
 <div class="row">
 <div style="clear: both;">
     <div style="float: right;">
+		Bulk Action:
     		<select name="bulk_action">
     			<option value="">select</option>
     			<option value="approve">approve selected</option>
     			<option value="reject">reject selected</option>
     		</select>
-    		<input type="button" name="go_batch" value="go" onClick="this.form.submit()" />
+    		<input class="" type="button" name="go_batch" value="go" onClick="this.form.submit()" />
     </div>
 </div>
 </div>
@@ -204,10 +205,8 @@ print $oHeader->Render();
 	<th>type</th>
 	<th>about</th>
 	<th>from</th>
-	<th>country</th>
 	<th>enquiry</th>
 	<th>status</th>
-	<th>delivery</th>
 <?php if ($oAuth->oUser->isAdmin) { ?>
 	<th>approve</th>
 	<th>reject</th>
@@ -231,8 +230,7 @@ print $oHeader->Render();
 			<br />
 			(<?= $oEnquiry->GetCompanyEmail() ?>)
 		</td>
-		<td width="" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().") <br />".$oEnquiry->GetIpAddr() ?></td>
-		<td width="" valign="top"><?= $oEnquiry->GetCountryName() ?></td>
+		<td width="" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().")<br />".$oEnquiry->GetCountryName()." <br />".$oEnquiry->GetIpAddr() ?></td>
 		<td width="" valign="top">
 			<?= $oEnquiry->GetEnquiry() ?>
         	<? if ($oEnquiry->GetEnquiryType() == "BOOKING") { ?>
@@ -243,17 +241,28 @@ print $oHeader->Render();
         	<? } ?>
 
 		</td>
-		<td width="" valign="top"><?= $oEnquiry->GetShortStatusLabel() ?></td>
-		<td width="" valign="top">
+		<td width="" valign="top"><?= $oEnquiry->GetShortStatusLabel() ?>
 		<? if (strlen($oEnquiry->GetDeliveryStatus()) > 1) { ?>
-			To: <?= $oEnquiry->GetDeliveryTo(); ?><br />
-			Status: <?= strtoupper($oEnquiry->GetDeliveryStatus()); ?><br />
-			Log Msg: <?= $oEnquiry->GetDeliveryLogMsg(); ?>
+			<?
+			$btn = ($oEnquiry->GetDeliveryStatus() == "sent") ? "success" : "danger";
+			?>
+			<button type="button" class="btn btn-outline-<?= $btn ?> btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">
+		        Mail Log
+			</button>
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+<?= $oEnquiry->GetDeliveryLogMsg(); ?>
+      </div>
+    </div>
+  </div>
+</div>
 		<? } ?>
 		</td>
 <?php if ($oAuth->oUser->isAdmin) { ?>
-    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_approve" value="approve" /></td>
-    	<td width="20px"><input type="submit" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_reject" value="reject" /></td>
+    	<td width="20px"><input type="submit" class="btn btn-primary" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_approve" value="approve" /></td>
+    	<td width="20px"><input type="submit" class="btn btn-primary" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_reject" value="reject" /></td>
     	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oEnquiry->GetId(); ?>" name="enq_<?= $oEnquiry->GetId() ?>" value="bulk" /></td>
 <?php } ?>
 	</tr>
