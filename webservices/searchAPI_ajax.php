@@ -17,6 +17,8 @@ require_once("../conf/config.php");
 require_once("../conf/brand_config.php");
 require_once("../classes/Brand.php");
 require_once("../classes/session.php");
+require_once("../classes/user.class.php");
+require_once("../classes/authenticate.class.php");
 require_once("../classes/logger.php");
 require_once("../classes/json.class.php");
 require_once("../classes/db_pgsql.class.php");
@@ -32,7 +34,18 @@ require_once("../classes/company.class.php");
 require_once("../classes/placement.class.php");
 
 
+
 $db = new db($dsn,$debug = false);
+
+
+if (!is_object($oAuth))
+{
+    /* setup an instance of session authentication */
+    $oAuth = new Authenticate($db,$redirect = TRUE, "/".ROUTE_LOGIN, COOKIE_NAME);
+    $oAuth->ValidSession();
+}
+
+
 
 if (!is_object($oBrand))
 {
@@ -241,7 +254,7 @@ function searchSQL($term, $exact, $ctype, $filterDate, $fromDate, $toDate)
 function prepareResponse()
 {
     global $aResult, $aResponse, $oAuth;
-  
+
     if(is_object($oAuth) && $oAuth->oUser->isAdmin)
     {
         $template = "search_result_list_profile_admin.php";
