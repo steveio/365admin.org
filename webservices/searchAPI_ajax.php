@@ -127,11 +127,14 @@ function searchSQL($term, $exact, $ctype, $filterDate, $fromDate, $toDate)
         $operator = " = ";
     } else { // fuzzy
         $operator = " like ";
-        if ($stype == 0)
+        if (strpos($term, "%") < 1)
         {
-            $term = $term."%";
-        } elseif ($stype == 1) {
-            $term = "%".$term."%";
+            if ($stype == 0)
+            {
+                $term = $term."%";
+            } elseif ($stype == 1) {
+                $term = "%".$term."%";
+            }
         }
     }
     
@@ -152,7 +155,7 @@ function searchSQL($term, $exact, $ctype, $filterDate, $fromDate, $toDate)
     
     if ($stype == 0)
     {
-        $strSQLWhereCompany = "UPPER(c.url_name) ".$operator." '".$term."'";
+        $strSQLWhereCompany = "UPPER('/COMPANY/'||c.url_name) ".$operator." '".$term."'";
         $strSQLWherePlacement = "UPPER('/company/'||c.url_name||'/'||p.url_name) ".$operator." '".$term."'";
         $strSqlWhereArticle = "UPPER(m.section_uri)  ".$operator." '".$term."'";
         

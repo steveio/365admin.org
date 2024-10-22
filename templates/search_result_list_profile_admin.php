@@ -36,6 +36,10 @@ if ((is_array($aResult)) && (count($aResult) >= 1)) {
 		<td>
 			<a class="btn btn-primary rounded-pill px-3" role="button"  href="<?= $oResult->url ?>/edit" title="Edit">Edit</a>
 		</td>
+		<td>
+			<button id="delete" class="btn btn-primary rounded-pill px-3" type="submit" value="delete"  onclick="deleteProfile('<?= $oResult->url ?>/delete'); return false;">delete</button>
+		</td>
+
 	</tr>
 <? 
 	}

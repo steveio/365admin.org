@@ -45,6 +45,7 @@ if ((is_array($aResult)) && (count($aResult) >= 1)) {
 		    $oResult->link = $this->Get('WEBSITE_URL').$oResult->url;
 		    $oResult->edit_link = $oResult->url."/edit";
 		    $oResult->publish_link = "";
+		    $oResult->delete_link = $oResult->url."/delete";
 		}
 		?>
 		<td valign="top"><a href="<?= $oResult->link; ?>" target="_new"><?= $oResult->url; ?></a></td>
@@ -60,6 +61,8 @@ if ((is_array($aResult)) && (count($aResult) >= 1)) {
 		<td>
 		<?php if ($oResult->type == "ARTICLE") { ?>
 			<button id="delete" onclick="javscript: return confirm('Are you sure you wish to delete article: <?= $oResult->title ?>?');" name="art_<?= $oResult->id ?>" class="btn btn-primary rounded-pill px-3" type="submit" value="delete">delete</button>
+		<?php } else { ?>
+			<button id="delete" class="btn btn-primary rounded-pill px-3" type="submit" value="delete"  onclick="deleteProfile('<?= $oResult->delete_link; ?>'); return false;">delete</button>
 		<?php } ?>			
 		</td>
 	</tr>

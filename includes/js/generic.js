@@ -262,7 +262,7 @@ function ArticleSearch(mode,aid,template) {
 
 function deleteProfile(url)
 {
-	var text = 'This will delete (archive) company and all placements - you can restore it later if necessary.  Are you sure?';
+	var text = 'This will delete (archive) profile: '+url+' - you can restore it later if necessary.  Are you sure?';
 
 	if (confirm(text) == true) {
 		window.location = url;
