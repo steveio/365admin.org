@@ -26,7 +26,13 @@ class Cache {
 
 	/* save a cache page */
 	public static function Save($f,$d) {
-		
+
+	    if(!file_exists($f)){ //permissions for cache refresh cronjob  
+	        touch($f);
+	        chmod($f, 0660);
+	        chown($f, "web_developer");
+	    }
+
 		$fh = fopen($f, 'w');
 		if (!$fh) return false;
 		fwrite($fh, $d);
