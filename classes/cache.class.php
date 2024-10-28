@@ -30,7 +30,7 @@ class Cache {
 	    if(!file_exists($f)){ //permissions for cache refresh cronjob  
 	        touch($f);
 	        chmod($f, 0660);
-	        chown($f, "web_developer");
+	        chgrp($f, "web_developer");
 	    }
 
 		$fh = fopen($f, 'w');
