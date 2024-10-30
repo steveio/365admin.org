@@ -141,7 +141,7 @@ print $oHeader->Render();
 		<label for="approve">Approve / Reject:</label>
 	    <input type="radio" id="report_approve" name="report_type" value="report_approve" <?= (!isset($_REQUEST['report_type']) || $_REQUEST['report_type'] == "report_approve") ? "checked" : ""; ?> />
 		<label for="approve">Stats:</label>
-	    <input type="radio" id="report_stats" name="report_type" value="report_stats" <?= (!isset($_REQUEST['report_type']) || $_REQUEST['report_type'] == "report_stats") ? "checked" : ""; ?> />
+	    <input type="radio" id="report_stats" name="report_type" value="report_stats" <?= (isset($_REQUEST['report_type']) && $_REQUEST['report_type'] == "report_stats") ? "checked" : ""; ?> />
 
 	</div>
 
