@@ -114,23 +114,36 @@ $aOptions['report_date_from'] = $startDate;
 $aOptions['report_date_to'] = $endDate;
 
 
-$aEnquiry = $oEnquiry->GetAll($aOptions);
 
+if (isset($_REQUEST['report_type']) && $_REQUEST['report_type'] == "report_approve")
+{
+    $aEnquiry = $oEnquiry->GetAll($aOptions);
+} else if ($_REQUEST['report_type'] == "report_stats")
+{
+    $aResultCompany = $oEnquiry->GetStatsCompany($aOptions);
+    $aResultPlacement = $oEnquiry->GetStatsPlacement($aOptions);
+}
 
 print $oHeader->Render();
 
 ?>
-
+    
 <div class="container">
 <div class="align-items-center justify-content-center">
 
-<h1>Enquiry Report</h1>
-
-
+<h1>Enquiry Report</h1>   
 
 <form enctype="multipart/form-data" name="enquiry_report" id="enquiry_report" action="" method="POST">
 
 <div class="row my-3">
+
+	<div class="col-12 my-3">
+		<label for="approve">Approve / Reject:</label>
+	    <input type="radio" id="report_approve" name="report_type" value="report_approve" <?= (!isset($_REQUEST['report_type']) || $_REQUEST['report_type'] == "report_approve") ? "checked" : ""; ?> />
+		<label for="approve">Stats:</label>
+	    <input type="radio" id="report_stats" name="report_type" value="report_stats" <?= (!isset($_REQUEST['report_type']) || $_REQUEST['report_type'] == "report_stats") ? "checked" : ""; ?> />
+
+	</div>
 
 	<div class="col-6">
 		<label for="daterange">Date range:</label>
@@ -160,120 +173,6 @@ print $oHeader->Render();
 <button class="btn btn-primary rounded-pill px-3" type="submit" name="report_filter" value="submit">submit</button>
 
 </div>
-
-
-</form>
-
-
-<form enctype="multipart/form-data" name="enquiry_result" id="enquiry_result" action="" method="POST">
-
-	
-<? if (strlen($strMessage) >= 1) { ?>
-    <div class="alert alert-success my-3" role="alert">
-    <?= $strMessage; ?>
-    </div>
-<?php } ?>
-
-
-
-
-<?php if ($oAuth->oUser->isAdmin) { ?>
-<div class="row">
-<div style="clear: both;">
-    <div style="float: right;">
-		Bulk Action:
-    		<select name="bulk_action">
-    			<option value="">select</option>
-    			<option value="approve">approve selected</option>
-    			<option value="reject">reject selected</option>
-    		</select>
-    		<input class="" type="button" name="go_batch" value="go" onClick="this.form.submit()" />
-    </div>
-</div>
-</div>
-<?php } ?>
-
-
-<div class="row my-3">
-
-
-<table id="report" class="display" cellspacing="2" cellpadding="4" border="0" class="table table-striped">	
-
-<thead>
-<tr>
-	<th>date</th>
-	<th>type</th>
-	<th>about</th>
-	<th>from</th>
-	<th>enquiry</th>
-	<th>status</th>
-<?php if ($oAuth->oUser->isAdmin) { ?>
-	<th>approve</th>
-	<th>reject</th>
-	<th>bulk</th>
-<?php } ?>
-</tr>
-</thead>
-
-<tbody>
-	
-<? foreach($aEnquiry as $oEnquiry) { ?>
-	<tr>
-		<td width="" valign="top"><?= $oEnquiry->GetDate() ?></td>
-		<td width="" valign="top"><?= $oEnquiry->GetEnquiryTypeLabel() ?></td>
-		<td width="" valign="top">
-			<? if (strlen($oEnquiry->GetPlacementName()) > 1) { ?>
-			<a class="" href="http://www.oneworld365.org/company/<?= $oEnquiry->GetCompanyUrlName() ."/". $oEnquiry->GetPlacementUrlName() ?>" title="<?= $oEnquiry->GetPlacementName() ?>"><?= $oEnquiry->GetPlacementName() ?></a>
-			<br/>
-			<? } ?>
-			<a class="" href="http://www.oneworld365.org/company/<?= $oEnquiry->GetCompanyUrlName(); ?>" title="<?= $oEnquiry->GetCompanyName(); ?>"><?= $oEnquiry->GetCompanyName(); ?></a>
-			<br />
-			(<?= $oEnquiry->GetCompanyEmail() ?>)
-		</td>
-		<td width="" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().")<br />".$oEnquiry->GetCountryName()." <br />".$oEnquiry->GetIpAddr() ?></td>
-		<td width="" valign="top">
-			<?= $oEnquiry->GetEnquiry() ?>
-        	<? if ($oEnquiry->GetEnquiryType() == "BOOKING") { ?>
-        		<br /><br />
-        		Group Size: <?= $oEnquiry->GetGroupSize(); ?>, 
-        		Budget: <?= $oEnquiry->GetBudget(); ?>, 
-        		Dept Date: <?= $oEnquiry->GetDeptDate(); ?>
-        	<? } ?>
-
-		</td>
-		<td width="" valign="top"><?= $oEnquiry->GetShortStatusLabel() ?>
-		<? if (strlen($oEnquiry->GetDeliveryStatus()) > 1) { ?>
-			<?
-			$btn = ($oEnquiry->GetDeliveryStatus() == "sent") ? "success" : "danger";
-			?>
-			<button type="button" class="btn btn-outline-<?= $btn ?> btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">
-		        Mail Log
-			</button>
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-<?= $oEnquiry->GetDeliveryLogMsg(); ?>
-      </div>
-    </div>
-  </div>
-</div>
-		<? } ?>
-		</td>
-<?php if ($oAuth->oUser->isAdmin) { ?>
-    	<td width="20px"><input type="submit" class="btn btn-primary" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_approve" value="approve" /></td>
-    	<td width="20px"><input type="submit" class="btn btn-primary" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_reject" value="reject" /></td>
-    	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oEnquiry->GetId(); ?>" name="enq_<?= $oEnquiry->GetId() ?>" value="bulk" /></td>
-<?php } ?>
-	</tr>
-
-<? } ?>
-
-</tbody>
-</table>
-
-</div>
-
 </form>
 
 
@@ -292,6 +191,130 @@ $(document).ready(function() {
       });
     });
 
+});
+
+</script>
+
+<?php 
+if (isset($_REQUEST['report_type']) && $_REQUEST['report_type'] == "report_approve")
+{
+?>    
+        
+    <form enctype="multipart/form-data" name="enquiry_result" id="enquiry_result" action="" method="POST">
+    
+    	
+    <? if (strlen($strMessage) >= 1) { ?>
+        <div class="alert alert-success my-3" role="alert">
+        <?= $strMessage; ?>
+        </div>
+    <?php } ?>
+    
+    
+    
+    
+    <?php if ($oAuth->oUser->isAdmin) { ?>
+    <div class="row">
+    <div style="clear: both;">
+        <div style="float: right;">
+    		Bulk Action:
+        		<select name="bulk_action">
+        			<option value="">select</option>
+        			<option value="approve">approve selected</option>
+        			<option value="reject">reject selected</option>
+        		</select>
+        		<input class="" type="button" name="go_batch" value="go" onClick="this.form.submit()" />
+        </div>
+    </div>
+    </div>
+    <?php } ?>
+    
+    
+    <div class="row my-3">
+    
+    
+    <table id="report" class="display" cellspacing="2" cellpadding="4" border="0" class="table table-striped">	
+    
+    <thead>
+    <tr>
+    	<th>date</th>
+    	<th>type</th>
+    	<th>about</th>
+    	<th>from</th>
+    	<th>enquiry</th>
+    	<th>status</th>
+    <?php if ($oAuth->oUser->isAdmin) { ?>
+    	<th>approve</th>
+    	<th>reject</th>
+    	<th>bulk</th>
+    <?php } ?>
+    </tr>
+    </thead>
+    
+    <tbody>
+    	
+    <? foreach($aEnquiry as $oEnquiry) { ?>
+    	<tr>
+    		<td width="" valign="top"><?= $oEnquiry->GetDate() ?></td>
+    		<td width="" valign="top"><?= $oEnquiry->GetEnquiryTypeLabel() ?></td>
+    		<td width="" valign="top">
+    			<? if (strlen($oEnquiry->GetPlacementName()) > 1) { ?>
+    			<a class="" href="http://www.oneworld365.org/company/<?= $oEnquiry->GetCompanyUrlName() ."/". $oEnquiry->GetPlacementUrlName() ?>" title="<?= $oEnquiry->GetPlacementName() ?>"><?= $oEnquiry->GetPlacementName() ?></a>
+    			<br/>
+    			<? } ?>
+    			<a class="" href="http://www.oneworld365.org/company/<?= $oEnquiry->GetCompanyUrlName(); ?>" title="<?= $oEnquiry->GetCompanyName(); ?>"><?= $oEnquiry->GetCompanyName(); ?></a>
+    			<br />
+    			(<?= $oEnquiry->GetCompanyEmail() ?>)
+    		</td>
+    		<td width="" valign="top"><?= $oEnquiry->GetName() ."<br /> (".$oEnquiry->GetEmail().")<br />".$oEnquiry->GetCountryName()." <br />".$oEnquiry->GetIpAddr() ?></td>
+    		<td width="" valign="top">
+    			<?= $oEnquiry->GetEnquiry() ?>
+            	<? if ($oEnquiry->GetEnquiryType() == "BOOKING") { ?>
+            		<br /><br />
+            		Group Size: <?= $oEnquiry->GetGroupSize(); ?>, 
+            		Budget: <?= $oEnquiry->GetBudget(); ?>, 
+            		Dept Date: <?= $oEnquiry->GetDeptDate(); ?>
+            	<? } ?>
+    
+    		</td>
+    		<td width="" valign="top"><?= $oEnquiry->GetShortStatusLabel() ?>
+    		<? if (strlen($oEnquiry->GetDeliveryStatus()) > 1) { ?>
+    			<?
+    			$btn = ($oEnquiry->GetDeliveryStatus() == "sent") ? "success" : "danger";
+    			?>
+    			<button type="button" class="btn btn-outline-<?= $btn ?> btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">
+    		        Mail Log
+    			</button>
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+    <?= $oEnquiry->GetDeliveryLogMsg(); ?>
+          </div>
+        </div>
+      </div>
+    </div>
+    		<? } ?>
+    		</td>
+    <?php if ($oAuth->oUser->isAdmin) { ?>
+        	<td width="20px"><input type="submit" class="btn btn-primary" onclick="javascript: return confirm('Are you sure you wish to approve this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_approve" value="approve" /></td>
+        	<td width="20px"><input type="submit" class="btn btn-primary" onclick="javascript: return confirm('Are you sure you wish to reject this entry?');" name="enq_<?= $oEnquiry->GetId() ?>_reject" value="reject" /></td>
+        	<td width="20px" valign="top"><input type="checkbox" id="enq_<?= $oEnquiry->GetId(); ?>" name="enq_<?= $oEnquiry->GetId() ?>" value="bulk" /></td>
+    <?php } ?>
+    	</tr>
+    
+    <? } ?>
+    
+    </tbody>
+    </table>
+    
+    </div>
+    
+    </form>
+
+<script>
+
+$(document).ready(function() {
+
     $('#report').DataTable({
     	"pageLength": 100,
     	"bSort" : false 
@@ -300,12 +323,123 @@ $(document).ready(function() {
 });
 
 </script>
-
-
-</div>
-</div>
+    
+    
+    </div>
+    </div>
 
 <?
+} else if (isset($_REQUEST['report_type']) && $_REQUEST['report_type'] == "report_stats")
+{
+?>    
+
+        
+    <form enctype="multipart/form-data" name="enquiry_result" id="enquiry_result" action="" method="POST">
+    
+    	
+    <? if (strlen($strMessage) >= 1) { ?>
+        <div class="alert alert-success my-3" role="alert">
+        <?= $strMessage; ?>
+        </div>
+    <?php } ?>
+    
+    <div class="row my-3">
+
+	<h3>Results: Company</h3>
+
+    <? if (count($aResultCompany) < 1) { ?>
+        <div class="alert alert-warning my-3" role="alert">
+        0 Results 
+        </div>    
+    <? } else { ?>
+    
+        <table id="report_company" class="display" cellspacing="2" cellpadding="4" border="0" class="table table-striped">	
+        
+        <thead>
+        <tr>
+        	<th>Count</th>
+        	<th>Company</th>
+        	<th>Url</th>
+        </tr>
+        </thead>
+        
+        <tbody>
+        	
+        <? foreach($aResultCompany as $aRow) { ?>
+        	<tr>
+        		<td width="" valign="top"><?= $aRow['count'] ?></td>
+        		<td width="" valign="top"><?= $aRow['company_name'] ?></td>
+        		<td width="" valign="top"><?= $aRow['url'] ?></td>
+        	</tr>    
+        <? } ?>
+        
+        </tbody>
+        </table>
+	<? } ?>    
+    </div>
+
+
+    <div class="row my-3">
+
+	<h3>Results: Placement</h3>
+
+    <? if (count($aResultCompany) < 1) { ?>
+        <div class="alert alert-warning my-3" role="alert">
+        0 Results 
+        </div>    
+    <? } else { ?>
+    
+        <table id="report_placement" class="display" cellspacing="2" cellpadding="4" border="0" class="table table-striped">	
+        
+        <thead>
+        <tr>
+        	<th>Count</th>
+        	<th>Placement</th>
+        	<th>Company</th>
+        	<th>Url</th>
+        </tr>
+        </thead>
+        
+        <tbody>
+        	
+        <? foreach($aResultPlacement as $aRow) { ?>
+        	<tr>
+        		<td width="" valign="top"><?= $aRow['count'] ?></td>
+        		<td width="" valign="top"><?= $aRow['placement_name']; ?></td>
+        		<td width="" valign="top"><?= $aRow['company_name']; ?></td>
+        		<td width="" valign="top"><?= $aRow['url'] ?></td>
+        	</tr>    
+        <? } ?>
+        
+        </tbody>
+        </table>
+	<? } ?>    
+    
+    </div>
+    
+    </form>
+
+<script>
+
+$(document).ready(function() {
+
+    $('#report_placement').DataTable({
+    	"pageLength": 50,
+    	"bSort" : false 
+    });
+    $('#report_company').DataTable({
+    	"pageLength": 50,
+    	"bSort" : false 
+    });
+
+
+});
+
+</script>
+
+
+<?php 
+}
 print $oFooter->Render();
 
 ?>

@@ -542,6 +542,91 @@ class Enquiry {
 		
 	}
 	
+	public function GetStatsCompany($aOptions)
+	{
+	    global $db,$_CONFIG;
+	    
+	    $strStartDateSQL = "";
+	    $strEndDateSQL = "";
+	    
+	    if ($aOptions['report_date_from'] != null) {
+	        $strStartDateSQL = $aOptions['report_date_from'];
+	    }
+	    
+	    if ($aOptions['report_date_to'] != null) {
+	        $strEndDateSQL = $aOptions['report_date_to'];
+	    }
+
+	    $company_sql = null;
+	    if (isset($aOptions['company_id']) && $aOptions['company_id'] != null) {
+	        $company_sql = "AND comp.id = ".$aOptions['company_id'];
+	    }
+
+	    $sql = "SELECT
+                count(*)
+                ,comp.title as company_name
+                ,'/company/'||comp.url_name as url
+                FROM
+                enquiry e  LEFT OUTER JOIN company comp ON comp.id = e.link_id  
+                ,country c
+                ,website w
+                WHERE
+                 e.link_to = '0'
+                ".$company_sql."
+                AND e.country = c.id
+                AND e.site_id = w.id and e.date >= ('".$strStartDateSQL."'::date) and e.date <= ('".$strEndDateSQL."'::date + '1 day'::interval)  and e.status in (0,1,2,3,4,5,6,7)
+                GROUP BY e.link_to, e.link_id, comp.title, comp.url_name
+                ORDER BY count(*) DESC
+                ";
+	    
+	    $db->query($sql);
+	    
+	    return $db->getRows();
+	}
+
+	public function GetStatsPlacement($aOptions)
+	{
+	    global $db;
+	    
+	    $strStartDateSQL = "";
+	    $strEndDateSQL = "";
+	    
+	    if ($aOptions['report_date_from'] != null) {
+	        $strStartDateSQL = $aOptions['report_date_from'];
+	    }
+	    
+	    if ($aOptions['report_date_to'] != null) {
+	        $strEndDateSQL = $aOptions['report_date_to'];
+	    }
+
+	    $company_sql = null;
+	    if (isset($aOptions['company_id']) && $aOptions['company_id'] != null) {
+	        $company_sql = "AND comp.id = ".$aOptions['company_id'];
+	    }
+
+	    $sql = "SELECT
+                    count(*),p.title as placement_name
+                    ,comp.title as company_name
+                    ,'/company/'||comp.url_name||'/'||p.url_name as url 
+                    FROM
+                    enquiry e  LEFT OUTER JOIN profile_hdr p ON p.id = e.link_id  LEFT OUTER JOIN company comp ON p.company_id = comp.id
+                    ,country c
+                    ,website w
+                    WHERE
+                     e.link_to = '1' 
+                    ".$company_sql."
+                    AND e.country = c.id
+                    AND e.site_id = w.id and e.date >= ('".$strStartDateSQL."'::date)  and e.date <= ('".$strEndDateSQL."'::date + '1 day'::interval)  and e.status in (0,1,2,3,4,5,6,7) 
+                    GROUP BY p.title, comp.title, comp.url_name, p.url_name
+                    ORDER BY count(*) DESC
+                ";
+	    
+	    $db->query($sql);
+
+	    return $db->getRows();
+	    
+	}
+	
 	public function GetNextId() {
 
 		if (DEBUG) Logger::Msg(get_class($this)."::".__FUNCTION__."()");
