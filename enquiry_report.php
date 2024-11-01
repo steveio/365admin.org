@@ -357,7 +357,11 @@ $(document).ready(function() {
         
         <thead>
         <tr>
-        	<th>Count</th>
+        	<th>Enquiry Count</th>
+		<th>Delivery Report</th>
+		<th>Sent</th>
+		<th>Bounced</th>
+		<th>Deferred</th>
         	<th>Company</th>
         	<th>Url</th>
         </tr>
@@ -368,6 +372,10 @@ $(document).ready(function() {
         <? foreach($aResultCompany as $aRow) { ?>
         	<tr>
         		<td width="" valign="top"><?= $aRow['count'] ?></td>
+			<td width="" valign="top"><?= $aRow['delivery_report'] ?></td>
+			<td width="" valign="top" style="color: green;"><?= ($aRow['sent'] > 0) ? $aRow['sent'] : ""; ?></td>
+			<td width="" valign="top" style="color: red;"><?= ($aRow['bounced'] > 0) ? $aRow['bounced'] : ""; ?></td>
+			<td width="" valign="top" style="color: orange;"><?= ($aRow['deferred'] > 0) ? $aRow['deferred'] : ""; ?></td>
         		<td width="" valign="top"><?= $aRow['company_name'] ?></td>
         		<td width="" valign="top"><?= $aRow['url'] ?></td>
         	</tr>    
@@ -393,7 +401,11 @@ $(document).ready(function() {
         
         <thead>
         <tr>
-        	<th>Count</th>
+        	<th>Enquiry Count</th>
+                <th>Delivery Report</th>
+                <th>Sent</th>
+                <th>Bounced</th>
+                <th>Deferred</th>
         	<th>Placement</th>
         	<th>Company</th>
         	<th>Url</th>
@@ -405,6 +417,10 @@ $(document).ready(function() {
         <? foreach($aResultPlacement as $aRow) { ?>
         	<tr>
         		<td width="" valign="top"><?= $aRow['count'] ?></td>
+                        <td width="" valign="top"><?= $aRow['delivery_report'] ?></td>
+                        <td width="" valign="top" style="color: green;"><?= ($aRow['sent'] > 0) ? $aRow['sent'] : ""; ?></td>
+                        <td width="" valign="top" style="color: red;"><?= ($aRow['bounced'] > 0) ? $aRow['bounced'] : ""; ?></td>
+                        <td width="" valign="top" style="color: orange;"><?= ($aRow['deferred'] > 0) ? $aRow['deferred'] : ""; ?></td>
         		<td width="" valign="top"><?= $aRow['placement_name']; ?></td>
         		<td width="" valign="top"><?= $aRow['company_name']; ?></td>
         		<td width="" valign="top"><?= $aRow['url'] ?></td>

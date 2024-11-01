@@ -564,6 +564,10 @@ class Enquiry {
 
 	    $sql = "SELECT
                 count(*)
+		,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '0' AND e2.link_id = comp.id AND e2.id = d.enquiry_id) as delivery_report
+		,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '0' AND e2.link_id = comp.id AND e2.id = d.enquiry_id AND d.status = 'sent') as sent
+		,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '0' AND e2.link_id = comp.id AND e2.id = d.enquiry_id AND d.status = 'bounced') as bounced
+		,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '0' AND e2.link_id = comp.id AND e2.id = d.enquiry_id AND d.status = 'deferred') as deferred
                 ,comp.title as company_name
                 ,'/company/'||comp.url_name as url
                 FROM
@@ -575,7 +579,7 @@ class Enquiry {
                 ".$company_sql."
                 AND e.country = c.id
                 AND e.site_id = w.id and e.date >= ('".$strStartDateSQL."'::date) and e.date <= ('".$strEndDateSQL."'::date + '1 day'::interval)  and e.status in (0,1,2,3,4,5,6,7)
-                GROUP BY e.link_to, e.link_id, comp.title, comp.url_name
+                GROUP BY e.link_to, e.link_id, comp.id, comp.title, comp.url_name
                 ORDER BY count(*) DESC
                 ";
 	    
@@ -606,6 +610,10 @@ class Enquiry {
 
 	    $sql = "SELECT
                     count(*),p.title as placement_name
+		    ,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '1' AND e2.link_id = p.id AND e2.id = d.enquiry_id) as delivery_report
+		    ,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '1' AND e2.link_id = p.id AND e2.id = d.enquiry_id AND d.status = 'sent') as sent
+		    ,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '1' AND e2.link_id = p.id AND e2.id = d.enquiry_id AND d.status = 'bounced') as bounced
+		    ,(SELECT count(*) FROM enquiry e2, enquiry_delivery d where e2.link_to = '1' AND e2.link_id = p.id AND e2.id = d.enquiry_id AND d.status = 'deferred') as deferred
                     ,comp.title as company_name
                     ,'/company/'||comp.url_name||'/'||p.url_name as url 
                     FROM
@@ -617,7 +625,7 @@ class Enquiry {
                     ".$company_sql."
                     AND e.country = c.id
                     AND e.site_id = w.id and e.date >= ('".$strStartDateSQL."'::date)  and e.date <= ('".$strEndDateSQL."'::date + '1 day'::interval)  and e.status in (0,1,2,3,4,5,6,7) 
-                    GROUP BY p.title, comp.title, comp.url_name, p.url_name
+                    GROUP BY p.id, p.title, comp.title, comp.url_name, p.url_name
                     ORDER BY count(*) DESC
                 ";
 	    
