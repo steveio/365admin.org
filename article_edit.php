@@ -406,7 +406,7 @@ if (isset($aResponse['msg']) && strlen($aResponse['msg']) >= 1) {
     		<td><?= $oProfile->GetTypeLabel(); ?></td>
 			<td><?= $oProfile->GetTitle(); ?></td>
     		<td><?= $oProfile->GetUri(); ?></td>
-    		<td><a class="btn btn-primary rounded-pill px-3" title="Remove Profile" href="/article-editor/?&id=<?= $oArticle->GetId() ?>&profile_id=<?= $oProfile->GetId() ?>&profile_type=<?= $oProfile->GetType(); ?>&remove_profile=1">Remove</a>
+    		<td><a class="btn btn-primary rounded-pill px-3" title="Remove Profile" href="/article-editor/?&id=<?= $oArticle->GetId() ?>&profile_id=<?= $oProfile->GetId() ?>&remove_profile=1">Remove</a>
     	</tr><? 
         }
     } else {
