@@ -1,16 +1,14 @@
 <?
 
+$oArticle = new Article;
+$oArticle->SetFetchMode(FETCHMODE__FULL);
+$oArticle->Get($oBrand->GetWebsiteId(),"/footer");
 
-$oFooter = new Footer();
+$oFooter = new Template();
 
+$oFooter->Set('CONTENT',$oArticle->GetDescFull());
+$oFooter->Set('COPYRIGHT',$oBrand->GetName() . " &copy;  2007 - ".date('Y'));
 
-
-$oFooter->SetBrand($oBrand->GetName());
-$oFooter->SetDesc($oBrand->GetSiteDescription());
-$oFooter->SetCopyright($oBrand->GetName() . " &copy;  2007 - ".date('Y'));
-
-
-$oFooter->LoadTemplate("footer.php");
-
+$oFooter->LoadTemplate('footer.php');
 
 ?>
