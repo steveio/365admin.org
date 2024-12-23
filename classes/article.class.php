@@ -1089,11 +1089,7 @@ class Content  implements TemplateInterface {
 			return false;
 		}
 
-		$type = ($aRequest['profile_type'] == 0) ? 0 : 1; /* 0=company profile, 1=placement */
-	
-		//print $sql = "DELETE FROM ".DB__ARTICLE_PROFILE_MAP_TBL." WHERE article_id = ".$aRequest['id']." AND profile_type=".$type." AND profile_id=".$aRequest['profile_id'];	
-		
-		$db->query("DELETE FROM ".DB__ARTICLE_PROFILE_MAP_TBL." WHERE article_id = ".$aRequest['id']." AND profile_type=".$type." AND profile_id=".$aRequest['profile_id']);
+		$db->query("DELETE FROM ".DB__ARTICLE_PROFILE_MAP_TBL." WHERE article_id = ".$aRequest['id']." AND profile_id=".$aRequest['profile_id']);
 		
 		return true;
 		
