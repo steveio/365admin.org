@@ -32,6 +32,9 @@
 
 <?= $this->Get("JS_INCLUDE"); ?>
 
+
+<? if (!$oAuth->oUser->isValidUser) { ?>
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-KFVBLN089G"></script>
 <script>
@@ -56,6 +59,7 @@ $(document).ready(function(){
 });
 </script>
 
+<? } // end is valid user ?>
 
 </head>
 
