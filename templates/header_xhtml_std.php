@@ -45,10 +45,9 @@
   gtag('config', 'G-KFVBLN089G');
 </script>
 
-
-<? if (!$oAuth->IsValidUser()) { ?>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9874604497476880" crossorigin="anonymous"></script>
 <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bca02abddd6040011604f41&product=inline-share-buttons' async='async'></script>
+
 <? } ?>
 
 <script type="text/javascript">
@@ -58,8 +57,6 @@ $(document).ready(function(){
 
 });
 </script>
-
-<? } // end is valid user ?>
 
 </head>
 
