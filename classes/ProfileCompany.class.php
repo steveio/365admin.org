@@ -71,6 +71,7 @@ class CompanyProfile extends AbstractProfile {
 	protected $prod_type;
 	protected $profile_quota;
 	protected $profile_filter_from_search;
+	protected $profile_dormant;
 	protected $enq_opt;
 	protected $prof_opt;
 	protected $aEnqOpt;
@@ -421,6 +422,21 @@ class CompanyProfile extends AbstractProfile {
 	public function GetProfileFilterFromSearch()
 	{
 		return $this->profile_filter_from_search;		
+	}
+
+	public function SetProfileDormant($bFilter)
+	{
+	    $this->profile_dormant = $bFilter;
+	}
+	
+	public function GetProfileDormant()
+	{
+	    return $this->profile_dormant;
+	}
+
+	public function GetProfileDormantBool()
+	{
+	    return ($this->profile_filter_from_search == 't') ? true : false;
 	}
 
 	public function GetProfileCount() {
@@ -1420,9 +1436,81 @@ class CompanyProfile extends AbstractProfile {
 
 	public function GetJSONLD()
 	{
-	   $json_ld = "";
-	   
-	   return json_ld;
+
+	    $title = $this->GetTitle();
+	    $description = trim(htmlUtils::convertToPlainText($this->GetDescShort(160)));
+	    $bookingurl = $this->GetApplyUrl();
+	    $provider = $this->GetCompanyName();
+	    $provider_url = $this->GetCompanyProfileUrl();
+	    
+	    if (count($this->GetActivityTxtArray()) >= 1) {
+	        $i = 0;
+	        foreach($this->GetActivityTxtArray() as $strActivity)
+	        {
+	            $activity .= "\"".$strActivity."\"";
+	            if ($i < count($this->GetActivityArray()) -1) $activity = $activity.",";
+	            $i++;
+	        }
+	    }
+	    
+	    if (count($this->GetCountryTxtArray()) >= 1) {
+	        $i = 0;
+	        $destination = "";
+	        foreach($this->GetCountryTxtArray() as $strCountry)
+	        {
+	            $destination .= "\"@type\": \"Country\",";
+	            $destination .= "\"name\": \"".$strCountry."\"";
+	            
+	            if ($i < count($this->GetCountryArray()) -1) $destination = $destination.",";
+	            $i++;
+	        }
+	    }
+	    
+	    $aImageDetails = $this->GetImageUrlArray();
+	    
+	    if (strlen($aImageDetails['MEDIUM']['URL']) >= 1 || strlen($aImageDetails['LARGE']['URL']) >= 1) {
+	        $img_url = strlen($aImageDetails['LARGE']['URL']) >= 1 ? $aImageDetails['LARGE']['URL'] : $aImageDetails['MEDIUM']['URL'];
+	        $strIMGJSON = '"image": {';
+	        $strIMGJSON .= '"@type": "ImageObject",';
+	        $strIMGJSON .= '"url": "'.$img_url.'"';
+	        $strIMGJSON .= '},';
+	    }
+	    
+	    $strJSON_LD = <<<EOF
+{
+    "@context": "https://schema.org",
+    "@type": "TravelAgency",
+    "name": "$title;",
+    "description": "$description",
+    "provider": "$provider",
+    "touristType": [
+      $activity
+    ],
+    "offers": {
+      "@type": "Offer",
+      "name": "$title",
+      "description": "$description",
+      "price": "$price",
+      "priceCurrency": "$currency",
+      "url": "$bookingurl",
+      "offeredBy": {
+        "@type": "Organization",
+        "name": "$provider",
+        "url": "$provider_url"
+      }
+    },
+    $strIMGJSON
+    "itinerary": [
+      {
+        $destination
+      }
+    ]
+    
+}
+EOF;
+	    
+	    return $strJSON_LD;
+	    
 	}
 	
 }

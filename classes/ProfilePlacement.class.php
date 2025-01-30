@@ -1384,6 +1384,16 @@ class PlacementProfile extends AbstractProfile {
 	        }
 	    }
 
+	    $aImageDetails = $this->GetImageUrlArray();
+
+	    if (strlen($aImageDetails['MEDIUM']['URL']) >= 1 || strlen($aImageDetails['LARGE']['URL']) >= 1) {
+	        $img_url = strlen($aImageDetails['LARGE']['URL']) >= 1 ? $aImageDetails['LARGE']['URL'] : $aImageDetails['MEDIUM']['URL'];
+	        $strIMGJSON = '"image": {';
+	        $strIMGJSON .= '"@type": "ImageObject",';
+	        $strIMGJSON .= '"url": "'.$img_url.'"';
+	        $strIMGJSON .= '},';
+	    }
+	    
 	    $strJSON_LD = <<<EOF
 {
     "@context": "https://schema.org",
@@ -1407,6 +1417,7 @@ class PlacementProfile extends AbstractProfile {
         "url": "$provider_url"
       }
     },
+    $strIMGJSON
     "itinerary": [
       {
         $destination
