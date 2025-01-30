@@ -32,9 +32,22 @@
 
 <?= $this->Get("JS_INCLUDE"); ?>
 
-<? if (!$oAuth->IsValidUser()) { ?>
+
+<? if (!$oAuth->oUser->isValidUser) { ?>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KFVBLN089G"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-KFVBLN089G');
+</script>
+
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9874604497476880" crossorigin="anonymous"></script>
 <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5bca02abddd6040011604f41&product=inline-share-buttons' async='async'></script>
+
 <? } ?>
 
 <script type="text/javascript">
@@ -44,7 +57,6 @@ $(document).ready(function(){
 
 });
 </script>
-
 
 </head>
 
