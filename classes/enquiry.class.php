@@ -420,7 +420,8 @@ class Enquiry {
 			/* get the company enquiry results */
 			$sql_filter_company = " e.link_to = '0' AND e.link_id = ".$company_id;
 			$join = " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON comp.id = e.link_id ";
-			$join_fields = "comp.title as company_name,comp.url_name as company_url_name,comp.id as company_id ";
+			 $join .= " LEFT OUTER JOIN enquiry_delivery d ON e.id = d.enquiry_id";
+			$join_fields = "comp.title as company_name,comp.url_name as company_url_name,comp.id as company_id, comp.email as company_email ";
 			$aCompEnquiry = $this->GetEnquiryResults($join, $join_fields, $sql_filter_company, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 			
 			/* get placement enquiry result */
@@ -436,7 +437,8 @@ class Enquiry {
 				$sql_filter_placement = " e.link_to = '1' AND e.link_id IN (".implode(",",$aProfileId).") ";
 				$join = " LEFT OUTER JOIN ".$_CONFIG['profile_hdr_table']." p ON p.id = e.link_id ";
 				$join .= " LEFT OUTER JOIN ".$_CONFIG['company_table']." comp ON p.company_id = comp.id ";
-				$join_fields = "p.title as placement_name,p.url_name as placement_url_name,p.company_id, comp.title as company_name, comp.url_name as company_url_name ";
+				$join .= " LEFT OUTER JOIN enquiry_delivery d ON e.id = d.enquiry_id";
+				$join_fields = "p.title as placement_name,p.url_name as placement_url_name,p.company_id, comp.title as company_name, comp.url_name as company_url_name, comp.email as company_email ";
 				$aPlacementEnquiry = $this->GetEnquiryResults($join, $join_fields,$sql_filter_placement, $sLimit, $strStartDateSQL, $strEndDateSQL,$strStatusSQL);
 			} else {
 				$aPlacementEnquiry = array();

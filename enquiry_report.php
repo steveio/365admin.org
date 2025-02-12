@@ -114,7 +114,6 @@ $aOptions['report_date_from'] = $startDate;
 $aOptions['report_date_to'] = $endDate;
 
 
-
 if (isset($_REQUEST['report_type']) && $_REQUEST['report_type'] == "report_approve")
 {
     $aEnquiry = $oEnquiry->GetAll($aOptions);
@@ -281,10 +280,10 @@ if (isset($_REQUEST['report_type']) && $_REQUEST['report_type'] == "report_appro
     			<?
     			$btn = ($oEnquiry->GetDeliveryStatus() == "sent") ? "success" : "danger";
     			?>
-    			<button type="button" class="btn btn-outline-<?= $btn ?> btn-sm" data-bs-toggle="modal" data-bs-target="#myModal">
+    			<button type="button" class="btn btn-outline-<?= $btn ?> btn-sm" data-bs-toggle="modal" data-bs-target="#myModal_<?= $oEnquiry->GetId(); ?>">
     		        Mail Log
     			</button>
-    <div class="modal" id="myModal">
+    <div class="modal" id="myModal_<?= $oEnquiry->GetId(); ?>">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
