@@ -496,7 +496,8 @@ class RequestRouter {
 
             $lastUriSeg = $this->GetRequestUri(count($this->GetRequestArray()) -1);
 
-            if ($lastUriSeg == "/edit")
+            
+            if (in_array($lastUriSeg,array("/edit","/delete")))
             {
                 $uri = "";
                 for($i=1;$i<count($this->GetRequestArray()) -1;$i++)
@@ -509,11 +510,36 @@ class RequestRouter {
                 
                 if (is_numeric($id))
                 {
-                    http://admin.oneworld365.org/article-editor?&id=11066
-                    $redirect_url = ADMIN_SYSTEM."/article-editor?&id=".$id;
-
-                    Http::Redirect($redirect_url);
                     
+                    if ($lastUriSeg == "/delete")
+                    {
+
+                        $oArticle = new Article();
+                        $oArticle->SetId($id);
+                        if ($oArticle->Delete()) {
+
+                            $oMessage = new Message(MESSAGE_TYPE_SUCCESS,0, "SUCCESS : Deleted article.");
+                            $oSession->SetMessage($oMessage);
+                            $oSession->Save();
+
+                            $redirect_url = ADMIN_SYSTEM;
+                            Http::Redirect($redirect_url);
+
+                        } else {
+
+                            $oMessage = new Message(MESSAGE_TYPE_ERROR,0, "ERROR : Failed to delete article.");
+                            $oSession->SetMessage($oMessage);
+                            $oSession->Save();
+
+                        }
+
+                    } else { // redirect to /edit
+
+                        $redirect_url = ADMIN_SYSTEM."/article-editor?&id=".$id;
+                        Http::Redirect($redirect_url);
+
+                    }
+
                 } else {
                     throw new NotFoundException("Article not found : ".$this->GetRequestUri(1));
                 }
