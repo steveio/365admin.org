@@ -135,11 +135,12 @@ class PlacementController extends ProfileController {
 	}
 	
 	private function RequestDelete() {
-	    if (($this->aRequestArray[1] == ROUTE_PLACEMENT) &&
-	        (strlen($this->aRequestArray[2]) > 1) && 
-	        ($this->aRequestArray[3] == ROUTE_DELETE)) 
+	    if (($this->aRequestArray[1] == ROUTE_COMPANY) &&
+	        (strlen($this->aRequestArray[2]) > 1) &&
+	        (strlen($this->aRequestArray[3]) > 1) &&
+	        ($this->aRequestArray[4] == ROUTE_DELETE))
 		{
-			return TRUE;			
+		    return TRUE;
 		}
 	}
 	
