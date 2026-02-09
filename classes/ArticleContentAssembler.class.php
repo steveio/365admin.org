@@ -141,7 +141,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                 $this->GetReviews($this->oArticle->GetId(), CONTENT_TYPE_ARTICLE, $this->oArticle->GetTitle());
             }
 
-            // fetch related blog articles ( there are 0 attached articles )
+            // fetch related blog articles 
             if ($this->oContentMapping->GetDisplayOptBlogArticle())
             {
                 if ($this->oRequestRouter->GetRequestUri() == "/") // homepage
@@ -150,7 +150,7 @@ class ArticleContentAssembler extends AbstractContentAssembler {
                     $oTemplateCfg->fetch_limit = 14;
 
                     $oArticle = new Article();
-                    $oArticle->SetAttachedArticleId($id = 6288); // latest from /blog
+		    $oArticle->SetAttachedArticleIdByPath('/blog');
                     $iTotalMatchedArticle = count($oArticle->GetAttachedArticleId());
                     if (is_numeric($oTemplateCfg->fetch_limit))
                     {
